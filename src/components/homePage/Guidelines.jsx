@@ -17,8 +17,7 @@ function Guidelines() {
 
   return (
     <div style={{ width: "1000px", margin: "0 auto", textAlign: "center" }}>
-      <h1>משימה/אתגר קיץ</h1>
-      <p>
+      <p style={{fontFamily: 'yarden', fontWeight:'normal'}}> 
         ...חניכים יקרים, רק יצאתם לחופש וכבר אנחנו מתגעגעים <br />
         כדי לשמור על כשירות, מצורפת משימה לקיץ. הגשה שלה היא תנאי הכרחי להמשך
         לשנה ב <br />

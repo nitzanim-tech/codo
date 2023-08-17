@@ -33,3 +33,15 @@
   margin-bottom: 20px;
   margin-left: 20px;
 }
+
+@font-face {
+  font-family: 'yarden'; 
+  src: url('../assets/fonts/yarden-regular.woff') format('woff');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'yarden'; 
+  src: url('../assets/fonts/yarden-bold.woff') format('woff');
+  font-weight: bold;  
+}

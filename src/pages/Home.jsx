@@ -6,8 +6,14 @@ import { formatDate } from "../util/formatDate";
 import { ConfirmationDialog, FameWall, Guidelines } from "../components";
 import Timer from "../components/homePage/Timer";
 import { useTimer } from "react-timer-hook";
-
+//import useAnalyticsEventTracker from '../util/useAnalyticsEventTracker';
+import styled from 'styled-components';
+import Divider from '@mui/material/Divider';
+import LottieComponent from "../components/LottieComponent"
 import "./Home.css";
+import Button from '@mui/material/Button';
+
+
 
 const formatData = (data) => {
   const sortedData = data.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -18,12 +24,19 @@ const formatData = (data) => {
   return formattedData;
 };
 
-function Home() {
+function Home({deadline}) {
   const navigateTo = useNavigate();
   const [open, setOpen] = useState(false);
   const [basicStudents, setBasicStudents] = useState([]);
   const [challengeStudents, setChallengeStudents] = useState([]);
-  const [showButtons, setShowButtons] = useState(true);
+
+  //const gaEventTracker = useAnalyticsEventTracker('Home');
+  
+  const currentTime = new Date();
+  const isTimeOver = currentTime >= new Date(deadline);
+
+
+
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -44,57 +57,85 @@ function Home() {
   };
 
   const handleAgree = () => {
+    gaEventTracker('agree')
     navigateTo('/submit');
   };
   const handleClickToFW = () => {
     navigateTo('/famewall');
   };
 
-  const targetDate = Date.parse('2023-06-25T10:00:00+03:00');
-  const timer = useTimer({
-    expiryTimestamp: targetDate,
-    onExpire: () => setShowButtons(true),
-  });
+  const targetDate = Date.parse(deadline);
+  // const timer = useTimer({
+  //   expiryTimestamp: targetDate,
+  //   onExpire: () => setShowButtons(false),
+  // });
+
+
+const ParentDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px;
+`;
 
   return (
     <>
-      <img src={logoImg}></img>
-      {showButtons ? (
-        <>
-          <Guidelines />
-          <button className="home-button" onClick={handleClickOpen}>
-            להגשה
-          </button>
-          <button className="home-button" onClick={handleClickToFW}>
-            לקיר התהילה
-          </button>
-        </>
-      ) : (
-        <div className="timer-container">
-          <h1>:אנחנו מתחילים עוד</h1>
-          <h3>ראשון | 25.06.23 | 10:00</h3>
-        </div>
-      )}
+    <Button>
+        <LottieComponent name = 'coin' text='אתגר'/>
+    </Button>
 
-      <div className="blue-container">
+    <Button>
+      <LottieComponent name = 'puzzle' text='משימה'/>
+    </Button>
+
+    <Button>
+      <LottieComponent name = 'explore' text='התנסות'/>
+    </Button>
+    
+    <Button>
+      <LottieComponent name = 'book' text = 'לספר הקורס'/>
+    </Button>
+    
+      <ParentDiv>
+          {!isTimeOver ? (
+            <div className="timer-container">
+            <h2>:האתר יסגר להגשות עוד</h2>
+          <Timer targetDate={targetDate} />
+            <h3>שלישי | 15.08.23 | 20:00</h3>
+          </div>
+      ) : (
+          <h2 style={{ color: '#003061', margin: '20px' }}>האתר סגור להגשות</h2>
+        )}
+          <Divider orientation="vertical" flexItem/>
+          <div className="vertical-layout">
+            <img src={logoImg}></img>
+            <h1 style={{fontFamily: 'yarden', fontWeight:'bold'}}>משימה/אתגר קיץ</h1>
+            <Guidelines />
+          </div>
+        </ParentDiv>
+
+
+      <button className="home-button" onClick={handleClickOpen}>
+        {!isTimeOver? 'להגשה': 'לבדיקה'}
+      </button>
+      <button className="home-button" onClick={handleClickToFW}>
+        לקיר התהילה
+      </button>
+
+      {/* <div className="blue-container">
         <div className="container" style={{ flexDirection: 'row' }}>
           <div style={{ marginRight: '20px', flex: '1' }}>
             <h3 style={{ color: 'white' }}>אתגר-לוח גדול</h3>
             <FameWall students={challengeStudents} />
           </div>
-          <div
-            style={{
-              backgroundColor: 'white',
-              width: '2px',
-              height: '100%',
-            }}
-          />
+
           <div style={{ flex: '1' }}>
             <h3 style={{ color: 'white' }}>משימה-לוח קטן</h3>
             <FameWall students={basicStudents} />
           </div>
         </div>
-      </div>
+      </div> */}
       <ConfirmationDialog
         open={open}
         onClose={handleClose}

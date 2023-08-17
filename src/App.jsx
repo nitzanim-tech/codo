@@ -8,6 +8,7 @@ import RegionalFameWall from "./pages/RegionalFameWall";
 import "./App.css";
 
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>
