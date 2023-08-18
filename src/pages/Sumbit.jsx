@@ -1,25 +1,29 @@
 import React, { useState } from "react";
-//import { python } from 'pythonia'
-
+import FirstTask from "./FirstTask"
+import {Breadcrumbs, Typography} from '@mui/material';
+import Link from '@mui/material/Link';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 function Submit() {
   const [result, setResult] = useState("");
 
   const runPythonCode = async () => {
-    // const code = "print('hi')\nprint('hi2')";
-    // const tk = await python('tkinter')
-
-    // const root = await tk.Tk()
-    // const a = await tk.Label$(root, { text: 'Hello World' })
-    // await a.pack()
-    // await root.mainloop()
-    // process.exit() 
   };
+
+function handleClick(event) {
+  event.preventDefault();
+  console.info('You clicked a breadcrumb.');
+}
 
 
   return (
     <>
-      <button onClick={runPythonCode}>Run Python Code</button>
-      <h1>{result}</h1>
+        <Breadcrumbs aria-label="breadcrumb" dir='rtl'>
+          <Typography color="text.primary">ניווט</Typography>
+          <Link underline="hover" color="inherit" href="/"> <HomeRoundedIcon/>בית  </Link>
+          <Link underline="hover" color="inherit" href="/sumbit" > משימה  </Link>
+        </Breadcrumbs>
+
+      <FirstTask />
     </>
   );
 }

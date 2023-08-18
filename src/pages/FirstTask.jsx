@@ -4,10 +4,16 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-chrome";
 import { examplecode } from "../util/exampleCode";
-import logoImg from "../assets/img/logo.png";
-import { OutlinedInput, InputLabel, Select, MenuItem } from "@mui/material";
-import { FormControl } from "@mui/material";
+import { ButtonGroup, Button } from "@mui/material";
 import "./Submit.css";
+import FolderList from "./FolderList"
+import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
+import PlayCircleRoundedIcon from '@mui/icons-material/PlayCircleRounded';
+import RuleRoundedIcon from '@mui/icons-material/RuleRounded';
+import BasicAccordion from "../components/Instructions"
+import { WidthFull } from "@mui/icons-material";
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+
 
 function FirstTask() {
   const [code, setCode] = useState(localStorage.getItem("code") || examplecode);
@@ -27,65 +33,36 @@ function FirstTask() {
   };
 
   return (
-    <>        
-      <div className="central-div">
-        <button onClick={handleSubmit} className="check-button">
-          בדוק
-        </button>
-        <FormControl>
-          <InputLabel htmlFor="task-select">כתבתי</InputLabel>
-          <Select
-            labelId="task-label"
-            id="task-select"
-            value={selectedTask || ""}
-            onChange={(e) => setSelectedTask(e.target.value)}
-            input={
-              <OutlinedInput
-                label="כתבתי"
-                id="task-select"
-                error={selectError}
-              />
-            }
-          >
-            <MenuItem key={4} value={4}>
-              4x4 משימה - סודוקו
-            </MenuItem>
-            <MenuItem key={9} value={9}>
-              9x9 אתגר - סודוקו
-            </MenuItem>
-          </Select>
-        </FormControl>
+    <>  
+      <Grid container spacing={1} columns={3} rows={1}>
+        <Grid item style={{ width: '25%' }}>
+            <FolderList/>
+        </Grid>
 
-        <img src={logoImg} alt="Logo" />
-      </div>
-      <div className="editor-container">
+      <Grid item style={{ width: '45%' }}>
+          <ButtonGroup variant="text" aria-label="outlined button group">
+            <Button endIcon={<ReplyRoundedIcon />}>הגש</Button>
+            <Button endIcon={<RuleRoundedIcon />} >בדוק</Button>
+            <Button endIcon={<PlayCircleRoundedIcon />}>הרץ </Button>
+          </ButtonGroup>
 
-      <div style={{ backgroundColor: "white" }}>
-          <h1>טסט 1</h1>
-          <h1>טסט2</h1>
-          <h1>פלט בלה בלה</h1>
-          <button onClick={handleSubmit} className="check-button">עמוד הבא </button>
+            <AceEditor
+              mode="python"
+              theme="chrome"
+              name="code-editor"
+              fontSize={14}
+              value={code}
+              editorProps={{ $blockScrolling: true }}
+              onChange={(newValue) => setCode(newValue)}
+              style={{ width: '100%' }}
+            />
+        </Grid>
 
+      <Grid item style={{ width: '30%' }}>
+          <BasicAccordion/>
+        </Grid>
 
-      </div>
-
-        <AceEditor
-          mode="python"
-          theme="chrome"
-          name="code-editor"
-          fontSize={16}
-          value={code}
-          editorProps={{ $blockScrolling: true }}
-          onChange={(newValue) => setCode(newValue)}
-        />
-
-      <div style={{ backgroundColor: "white" }}>
-          <h1>הוראות בלה בלה</h1>
-          <button onClick={handleSubmit} className="check-button">בדוק </button>
-      </div>
-
-
-      </div>
+      </Grid>
     </>
   );
 }

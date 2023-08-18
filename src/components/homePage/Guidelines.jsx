@@ -17,13 +17,10 @@ function Guidelines() {
 
   return (
     <div style={{ width: "1000px", margin: "0 auto", textAlign: "center" }}>
-      <p style={{fontFamily: 'yarden', fontWeight:'normal'}}> 
+      <p style={{fontFamily: 'yarden', fontWeight:'normal', fontSize: 28}}> 
         ...חניכים יקרים, רק יצאתם לחופש וכבר אנחנו מתגעגעים <br />
-        כדי לשמור על כשירות, מצורפת משימה לקיץ. הגשה שלה היא תנאי הכרחי להמשך
+        כדי לשמור על כשירות, מצורפת משימה לקיץ. <br />הגשה שלה היא תנאי הכרחי להמשך
         לשנה ב <br />
-        בנוסף קיים אתגר לאמיצים, ניתן להגיש אותו במקום המשימה הרגילה <br />
-        מזכירים שבקרוב יהיה תרגול מונחה, שבו נפתור את המשימות יחד <br />
-        מוזמנים בינתיים לנסות לפתור לבד ולתפוס את מקומכם על קיר התהילה
       </p>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ textAlign: "center" }}>
@@ -45,13 +42,7 @@ function Guidelines() {
           <h4>4X4 משימה</h4>
         </div>
       </div>
-      <p>
-        :לכל שאלה, צוות פיתוח שנה א' זמינים במייל
-        <br />
-        devteam.a@nitzanim.tech
-        <br />
-        <b>!בהצלחה</b>
-      </p>
+
     </div>
   );
 }

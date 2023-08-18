@@ -39,8 +39,6 @@ img {
 
 .ace_editor {
   margin-top: 5px;
-  width: 900px !important;
-  height: 530px !important;
 }
 
 .ace_chrome {
@@ -49,18 +47,9 @@ img {
 
 .editor-container {
   background-color: #003061;
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  margin-bottom: -50vw;
   display: flex;
-  justify-content: center;
-  height: 540px; 
+  flex-direction: row;
 }
-
 .central-div {
   display: flex;
   flex-grow: 1;

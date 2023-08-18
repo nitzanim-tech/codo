@@ -57,7 +57,7 @@ function Home({deadline}) {
   };
 
   const handleAgree = () => {
-    gaEventTracker('agree')
+    //gaEventTracker('agree')
     navigateTo('/submit');
   };
   const handleClickToFW = () => {
@@ -65,11 +65,6 @@ function Home({deadline}) {
   };
 
   const targetDate = Date.parse(deadline);
-  // const timer = useTimer({
-  //   expiryTimestamp: targetDate,
-  //   onExpire: () => setShowButtons(false),
-  // });
-
 
 const ParentDiv = styled.div`
   display: flex;
@@ -81,7 +76,7 @@ const ParentDiv = styled.div`
 
   return (
     <>
-    <Button>
+    <Button onClick={navigateTo('/submit')}>
         <LottieComponent name = 'coin' text='אתגר'/>
     </Button>
 
@@ -109,33 +104,12 @@ const ParentDiv = styled.div`
         )}
           <Divider orientation="vertical" flexItem/>
           <div className="vertical-layout">
-            <img src={logoImg}></img>
-            <h1 style={{fontFamily: 'yarden', fontWeight:'bold'}}>משימה/אתגר קיץ</h1>
+          <img src={logoImg} style={{width: '300px'}} />
+            <h1 style={{fontFamily: 'yarden', fontWeight:'bold'}}>ברוכים הבאים</h1>
             <Guidelines />
           </div>
         </ParentDiv>
 
-
-      <button className="home-button" onClick={handleClickOpen}>
-        {!isTimeOver? 'להגשה': 'לבדיקה'}
-      </button>
-      <button className="home-button" onClick={handleClickToFW}>
-        לקיר התהילה
-      </button>
-
-      {/* <div className="blue-container">
-        <div className="container" style={{ flexDirection: 'row' }}>
-          <div style={{ marginRight: '20px', flex: '1' }}>
-            <h3 style={{ color: 'white' }}>אתגר-לוח גדול</h3>
-            <FameWall students={challengeStudents} />
-          </div>
-
-          <div style={{ flex: '1' }}>
-            <h3 style={{ color: 'white' }}>משימה-לוח קטן</h3>
-            <FameWall students={basicStudents} />
-          </div>
-        </div>
-      </div> */}
       <ConfirmationDialog
         open={open}
         onClose={handleClose}
