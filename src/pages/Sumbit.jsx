@@ -3,7 +3,6 @@ import FirstTask from "./FirstTask"
 import {Breadcrumbs, Typography} from '@mui/material';
 import Link from '@mui/material/Link';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import PythonConsole from '../components/PythonConsole'
 
 function Submit() {
 
@@ -21,7 +20,6 @@ function Submit() {
           <Link underline="hover" color="inherit" href="/sumbit" > משימה  </Link>
         </Breadcrumbs>
 
-    <PythonConsole/>
       <FirstTask />
     </>
   );

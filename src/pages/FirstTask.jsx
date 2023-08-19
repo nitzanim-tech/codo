@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-python";
-import "ace-builds/src-noconflict/theme-chrome";
 import { examplecode } from "../util/exampleCode";
 import { ButtonGroup, Button } from "@mui/material";
 import "./Submit.css";
@@ -12,7 +9,7 @@ import PlayCircleRoundedIcon from '@mui/icons-material/PlayCircleRounded';
 import RuleRoundedIcon from '@mui/icons-material/RuleRounded';
 import BasicAccordion from "../components/Instructions"
 import { WidthFull } from "@mui/icons-material";
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import {  Grid } from "@mui/material";
 import PyodideConsole from "../components/instractorsPage/newPython"
 
 function FirstTask() {
@@ -44,7 +41,6 @@ print(hi)
             <FolderList/>
         </Grid>
 
-      <PyodideConsole pythonCode={myPythonCodeString} />
 
       <Grid item style={{ width: '45%' }}>
           <ButtonGroup variant="text" aria-label="outlined button group">
@@ -53,16 +49,7 @@ print(hi)
             <Button endIcon={<PlayCircleRoundedIcon />}>הרץ </Button>
           </ButtonGroup>
 
-            <AceEditor
-              mode="python"
-              theme="chrome"
-              name="code-editor"
-              fontSize={14}
-              value={code}
-              editorProps={{ $blockScrolling: true }}
-              onChange={(newValue) => setCode(newValue)}
-              style={{ width: '100%' }}
-            />
+         <PyodideConsole pythonCode={myPythonCodeString} /> 
         </Grid>
 
       <Grid item style={{ width: '30%' }}>

@@ -1,4 +1,40 @@
 import React, { useState, useEffect } from "react";
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/mode-python";
+import "ace-builds/src-noconflict/theme-chrome";
+import { Terminal } from "primereact/terminal";
+import { TerminalService } from "primereact/terminalservice";
+import styled from "styled-components";
+
+const TerminalDemo = styled.div`
+  p {
+    margin-top: 10;
+  }
+  .p-terminal {
+    background-color: #212121;
+    color: #fff;
+    text-align: left;
+    margin: 10px;
+  }
+  .p-terminal .p-terminal-command {
+    color: #80cbc4;
+  }
+  .p-terminal .p-terminal-prompt {
+    color: #ffd54f;
+    margin: 10px;
+  }
+  .p-terminal .p-terminal-response {
+    color: #9fa8da;
+  }
+  .p-terminal input {
+    background-color: #212121;
+    border: 0;
+    color: #80cbc4;
+  }
+  .p-terminal input:focus {
+    outline: none !important;
+  }
+`;
 
 export default function PyodideConsole() {
   const [code, setCode] = useState("");
@@ -13,17 +49,23 @@ export default function PyodideConsole() {
       const pyodide = await loadPyodide({
         indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/",
       });
-pyodide.registerJsModule("customInput", {
-  input: (prompt) => {
-    setOutput((output) => output + prompt);
-    return new Promise((resolve) => {
-      setInputCallback(() => (value) => {
-        setOutput((output) => output + value + "\n");
-        resolve(value);
+      pyodide.registerJsModule("customInput", {
+        input: (prompt) => {
+          setTerminalHistory((history) => [
+            ...history,
+            { value: prompt, type: "response" },
+          ]);
+          return new Promise((resolve) => {
+            setInputCallback(() => (value) => {
+              setTerminalHistory((history) => [
+                ...history,
+                { value, type: "command" },
+              ]);
+              resolve(value);
+            });
+          });
+        },
       });
-    });
-  },
-});
       pyodide.runPython(`
         import customInput
         def input(prompt=""):
@@ -34,30 +76,50 @@ pyodide.registerJsModule("customInput", {
     })();
   }, []);
 
-const handleEvaluate = async () => {
-  try {
-    pyodide.runPython(`
+  useEffect(() => {
+    TerminalService.on("command", (event) => {
+      if (event.command === "run") {
+        handleEvaluate();
+      } else {
+        TerminalService.emit("response", `Unknown command: ${event.command}`);
+      }
+    });
+  }, []);
+
+  const [terminalHistory, setTerminalHistory] = useState([
+    { value: "Welcome to the Pyodide terminal!", type: "response" },
+  ]);
+  useEffect(() => {
+    console.log("terminalHistory updated", terminalHistory);
+  }, [terminalHistory]);
+
+  const handleEvaluate = async () => {
+    console.log("handleEvaluate called");
+    try {
+      pyodide.runPython(`
       import io, sys
       sys.stdout = io.StringIO()
     `);
-    const asyncCode = `async def main():\n${code
-      .split("\n")
-      .map((line) => {
-        if (line.includes("input(")) {
-          return "  " + line.replace("input(", "await input(");
-        }
-        return "  " + line;
-      })
-      .join("\n")}\nawait main()`;
-    await pyodide.runPythonAsync(asyncCode);
-    const result = pyodide.runPython("sys.stdout.getvalue()");
-    setOutput(result);
-  } catch (error) {
-    setOutput(error.message);
-  }
-};
+      const asyncCode = `async def main():\n${code
+        .split("\n")
+        .map((line) => {
+          if (line.includes("input(")) {
+            return "  " + line.replace("input(", "await input(");
+          }
+          return "  " + line;
+        })
+        .join("\n")}\nawait main()`;
+      await pyodide.runPythonAsync(asyncCode);
+      const result = pyodide.runPython("sys.stdout.getvalue()");
+      console.log(result);
 
-
+      TerminalService.emit("response", result);
+    } catch (error) {
+      console.error(error);
+      // Emit a "response" event with the error message
+      TerminalService.emit("response", error.message);
+    }
+  };
 
   const handleInput = (event) => {
     if (event.key === "Enter" && inputCallback) {
@@ -74,17 +136,33 @@ const handleEvaluate = async () => {
 
   return (
     <div>
-      <label htmlFor="code">Code:</label>
-      <textarea id="code" value={code} onChange={(e) => setCode(e.target.value)} />
-      <button onClick={handleEvaluate}>Evaluate</button>
-      <label htmlFor="console">Console:</label>
-      <textarea id="console" value={output} readOnly />
-      <input
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleInput}
-        placeholder="Enter input here"
+      <AceEditor
+        mode="python"
+        theme="chrome"
+        name="code-editor"
+        fontSize={14}
+        value={code}
+        editorProps={{ $blockScrolling: true }}
+        onChange={(newValue) => setCode(newValue)}
+        style={{ width: "100%" }}
       />
+
+      <button onClick={handleEvaluate}>Run</button>
+      <TerminalDemo>
+        <Terminal welcomeMessage="Welcome to PrimeReact" prompt=">" />
+      </TerminalDemo>
+      {/* <Terminal
+        onInput={(terminalInput) =>
+          console.log(`New terminal input received: '${terminalInput}'`)
+        }
+      >
+        {terminalHistory.map((item) => (
+          <TerminalOutput style={{ fontSize: 14 }} dir="ltr" key={item.value}>
+            {item.value}
+          </TerminalOutput>
+        ))}
+      </Terminal> */}
     </div>
   );
 }
+
