@@ -3,13 +3,11 @@ import FirstTask from "./FirstTask"
 import {Breadcrumbs, Typography} from '@mui/material';
 import Link from '@mui/material/Link';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import PythonConsole from '../components/PythonConsole'
+
 function Submit() {
-  const [result, setResult] = useState("");
 
-  const runPythonCode = async () => {
-  };
-
-function handleClick(event) {
+  function handleClick(event) {
   event.preventDefault();
   console.info('You clicked a breadcrumb.');
 }
@@ -23,6 +21,7 @@ function handleClick(event) {
           <Link underline="hover" color="inherit" href="/sumbit" > משימה  </Link>
         </Breadcrumbs>
 
+    <PythonConsole/>
       <FirstTask />
     </>
   );

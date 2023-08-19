@@ -13,14 +13,13 @@ import RuleRoundedIcon from '@mui/icons-material/RuleRounded';
 import BasicAccordion from "../components/Instructions"
 import { WidthFull } from "@mui/icons-material";
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
-
+import PyodideConsole from "../components/instractorsPage/newPython"
 
 function FirstTask() {
   const [code, setCode] = useState(localStorage.getItem("code") || examplecode);
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectError, setSelectError] = useState(false);
   const navigate = useNavigate();
-
   const handleSubmit = () => {
     if (!selectedTask) {
       setSelectError(true);
@@ -32,12 +31,20 @@ function FirstTask() {
     navigate("/check");
   };
 
+
+let myPythonCodeString = `
+print(hi)
+`;
+
+
   return (
     <>  
       <Grid container spacing={1} columns={3} rows={1}>
         <Grid item style={{ width: '25%' }}>
             <FolderList/>
         </Grid>
+
+      <PyodideConsole pythonCode={myPythonCodeString} />
 
       <Grid item style={{ width: '45%' }}>
           <ButtonGroup variant="text" aria-label="outlined button group">
