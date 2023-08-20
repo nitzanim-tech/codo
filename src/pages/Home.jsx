@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import LottieComponent from "../components/LottieComponent";
 import "./Home.css";
 import { Button ,Grid} from "@mui/material";
+import waveSvg from "../assets/wave-haikei.svg";
 
 function Home({ deadline }) {
   const navigateTo = useNavigate();
@@ -47,13 +48,23 @@ function Home({ deadline }) {
         </Grid>
         <Divider orientation="vertical" flexItem />
 
-        <Grid item style={{ width: "74%", backgroundColor: "#00325C" }}>
+        <Grid
+          item
+          style={{
+            width: "74%",
+            backgroundImage: `url(${waveSvg})`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            textAlign: "right",
+          }}
+        >
           <h1
             style={{
               fontFamily: "yarden",
               fontWeight: "bold",
               color: "white",
-              direction: "rtl",
+              marginRight: "10%",
             }}
           >
             ברוכים הבאים

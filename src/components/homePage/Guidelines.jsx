@@ -16,7 +16,7 @@ function Guidelines() {
   };
 
   return (
-    <div style={{ width: "1000px", margin: "0 auto", textAlign: "center" }}>
+    <div style={{ marginRight: "10%", }}>
       <p style={{fontFamily: 'yarden', fontWeight:'normal', fontSize: 28, color:'white'}}> 
         ...חניכים יקרים, רק יצאתם לחופש וכבר אנחנו מתגעגעים <br />
         כדי לשמור על כשירות, מצורפת משימה לקיץ. <br />הגשה שלה היא תנאי הכרחי להמשך

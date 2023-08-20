@@ -11,25 +11,29 @@ const TerminalDemo = styled.div`
     margin-top: 10;
   }
   .p-terminal {
-    background-color: #212121;
-    color: #fff;
+    background-color: #2b2b2b;
+    color: #cad2d8;
     text-align: left;
     margin: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    height: 150px;
+    overflow-y: scroll;
+    font-family: "Courier New", Courier, monospace;
   }
   .p-terminal .p-terminal-command {
-    color: #80cbc4;
+    color: #0b7309;
+    margin: 2px;
   }
   .p-terminal .p-terminal-prompt {
     color: #ffd54f;
     margin: 10px;
   }
-  .p-terminal .p-terminal-response {
-    color: #9fa8da;
-  }
   .p-terminal input {
-    background-color: #212121;
+    background-color: #2b2b2b;
     border: 0;
-    color: #80cbc4;
+    color: #0b7309;
   }
   .p-terminal input:focus {
     outline: none !important;
@@ -116,7 +120,6 @@ export default function PyodideConsole() {
       TerminalService.emit("response", result);
     } catch (error) {
       console.error(error);
-      // Emit a "response" event with the error message
       TerminalService.emit("response", error.message);
     }
   };
@@ -136,6 +139,8 @@ export default function PyodideConsole() {
 
   return (
     <div>
+      <button onClick={handleEvaluate}>Run</button>
+
       <AceEditor
         mode="python"
         theme="chrome"
@@ -144,25 +149,12 @@ export default function PyodideConsole() {
         value={code}
         editorProps={{ $blockScrolling: true }}
         onChange={(newValue) => setCode(newValue)}
-        style={{ width: "100%" }}
+        style={{ width: "100%", height: "300px" }}
       />
 
-      <button onClick={handleEvaluate}>Run</button>
       <TerminalDemo>
-        <Terminal welcomeMessage="Welcome to PrimeReact" prompt=">" />
+        <Terminal welcomeMessage="Welcome to PrimeReact" prompt="" />
       </TerminalDemo>
-      {/* <Terminal
-        onInput={(terminalInput) =>
-          console.log(`New terminal input received: '${terminalInput}'`)
-        }
-      >
-        {terminalHistory.map((item) => (
-          <TerminalOutput style={{ fontSize: 14 }} dir="ltr" key={item.value}>
-            {item.value}
-          </TerminalOutput>
-        ))}
-      </Terminal> */}
     </div>
   );
 }
-

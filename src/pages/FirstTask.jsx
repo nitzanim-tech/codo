@@ -10,7 +10,7 @@ import RuleRoundedIcon from '@mui/icons-material/RuleRounded';
 import BasicAccordion from "../components/Instructions"
 import { WidthFull } from "@mui/icons-material";
 import {  Grid } from "@mui/material";
-import PyodideConsole from "../components/instractorsPage/newPython"
+import PyodideConsole from "../components/newPython"
 
 function FirstTask() {
   const [code, setCode] = useState(localStorage.getItem("code") || examplecode);
