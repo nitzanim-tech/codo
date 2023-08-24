@@ -1,0 +1,31 @@
+  p {
+    margin-top: 10;
+  }
+  .p-terminal {
+    background-color: #2b2b2b;
+    color: #cad2d8;
+    text-align: left;
+    margin: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    height: 150px;
+    overflow-y: scroll;
+    font-family: "Courier New", Courier, monospace;
+  }
+  .p-terminal .p-terminal-command {
+    color: #0b7309;
+    margin: 2px;
+  }
+  .p-terminal .p-terminal-prompt {
+    color: #ffd54f;
+    margin: 10px;
+  }
+  .p-terminal input {
+    background-color: #2b2b2b;
+    border: 0;
+    color: #0b7309;
+  }
+  .p-terminal input:focus {
+    outline: none !important;
+  }

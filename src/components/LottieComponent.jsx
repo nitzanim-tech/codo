@@ -1,50 +1,50 @@
-import Lottie from 'react-lottie';
-import bookLottie from '../assets/lottie/book.json';
-import exploreLottie from '../assets/lottie/explore.json';
-import coinLottie from '../assets/lottie/coin.json';
-import puzzleLottie from '../assets/lottie/puzzle.json';
+import Lottie from "lottie-react";
+import bookLottie from "../assets/lottie/book.json";
+import exploreLottie from "../assets/lottie/explore.json";
+import coinLottie from "../assets/lottie/coin.json";
+import puzzleLottie from "../assets/lottie/puzzle.json";
 
-import { useState, useEffect } from "react";
-
+import { useState, useRef } from "react";
 
 const animations = {
   book: bookLottie,
   explore: exploreLottie,
   coin: coinLottie,
-  puzzle: puzzleLottie
-}
+  puzzle: puzzleLottie,
+};
 
-function LottieComponent({name, text}) {
-  const [isStopped, setIsStopped] = useState(true);
-  const animationData = animations[name]
+function LottieComponent({ name, text }) {
+  const animationData = animations[name];
+  const lottieRef = useRef(null);
 
-  const defaultOptions = {
-    loop: false,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice'
-    }
+  const handleMouseEnter = () => {
+    lottieRef.current.play();
+  };
+
+  const handleMouseLeave = () => {
+    lottieRef.current.pause();
   };
 
   return (
-    <div onMouseEnter={() => setIsStopped(false)}
-         onMouseLeave={() => setIsStopped(true)}
-         style={{
-  display: 'flex',
-  alignItems: 'center',
-  marginLeft:'30px',
-  marginRight:'10px'
-}}>
-      <h2 style={{fontFamily: 'yarden' ,  fontWeight: 'bold' }}>{text}</h2>
-      <Lottie 
-        options={defaultOptions}
-        isStopped={isStopped}
-        isPaused={isStopped}  
-                height={100}
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        marginLeft: "30px",
+        marginRight: "10px",
+      }}
+    >
+      <h2 style={{ fontFamily: "yarden", fontWeight: "bold" }}>{text}</h2>
+      <Lottie
+        animationData={animationData}
+        loop={false}
+        lottiRef={lottieRef}
+        height={100}
         width={100}
-
       />
     </div>
-)
+  );
 }
 export default LottieComponent;

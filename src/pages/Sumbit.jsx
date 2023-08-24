@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FirstTask from "./FirstTask"
+import FirstTask from "../components/FirstTask";
 import {Breadcrumbs, Typography} from '@mui/material';
 import Link from '@mui/material/Link';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';

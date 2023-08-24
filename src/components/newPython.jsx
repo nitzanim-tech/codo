@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-python";
-import "ace-builds/src-noconflict/theme-chrome";
 import { Terminal } from "primereact/terminal";
 import { TerminalService } from "primereact/terminalservice";
 import styled from "styled-components";
+import { Spinner } from "@nextui-org/react";
+import Editor from "@monaco-editor/react";
 
 const TerminalDemo = styled.div`
   p {
@@ -134,22 +133,19 @@ export default function PyodideConsole() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div><Spinner/></div>;
   }
 
   return (
     <div>
       <button onClick={handleEvaluate}>Run</button>
 
-      <AceEditor
-        mode="python"
-        theme="chrome"
-        name="code-editor"
-        fontSize={14}
+      <Editor
+        height="300px"
+        defaultLanguage="python"
+        theme="vs-dark"
         value={code}
-        editorProps={{ $blockScrolling: true }}
         onChange={(newValue) => setCode(newValue)}
-        style={{ width: "100%", height: "300px" }}
       />
 
       <TerminalDemo>
