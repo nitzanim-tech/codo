@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Chip } from "@nextui-org/react";
-
 import { Accordion, AccordionItem } from "@nextui-org/react";
 
 export default function BasicAccordion() {
   return (
-    <div>
-      <Accordion dir="rtl">
+    <div style={{ width: "100%" }}>
+      <Accordion dir="rtl" variant="splitted" selectionMode="multiple">
         <AccordionItem title="מה צריך לדעת?">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
@@ -32,7 +31,7 @@ export default function BasicAccordion() {
           <p style={{ direction: "rtl", textAlign: "right" }}>
             דג גדול שט לו בים ובלב שלנו את תמיד תהיי פרח השכונות
             <br />
-            דוגמה לקוד:{" "}
+            דוגמה לקוד:
             <code>
               print(a)
               <br />

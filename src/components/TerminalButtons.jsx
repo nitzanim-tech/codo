@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { examplecode } from "../util/exampleCode";
-import { ButtonGroup } from "@mui/material";
 import { Button } from "@nextui-org/react";
 
 import FolderList from "./TestsList";
@@ -10,7 +9,11 @@ import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import RuleRoundedIcon from "@mui/icons-material/RuleRounded";
 import BasicAccordion from "./Instructions";
 import { Grid } from "@mui/material";
-import PyodideConsole from "./newPython";
+import PyodideConsole from "./PythonIDE";
+import { Switch } from "@nextui-org/react";
+import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import { Tooltip } from "@nextui-org/react";
 
 function FirstTask() {
   const [code, setCode] = useState(localStorage.getItem("code") || examplecode);
@@ -35,16 +38,38 @@ print(hi)
   return (
     <>
       <Grid container spacing={1} columns={3} rows={1}>
+
+
         <Grid item style={{ width: "25%" }}>
           <FolderList />
         </Grid>
 
         <Grid item style={{ width: "45%" }}>
-          <ButtonGroup variant="text" aria-label="outlined button group">
-            <Button endContent={<ReplyRoundedIcon />}>הגש</Button>
-            <Button endContent={<RuleRoundedIcon />}>בדוק</Button>
-            <Button endContent={<PlayCircleRoundedIcon />}>הרץ </Button>
-          </ButtonGroup>
+          <Switch
+            defaultSelected
+            size="lg"
+            color="success"
+            startContent={<WbSunnyRoundedIcon />}
+            endContent={<DarkModeRoundedIcon />}
+          ></Switch>
+          <Tooltip content="הגש" placement={"bottom"}>
+            <Button isIconOnly variant="faded">
+              <ReplyRoundedIcon />
+            </Button>
+          </Tooltip>
+
+          <Tooltip content="בדוק" placement={"bottom"}>
+            <Button isIconOnly variant="faded">
+              <RuleRoundedIcon />
+            </Button>
+          </Tooltip>
+
+          <Tooltip content="הרץ" placement={"bottom"}>
+            <Button isIconOnly variant="faded">
+              <PlayCircleRoundedIcon />
+            </Button>
+          </Tooltip>
+
 
           <PyodideConsole pythonCode={myPythonCodeString} />
         </Grid>

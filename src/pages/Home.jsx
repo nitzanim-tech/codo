@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import logoImg from "../assets/img/logo.png";
-import { ConfirmationDialog, FameWall, Guidelines } from "../components";
+import { Guidelines } from "../components";
 //import useAnalyticsEventTracker from '../util/useAnalyticsEventTracker';
 import styled from "styled-components";
 import Divider from "@mui/material/Divider";
@@ -26,7 +25,6 @@ function Home({ deadline }) {
 
   return (
     <>
-      <img src={logoImg} style={{ width: "200px" }} />
 
       <Grid container spacing={1} columns={3} rows={1}>
         <Grid item style={{ width: "25%" }}>

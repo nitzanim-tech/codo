@@ -1,17 +1,16 @@
-  p {
-    margin-top: 10;
-  }
   .p-terminal {
     background-color: #2b2b2b;
     color: #cad2d8;
     text-align: left;
-    margin: 10px;
+    margin-top: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
     height: 150px;
     overflow-y: scroll;
-    font-family: "Courier New", Courier, monospace;
+    font-family: "JetBrainsMono", Courier, monospace;
+    width: 100%;
+
   }
   .p-terminal .p-terminal-command {
     color: #0b7309;

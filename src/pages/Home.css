@@ -1,6 +1,8 @@
 /* body{
   background-color: #003061;
 } */
+
+
 .logo {
   display: block;
   margin: 0 auto;
@@ -47,4 +49,15 @@
   font-family: 'yarden'; 
   src: url('../assets/fonts/yarden-bold.woff') format('woff');
   font-weight: bold;  
+}
+@font-face {
+  font-family: 'JetBrainsMono'; 
+  src: url('../assets/fonts/JetBrainsMono-Bold.ttf') format('ttf');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'JetBrainsMono'; 
+  src: url('../assets/fonts/JetBrainsMono-Medium.ttf') format('ttf');
+  font-weight: normal;
 }
