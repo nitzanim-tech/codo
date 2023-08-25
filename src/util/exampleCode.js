@@ -1,5 +1,4 @@
-const examplecode = `
-A_location = int(input("Enter A floor:"))
+const examplecode = `A_location = int(input("Enter A floor:"))
 B_location = int(input("Enter B floor:"))
 people_position = int(input("Enter people floor:"))
 

@@ -4,31 +4,37 @@ import { Accordion, AccordionItem } from "@nextui-org/react";
 
 export default function BasicAccordion() {
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", textAlign: "right", direction: "rtl" }}>
       <Accordion dir="rtl" variant="splitted" selectionMode="multiple">
         <AccordionItem title="מה צריך לדעת?">
-          <p style={{ marginBottom: "10px" }}>
-            חזרה על החומר שנלמד במהלך השנה בתוכנית ג'וניור. תוכלו לחזור עליו על
-            ידי ספר הקורס (קישור אליו מופיע בעמוד הבית)
-          </p>
+          <p style={{ marginBottom: "10px" }}>נושאים עיקריים: </p>
           <div
             style={{ display: "flex", justifyContent: "center", gap: "10px" }}
           >
             <Chip>משתנים</Chip>
+            <Chip>ביטויים בוליאניים</Chip>
             <Chip>תנאים</Chip>
-            <Chip>לולאות</Chip>
           </div>
         </AccordionItem>
 
         <AccordionItem title="תיאור המשימה">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            בבניין רב קומות יש שתי מעליות – A וB המעליות נמצאות בקומות שונות.
+            <br />
+            כשאליס תזמין מעלית, תגיע אליה המעלית הקרובה ביותר לקומה שנמצאת בה
+            עכשיו.
+            <br />
+            קלטו מהמשתמש את הקומה של שבה המעלית A נמצאת עכשיו, ואת הקומה שבה B
+            נמצאת.
+            <br />
+            לאחר מכן קלטו את הקומה בה אליס נמצאת. הדפיסו את שם המעלית הקרובה
+            ביותר לאליס - A או B. אם שתיהן קרובות באותה המידה הדפיסו אחת מהן
+            (שתי הבחירות נכונות)
           </p>
         </AccordionItem>
 
         <AccordionItem title="דוגמאות הרצה">
-          <p style={{ direction: "rtl", textAlign: "right" }}>
+          <p style={{ textAlign: "right" }}>
             דג גדול שט לו בים ובלב שלנו את תמיד תהיי פרח השכונות
             <br />
             דוגמה לקוד:

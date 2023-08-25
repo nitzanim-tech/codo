@@ -1,13 +1,30 @@
-import React, { useState } from "react";
-import FirstTask from "../components/TerminalButtons";
+import React from "react";
+import PythonIDE from "../components/PythonIDE";
 import NavBar from "../components/NavigateBar";
-import "./Submit.css";
-function Submit() {
+import BasicAccordion from "../components/Instructions";
+import TestsList from "../components/TestsList";
+import { Grid } from "@mui/material";
 
+import "./Submit.css";
+
+function Submit() {
   return (
     <>
       <NavBar />
-      <FirstTask />
+
+      <Grid container spacing={1} columns={3} rows={1}>
+        <Grid item style={{ width: "25%" }}>
+          <TestsList />
+        </Grid>
+
+        <Grid item style={{ width: "45%" }}>
+          <PythonIDE />
+        </Grid>
+
+        <Grid item style={{ width: "30%" }}>
+          <BasicAccordion />
+        </Grid>
+      </Grid>
     </>
   );
 }

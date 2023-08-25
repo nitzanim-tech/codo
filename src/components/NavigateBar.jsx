@@ -5,14 +5,11 @@ import {
   NavbarContent,
   NavbarItem,
   Link,
-  Button,
 } from "@nextui-org/react";
 import logoImg from "../assets/img/logo.png";
 import FirebaseAuth from "./FirebaseAuth";
 
-
 export default function NavigateBar() {
-
   return (
     <Navbar dir="rtl" position="static">
       <NavbarBrand>
@@ -22,11 +19,6 @@ export default function NavigateBar() {
         <NavbarItem>
           <Link color="foreground" href="#">
             Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
           </Link>
         </NavbarItem>
         <NavbarItem>

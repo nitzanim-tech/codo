@@ -4,10 +4,9 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
 import { Listbox, ListboxItem, ModalContent } from "@nextui-org/react";
 import { Modal, ModalHeader, ModalBody, ModalFooter ,useDisclosure} from "@nextui-org/react";
-import Terminal from "./Terminal";
 
 
-export default function FolderList() {
+export default function TestsList() {
   const [selectedValue, setSelectedValue] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

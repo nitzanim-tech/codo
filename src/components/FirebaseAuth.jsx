@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 import firebaseConfig from "../util/firebaseConfig";
 import { User, Dropdown } from "@nextui-org/react";
+import { DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -41,16 +42,6 @@ const FirebaseAuth = () => {
       });
   };
 
-  const handleFacebookSignIn = () => {
-    const provider = new FacebookAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log(result.user);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
 
   const handleEmailSignUp = (event) => {
     event.preventDefault();
@@ -88,17 +79,35 @@ const FirebaseAuth = () => {
 
   return (
     <div>
-      <User name={currentUser ? currentUser.displayName : "אורח"} />
       {currentUser ? (
-        <button onClick={handleSignOut}>התנתק</button>
+        <Dropdown dir="rtl">
+          <DropdownTrigger>
+            <User
+              name={currentUser.displayName}
+              style={{ cursor: "pointer" }}
+            />
+          </DropdownTrigger>
+          <DropdownMenu
+            variant="faded"
+            aria-label="Dropdown menu with description"
+            onAction={(key) => console.log(key)}
+          >
+            <DropdownItem key="logout">התנתק</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       ) : (
-        <Dropdown
-          title="אפשרויות"
-          options={[
-            { label: "הרשם", onClick: () => {} },
-            { label: "התחבר", onClick: () => {} },
-          ]}
-        />
+        <Dropdown dir="rtl">
+          <DropdownTrigger>
+            <User name={"אורח"} style={{ cursor: "pointer" }} />
+          </DropdownTrigger>
+          <DropdownMenu
+            variant="faded"
+            aria-label="Dropdown menu with description"
+          >
+            <DropdownItem key="sign">הרשם</DropdownItem>
+            <DropdownItem key="login">התחבר</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       )}
     </div>
   );
