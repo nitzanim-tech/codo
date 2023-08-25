@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Guidelines } from "../components";
-//import useAnalyticsEventTracker from '../util/useAnalyticsEventTracker';
 import styled from "styled-components";
 import Divider from "@mui/material/Divider";
 import LottieComponent from "../components/LottieComponent";

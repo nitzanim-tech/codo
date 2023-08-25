@@ -3,6 +3,8 @@ import Home from "./pages/Home";
 import Sumbit from "./pages/Sumbit";
 import Check from "./pages/Check";
 import Instructors from "./pages/Instructors";
+import { app, analytics } from "./util/Firebase";
+
 import "./App.css";
 
 function App() {

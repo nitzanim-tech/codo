@@ -8,8 +8,11 @@ import {
   Button,
 } from "@nextui-org/react";
 import logoImg from "../assets/img/logo.png";
+import FirebaseAuth from "./FirebaseAuth";
+
 
 export default function NavigateBar() {
+
   return (
     <Navbar dir="rtl" position="static">
       <NavbarBrand>
@@ -33,14 +36,7 @@ export default function NavigateBar() {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        <FirebaseAuth />
       </NavbarContent>
     </Navbar>
   );

@@ -7,9 +7,9 @@ export default function BasicAccordion() {
     <div style={{ width: "100%" }}>
       <Accordion dir="rtl" variant="splitted" selectionMode="multiple">
         <AccordionItem title="מה צריך לדעת?">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+          <p style={{ marginBottom: "10px" }}>
+            חזרה על החומר שנלמד במהלך השנה בתוכנית ג'וניור. תוכלו לחזור עליו על
+            ידי ספר הקורס (קישור אליו מופיע בעמוד הבית)
           </p>
           <div
             style={{ display: "flex", justifyContent: "center", gap: "10px" }}
