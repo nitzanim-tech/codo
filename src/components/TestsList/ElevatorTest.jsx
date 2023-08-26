@@ -19,28 +19,35 @@ const ElevatorTable = ({ test }) => {
         <Row key={row}>
           {columns.map((column) => (
             <Cell key={column} column={column}>
-              {column === 0 && row.toString()}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {column === 0 && row.toString()}
+              </div>
               {column === 1 && row === input.A && (
                 <>
-                  <div style={{ position: "relative" }}>
-                    <ElevatorImg
-                      src={elevatorImg}
-                      alt="elevator"
-                      glow={column === 1 && row === input.A}
-                    />
-                    <Letter>A</Letter>
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ElevatorImg src={elevatorImg} alt="elevator" />
+                    <Letter glow={test.ans === "A"}>A</Letter>
                   </div>
                 </>
               )}
               {column === 3 && row === input.B && (
                 <>
                   <div style={{ position: "relative" }}>
-                    <ElevatorImg
-                      src={elevatorImg}
-                      alt="elevator"
-                      glow={test.correct}
-                    />
-                    <Letter>B</Letter>
+                    <ElevatorImg src={elevatorImg} alt="elevator" />
+                    <Letter glow={test.ans === "B"}>B</Letter>
                   </div>
                 </>
               )}
@@ -48,7 +55,6 @@ const ElevatorTable = ({ test }) => {
                 <>
                   <div style={{ position: "relative" }}>
                     <img src={childImg} alt="child" style={{ width: "100%" }} />
-                    <Letter>P</Letter>
                   </div>
                 </>
               )}
@@ -67,16 +73,25 @@ const Table = styled.div`
   border-collapse: collapse;
   width: 100%;
 `;
+const Cell = styled.div`
+  display: table-cell;
+  border-left: ${(props) =>
+    props.column === 0 || props.column === 3 ? "1px solid black" : "none"};
+  border-right: ${(props) => (props.column === 0 ? "1px solid black" : "none")};
+  width: 25%;
+  height: 35px;
+`;
 
 const Row = styled.div`
   display: table-row;
-`;
 
-const Cell = styled.div`
-  display: table-cell;
-  border: ${(props) => (props.column === 0 ? "1px solid black" : "none")};
-  width: 25%;
-  height: 30px;
+  &:first-child ${Cell} {
+    border-top: 1px solid black;
+  }
+
+  &:last-child ${Cell} {
+    border-bottom: 1px solid black;
+  }
 `;
 
 const Letter = styled.div`
@@ -84,12 +99,13 @@ const Letter = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: black;
+  color: ${(props) => (props.glow ? "rgba(0, 70, 0, 1.0)" : "balck")};
   font-weight: bold;
+  text-shadow: ${(props) =>
+    props.glow ? "0 0px 5px rgba(0, 200, 100, 1.0)" : "none"};
+  z-index: 1;
 `;
 
 const ElevatorImg = styled.img`
   width: 100%;
-  box-shadow: ${(props) =>
-    props.glow ? "0 0 10px 5px rgba(0, 140, 210, 0.75)" : "none"};
 `;

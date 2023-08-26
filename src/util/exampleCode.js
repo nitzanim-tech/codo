@@ -7,7 +7,7 @@ if dist_from_A < 0:
     dist_from_A *= -1
 dist_from_B = B_location - people_position
 if dist_from_B < 0:
-    dist_from_A *= -1
+    dist_from_B *= -1
 
 if dist_from_A < dist_from_B:
     print('A')

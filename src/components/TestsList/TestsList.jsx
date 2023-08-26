@@ -46,7 +46,6 @@ export default function TestsList({ testsOutputs }) {
                 }
                 dir="rtl"
               >
-                {console.log(testsOutput)}
                 {testsOutput.name}
               </ListboxItem>
             ) : (
@@ -85,7 +84,7 @@ export default function TestsList({ testsOutputs }) {
               <Grid item style={{ width: "30%" }}>
                 <ElevatorTable test={selectedValue} />
               </Grid>
-              <Grid item style={{ width: "60%" }}>
+              <Grid item style={{ width: "70%" }}>
                 {generateExplanation(selectedValue)}
               </Grid>
             </Grid>
