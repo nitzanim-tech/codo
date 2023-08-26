@@ -2,18 +2,6 @@ import React from "react";
 // import { driveImg } from "../../assets/img";
 
  function Guidelines() {
-  const handleDownload = (file) => {
-    const link = document.createElement("a");
-    if (file == "basic") {
-      link.href = `https://drive.google.com/file/d/1P2Q-NpB9gLWmcgl3iGvKYlCLSonKubNF/view?usp=sharing`;
-    } else {
-      link.href =
-        "https://drive.google.com/file/d/1A4gOAv-GYNumLRCd8cnrKdaLBIMQXJob/view?usp=sharing";
-    }
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div style={{ marginRight: "10%" }}>

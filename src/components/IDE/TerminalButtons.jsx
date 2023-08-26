@@ -19,7 +19,7 @@ function TerminalButtons({ code, setOutput, setTestsOutputs, setInputCallback })
         setOutput((output) => output + prompt);
         return new Promise((resolve) => {
           setInputCallback(() => (value) => {
-            setOutput((output) => output + value + '\n');
+            setOutput((output) => output + '\n' + value + '\n');
             resolve(value);
           });
         });
@@ -75,18 +75,11 @@ function TerminalButtons({ code, setOutput, setTestsOutputs, setInputCallback })
       </Tooltip>
 
       <RunTestButton code={code} setTestsOutputs={setTestsOutputs} />
-      <Tooltip content="הרץ" placement={'bottom'}>
         <Tooltip content="הרץ" placement={'bottom'}>
-          <Button
-            isIconOnly
-            variant="faded"
-            onClick={() => handleEvaluate()}
-            // disabled={!pyodideReady}
-          >
+          <Button isIconOnly variant="faded" onClick={() => handleEvaluate()}>
             <PlayCircleRoundedIcon />
           </Button>
         </Tooltip>
-      </Tooltip>
     </div>
   );
 }

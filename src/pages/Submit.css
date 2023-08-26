@@ -1,11 +1,9 @@
 /* Submit.css */
 body {
   color: rgba(14, 12, 12, 0.87);
-  background-color: #ffffff;
+  background-color: #FBF9F9;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-
 }
 
 /* body {
