@@ -7,8 +7,9 @@ import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import { Switch, Tooltip } from "@nextui-org/react";
 import RunTestButton from "./RunTestButton";
-function TerminalButtons({ pyodide, code, setOutput }) {
 
+
+function TerminalButtons({ pyodide, code, setOutput, setTestsOutputs }) {
   async function handleEvaluate() {
     setOutput("");
     console.log("handleEvaluate called");
@@ -50,7 +51,7 @@ function TerminalButtons({ pyodide, code, setOutput }) {
           <ReplyRoundedIcon />
         </Button>
       </Tooltip>
-      <RunTestButton code={code || ""} /> 
+      <RunTestButton code={code} setTestsOutputs={setTestsOutputs}/>
       <Tooltip content="הרץ" placement={"bottom"}>
         <Button isIconOnly variant="faded" onClick={() => handleEvaluate()}>
           <PlayCircleRoundedIcon />

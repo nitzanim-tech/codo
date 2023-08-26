@@ -1,16 +1,20 @@
-import * as React from "react";
+import React, { useState } from "react";
+import { Listbox, ListboxItem, ModalContent } from "@nextui-org/react";
+import { ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
+import { Modal, ModalHeader } from "@nextui-org/react";
+
+import ElevatorTable from "./ElevatorTest";
+import { Grid } from "@mui/material";
+
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
-import { Listbox, ListboxItem, ModalContent } from "@nextui-org/react";
-import { Modal, ModalHeader, ModalBody, ModalFooter ,useDisclosure} from "@nextui-org/react";
-import ElevatorTable from "./ElevatorTest";
 
-export default function TestsList() {
-  const [selectedValue, setSelectedValue] = React.useState("");
-  const [open, setOpen] = React.useState(false);
+export default function TestsList({ testsOutputs }) {
+  const [selectedValue, setSelectedValue] = useState(0);
+  const [open, setOpen] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [scrollBehavior, setScrollBehavior] = React.useState("inside");
+  const [scrollBehavior, setScrollBehavior] = useState("inside");
 
   const ListboxWrapper = ({ children }) => (
     <div className="w-full max-w-[260px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100">
@@ -19,41 +23,44 @@ export default function TestsList() {
   );
 
   const handleSelect = (value) => {
-    setSelectedValue(value);
+    const selectedObject = testsOutputs.find((obj) => obj.name === value);
+    setSelectedValue(selectedObject);
     setOpen(true);
   };
 
-  const disableKeys = ["edit", "delete"];
   return (
     <>
       <ListboxWrapper>
-        <Listbox
-          aria-label="tests"
-          onAction={handleSelect}
-          disabledKeys={disableKeys}
-        >
-          <ListboxItem
-            value="קרוב למעלית A"
-            startContent={<CheckCircleRoundedIcon />}
-            dir="rtl"
-          >
-            קרוב למעלית A
-          </ListboxItem>
-          <ListboxItem
-            value="קרוב למעלית B"
-            startContent={<CancelRoundedIcon />}
-            dir="rtl"
-          >
-            קרוב למעלית B
-          </ListboxItem>
-          <ListboxItem
-            key="edit"
-            value="בדיוק באמצע"
-            startContent={<RadioButtonUncheckedRoundedIcon />}
-            dir="rtl"
-          >
-            בדיוק באמצע
-          </ListboxItem>
+        <Listbox aria-label="tests" onAction={handleSelect}>
+          {testsOutputs.map((testsOutput, index) =>
+            testsOutput.output ? (
+              <ListboxItem
+                key={testsOutput.name}
+                value={testsOutput.name}
+                startContent={
+                  testsOutput.correct ? (
+                    <CheckCircleRoundedIcon />
+                  ) : (
+                    <CancelRoundedIcon />
+                  )
+                }
+                dir="rtl"
+              >
+                {console.log(testsOutput)}
+                {testsOutput.name}
+              </ListboxItem>
+            ) : (
+              <ListboxItem
+                isDisabled
+                key={index}
+                value={testsOutput.name}
+                startContent={<RadioButtonUncheckedRoundedIcon />}
+                dir="rtl"
+              >
+                {testsOutput.name}
+              </ListboxItem>
+            ),
+          )}
         </Listbox>
       </ListboxWrapper>
 
@@ -64,11 +71,26 @@ export default function TestsList() {
         dir="rtl"
       >
         <ModalContent onClose={() => setOpen(false)}>
-          <ModalHeader>כותרת</ModalHeader>
+          <ModalHeader>
+            {selectedValue.correct ? (
+              <CheckCircleRoundedIcon />
+            ) : (
+              <CancelRoundedIcon />
+            )}
+            {selectedValue.name}
+          </ModalHeader>
+
           <ModalBody>
-            <ElevatorTable />
-            {selectedValue}
+            <Grid container spacing={1} columns={3} rows={1}>
+              <Grid item style={{ width: "30%" }}>
+                <ElevatorTable test={selectedValue} />
+              </Grid>
+              <Grid item style={{ width: "40%" }}>
+                <p>{JSON.stringify(selectedValue)};</p>
+              </Grid>
+            </Grid>
           </ModalBody>
+
           <ModalFooter>
             <button onClick={() => setOpen(false)}>סגור</button>
           </ModalFooter>

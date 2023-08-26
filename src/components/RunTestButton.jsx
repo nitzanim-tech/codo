@@ -1,11 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Tooltip } from "@nextui-org/react";
 import RuleRoundedIcon from "@mui/icons-material/RuleRounded";
 import runTest from "./test";
 
-export default function RunTestButton({ code }) {
+export default function RunTestButton({ code, setTestsOutputs }) {
   const pyodide = true;
-  let testsOutputs = [];
+
+  async function handleClick() {
+    const inputList = generateInputList();
+    const rowTestsOutputs = await runTest({ code, inputList });
+    setTestsOutputs(processTestsOutputs(rowTestsOutputs));
+  }
 
   return (
     <Tooltip content={pyodide ? "בדוק" : "(טוען..) בדוק"} placement={"bottom"}>
@@ -14,8 +19,7 @@ export default function RunTestButton({ code }) {
           isIconOnly
           variant="faded"
           onClick={() => {
-            const inputList = generateInputList();
-            runTest({ code, inputList, testsOutputs });
+            handleClick();
           }}
         >
           <RuleRoundedIcon />
@@ -43,4 +47,22 @@ function generateInputList() {
   ];
 
   return [first.join("\n"), second.join("\n")];
+}
+
+function processTestsOutputs(testsOutputs) {
+  const answers = ["B", "A"];
+  const names = ["קרוב למעלית A", "קרוב למעלית B", "בדיוק באמצע"];
+  return testsOutputs.map((testsOutput, index) => {
+    const inputLines = testsOutput.input.split("\n");
+    const input = {
+      A: parseInt(inputLines[0]),
+      B: parseInt(inputLines[1]),
+      P: parseInt(inputLines[2]),
+    };
+    const outputLines = testsOutput.output.split("\n");
+    const output = outputLines[outputLines.length - 2];
+    const correct = output.includes(answers[index]);
+    const name = names[index];
+    return {name, input, output, correct };
+  });
 }

@@ -18,10 +18,11 @@ async function runPython(pythonCode, input) {
   return output;
 }
 
-export default async function runTest({ code, inputList, testsOutputs }) {
-  testsOutputs = [];
+export default async function runTest({ code, inputList }) {
+  let testsOutputs = [];
   for (const input of inputList) {
     const output = await runPython(code, input.replace(/\n/g, "\\n"));
     testsOutputs.push({ input, output });
   }
+  return testsOutputs;
 }

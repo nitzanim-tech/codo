@@ -7,14 +7,13 @@ import Terminal from "./Terminal";
 import TerminalButtons from "./TerminalButtons";
 import PyodideConsole from "./MonacoEditor";
 
-function PythonIDE() {
+function PythonIDE({ setTestsOutputs }) {
   const [code, setCode] = useState(localStorage.getItem("code") || examplecode);
   const [output, setOutput] = useState("");
   const [pyodide, setPyodide] = useState(null);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [inputCallback, setInputCallback] = useState(null);
-
 
   useEffect(() => {
     (async () => {
@@ -64,7 +63,12 @@ function PythonIDE() {
     <>
       <Card isFooterBlurred style={{ backgroundColor: "#1E1E1E" }}>
         <CardBody>
-          <TerminalButtons code={code}  pyodide={pyodide} setOutput={setOutput}/>
+          <TerminalButtons
+            code={code}
+            pyodide={pyodide}
+            setOutput={setOutput}
+            setTestsOutputs={setTestsOutputs}
+          />
           <Divider style={{ color: "white" }} />
           <div style={{ marginLeft: "-30px", marginRight: "-20px" }}>
             <PyodideConsole code={code} setCode={setCode} output={output} />
