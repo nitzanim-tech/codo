@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-  signOut,
-} from "firebase/auth";
 import firebaseConfig from "../util/firebaseConfig";
+
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+
 import { User, Dropdown } from "@nextui-org/react";
 import { DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
+
+import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
+import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -41,7 +39,6 @@ const FirebaseAuth = () => {
         console.log(error.message);
       });
   };
-
 
   const handleEmailSignUp = (event) => {
     event.preventDefault();
@@ -78,38 +75,82 @@ const FirebaseAuth = () => {
   };
 
   return (
-    <div>
-      {currentUser ? (
-        <Dropdown dir="rtl">
-          <DropdownTrigger>
-            <User
-              name={currentUser.displayName}
-              style={{ cursor: "pointer" }}
-            />
-          </DropdownTrigger>
-          <DropdownMenu
-            variant="faded"
-            aria-label="Dropdown menu with description"
-            onAction={(key) => console.log(key)}
-          >
-            <DropdownItem key="logout">התנתק</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      ) : (
-        <Dropdown dir="rtl">
-          <DropdownTrigger>
-            <User name={"אורח"} style={{ cursor: "pointer" }} />
-          </DropdownTrigger>
-          <DropdownMenu
-            variant="faded"
-            aria-label="Dropdown menu with description"
-          >
-            <DropdownItem key="sign">הרשם</DropdownItem>
-            <DropdownItem key="login">התחבר</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      )}
-    </div>
+    <>
+      <div>
+        {currentUser ? (
+          <Dropdown dir="rtl">
+            <DropdownTrigger>
+              <User
+                name={currentUser.displayName}
+                style={{ cursor: "pointer" }}
+              />
+            </DropdownTrigger>
+            <DropdownMenu
+              variant="faded"
+              aria-label="Dropdown menu with description"
+              onAction={(key) => console.log(key)}
+            >
+              <DropdownItem key="logout">התנתק</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        ) : (
+          <Dropdown dir="rtl">
+            <DropdownTrigger>
+              <User name={"אורח"} style={{ cursor: "pointer" }} />
+            </DropdownTrigger>
+            <DropdownMenu
+              variant="faded"
+              aria-label="Dropdown menu with description"
+            >
+              <DropdownItem
+                key="sign"
+                onClick={() => handleEmailSignUp}
+                startContent={<AssignmentIndRoundedIcon />}
+              >
+                הרשם
+              </DropdownItem>
+              <DropdownItem key="login" startContent={<LoginRoundedIcon />}>
+                התחבר
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        )}
+      </div>
+
+
+      {/* <Modal
+        isOpen={open}
+        onOpenChange={onOpenChange}
+        scrollBehavior={scrollBehavior}
+        dir="rtl"
+      >
+        <ModalContent onClose={() => setOpen(false)}>
+          <ModalHeader>
+            {selectedValue.correct ? (
+              <CheckCircleRoundedIcon />
+            ) : (
+              <CancelRoundedIcon />
+            )}
+            {selectedValue.name}
+          </ModalHeader>
+
+          <ModalBody>
+            <Grid container spacing={2} columns={3} rows={1}>
+              <Grid item style={{ width: "30%" }}>
+                <ElevatorTable test={selectedValue} />
+              </Grid>
+              <Grid item style={{ width: "60%" }}>
+                {generateExplanation(selectedValue)}
+              </Grid>
+            </Grid>
+          </ModalBody>
+
+          <ModalFooter>
+            <button onClick={() => setOpen(false)}>סגור</button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal> */}
+    </>
   );
 };
 

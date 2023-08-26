@@ -1,7 +1,7 @@
 import React from "react";
-import { driveImg } from "../../assets/img";
+// import { driveImg } from "../../assets/img";
 
-function Guidelines() {
+ function Guidelines() {
   const handleDownload = (file) => {
     const link = document.createElement("a");
     if (file == "basic") {
@@ -16,11 +16,18 @@ function Guidelines() {
   };
 
   return (
-    <div style={{ marginRight: "10%", }}>
-      <p style={{fontFamily: 'yarden', fontWeight:'normal', fontSize: 28, color:'white'}}> 
+    <div style={{ marginRight: "10%" }}>
+      <p
+        style={{
+          fontFamily: "yarden",
+          fontWeight: "normal",
+          fontSize: 28,
+          color: "white",
+        }}
+      >
         ...חניכים יקרים, רק יצאתם לחופש וכבר אנחנו מתגעגעים <br />
-        כדי לשמור על כשירות, מצורפת משימה לקיץ. <br />הגשה שלה היא תנאי הכרחי להמשך
-        לשנה ב <br />
+        כדי לשמור על כשירות, מצורפת משימה לקיץ. <br />
+        הגשה שלה היא תנאי הכרחי להמשך לשנה ב <br />
       </p>
       {/* <div style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ textAlign: "center" }}>
@@ -42,7 +49,6 @@ function Guidelines() {
           <h4>4X4 משימה</h4>
         </div>
       </div> */}
-
     </div>
   );
 }

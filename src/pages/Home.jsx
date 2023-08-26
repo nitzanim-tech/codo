@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Guidelines } from "../components";
+// import { Guidelines } from "../components/Guidelines";
 import styled from "styled-components";
 import Divider from "@mui/material/Divider";
 import LottieComponent from "../components/LottieComponent";
@@ -66,7 +66,7 @@ function Home({ deadline }) {
           >
             ברוכים הבאים
           </h1>
-          <Guidelines />
+          {/* <Guidelines /> */}
         </Grid>
       </Grid>
     </>

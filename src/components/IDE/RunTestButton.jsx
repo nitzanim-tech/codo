@@ -63,6 +63,6 @@ function processTestsOutputs(testsOutputs) {
     const output = outputLines[outputLines.length - 2];
     const correct = output.includes(answers[index]);
     const name = names[index];
-    return {name, input, output, correct };
+    return { name, input, output, correct, ans: answers[index] };
   });
 }

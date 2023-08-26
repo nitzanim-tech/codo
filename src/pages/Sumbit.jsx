@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import PythonIDE from "../components/PythonIDE";
+import PythonIDE from "../components/IDE/PythonIDE";
 import NavBar from "../components/NavigateBar";
-import BasicAccordion from "../components/Instructions";
-import TestsList from "../components/TestsList";
+import Instructions from "../components/Instructions";
+import TestsList from "../components/TestsList/TestsList";
 import { Grid } from "@mui/material";
 
 import "./Submit.css";
@@ -26,7 +26,7 @@ function Submit() {
         </Grid>
 
         <Grid item style={{ width: "30%" }}>
-          <BasicAccordion />
+          <Instructions />
         </Grid>
       </Grid>
     </>

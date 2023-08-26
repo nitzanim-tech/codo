@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Skeleton } from "@nextui-org/react";
 import { Card, CardBody, Divider } from "@nextui-org/react";
 
-import { examplecode } from "../util/exampleCode";
+import { examplecode } from "../../util/exampleCode";
 import Terminal from "./Terminal";
 import TerminalButtons from "./TerminalButtons";
 import PyodideConsole from "./MonacoEditor";

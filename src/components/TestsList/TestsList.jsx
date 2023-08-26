@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Listbox, ListboxItem, ModalContent } from "@nextui-org/react";
+import { Divider, Listbox, ListboxItem, ModalContent } from "@nextui-org/react";
 import { ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
 import { Modal, ModalHeader } from "@nextui-org/react";
 
@@ -81,12 +81,12 @@ export default function TestsList({ testsOutputs }) {
           </ModalHeader>
 
           <ModalBody>
-            <Grid container spacing={1} columns={3} rows={1}>
+            <Grid container spacing={2} columns={3} rows={1}>
               <Grid item style={{ width: "30%" }}>
                 <ElevatorTable test={selectedValue} />
               </Grid>
-              <Grid item style={{ width: "40%" }}>
-                <p>{JSON.stringify(selectedValue)};</p>
+              <Grid item style={{ width: "60%" }}>
+                {generateExplanation(selectedValue)}
               </Grid>
             </Grid>
           </ModalBody>
@@ -96,6 +96,32 @@ export default function TestsList({ testsOutputs }) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+    </>
+  );
+}
+
+function generateExplanation(selectedValue) {
+  return (
+    <>
+      {selectedValue.input && (
+        <div dir="rtl">
+          <p>
+            עבור המצב: <br />
+            מעלית A בקומה {selectedValue.input.A} <br />
+            מעלית B בקומה {selectedValue.input.B} <br />
+            אליס ובוב בקומה {selectedValue.input.P} <br />
+            <Divider />
+            המרחק בין אליס ובוב למעלית A הוא
+            {Math.abs(selectedValue.input.A - selectedValue.input.P)} <br />
+            המרחק בין אליס ובוב למעלית B הוא
+            {Math.abs(selectedValue.input.B - selectedValue.input.P)} <br />
+            לכן המעלית שתבחר היא {selectedValue.ans} <br />
+            <Divider />
+            ההדפסה האחרונה בקוד שכתבת: {selectedValue.output} <br />
+            לא מכילה את
+          </p>
+        </div>
+      )}
     </>
   );
 }

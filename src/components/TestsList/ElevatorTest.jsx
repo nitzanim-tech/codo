@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import elevatorImg from "../assets/img/elevator/elevator.png";
-import childImg from "../assets/img/elevator/child.png";
+import elevatorImg from "../../assets/img/elevator/elevator.png";
+import childImg from "../../assets/img/elevator/child.png";
 
 const ElevatorTable = ({ test }) => {
   const input = test.input;
@@ -23,10 +23,10 @@ const ElevatorTable = ({ test }) => {
               {column === 1 && row === input.A && (
                 <>
                   <div style={{ position: "relative" }}>
-                    <img
+                    <ElevatorImg
                       src={elevatorImg}
                       alt="elevator"
-                      style={{ width: "100%" }}
+                      glow={column === 1 && row === input.A}
                     />
                     <Letter>A</Letter>
                   </div>
@@ -35,10 +35,10 @@ const ElevatorTable = ({ test }) => {
               {column === 3 && row === input.B && (
                 <>
                   <div style={{ position: "relative" }}>
-                    <img
+                    <ElevatorImg
                       src={elevatorImg}
                       alt="elevator"
-                      style={{ width: "30px" }}
+                      glow={test.correct}
                     />
                     <Letter>B</Letter>
                   </div>
@@ -86,4 +86,10 @@ const Letter = styled.div`
   transform: translate(-50%, -50%);
   color: black;
   font-weight: bold;
+`;
+
+const ElevatorImg = styled.img`
+  width: 100%;
+  box-shadow: ${(props) =>
+    props.glow ? "0 0 10px 5px rgba(0, 140, 210, 0.75)" : "none"};
 `;

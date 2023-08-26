@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Chip } from "@nextui-org/react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 
-export default function BasicAccordion() {
+export default function Instructions() {
   return (
     <div style={{ width: "100%", textAlign: "right", direction: "rtl" }}>
       <Accordion dir="rtl" variant="splitted" selectionMode="multiple">
