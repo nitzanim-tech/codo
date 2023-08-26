@@ -3,14 +3,12 @@ import { Button } from "@nextui-org/react";
 
 import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
 import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
-import RuleRoundedIcon from "@mui/icons-material/RuleRounded";
 import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
-
 import { Switch, Tooltip } from "@nextui-org/react";
-import RunTestButton from "./RunTestButton"
+import RunTestButton from "./RunTestButton";
 function TerminalButtons({ pyodide, code, setOutput }) {
-  
+
   async function handleEvaluate() {
     setOutput("");
     console.log("handleEvaluate called");
@@ -38,21 +36,6 @@ function TerminalButtons({ pyodide, code, setOutput }) {
     }
   }
 
-async function runCodeWithPyodide(inputs) {
-  const pyodide = await loadPyodide({
-    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/",
-  });
-  inputs = inputs.map(String);
-  pyodide.registerJsModule("customInput", {
-    input: () => inputs.shift(),
-  });
-  const result = await pyodide.runPythonAsync(code);
-  pyodide.unregisterJsModule("customInput");
-  return result;
-}
-  
-
-const inputs=['23','22','10']
   return (
     <div style={{ marginTop: "-10px" }}>
       <Switch
@@ -67,16 +50,7 @@ const inputs=['23','22','10']
           <ReplyRoundedIcon />
         </Button>
       </Tooltip>
-      <Tooltip content="בדוק" placement={"bottom"}>
-        <Button
-          isIconOnly
-          variant="faded"
-          onClick={() => runCodeWithPyodide(inputs)}
-        >
-          <RuleRoundedIcon />
-        </Button>
-      </Tooltip>
-      <RunTestButton code={code}/>
+      <RunTestButton code={code || ""} /> 
       <Tooltip content="הרץ" placement={"bottom"}>
         <Button isIconOnly variant="faded" onClick={() => handleEvaluate()}>
           <PlayCircleRoundedIcon />

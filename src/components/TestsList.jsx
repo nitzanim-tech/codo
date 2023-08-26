@@ -4,7 +4,7 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
 import { Listbox, ListboxItem, ModalContent } from "@nextui-org/react";
 import { Modal, ModalHeader, ModalBody, ModalFooter ,useDisclosure} from "@nextui-org/react";
-
+import ElevatorTable from "./ElevatorTest";
 
 export default function TestsList() {
   const [selectedValue, setSelectedValue] = React.useState("");
@@ -65,7 +65,10 @@ export default function TestsList() {
       >
         <ModalContent onClose={() => setOpen(false)}>
           <ModalHeader>כותרת</ModalHeader>
-          <ModalBody>{selectedValue}</ModalBody>
+          <ModalBody>
+            <ElevatorTable />
+            {selectedValue}
+          </ModalBody>
           <ModalFooter>
             <button onClick={() => setOpen(false)}>סגור</button>
           </ModalFooter>

@@ -1,37 +1,46 @@
 import { useState, useEffect } from "react";
+import { Button, Tooltip } from "@nextui-org/react";
+import RuleRoundedIcon from "@mui/icons-material/RuleRounded";
+import runTest from "./test";
 
 export default function RunTestButton({ code }) {
-  const [pyodide, setPyodide] = useState(null);
-  let inputs = [10, 12, 13];
+  const pyodide = true;
+  let testsOutputs = [];
 
-  useEffect(() => {
-    (async () => {
-      const pyodide = await loadPyodide({
-        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/",
-      });
-      setPyodide(pyodide);
-    })();
-  }, []);
+  return (
+    <Tooltip content={pyodide ? "בדוק" : "(טוען..) בדוק"} placement={"bottom"}>
+      {pyodide ? (
+        <Button
+          isIconOnly
+          variant="faded"
+          onClick={() => {
+            const inputList = generateInputList();
+            runTest({ code, inputList, testsOutputs });
+          }}
+        >
+          <RuleRoundedIcon />
+        </Button>
+      ) : (
+        <Button isIconOnly isDisabled variant="faded">
+          <RuleRoundedIcon />
+        </Button>
+      )}
+    </Tooltip>
+  );
+}
 
-  async function runCodeWithPyodide() {
-    let mappedInputs = inputs.map(String);
-    pyodide.registerJsModule("customInput", {
-      input: () => {
-        if (mappedInputs.length > 0) {
-          return mappedInputs.shift();
-        } else {
-          throw new Error("No more inputs available");
-        }
-      },
-    });
-    const result = await pyodide.runPythonAsync(code);
-    pyodide.unregisterJsModule("customInput");
-    return result;
-  }
+function generateInputList() {
+  const first = [
+    Math.floor(Math.random() * (9 - 6 + 1)) + 6,
+    Math.floor(Math.random() * (3 - 1 + 1)) + 1,
+    Math.floor(Math.random() * (9 - 6 + 1) + 6) + 1,
+  ];
 
-  if (!pyodide) {
-    return <p>loading</p>;
-  }
+  const second = [
+    Math.floor(Math.random() * (5 - 3 + 1)) + 3,
+    Math.floor(Math.random() * (9 - 6 + 1)) + 6,
+    Math.floor(Math.random() * (2 - 1 + 1)) + 1,
+  ];
 
-  return <button onClick={() => runCodeWithPyodide(inputs)}>Run Code</button>;
+  return [first.join("\n"), second.join("\n")];
 }
