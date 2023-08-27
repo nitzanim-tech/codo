@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PythonIDE from "../components/IDE/PythonIDE";
-import NavBar from "../components/NavigateBar";
+import NavBar from "../components/NavBar/NavigateBar";
 import Instructions from "../components/Instructions";
 import TestsList from "../components/TestsList/TestsList";
 import { Grid } from "@mui/material";

@@ -7,7 +7,6 @@ export default function RunTestButton({ code, setTestsOutputs }) {
   const pyodide = usePyodide();
 
   async function runPython({ code, input }) {
-    console.log(input);
     pyodide.runPython('import io, sys');
     pyodide.runPython(`sys.stdin = io.StringIO("${input}")`);
     pyodide.runPython('sys.stdout = io.StringIO()');
