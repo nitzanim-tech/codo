@@ -4,14 +4,15 @@ import { Card, CardBody, Divider } from "@nextui-org/react";
 import { examplecode } from "../../util/exampleCode";
 import Terminal from "./Terminal";
 import IDEButtons from './IDEButtons';
-import PyodideConsole from "./MonacoEditor";
+import MonacoEditor from './MonacoEditor';
 
 function PythonIDE({ setTestsOutputs }) {
-  const [code, setCode] = useState(localStorage.getItem("code") || examplecode);
-  const [output, setOutput] = useState("");
-  const [inputValue, setInputValue] = useState("");
+  const [code, setCode] = useState(localStorage.getItem('code') || examplecode);
+  const [output, setOutput] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const [inputCallback, setInputCallback] = useState(null);
   const [error, setError] = useState(null);
+  const [theme, setTheme] = useState('vs-dark');
 
   const handleInput = (value) => {
     if (inputCallback) {
@@ -23,7 +24,7 @@ function PythonIDE({ setTestsOutputs }) {
 
   return (
     <>
-      <Card isFooterBlurred style={{ backgroundColor: '#1E1E1E' }}>
+      <Card isFooterBlurred style={{ backgroundColor: theme=='vs-dark'?'#1E1E1E':'white' }}>
         <CardBody>
           <IDEButtons
             code={code}
@@ -31,10 +32,10 @@ function PythonIDE({ setTestsOutputs }) {
             setError={setError}
             setTestsOutputs={setTestsOutputs}
             setInputCallback={setInputCallback}
+            setTheme={setTheme}
           />
-          <Divider style={{ color: 'white' }} />
           <div style={{ marginLeft: '-30px', marginRight: '-20px' }}>
-            <PyodideConsole code={code} setCode={setCode} output={output} />
+            <MonacoEditor code={code} setCode={setCode} output={output} theme={theme} />
           </div>
         </CardBody>
       </Card>

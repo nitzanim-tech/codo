@@ -41,6 +41,7 @@ export default function RunTestButton({ code, setTestsOutputs }) {
     <Tooltip content={pyodide ? 'בדוק' : '(טוען..) בדוק'} placement={'bottom'}>
       {pyodide ? (
         <Button
+          radius="full"
           isIconOnly
           variant="faded"
           onClick={() => {
@@ -50,7 +51,7 @@ export default function RunTestButton({ code, setTestsOutputs }) {
           <RuleRoundedIcon />
         </Button>
       ) : (
-        <Button isIconOnly isDisabled variant="faded">
+        <Button isIconOnly isDisabled variant="faded" radius="full">
           <RuleRoundedIcon />
         </Button>
       )}

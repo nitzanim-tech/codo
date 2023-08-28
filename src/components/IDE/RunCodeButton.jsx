@@ -52,18 +52,19 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
         const lines = error.message.split('\n');
         const tracebackHead = lines[0];
         const tracebackBody = lines.slice(10);
-        setError(() => tracebackHead + '\n' + tracebackBody.join('\n') + '\n');
+        const newTracebackBody = tracebackBody.map((line, index) =>
+          index === 0 ? line.replace(/line (\d+)/, (match, p1) => `line ${parseInt(p1) - 1}`) : line,
+        );
+        setError(() => tracebackHead + '\n' + newTracebackBody.join('\n') + '\n');
       } catch {
-        console.log('incatch');
         setError(() => error.message + '\n');
       }
-      console.error(error);
     }
   }
 
   return (
     <Tooltip content="הרץ" placement={'bottom'}>
-      <Button isIconOnly variant="faded" onClick={() => handleEvaluate()}>
+      <Button radius="full" isIconOnly variant="faded" onClick={() => handleEvaluate()}>
         <PlayCircleRoundedIcon />
       </Button>
     </Tooltip>

@@ -37,7 +37,7 @@ function SumbitButton({ code }) {
   return (
     <>
       <Tooltip content="הגש" placement={'bottom'}>
-        <Button isIconOnly variant="faded" onClick={handleClick}>
+        <Button isIconOnly variant="faded" onClick={handleClick} radius="full">
           <ReplyRoundedIcon />
         </Button>
       </Tooltip>
