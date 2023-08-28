@@ -19,12 +19,14 @@ const printUserCode = ({ uid, app }) => {
 const sumbitCode = ({ user, app, code }) => {
   const db = getDatabase(app);
   const newUserRef = push(ref(db, `users/${user.uid}/submissions`));
-  set(newUserRef, { task: 'task', data: [{ code: code, date: new Date().toISOString(), pass: true }] })
+  return set(newUserRef, { task: 'task', data: [{ code: code, date: new Date().toISOString(), pass: true }] })
     .then(() => {
       console.log('Data saved successfully');
+      return true;
     })
     .catch((error) => {
       console.error('Error saving data:', error);
+      return false;
     });
 };
 

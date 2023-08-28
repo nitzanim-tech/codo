@@ -7,10 +7,11 @@ const registerUserInDB = ({ user,uid, app }) => {
   const newUserRef = ref(db, `users/${uid}`);
   set(newUserRef, user)
     .then(() => {
-      console.log('Data saved successfully');
+      return true;
     })
     .catch((error) => {
       console.error('Error saving data:', error);
+      return false;
     });
 };
 

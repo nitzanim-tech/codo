@@ -7,7 +7,7 @@ import RunTestButton from './RunTestButton';
 import SumbitButton from './SumbitButton';
 import RunCodeButton from './RunCodeButton';
 
-function IDEButtons({ code, setOutput, setTestsOutputs, setInputCallback }) {
+function IDEButtons({ code, setOutput,setError, setTestsOutputs, setInputCallback }) {
   return (
     <div style={{ marginTop: '-10px', textAlign: 'right' }}>
       <Switch
@@ -19,7 +19,7 @@ function IDEButtons({ code, setOutput, setTestsOutputs, setInputCallback }) {
       ></Switch>
       <SumbitButton code={code} />
       <RunTestButton code={code} setTestsOutputs={setTestsOutputs} />
-      <RunCodeButton code={code} setOutput={setOutput} setInputCallback={setInputCallback} />
+      <RunCodeButton code={code} setOutput={setOutput} setInputCallback={setInputCallback} setError={setError} />
     </div>
   );
 }

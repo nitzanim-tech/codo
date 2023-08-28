@@ -1,15 +1,15 @@
 import React from 'react';
-import { Button } from '@nextui-org/react';
 
 import PlayCircleRoundedIcon from '@mui/icons-material/PlayCircleRounded';
-import { Tooltip } from '@nextui-org/react';
+import { Tooltip, Button } from '@nextui-org/react';
 import { usePyodide } from './PyodideProvider.jsx';
 
-function RunCodeButton({ code, setOutput, setInputCallback }) {
+function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
   const pyodide = usePyodide();
 
   async function handleEvaluate() {
     setOutput('');
+    setError('');
     try {
       pyodide.registerJsModule('customInput', {
         input: (prompt) => {
@@ -33,7 +33,7 @@ function RunCodeButton({ code, setOutput, setInputCallback }) {
       import io, sys
       sys.stdout = io.StringIO()
     `);
-    
+
       const asyncCode = `async def main():\n${code
         .split('\n')
         .map((line) => {
@@ -48,8 +48,16 @@ function RunCodeButton({ code, setOutput, setInputCallback }) {
 
       setOutput((output) => output + result);
     } catch (error) {
+      try {
+        const lines = error.message.split('\n');
+        const tracebackHead = lines[0];
+        const tracebackBody = lines.slice(10);
+        setError(() => tracebackHead + '\n' + tracebackBody.join('\n') + '\n');
+      } catch {
+        console.log('incatch');
+        setError(() => error.message + '\n');
+      }
       console.error(error);
-      setOutput((output) => output + error.message + '\n');
     }
   }
 

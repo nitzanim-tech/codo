@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
-const Terminal = ({ output, onInput, waitingForInput }) => {
+const Terminal = ({ output, onInput, waitingForInput, error }) => {
   const [input, setInput] = useState('');
   const [inputIndexes, setInputIndexes] = useState('');
   const inputRef = useRef(null);
@@ -10,7 +10,9 @@ const Terminal = ({ output, onInput, waitingForInput }) => {
     if (waitingForInput) {
       inputRef.current.focus();
     }
-  }, [waitingForInput]);
+    const terminalDiv = document.querySelector('#terminal');
+    terminalDiv.scrollTop = terminalDiv.scrollHeight;
+  }, [output]);
 
   const handleInput = (event) => {
     if (event.key === 'Enter') {
@@ -21,7 +23,7 @@ const Terminal = ({ output, onInput, waitingForInput }) => {
   };
 
   return (
-    <MainDiv>
+    <MainDiv id="terminal">
       <OutputDiv>
         {output
           ? output.split('\n').map((line, index) => (
@@ -37,6 +39,13 @@ const Terminal = ({ output, onInput, waitingForInput }) => {
             ))
           : ''}
       </OutputDiv>
+      {error && (
+        <ErrorDiv>
+          {error.split('\n').map((line, index) => (
+            <div key={index}>{line}</div>
+          ))}
+        </ErrorDiv>
+      )}
       {waitingForInput && (
         <CommandDiv>
           <input
@@ -89,5 +98,11 @@ const CommandDiv = styled.div`
 const OutputDiv = styled.div`
   margin-left: 10px;
   font-family: 'DejaVuSansMono', Courier, monospace;
-  outline: none !important;
+`;
+const ErrorDiv = styled.div`
+  margin-left: 10px;
+  font-weight: bold;
+
+  font-family: 'DejaVuSansMono', Courier, monospace;
+  color: #f6665f;
 `;

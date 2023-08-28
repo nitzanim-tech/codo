@@ -11,11 +11,11 @@ function PythonIDE({ setTestsOutputs }) {
   const [output, setOutput] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [inputCallback, setInputCallback] = useState(null);
-
+  const [error, setError] = useState(null);
 
   const handleInput = (value) => {
     if (inputCallback) {
-      setInputValue("");
+      setInputValue('');
       inputCallback(value);
       setInputCallback(null);
     }
@@ -28,6 +28,7 @@ function PythonIDE({ setTestsOutputs }) {
           <IDEButtons
             code={code}
             setOutput={setOutput}
+            setError={setError}
             setTestsOutputs={setTestsOutputs}
             setInputCallback={setInputCallback}
           />
@@ -38,7 +39,7 @@ function PythonIDE({ setTestsOutputs }) {
         </CardBody>
       </Card>
 
-      <Terminal output={output || ''} onInput={handleInput} waitingForInput={!!inputCallback} />
+      <Terminal output={output || ''} onInput={handleInput} waitingForInput={!!inputCallback} error={error} />
     </>
   );
 }
