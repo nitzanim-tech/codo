@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import elevatorImg from "../../assets/img/elevator/elevator.png";
-import childImg from "../../assets/img/elevator/child.png";
+import elevatorImg from "../assets/img/elevator/elevator.png";
+import childImg from "../assets/img/elevator/child.png";
 
 const ElevatorTable = ({ test }) => {
   const input = test.input;
@@ -39,7 +39,7 @@ const ElevatorTable = ({ test }) => {
                     }}
                   >
                     <ElevatorImg src={elevatorImg} alt="elevator" />
-                    <Letter glow={test.ans === "A"}>A</Letter>
+                    <Letter glow={test.ans === "A"}>A </Letter>
                   </div>
                 </>
               )}
@@ -97,7 +97,7 @@ const Row = styled.div`
 const Letter = styled.div`
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 43%;
   transform: translate(-50%, -50%);
   color: ${(props) => (props.glow ? "rgba(0, 70, 0, 1.0)" : "balck")};
   font-weight: bold;

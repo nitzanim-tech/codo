@@ -101,7 +101,6 @@ const OutputDiv = styled.div`
 `;
 const ErrorDiv = styled.div`
   margin-left: 10px;
-  font-weight: bold;
 
   font-family: 'DejaVuSansMono', Courier, monospace;
   color: #f6665f;

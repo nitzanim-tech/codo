@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Sumbit from "./pages/Sumbit";
-import { app, analytics } from "./util/Firebase";
 
 import "./App.css";
 

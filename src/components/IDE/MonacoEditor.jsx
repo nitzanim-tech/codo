@@ -5,7 +5,7 @@ export default function MonacoEditor({ code, setCode, theme }) {
 
   return (
     <Editor
-      height="300px"
+      height="315px"
       defaultLanguage="python"
       theme={theme}
       value={code}

@@ -8,13 +8,10 @@ import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import GoogleIcon from '@mui/icons-material/Google';
 
-const LoginModal = ({ app, auth, open, setOpen }) => {
+const LoginModal = ({ auth, open, setOpen }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [lastName, setLastName] = useState('');
-  const [group, setGroup] = useState('');
-  const [choosenRegion, setChoosenRegion] = useState('');
-  const [currentUser, setCurrentUser] = useState(null);
 
   const handleGoogleSignIn = () => {
     const provider = new GoogleAuthProvider();
