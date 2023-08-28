@@ -66,7 +66,6 @@ function Home({ deadline }) {
           >
             ברוכים הבאים
           </h1>
-          {/* <Guidelines /> */}
         </Grid>
       </Grid>
     </>

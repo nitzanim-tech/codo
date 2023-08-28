@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
-import { signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 import { ModalBody, ModalFooter, Button } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import GoogleIcon from '@mui/icons-material/Google';
-import { getDatabase, ref, set } from 'firebase/database';
-
-import { push } from 'firebase/database';
+import registerUserInDB from '../../requests/registerUser';
 
 const groups = {
   דרום: ['אשקלון', 'קרית גת', 'באר שבע'],
@@ -25,28 +22,6 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
   const [group, setGroup] = useState('');
   const [choosenRegion, setChoosenRegion] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
-
-  const db = getDatabase(app);
-
-  const registerUserInDB = (email) => {
-    console.log('in here');
-    const data = {
-      name: name,
-      lastName:lastName,
-      email: email,
-      region: choosenRegion,
-      group: group,
-    };
-
-    const newUserRef = push(ref(db, 'users'));
-    set(newUserRef, data)
-      .then(() => {
-        console.log('Data saved successfully');
-      })
-      .catch((error) => {
-        console.error('Error saving data:', error);
-      });
-  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -72,7 +47,15 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
-        registerUserInDB(result.user.email);
+        const user = {
+          name: name,
+          lastName: lastName,
+          email: result.user.email,
+          region: choosenRegion,
+          group: group,
+        };
+        registerUserInDB({ user, uid: result.user.uid, app });
+        setOpen(false);
         console.log(result.user);
       })
       .catch((error) => {
@@ -84,7 +67,7 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
     <>
       <Modal isOpen={open} dir="rtl">
         <ModalContent onClose={() => setOpen(false)}>
-          <ModalHeader>Registration Form</ModalHeader>
+          <ModalHeader> הרשמה</ModalHeader>
 
           <ModalBody>
             <Input label="שם" value={name} onChange={(e) => setName(e.target.value)} />
@@ -122,6 +105,8 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
             </Select>
 
             <Divider />
+
+            {/* <div style={{ display: 'flex', flexDirection: 'row' }}> */}
             <Button
               onClick={handleGoogleSignIn}
               startContent={<GoogleIcon />}
@@ -129,7 +114,11 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
             >
               הרשמה באמצעות גוגל
             </Button>
-
+            {/*<Divider orientation="vertical"> או </Divider>
+               <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Input label="מייל" value={email} onChange={(e) => setName(e.target.value)} />
+                <Input label="ססמה" value={password} onChange={(e) => setLastName(e.target.value)} />
+ */}
             <Button
               onClick={handleEmailSignUp}
               startContent={<EmailRoundedIcon />}
@@ -137,6 +126,8 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
             >
               הרשמה באמצעות מייל וססמה
             </Button>
+            {/* </div>
+            </div> */}
           </ModalBody>
 
           <ModalFooter>

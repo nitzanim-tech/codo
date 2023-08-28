@@ -3,22 +3,21 @@ import firebaseConfig from '../../util/firebaseConfig';
 
 import { initializeApp } from 'firebase/app';
 import { getAuth, signOut } from 'firebase/auth';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import { User, Dropdown } from '@nextui-org/react';
 import { DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import RegisterModal from './RegisterModal';
+import LoginModal from './LoginModal';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const FirebaseAuth = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -26,28 +25,6 @@ const FirebaseAuth = () => {
     });
     return unsubscribe;
   }, []);
-  
-  const handleGoogleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log(result.user);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
-
-  const handleEmailSignIn = (event) => {
-    event.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential.user);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
 
   const handleSignOut = () => {
     signOut(auth)
@@ -91,7 +68,7 @@ const FirebaseAuth = () => {
               >
                 הרשם
               </DropdownItem>
-              <DropdownItem key="login" startContent={<LoginRoundedIcon />}>
+              <DropdownItem key="login" startContent={<LoginRoundedIcon />} onClick={() => setOpenLoginModal(true)}>
                 התחבר
               </DropdownItem>
             </DropdownMenu>
@@ -99,6 +76,7 @@ const FirebaseAuth = () => {
         )}
       </div>
       <RegisterModal app={app} auth={auth} open={openRegisterModal} setOpen={setOpenRegisterModal} />
+      <LoginModal app={app} auth={auth} open={openLoginModal} setOpen={setOpenLoginModal} />
     </>
   );
 };

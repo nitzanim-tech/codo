@@ -3,7 +3,7 @@ import { Card, CardBody, Divider } from "@nextui-org/react";
 
 import { examplecode } from "../../util/exampleCode";
 import Terminal from "./Terminal";
-import TerminalButtons from "./TerminalButtons";
+import IDEButtons from './IDEButtons';
 import PyodideConsole from "./MonacoEditor";
 
 function PythonIDE({ setTestsOutputs }) {
@@ -23,26 +23,22 @@ function PythonIDE({ setTestsOutputs }) {
 
   return (
     <>
-      <Card isFooterBlurred style={{ backgroundColor: "#1E1E1E" }}>
+      <Card isFooterBlurred style={{ backgroundColor: '#1E1E1E' }}>
         <CardBody>
-          <TerminalButtons
+          <IDEButtons
             code={code}
             setOutput={setOutput}
             setTestsOutputs={setTestsOutputs}
             setInputCallback={setInputCallback}
           />
-          <Divider style={{ color: "white" }} />
-          <div style={{ marginLeft: "-30px", marginRight: "-20px" }}>
+          <Divider style={{ color: 'white' }} />
+          <div style={{ marginLeft: '-30px', marginRight: '-20px' }}>
             <PyodideConsole code={code} setCode={setCode} output={output} />
           </div>
         </CardBody>
       </Card>
 
-      <Terminal
-        output={output || ""}
-        onInput={handleInput}
-        waitingForInput={!!inputCallback}
-      />
+      <Terminal output={output || ''} onInput={handleInput} waitingForInput={!!inputCallback} />
     </>
   );
 }
