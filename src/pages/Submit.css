@@ -2,7 +2,8 @@
 body {
   color: rgba(14, 12, 12, 0.87);
   /* background-color: #FBF9F9; */
-  background-color: #E8F8FE;
+  background-color: #F0FAFE;
+
   display: flex;
   flex-direction: column;
 }

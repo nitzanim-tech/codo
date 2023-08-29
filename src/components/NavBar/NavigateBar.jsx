@@ -6,22 +6,10 @@ import FirebaseAuth from './FirebaseAuth';
 export default function NavigateBar() {
   return (
     <Navbar dir="rtl" position="static">
-      <NavbarBrand>
-        <img src={logoImg} style={{ width: '180px' }} />
+      <NavbarBrand style={{ flex: 1 }}>
+        <img src={logoImg} style={{ width: '180px' , marginRight:'-30%'}} />
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
-      <NavbarContent justify="end">
+      <NavbarContent justify="end" style={{ flex: 1 }}>
         <FirebaseAuth />
       </NavbarContent>
     </Navbar>

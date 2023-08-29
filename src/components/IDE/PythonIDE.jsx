@@ -6,7 +6,7 @@ import Terminal from "./Terminal";
 import IDEButtons from './IDEButtons';
 import MonacoEditor from './MonacoEditor';
 
-function PythonIDE({ setTestsOutputs }) {
+function PythonIDE({ testsOutputs, setTestsOutputs }) {
   const [code, setCode] = useState(localStorage.getItem('code') || examplecode);
   const [output, setOutput] = useState('');
   const [inputValue, setInputValue] = useState('');
@@ -24,12 +24,13 @@ function PythonIDE({ setTestsOutputs }) {
 
   return (
     <>
-      <Card isFooterBlurred style={{ backgroundColor: theme=='vs-dark'?'#1E1E1E':'white' }}>
+      <Card isFooterBlurred style={{ backgroundColor: theme == 'vs-dark' ? '#1E1E1E' : 'white' }}>
         <CardBody>
           <IDEButtons
             code={code}
             setOutput={setOutput}
             setError={setError}
+            testsOutputs={testsOutputs}
             setTestsOutputs={setTestsOutputs}
             setInputCallback={setInputCallback}
             setTheme={setTheme}

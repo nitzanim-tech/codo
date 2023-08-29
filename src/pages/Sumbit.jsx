@@ -23,7 +23,7 @@ function Submit() {
           </Grid>
 
           <Grid item style={{ width: '50%' }}>
-            <PythonIDE setTestsOutputs={setTestsOutputs} />
+            <PythonIDE testsOutputs={testsOutputs} setTestsOutputs={setTestsOutputs} />
           </Grid>
 
           <Grid item style={{ width: '30%' }}>

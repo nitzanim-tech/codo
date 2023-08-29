@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect } from 'react';
 import { Button, Tooltip } from "@nextui-org/react";
 import RuleRoundedIcon from "@mui/icons-material/RuleRounded";
 import { usePyodide } from './PyodideProvider';
 import { processTestsOutputs, generateInputList } from '../../Tasks/BasicElevator';
 
-export default function RunTestButton({ code, setTestsOutputs }) {
+export default function RunTestButton({ code, setTestsOutputs, runTests }) {
+  
   const pyodide = usePyodide();
+  
+  useEffect(() => {
+    if (runTests) handleClick();
+  }, [runTests]);
 
   async function runPython({ code, input }) {
     pyodide.runPython('import io, sys');

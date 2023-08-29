@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import WbSunnyRoundedIcon from '@mui/icons-material/WbSunnyRounded';
@@ -8,9 +8,11 @@ import RunTestButton from './RunTestButton';
 import SumbitButton from './SumbitButton';
 import RunCodeButton from './RunCodeButton';
 
-function IDEButtons({ code, setOutput, setError, setTestsOutputs, setInputCallback, setTheme }) {
+function IDEButtons({ code, setOutput, setError, testsOutputs, setTestsOutputs, setInputCallback, setTheme }) {
+  const [runTests, setRunTests] = useState(false);
+
   const handleThemeChange = (checked) => {
-    setTheme(checked ?   'hc-light':'vs-dark');
+    setTheme(checked ? 'hc-light' : 'vs-dark');
   };
 
   return (
@@ -24,10 +26,10 @@ function IDEButtons({ code, setOutput, setError, setTestsOutputs, setInputCallba
         onValueChange={handleThemeChange}
       ></Switch>
       <ButtonWrapper>
-        <SumbitButton code={code} />
+        <SumbitButton code={code} testsOutputs={testsOutputs} setRunTests={setRunTests} />
       </ButtonWrapper>
       <ButtonWrapper>
-        <RunTestButton code={code} setTestsOutputs={setTestsOutputs} />
+        <RunTestButton code={code} setTestsOutputs={setTestsOutputs} runTests={runTests} />
       </ButtonWrapper>
       <ButtonWrapper>
         <RunCodeButton code={code} setOutput={setOutput} setInputCallback={setInputCallback} setError={setError} />
