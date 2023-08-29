@@ -10,7 +10,7 @@ import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
-
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -50,7 +50,7 @@ const FirebaseAuth = () => {
               aria-label="Dropdown menu with description"
               onAction={(key) => console.log(key)}
             >
-              <DropdownItem key="logout" onClick={() => handleSignOut()}>
+              <DropdownItem key="logout" onClick={() => handleSignOut()} startContent={<LogoutRoundedIcon />}>
                 התנתק
               </DropdownItem>
             </DropdownMenu>

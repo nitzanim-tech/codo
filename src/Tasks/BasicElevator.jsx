@@ -55,7 +55,7 @@ const range = (from, to) => {
 
 export function generateInputList() {
   // A, B, P
-  const closeToA = [range(6, 8), range(1, 2), range(5, 6)].join('\n'); // A
+  const closeToA = [range(6, 8), range(1, 2), range(6, 6)].join('\n'); // A
   const closeToB = [range(1, 2), range(6, 8), range(5, 6)].join('\n'); // B
   const aboveBoth = [range(1, 3), range(4, 5), range(6, 8)].join('\n'); //B
   const underBoth = [range(6, 8), range(4, 5), range(1, 3)].join('\n'); // B
