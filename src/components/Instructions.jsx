@@ -1,9 +1,14 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chip, Divider } from '@nextui-org/react';
 import { Accordion, AccordionItem } from '@nextui-org/react';
-import { subjects, desription, examples } from '../Tasks/BasicElevator';
+import { getInstructions } from '../Tasks/TaskIndex';
 
-export default function Instructions() {
+export default function Instructions({task}) {
+  const [instructionFunctions, setIntsructionFunctions] = useState(getInstructions(task));
+
+  useEffect(() => {
+    setIntsructionFunctions(getInstructions(task));
+  }, [task]);
 
   return (
     <div style={{ width: '100%', textAlign: 'right', direction: 'rtl' }}>
@@ -11,7 +16,7 @@ export default function Instructions() {
         <AccordionItem title="מה צריך לדעת?">
           <p style={{ marginBottom: '10px' }}>נושאים עיקריים: </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-            {subjects().map((subject) => (
+            {instructionFunctions.subjects().map((subject) => (
               <Chip key={subject} variant="faded">
                 {subject}
               </Chip>
@@ -19,8 +24,8 @@ export default function Instructions() {
           </div>
         </AccordionItem>
 
-        <AccordionItem title="תיאור המשימה">{desription()}</AccordionItem>
-        <AccordionItem title="דוגמה"> {examples()}</AccordionItem>
+        <AccordionItem title="תיאור המשימה">{instructionFunctions.desription()}</AccordionItem>
+        <AccordionItem title="דוגמה"> {instructionFunctions.examples()}</AccordionItem>
       </Accordion>
     </div>
   );

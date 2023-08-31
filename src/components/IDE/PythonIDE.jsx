@@ -6,7 +6,7 @@ import Terminal from "./Terminal";
 import IDEButtons from './IDEButtons';
 import MonacoEditor from './MonacoEditor';
 
-function PythonIDE({ testsOutputs, setTestsOutputs }) {
+function PythonIDE({ testsOutputs, setTestsOutputs , task}) {
   const [code, setCode] = useState(localStorage.getItem('code') || examplecode);
   const [output, setOutput] = useState('');
   const [inputValue, setInputValue] = useState('');
@@ -34,6 +34,7 @@ function PythonIDE({ testsOutputs, setTestsOutputs }) {
             setTestsOutputs={setTestsOutputs}
             setInputCallback={setInputCallback}
             setTheme={setTheme}
+            task={task}
           />
           <div style={{ marginLeft: '-30px', marginRight: '-20px' }}>
             <MonacoEditor code={code} setCode={setCode} output={output} theme={theme} />

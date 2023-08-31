@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Divider, Listbox, ListboxItem, ModalContent } from "@nextui-org/react";
+import { Listbox, ListboxItem, ModalContent } from "@nextui-org/react";
 import { ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
 import { Modal, ModalHeader } from "@nextui-org/react";
 
@@ -9,6 +9,7 @@ import { Grid } from "@mui/material";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import RadioButtonUncheckedRoundedIcon from "@mui/icons-material/RadioButtonUncheckedRounded";
+
 import { generateExplanation } from '../../Tasks/BasicElevator';
 
 export default function TestsList({ testsOutputs }) {

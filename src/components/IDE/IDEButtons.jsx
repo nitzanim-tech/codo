@@ -8,7 +8,7 @@ import RunTestButton from './RunTestButton';
 import SumbitButton from './SumbitButton';
 import RunCodeButton from './RunCodeButton';
 
-function IDEButtons({ code, setOutput, setError, testsOutputs, setTestsOutputs, setInputCallback, setTheme }) {
+function IDEButtons({ code, setOutput, setError, testsOutputs, setTestsOutputs, setInputCallback, setTheme, task }) {
   const [runTests, setRunTests] = useState(false);
 
   const handleThemeChange = (checked) => {
@@ -29,7 +29,7 @@ function IDEButtons({ code, setOutput, setError, testsOutputs, setTestsOutputs, 
         <SumbitButton code={code} testsOutputs={testsOutputs} setRunTests={setRunTests} />
       </ButtonWrapper>
       <ButtonWrapper>
-        <RunTestButton code={code} setTestsOutputs={setTestsOutputs} runTests={runTests} />
+        <RunTestButton code={code} setTestsOutputs={setTestsOutputs} runTests={runTests} task={task}/>
       </ButtonWrapper>
       <ButtonWrapper>
         <RunCodeButton code={code} setOutput={setOutput} setInputCallback={setInputCallback} setError={setError} />

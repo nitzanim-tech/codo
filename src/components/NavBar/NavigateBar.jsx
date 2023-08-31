@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link } from '@nextui-org/react';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@nextui-org/react';
 import logoImg from '../../assets/img/logo.png';
 import FirebaseAuth from './FirebaseAuth';
 import { Select, SelectItem, Button, Tooltip } from '@nextui-org/react';
+
 import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
 import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 
-export default function NavigateBar() {
+export default function NavigateBar({ setTask }) {
   const tasks = [
-    { name: 'משימה 0 - התנסות', finish: true },
-    { name: 'משימה 1 - מעלית', finish: false },
+    { value: 0, label: 'משימה 0 - התנסות', finish: true },
+    { value: 1, label: 'משימה 1 - מעלית', finish: false },
   ];
   const taskFinished = [];
   const [choosenTask, setChoosenTask] = useState('');
@@ -27,14 +28,17 @@ export default function NavigateBar() {
       <NavbarItem isActive style={{ width: '30%' }}>
         <Select
           aria-label="choose-task"
-          onChange={(value) => setChoosenTask(value)}
+          onChange={(key) => {
+            setTask(key.target.value);
+          }}
           radius="full"
           labelPlacement={'outside-left'}
+          defaultValue={tasks[0].value}
         >
           {tasks.map((task) => (
             <SelectItem
-              key={task.name}
-              value={task.name}
+              key={task.value}
+              value={task.value}
               dir="rtl"
               startContent={
                 task.finish ? (
@@ -44,7 +48,7 @@ export default function NavigateBar() {
                 )
               }
             >
-              {task.name}
+              {task.label}
             </SelectItem>
           ))}
         </Select>

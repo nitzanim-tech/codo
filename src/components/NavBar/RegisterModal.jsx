@@ -10,8 +10,11 @@ import GoogleIcon from '@mui/icons-material/Google';
 import registerUserInDB from '../../requests/registerUser';
 
 const groups = {
-  דרום: ['אשקלון', 'קרית גת', 'באר שבע'],
-  מרכז: ['תל אביב', 'לוד', 'פתח תקווה'],
+  'נגב מזרחי': ['דימונה', 'ירוחם', 'רמת נגב', 'באר שבע'],
+  'נגב מערבי': ['אשכול', 'מרחבים - אופקים', 'נתיבות בנות', 'נתיבות מעורב', 'שער הנגב', 'מבואות הנגב'],
+  'נגב צפוני': ['שקמה', 'כפר סילבר', 'אשקלון'],
+  שפלה: ['אשדוד', 'קריית גת', 'בת ים', 'רמלה'],
+  'גליל והעמקים וגליל מערבי': ['קצרין', 'טבריה', 'בית שאן', 'עמק הירדן', 'עפולה', 'נהלל', 'ימין אורד'],
 };
 
 const RegisterModal = ({ app, auth, open, setOpen }) => {
@@ -74,7 +77,7 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
             <Input label="שם משפחה" value={lastName} onChange={(e) => setLastName(e.target.value)} />
 
             <Select
-              label="אזור"
+              label="מרחב"
               value={choosenRegion}
               onChange={(e) => {
                 setChoosenRegion(e.target.value);

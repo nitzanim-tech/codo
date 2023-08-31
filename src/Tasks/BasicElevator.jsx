@@ -1,6 +1,8 @@
 import React from 'react';
 import { Divider } from '@nextui-org/react';
 
+
+
 export function testsName() {
   return [
     'אליס קרובה למעלית A',
@@ -49,6 +51,11 @@ export function generateExplanation(selectedValue) {
   );
 }
 
+// RunTestButton.jsx
+export function getTaskTests(testsOutputs) {
+  return { generateInputList, processTestsOutputs: () => processTestsOutputs(testsOutputs) };
+}
+
 const range = (from, to) => {
   return Math.floor(Math.random() * (to - from + 1)) + from;
 };
@@ -68,7 +75,7 @@ export function generateInputList() {
 
 export function processTestsOutputs(testsOutputs) {
   const names = testsName();
-  const answers = ['A', 'B', 'B', 'B','A או B','A'];
+  const answers = ['A', 'B', 'B', 'B', 'A או B', 'A'];
   return testsOutputs.map((testsOutput, index) => {
     const inputLines = testsOutput.input.split('\n');
     const input = {
@@ -78,17 +85,20 @@ export function processTestsOutputs(testsOutputs) {
     };
     const outputLines = testsOutput.output.split('\n');
     const output = outputLines[outputLines.length - 2];
-    const correct =
-      index != 4 ? output.includes(answers[index]) : (output.includes('A') || output.includes('B'));
+    const correct = index != 4 ? output.includes(answers[index]) : output.includes('A') || output.includes('B');
     const name = names[index];
     return { name, input, output, correct, ans: answers[index] };
   });
 }
 
 // instruction.jsx
-  export function subjects   ()   {
-    return ['משתנים', 'ביטויים בוליאניים', 'תנאים'];
-  };
+
+export function getInstructions() {
+  return { subjects, desription, examples };
+}
+export function subjects() {
+  return ['משתנים', 'ביטויים בוליאניים', 'תנאים'];
+};
   export function desription   ()   {
     return (
       <>

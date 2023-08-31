@@ -2,7 +2,6 @@ import { getDatabase, ref, set } from 'firebase/database';
 
 const registerUserInDB = ({ user,uid, app }) => {
   const db = getDatabase(app);
-  console.log('in here');
 
   const newUserRef = ref(db, `users/${uid}`);
   set(newUserRef, user)

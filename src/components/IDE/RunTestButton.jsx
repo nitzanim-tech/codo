@@ -1,11 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Tooltip } from "@nextui-org/react";
 import RuleRoundedIcon from "@mui/icons-material/RuleRounded";
 import { usePyodide } from './PyodideProvider';
-import { processTestsOutputs, generateInputList } from '../../Tasks/BasicElevator';
+import {getTaskTests} from "../../Tasks/TaskIndex"
 
-export default function RunTestButton({ code, setTestsOutputs, runTests }) {
-  
+export default function RunTestButton({ code, setTestsOutputs, runTests , task}) {
+    
+  const [rowTestsOutputs, setRowTestsOutputs] =  useState([]);
+    const [taskTestFunctions, setTaskTestFunctions] = useState(getTaskTests(task, rowTestsOutputs));
+    useEffect(() => {
+      setTaskTestFunctions(getTaskTests(task, rowTestsOutputs));
+    }, [task, rowTestsOutputs]);
+
   const pyodide = usePyodide();
   
   useEffect(() => {
@@ -38,9 +44,10 @@ export default function RunTestButton({ code, setTestsOutputs, runTests }) {
   }
 
   async function handleClick() {
-    const inputList = generateInputList();
-    const rowTestsOutputs = await runTest({ code, inputList });
-    setTestsOutputs(processTestsOutputs(rowTestsOutputs));
+    const inputList = taskTestFunctions.generateInputList({ task, rowTestsOutputs });
+    const testResult = await runTest({ code, inputList });
+    setRowTestsOutputs(testResult);
+    setTestsOutputs(taskTestFunctions.processTestsOutputs({ task, rowTestsOutputs }));
   }
 
   return (
