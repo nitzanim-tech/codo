@@ -19,19 +19,23 @@ export default function RunTestButton({ code, setTestsOutputs, runTests , task})
   }, [runTests]);
 
   async function runPython({ code, input }) {
-    pyodide.runPython('import io, sys');
-    pyodide.runPython(`sys.stdin = io.StringIO("${input}")`);
-    pyodide.runPython('sys.stdout = io.StringIO()');
-    pyodide.runPython(`def input(prompt=None):
+    try {
+      pyodide.runPython('import io, sys');
+      pyodide.runPython(`sys.stdin = io.StringIO("${input}")`);
+      pyodide.runPython('sys.stdout = io.StringIO()');
+      pyodide.runPython(`def input(prompt=None):
     import builtins
     if prompt:
         print(prompt)
     return builtins.input()
   `);
 
-    pyodide.runPython(String(code));
-    let output = pyodide.runPython('sys.stdout.getvalue()');
-    return output;
+      pyodide.runPython(String(code));
+      let output = pyodide.runPython('sys.stdout.getvalue()');
+      return output;
+    } catch (error) {
+      return error;
+    }
   }
 
   async function runTest({ code, inputList }) {

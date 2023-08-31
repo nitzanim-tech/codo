@@ -16,8 +16,9 @@ const [testsOutputs, setTestsOutputs] = useState(emptyTests);
 
 useEffect(() => {
   const testNames = testsName(task);
-  setEmptyTests(testNames.map((name) => ({ name })));
-  setTestsOutputs(emptyTests);
+  const newEmptyTests = testNames.map((name) => ({ name }));
+  setEmptyTests(newEmptyTests);
+  setTestsOutputs(newEmptyTests);
 }, [task]);
 
   return (
@@ -26,15 +27,15 @@ useEffect(() => {
       <PyodideProvider>
         <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
           <Grid item style={{ width: '20%' }}>
-            <TestsList testsOutputs={testsOutputs} />
+            <TestsList testsOutputs={testsOutputs} task={task} />
           </Grid>
 
           <Grid item style={{ width: '50%' }}>
-            <PythonIDE testsOutputs={testsOutputs} setTestsOutputs={setTestsOutputs} task={task}/>
+            <PythonIDE testsOutputs={testsOutputs} setTestsOutputs={setTestsOutputs} task={task} />
           </Grid>
 
           <Grid item style={{ width: '30%' }}>
-            <Instructions task={task}/>
+            <Instructions task={task} />
           </Grid>
         </Grid>
       </PyodideProvider>

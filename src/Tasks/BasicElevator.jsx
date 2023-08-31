@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Divider } from '@nextui-org/react';
-
-
+import ElevatorTable from './ElevatorVisualTest';
+import { Grid } from '@mui/material';
 
 export function testsName() {
   return [
@@ -15,39 +15,49 @@ export function testsName() {
 }
 
 export function generateExplanation(selectedValue) {
+  const [selectedTest, setSelectedTest] = useState(selectedValue);
+  useEffect(() => {
+    setSelectedTest(selectedValue);
+  }, [selectedValue]);
+
   return (
-    <>
-      {selectedValue.input && (
-        <div dir="rtl">
-          <p>
-            עבור המצב: <br />
-            מעלית A בקומה {selectedValue.input.A + ','} <br />
-            מעלית B בקומה {selectedValue.input.B + ','} <br />
-            אליס ובוב בקומה {selectedValue.input.P} <br />
-          </p>
-          <Divider />
-          <p>
-            המרחק בין אליס ובוב למעלית A הוא
-            {' ' + Math.abs(selectedValue.input.A - selectedValue.input.P) + ','} <br />
-            המרחק בין אליס ובוב למעלית B הוא
-            {' ' + Math.abs(selectedValue.input.B - selectedValue.input.P) + ','} <br />
-            לכן המעלית שתבחר היא {selectedValue.ans} <br />
-          </p>
-          <Divider />
-          <p>
-            ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"} <br />
-          </p>
-          {selectedValue.correct ? (
-            <p>מכילה את התשובה. כל הכבוד!</p>
-          ) : (
+    <Grid container spacing={2} columns={3} rows={1}>
+      <Grid item style={{ width: '30%' }}>
+        <ElevatorTable test={selectedTest} />
+      </Grid>
+      <Grid item style={{ width: '70%' }}>
+        {selectedValue.input && (
+          <div dir="rtl">
             <p>
-              לא מכילה את התשובה הנכונה.
-              <br /> נסו שוב :)
+              עבור המצב: <br />
+              מעלית A בקומה {selectedValue.input.A + ','} <br />
+              מעלית B בקומה {selectedValue.input.B + ','} <br />
+              אליס ובוב בקומה {selectedValue.input.P} <br />
             </p>
-          )}
-        </div>
-      )}
-    </>
+            <Divider />
+            <p>
+              המרחק בין אליס ובוב למעלית A הוא
+              {' ' + Math.abs(selectedValue.input.A - selectedValue.input.P) + ','} <br />
+              המרחק בין אליס ובוב למעלית B הוא
+              {' ' + Math.abs(selectedValue.input.B - selectedValue.input.P) + ','} <br />
+              לכן המעלית שתבחר היא {selectedValue.ans} <br />
+            </p>
+            <Divider />
+            <p>
+              ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"} <br />
+            </p>
+            {selectedValue.correct ? (
+              <p>מכילה את התשובה. כל הכבוד!</p>
+            ) : (
+              <p>
+                לא מכילה את התשובה הנכונה.
+                <br /> נסו שוב :)
+              </p>
+            )}
+          </div>
+        )}
+      </Grid>
+    </Grid>
   );
 }
 
@@ -98,33 +108,33 @@ export function getInstructions() {
 }
 export function subjects() {
   return ['משתנים', 'ביטויים בוליאניים', 'תנאים'];
-};
-  export function desription   ()   {
-    return (
-      <>
-        <p>
-          בבניין רב קומות יש שתי מעליות- מעלית A ומעלית B. המעליות נמצאות בקומות שונות <br />
-          כשאדם קורא למעלית, תגיע המעלית הקרובה אליו ביותר . <br />
-        </p>
-        <Divider />
-        <p>
-          קלטו מהמשתמש את הקומה של שבה המעלית A נמצאת, ואת הקומה שבה B נמצאת.
-          <br />
-          לאחר מכן קלטו את הקומה בה אליס נמצאת. הדפיסו את שם המעלית הקרובה ביותר לאליס - A או B. אם שתיהן קרובות באותה
-          המידה הדפיסו אחת מהן (שתי הבחירות נכונות)
-        </p>
-      </>
-    );
-  };
-  export function examples   ()   {
-    return (
-      <p style={{ textAlign: 'right', dir: 'rtl' }}>
-        נקלוט את המיקום של המעליות ושל אליס מהמשתמש. <br />
-        נניח שהוזן: מעלית A נמצאת בקומה 3,
-        <br />
-        מעלית B נמצאת בקומה 7 ואליס נמצאת בקומה 4. המרחק של אליס מקומה A הוא 1, המרחק שלה ממעלית B הוא 3, לכן נבחר את
-        מעלית A <br />
-        נדפיס: <code>A</code> <br />
+}
+export function desription() {
+  return (
+    <>
+      <p>
+        בבניין רב קומות יש שתי מעליות- מעלית A ומעלית B. המעליות נמצאות בקומות שונות <br />
+        כשאדם קורא למעלית, תגיע המעלית הקרובה אליו ביותר . <br />
       </p>
-    );
-  };
+      <Divider />
+      <p>
+        קלטו מהמשתמש את הקומה של שבה המעלית A נמצאת, ואת הקומה שבה B נמצאת.
+        <br />
+        לאחר מכן קלטו את הקומה בה אליס נמצאת. הדפיסו את שם המעלית הקרובה ביותר לאליס - A או B. אם שתיהן קרובות באותה
+        המידה הדפיסו אחת מהן (שתי הבחירות נכונות)
+      </p>
+    </>
+  );
+}
+export function examples() {
+  return (
+    <p style={{ textAlign: 'right', dir: 'rtl' }}>
+      נקלוט את המיקום של המעליות ושל אליס מהמשתמש. <br />
+      נניח שהוזן: מעלית A נמצאת בקומה 3,
+      <br />
+      מעלית B נמצאת בקומה 7 ואליס נמצאת בקומה 4. המרחק של אליס מקומה A הוא 1, המרחק שלה ממעלית B הוא 3, לכן נבחר את
+      מעלית A <br />
+      נדפיס: <code>A</code> <br />
+    </p>
+  );
+}

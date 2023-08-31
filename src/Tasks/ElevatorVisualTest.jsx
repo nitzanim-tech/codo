@@ -4,6 +4,8 @@ import elevatorImg from "../assets/img/elevator/elevator.png";
 import childImg from "../assets/img/elevator/child.png";
 
 const ElevatorTable = ({ test }) => {
+    console.log(test);
+
   const input = test.input;
   const minRow = Math.min(input.A, input.B, input.P) - 1;
   const maxRow = Math.max(input.A, input.B, input.P) + 1;
