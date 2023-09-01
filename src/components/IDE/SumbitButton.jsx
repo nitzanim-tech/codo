@@ -44,13 +44,12 @@ function SumbitButton({ code, testsOutputs, setRunTests, task }) {
   };
 
   const callSumbitCode = () => {
-    sumbitCode({ user: currentUser, app, code, task }).then((succesfulySent) => {
+    sumbitCode({ user: currentUser, app, code, task, pass: testStatus }).then((succesfulySent) => {
       succesfulySent ? setSuccesfulySent(true) : setErrorSent(true);
     });
   };
 
   const resetState = () => {
-    console.log('in here');
     setTestStatus('');
     setOpenModal(false);
     setSuccesfulySent(false);

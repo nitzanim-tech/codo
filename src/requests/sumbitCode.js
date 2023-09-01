@@ -15,7 +15,7 @@ const printUserCode = ({ uid, app }) => {
   });
 };
 
-const sumbitCode = async ({ user, app, code, task }) => {
+const sumbitCode = async ({ user, app, code, task, pass }) => {
   const db = getDatabase(app);
   const submissionsRef = ref(db, `users/${user.uid}/submissions`);
 
@@ -24,15 +24,15 @@ const sumbitCode = async ({ user, app, code, task }) => {
     const submissions = snapshot.val() || {};
 
     if (submissions.hasOwnProperty(task)) {
-      const newSubmission = { code: code, date: new Date().toISOString(), pass: true };
+      const newSubmission = { code: code, date: new Date().toISOString(), pass: pass };
       submissions[task].trials.push(newSubmission);
     } else {
       submissions[task] = {
-        trials: [{ code: code, date: new Date().toISOString(), pass: true }],
+        trials: [{ code: code, date: new Date().toISOString(), pass: pass }],
       };
     }
-
-    await update(submissionsRef, submissions);
+    const taskRef = ref(db, `users/${user.uid}/submissions/${task}`);
+    await update(taskRef, submissions[task]);
 
     console.log('Data saved successfully');
     return true;

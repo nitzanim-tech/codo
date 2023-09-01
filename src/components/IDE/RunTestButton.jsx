@@ -13,6 +13,10 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, task })
     setTaskTestFunctions(getTaskTests(task));
   }, [task, rowTestsOutputs]);
 
+    useEffect(() => {
+      if (runTests) handleClick();
+    }, [runTests]);
+
   const pyodide = usePyodide();
 
   async function runPython({ code, input }) {
