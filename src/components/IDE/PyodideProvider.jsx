@@ -12,9 +12,8 @@ useEffect(() => {
         indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/",
       });
       setPyodide(pyodide);
-      console.log("setPyodide");
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   })();
 }, []);

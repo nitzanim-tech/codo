@@ -14,16 +14,14 @@ export function testsName() {
   ];
 }
 
+export function getTaskExplanation() {
+  return { generateExplanation: (selectedValue) => generateExplanation(selectedValue) };
+}
 export function generateExplanation(selectedValue) {
-  const [selectedTest, setSelectedTest] = useState(selectedValue);
-  useEffect(() => {
-    setSelectedTest(selectedValue);
-  }, [selectedValue]);
-
   return (
     <Grid container spacing={2} columns={3} rows={1}>
       <Grid item style={{ width: '30%' }}>
-        <ElevatorTable test={selectedTest} />
+        <ElevatorTable test={selectedValue} />
       </Grid>
       <Grid item style={{ width: '70%' }}>
         {selectedValue.input && (
@@ -62,8 +60,8 @@ export function generateExplanation(selectedValue) {
 }
 
 // RunTestButton.jsx
-export function getTaskTests(testsOutputs) {
-  return { generateInputList, processTestsOutputs: () => processTestsOutputs(testsOutputs) };
+export function getTaskTests() {
+  return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
 }
 
 const range = (from, to) => {

@@ -22,18 +22,18 @@ export function getInstructions(task) {
   }
 }
 
-export function getTaskTests(task, testsOutputs) {
+export function getTaskTests(task) {
   if (tasks.hasOwnProperty(task)) {
-    return tasks[task].getTaskTests(testsOutputs);
+    return tasks[task].getTaskTests();
   } else {
     throw new Error(`In getTaskTests: Invalid task number: ${task}`);
   }
 }
 
-export function generateExplanation(task, selectedValue) {
+export function getTaskExplanation(task) {
   if (tasks.hasOwnProperty(task)) {
-    return tasks[task].generateExplanation(selectedValue);
+    return tasks[task].getTaskExplanation();
   } else {
-    throw new Error(`In generateExplanation: Invalid task number: ${task}`);
+    throw new Error(`In getTaskExplanation: Invalid task number: ${task}`);
   }
 }

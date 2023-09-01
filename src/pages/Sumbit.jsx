@@ -11,15 +11,14 @@ import './Submit.css';
 function Submit() {
 const [task, setTask] = useState(0);
 const initialTestNames = testsName(task);
-const [emptyTests, setEmptyTests] = useState(initialTestNames.map((name) => ({ name })));
-const [testsOutputs, setTestsOutputs] = useState(emptyTests);
+const [testsOutputs, setTestsOutputs] = useState(initialTestNames.map((name) => ({ name })));
 
 useEffect(() => {
   const testNames = testsName(task);
   const newEmptyTests = testNames.map((name) => ({ name }));
-  setEmptyTests(newEmptyTests);
   setTestsOutputs(newEmptyTests);
 }, [task]);
+
 
   return (
     <>

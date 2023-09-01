@@ -22,6 +22,7 @@ function PythonIDE({ testsOutputs, setTestsOutputs , task}) {
     }
   };
 
+
   return (
     <>
       <Card isFooterBlurred style={{ backgroundColor: theme == 'vs-dark' ? '#1E1E1E' : 'white' }}>

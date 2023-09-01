@@ -5,21 +5,26 @@ export function testsName() {
 }
 
 // TestsList.jsx
+export function getTaskExplanation() {
+  return { generateExplanation: (selectedValue) => generateExplanation(selectedValue) };
+}
 export function generateExplanation(selectedValue) {
   return (
     <>
       <div dir="rtl">
         <p>
-          נדרש: בלבלבלבל ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"} <br />
+          הפלט הנדרש הוא {selectedValue.ans} <br />
+          ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"}
         </p>
+        {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>נסה שוב :)לא מתאימה לפלט.</p>}
       </div>
     </>
   );
 }
 
 // RunTestButton.jsx
-export function getTaskTests(testsOutputs) {
-  return { generateInputList, processTestsOutputs: () => processTestsOutputs(testsOutputs) };
+export function getTaskTests() {
+  return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
 }
 export function generateInputList() {
   return ['', ''];
@@ -29,9 +34,7 @@ export function processTestsOutputs(testsOutputs) {
   const answers = ['Hello world', 'לא Sababa Egozim'];
   return testsOutputs.map((testsOutput, index) => {
     const input = null;
-    // const output = testsOutput.output.replace(/\n/g, '');
-    const output = testsOutput.output;
-    console.log(output);
+    const output = testsOutput.output ? testsOutput.output.replace(/\n/g, '') : '';
     const correct = index == 0 ? output.includes(answers[index]) : !output.includes('Sababa Egozim');
     const name = names[index];
     return { name, input, output, correct, ans: answers[index] };
