@@ -9,6 +9,7 @@ import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 
 export default function NavigateBar({ setTask }) {
+  const courseBookUrl = 'https://drive.google.com/file/d/19ZABUSmex80nO07J074tY0Ma2Cietb0p/view';
   const tasks = [
     { value: 0, label: 'משימה 0 - התנסות', finish: true },
     { value: 1, label: 'משימה 1 - מעלית', finish: false },
@@ -34,6 +35,7 @@ export default function NavigateBar({ setTask }) {
           radius="full"
           labelPlacement={'outside-left'}
           defaultValue={tasks[0].value}
+          placeholder={tasks[0].label}
         >
           {tasks.map((task) => (
             <SelectItem
@@ -56,12 +58,7 @@ export default function NavigateBar({ setTask }) {
 
       <NavbarItem isActive>
         <Tooltip content={'לספר הקורס'} placement={'bottom'}>
-          <Button
-            radius="full"
-            isIconOnly
-            variant="faded"
-            onClick={() => window.open('/src/assets/pdf/CourseBookA.pdf')}
-          >
+          <Button radius="full" isIconOnly variant="faded" onClick={() => window.open(courseBookUrl)}>
             <AutoStoriesOutlinedIcon />
           </Button>
         </Tooltip>

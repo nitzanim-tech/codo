@@ -19,17 +19,17 @@ function IDEButtons({ code, setOutput, setError, testsOutputs, setTestsOutputs, 
     <div style={{ marginTop: '-10px', textAlign: 'right' }}>
       <Switch
         size="lg"
-        // color="success"
-        startContent={<WbSunnyRoundedIcon />}
+        color="primary"
+        startContent={<WbSunnyRoundedIcon sx={{ color: 'white' }} />}
         endContent={<DarkModeRoundedIcon />}
         style={{ marginRight: '3%' }}
         onValueChange={handleThemeChange}
       ></Switch>
       <ButtonWrapper>
-        <SumbitButton code={code} testsOutputs={testsOutputs} setRunTests={setRunTests} />
+        <SumbitButton code={code} testsOutputs={testsOutputs} setRunTests={setRunTests} task={task} />
       </ButtonWrapper>
       <ButtonWrapper>
-        <RunTestButton code={code} setTestsOutputs={setTestsOutputs} runTests={runTests} task={task}/>
+        <RunTestButton code={code} setTestsOutputs={setTestsOutputs} runTests={runTests} task={task} />
       </ButtonWrapper>
       <ButtonWrapper>
         <RunCodeButton code={code} setOutput={setOutput} setInputCallback={setInputCallback} setError={setError} />

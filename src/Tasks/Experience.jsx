@@ -16,7 +16,7 @@ export function generateExplanation(selectedValue) {
           הפלט הנדרש הוא {selectedValue.ans} <br />
           ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"}
         </p>
-        {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>נסה שוב :)לא מתאימה לפלט.</p>}
+        {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>לא מתאימה לפלט. נסו שוב :)</p>}{' '}
       </div>
     </>
   );

@@ -7,3 +7,8 @@ export function cleanTraceback(error) {
   );
   return tracebackHead + '\n' + newTracebackBody.join('\n') + '\n';
 }
+
+export function cleanTracebackTest(error) {
+  const lines = error.message.split('\n');
+  return 'שגיאה: '+ lines[lines.length - 2] + '\n';
+}
