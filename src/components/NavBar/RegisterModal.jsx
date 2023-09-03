@@ -7,7 +7,7 @@ import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import GoogleIcon from '@mui/icons-material/Google';
-import registerUserInDB from '../../requests/registerUser';
+import { registerUserInDB } from '../../requests/registerUser';
 
 const groups = {
   'נגב מזרחי': ['דימונה', 'ירוחם', 'רמת נגב', 'באר שבע'],
@@ -33,37 +33,34 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
     return unsubscribe;
   }, []);
 
-  const handleEmailSignUp = (event) => {
+  const handleEmailSignUp = async (event) => {
     event.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        updateProfile(userCredential.user, { displayName: name }).then(() => {
-          console.log(userCredential.user);
-        });
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, { displayName: name });
+      console.log(userCredential.user);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = {
-          name: name,
-          lastName: lastName,
-          email: result.user.email,
-          region: choosenRegion,
-          group: group,
-        };
-        registerUserInDB({ user, uid: result.user.uid, app });
-        setOpen(false);
-        console.log(result.user);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = {
+        name: name,
+        lastName: lastName,
+        email: result.user.email,
+        region: choosenRegion,
+        group: group,
+      };
+      registerUserInDB({ user, uid: result.user.uid, app });
+      setOpen(false);
+      console.log(result.user);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -121,7 +118,7 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
                <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <Input label="מייל" value={email} onChange={(e) => setName(e.target.value)} />
                 <Input label="ססמה" value={password} onChange={(e) => setLastName(e.target.value)} />
- */}
+
             <Button
               onClick={handleEmailSignUp}
               startContent={<EmailRoundedIcon />}
@@ -129,7 +126,7 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
             >
               הרשמה באמצעות מייל וססמה
             </Button>
-            {/* </div>
+             </div>
             </div> */}
           </ModalBody>
 

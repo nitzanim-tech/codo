@@ -1,6 +1,7 @@
-const examplecode = `A_location = int(input("Enter A floor:"))
+const examplecode = `# write your code here`;
+const elevatorAns = `A_location = int(input("Enter A floor:"))
 B_location = int(input("Enter B floor:"))
-people_position = int(input("Enter people floor:"))
+people_position = int(input("Enter Alice floor:"))
 
 dist_from_A = A_location - people_position
 if dist_from_A < 0:

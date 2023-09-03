@@ -14,6 +14,7 @@ export function testsName(task) {
   }
 }
 
+// instruction.jsx
 export function getInstructions(task) {
   if (tasks.hasOwnProperty(task)) {
     return tasks[task].getInstructions();
@@ -22,6 +23,7 @@ export function getInstructions(task) {
   }
 }
 
+// RunTestButton.jsx
 export function getTaskTests(task) {
   if (tasks.hasOwnProperty(task)) {
     return tasks[task].getTaskTests();
@@ -30,6 +32,7 @@ export function getTaskTests(task) {
   }
 }
 
+// TestList.jsx
 export function getTaskExplanation(task) {
   if (tasks.hasOwnProperty(task)) {
     return tasks[task].getTaskExplanation();

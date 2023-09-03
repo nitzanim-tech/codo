@@ -4,10 +4,15 @@ import PlayCircleRoundedIcon from '@mui/icons-material/PlayCircleRounded';
 import { Tooltip, Button } from '@nextui-org/react';
 import { usePyodide } from './PyodideProvider.jsx';
 import { cleanTraceback } from '../../util/general.js';
+
+import useAnalyticsEventTracker from '../../util/useAnalyticsEventTracker.js';
+
 function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
   const pyodide = usePyodide();
+  const eventTracker = useAnalyticsEventTracker('Buttons');
 
   async function handleEvaluate() {
+    eventTracker('Button Clicked', 'runCodeButton');
     setOutput('');
     setError('');
     try {

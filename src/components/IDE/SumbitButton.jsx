@@ -5,6 +5,9 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+
 import sumbitCode from '../../requests/sumbitCode';
 import { ModalBody, ModalFooter } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
@@ -72,8 +75,18 @@ function SumbitButton({ code, testsOutputs, setRunTests, task }) {
             <ModalBody style={{ textAlign: 'center' }}>
               {testStatus && currentUser && <p>הקוד עבר {testStatus} טסטים</p>}
               {currentUser ? <p>האם ברצונך להגיש?</p> : <p>יש להרשם או להתחבר</p>}
-              {succesfulySent && <p style={{ fontWeight: 'bold', color: '#005395' }}>הוגש בהצלחה</p>}
-              {errorSent && <p style={{ fontWeight: 'bold', color: 'red' }}>שגיאה</p>}
+              {succesfulySent && (
+                <p style={{ fontWeight: 'bold', color: '#005395' }}>
+                  <CheckCircleRoundedIcon />
+                  הוגש בהצלחה
+                </p>
+              )}
+              {errorSent && (
+                <p style={{ fontWeight: 'bold', color: 'red' }}>
+                  <CancelRoundedIcon />
+                  שגיאה
+                </p>
+              )}
             </ModalBody>
             <ModalFooter>
               {currentUser && (

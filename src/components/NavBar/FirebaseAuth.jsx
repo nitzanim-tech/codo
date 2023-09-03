@@ -26,16 +26,15 @@ const FirebaseAuth = () => {
     return unsubscribe;
   }, []);
 
-  const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        console.log('Signed out');
-        setCurrentUser(null);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
+const handleSignOut = async () => {
+  try {
+    await signOut(auth);
+    console.log('Signed out');
+    setCurrentUser(null);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
   return (
     <>
