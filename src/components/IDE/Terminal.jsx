@@ -3,10 +3,11 @@ import styled from 'styled-components';
 
 const Terminal = ({ output, onInput, waitingForInput, error }) => {
   const [input, setInput] = useState('');
-  const [inputIndexes, setInputIndexes] = useState('');
+  const [inputIndexes, setInputIndexes] = useState([]);
   const inputRef = useRef(null);
 
   useEffect(() => {
+    if (!output) setInputIndexes([]);
     if (waitingForInput) {
       inputRef.current.focus();
     }

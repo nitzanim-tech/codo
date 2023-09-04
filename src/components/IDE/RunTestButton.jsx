@@ -24,6 +24,8 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, task })
       pyodide.runPython('import io, sys');
       pyodide.runPython(`sys.stdin = io.StringIO("${input}")`);
       pyodide.runPython('sys.stdout = io.StringIO()');
+      pyodide.runPython(`from builtins import print`);
+
       pyodide.runPython(`def input(prompt=None):
     import builtins
     if prompt:

@@ -5,14 +5,11 @@ import { Tooltip, Button } from '@nextui-org/react';
 import { usePyodide } from './PyodideProvider.jsx';
 import { cleanTraceback } from '../../util/general.js';
 
-import useAnalyticsEventTracker from '../../util/useAnalyticsEventTracker.js';
 
 function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
   const pyodide = usePyodide();
-  const eventTracker = useAnalyticsEventTracker('Buttons');
 
   async function handleEvaluate() {
-    eventTracker('Button Clicked', 'runCodeButton');
     setOutput('');
     setError('');
     try {
@@ -27,6 +24,20 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
           });
         },
       });
+      pyodide.registerJsModule('customPrint', {
+        print: (prompt) => {
+          return new Promise((resolve) => {
+            setOutput((output) => output + prompt + '\n');
+            resolve();
+          });
+        },
+      });
+
+      pyodide.runPython(`
+      import customPrint
+      def print(prompt=""):
+          return customPrint.print(prompt)
+      `);
 
       pyodide.runPython(`
       import customInput
@@ -39,7 +50,7 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
       sys.stdout = io.StringIO()
     `);
 
-      const asyncCode = `async def main():\n${code
+      const asyncCode = `async def pythonCodeWrapper():\n${code
         .split('\n')
         .map((line) => {
           if (line.includes('input(')) {
@@ -47,7 +58,7 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
           }
           return '  ' + line;
         })
-        .join('\n')}\nawait main()`;
+        .join('\n')}\n  pass\nawait pythonCodeWrapper()`;
       await pyodide.runPythonAsync(asyncCode);
       const result = pyodide.runPython('sys.stdout.getvalue()');
 

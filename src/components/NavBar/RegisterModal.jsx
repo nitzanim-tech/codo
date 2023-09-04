@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { ModalBody, ModalFooter, Button } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
-import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+// import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import GoogleIcon from '@mui/icons-material/Google';
 import { registerUserInDB } from '../../requests/registerUser';
 
@@ -13,7 +13,7 @@ const groups = {
   'נגב מזרחי': ['דימונה', 'ירוחם', 'רמת נגב', 'באר שבע'],
   'נגב מערבי': ['אשכול', 'מרחבים - אופקים', 'נתיבות בנות', 'נתיבות מעורב', 'שער הנגב', 'מבואות הנגב'],
   'נגב צפוני': ['שקמה', 'כפר סילבר', 'אשקלון'],
-  שפלה: ['אשדוד', 'קריית גת', 'בת ים', 'רמלה'],
+  מרכז: ['אשדוד', 'קריית גת', 'בת ים', 'רמלה'],
   'גליל והעמקים וגליל מערבי': ['קצרין', 'טבריה', 'בית שאן', 'עמק הירדן', 'עפולה', 'נהלל', 'ימין אורד'],
 };
 

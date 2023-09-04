@@ -43,13 +43,3 @@
   font-weight: normal;
 }
 
-@font-face {
-  font-family: 'DejaVuSansMono'; 
-  src: url('../assets/fonts/DejaVuSansMono-Bold.ttf') format('ttf');
-  font-weight: bold;
-}
-@font-face {
-  font-family: 'DejaVuSansMono'; 
-  src: url('../assets/fonts/DejaVuSansMono.ttf') format('ttf');
-  font-weight: normal;
-}
