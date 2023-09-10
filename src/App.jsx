@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
+import Instructurs from './pages/Instructurs';
 import Sumbit from "./pages/Sumbit";
 import { useEffect } from 'react';
 import ReactGA from 'react-ga4';
@@ -17,11 +17,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/inst" element={<Instructurs />} />
         <Route path="/submit" element={<Sumbit />} />
       </Routes>
     </BrowserRouter>
-
   );
 }
 

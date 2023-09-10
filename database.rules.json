@@ -1,6 +1,11 @@
 {
   "rules": {
-    ".read": false,
-    ".write": true
+    "users": {
+      ".read": "auth.token.email.endsWith('nitzanim.tech')",
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    }
   }
 }

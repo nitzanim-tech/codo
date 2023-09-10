@@ -20,6 +20,7 @@
     "@mui/x-data-grid": "^6.7.0",
     "@nextui-org/react": "^2.1.5",
     "@react-spring/web": "^9.7.3",
+    "@react-stately/data": "^3.10.2",
     "ace-builds": "^1.22.0",
     "exceljs": "^4.3.0",
     "firebase": "^10.3.0",
