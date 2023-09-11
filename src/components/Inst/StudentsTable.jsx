@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import { getKeyValue, Spinner } from '@nextui-org/react';
 
-import getStudentData from '../requests/getStudents';
+import getStudentData from '../../requests/getStudents';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import firebaseConfig from '../util/firebaseConfig';
+import firebaseConfig from '../../util/firebaseConfig';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
