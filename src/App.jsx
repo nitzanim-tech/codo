@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Instructurs from './pages/Instructurs';
 import Sumbit from "./pages/Sumbit";
+import Review from "./pages/Review";
 import { useEffect } from 'react';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route path="/inst" element={<Instructurs />} />
         <Route path="/submit" element={<Sumbit />} />
+        <Route path="/review" element={<Review />} />
       </Routes>
     </BrowserRouter>
   );

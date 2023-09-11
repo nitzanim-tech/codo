@@ -43,7 +43,12 @@ export default function IntTestsTable() {
                   (selectedVersion.review ? (
                     <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
                   ) : (
-                    <Button radius="full" isIconOnly variant="faded">
+                    <Button
+                      radius="full"
+                      isIconOnly
+                      variant="faded"
+                      onClick={() => window.open(`/review?ver=${selectedVersion.id}`, '_blank')}
+                    >
                       <CreateRoundedIcon />
                     </Button>
                   ))}
@@ -82,22 +87,22 @@ const data = [
   {
     name: 'יוסי אבולעפיה',
     versions: [
-      { date: '23/10/22', tests: '4/5', code: "print('hi')", review: 'you have to blala' },
-      { date: '22/10/22', tests: '3/5', code: "print('hhi')" },
-      { date: '22/10/22', tests: '1/5', code: "print('butr')" },
+      { id: 1, date: '23/10/22', tests: '4/5', code: "print('hi')", review: 'you have to blala' },
+      { id: 2, date: '22/10/22', tests: '3/5', code: "print('hhi')" },
+      { id: 3, date: '22/10/22', tests: '1/5', code: "print('butr')" },
     ],
   },
   {
     name: 'דני סנדרסון',
     versions: [
-      { date: '23/10/22', tests: '2/5', code: "print('hello')", review: 'you need to blala' },
-      { date: '22/10/22', tests: '3/5', code: "print('world')" },
-      { date: '21/10/22', tests: '1/5', code: "print('!')" },
+      { id: 4, date: '23/10/22', tests: '2/5', code: "print('hello')", review: 'you need to blala' },
+      { id: 5, date: '22/10/22', tests: '3/5', code: "print('world')" },
+      { id: 6, date: '21/10/22', tests: '1/5', code: "print('!')" },
     ],
   },
   {
     name: 'רוני כהן',
-    versions: [{ date: '24/10/22', tests: '1/5', code: "print('hi')" }],
+    versions: [{ id: 8, date: '24/10/22', tests: '1/5', code: "print('hi')" }],
   },
   {
     name: 'אלון מזרחי',

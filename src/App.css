@@ -8,3 +8,6 @@ div[data-overlay-container="true"] {
   width: 100%;
 }
 
+.myGlyphMarginClass::before {
+  content: "🖊️";
+}
