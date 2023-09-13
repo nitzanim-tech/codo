@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import IntTestsTable from './SubmitsTable';
+import SubmitsTable from './SubmitsTable';
 import { Grid } from '@mui/material';
 import InstTasksList from './InstTasksList';
-import { Card, CardBody, Tabs, Tab } from '@nextui-org/react';
+import { Card, CardBody } from '@nextui-org/react';
 import { DashboardCard } from '../DashboardCard';
 
 export default function TaskTab({ studentsRawData }) {
   const [formattedData, setFormattedData] = useState([]);
+  const [selectedTask, setSelectedTask] = useState(0);
 
   useEffect(() => {
-    setFormattedData(formatStudentTestsData(studentsRawData, 0));
-  }, [studentsRawData]);
+    setFormattedData(formatStudentTestsData(studentsRawData, selectedTask));
+  }, [studentsRawData, selectedTask]);
 
   return (
     <>
       <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
         <Grid item style={{ width: '70%' }}>
-          <IntTestsTable data={formattedData} />
+          <SubmitsTable data={formattedData} />
         </Grid>
 
         <Grid item style={{ width: '20%' }}>
-          <InstTasksList />
+          <InstTasksList setSelectedTask={setSelectedTask} />
           <DashboardCard ratio={countStudents(formattedData)} text={'הגישו:'} />
           <Card>
             <CardBody>

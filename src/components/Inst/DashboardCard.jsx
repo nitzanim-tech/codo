@@ -1,4 +1,4 @@
-import { Card, CardBody, Tabs, Tab } from '@nextui-org/react';
+import { Card, CardBody } from '@nextui-org/react';
 import DonutChart from './Chart';
 import { Grid } from '@mui/material';
 
@@ -10,15 +10,16 @@ export const DashboardCard = ({ ratio, text }) => {
     <Card>
       <CardBody>
         <Grid container spacing={1} columns={2} rows={1} style={{ padding: '1.5%' }}>
-          <Grid item style={{ width: '40%' }}>
+          <Grid item style={{ width: '50%' }}>
             <div style={{ textAlign: 'center', marginRight: '15px', direction: 'rtl' }}>
               <h3>{text}</h3>
-              <p style={{ fontSize: '1.5em' }}>
+              <span style={{ fontSize: '1.5em' }}>
                 <b>{numerator}</b>
-              </p>
+              </span>
+              <span > / {denominator}</span>
             </div>
           </Grid>
-          <Grid item style={{ width: '60%' }}>
+          <Grid item style={{ width: '50%' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <DonutChart percentage={percentage} size={100} />
             </div>

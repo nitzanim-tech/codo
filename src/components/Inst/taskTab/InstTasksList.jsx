@@ -6,15 +6,19 @@ const ListboxWrapper = ({ children }) => (
     {children}
   </div>
 );
+const tasks = [
+  { key: 0, name: 'שלום עולם' },
+  { key: 1, name: 'אליס והמעלית' },
+  { key: 2, name: 'בוב והחייזרים היפנים' },
+];
 
-export default function InstTasksList() {
+export default function InstTasksList({ setSelectedTask }) {
   return (
     <ListboxWrapper>
-      <Listbox aria-label="Example with disabled actions" onAction={(key) => alert(key)}>
-        <ListboxItem key="new"> התנסות (0)</ListboxItem>
-        <ListboxItem key="copy">1 - מעלית</ListboxItem>
-        <ListboxItem key="edit">2 - מיון מהיר</ListboxItem>
-        <ListboxItem key="delete">Delete file</ListboxItem>
+      <Listbox aria-label="Example with disabled actions" onAction={(key) => setSelectedTask(key)}>
+        {tasks.map((task) => (
+          <ListboxItem key={task.key}>{task.name}</ListboxItem>
+        ))}
       </Listbox>
     </ListboxWrapper>
   );
