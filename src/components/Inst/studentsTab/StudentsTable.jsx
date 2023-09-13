@@ -2,32 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import { getKeyValue, Spinner } from '@nextui-org/react';
 
-import getStudentData from '../../requests/getStudents';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import firebaseConfig from '../../util/firebaseConfig';
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-export default function App1() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [studentsRawData, setStudentsRawData] = useState(null);
+export default function StudentsTable({ isLoading, studentsRawData }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getStudentData(app);
-      const cleanedData = data.map((item, index) => {
-        const { submissions, ...rest } = item;
-        return { ...rest, id: index };
-      });
-      setStudentsRawData(cleanedData);
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, []);
 
   const handleSortChange = (column) => {
     if (sortDescriptor.column === column) {

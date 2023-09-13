@@ -1,36 +1,37 @@
-import React from 'react';
-import IntTestsTable from '../components/Inst/InstTestsTable';
+import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
-import { Grid } from '@mui/material';
-import InstTasksList from '../components/Inst/InstTasksList';
-import DonutChart from '../components/Inst/Chart';
-import { Card, CardBody, Tabs, Tab } from '@nextui-org/react';
-import App1 from '../components/Inst/StudentsTable';
+import { Tabs, Tab } from '@nextui-org/react';
+import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
+import getStudentData from '../requests/getStudents';
+import { initializeApp } from 'firebase/app';
+import firebaseConfig from '../util/firebaseConfig';
+import TaskTab from '../components/Inst/taskTab/TaskTab';
+
+const app = initializeApp(firebaseConfig);
+
 function Instructors() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [studentsRawData, setStudentsRawData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getStudentData(app);
+      setStudentsRawData(data);
+      setIsLoading(false);
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
       <NavBar />
       <Tabs aria-label="Options">
         <Tab key="tasks" title="משימות">
-          <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
-            <Grid item style={{ width: '70%' }}>
-              <IntTestsTable />
-            </Grid>
-
-            <Grid item style={{ width: '20%' }}>
-              <InstTasksList />
-              <TestAverageCard ratio={'3/10'} text={'הגישו:'} />
-              <Card>
-                <CardBody>
-                  <h3>מחכים למשוב: 2</h3>
-                </CardBody>
-              </Card>
-              <TestAverageCard ratio={'4.23/5'} text={'ממוצע טסטים:'} />
-            </Grid>
-          </Grid>
+          <TaskTab studentsRawData={studentsRawData} />
         </Tab>
+
         <Tab key="students" title="חניכים">
-          <App1 />
+          <StudentsTable isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
         </Tab>
       </Tabs>
     </>
@@ -39,29 +40,13 @@ function Instructors() {
 
 export default Instructors;
 
-const TestAverageCard = ({ ratio, text }) => {
-  const [numerator, denominator] = ratio.split('/').map(Number);
-  const percentage = Math.round((numerator / denominator) * 100);
-
-  return (
-    <Card>
-      <CardBody>
-        <Grid container spacing={1} columns={2} rows={1} style={{ padding: '1.5%' }}>
-          <Grid item style={{ width: '40%' }}>
-            <div style={{ textAlign: 'center', marginRight: '15px', direction: 'rtl' }}>
-              <h3>{text}</h3>
-              <p style={{ fontSize: '1.5em' }}>
-                <b>{numerator}</b>
-              </p>
-            </div>
-          </Grid>
-          <Grid item style={{ width: '60%' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <DonutChart percentage={percentage} size={100} />
-            </div>
-          </Grid>
-        </Grid>
-      </CardBody>
-    </Card>
-  );
+const studentTableFormattedData = (data) => {
+  if (data) {
+    return data.map((item, index) => {
+      const { submissions, ...rest } = item;
+      return { ...rest, id: index };
+    });
+  } else {
+    return [];
+  }
 };

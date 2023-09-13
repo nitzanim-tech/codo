@@ -35,7 +35,7 @@ const Text = styled.span`
 const DonutChart = ({ percentage, size = 200 }) => (
   <Donut percentage={percentage} size={size}>
     <Hole size={size} />
-    <Text>{percentage}</Text>
+    <Text>{Math.round(percentage)}</Text>
   </Donut>
 );
 

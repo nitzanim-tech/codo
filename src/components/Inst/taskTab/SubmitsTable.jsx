@@ -1,11 +1,12 @@
 import React from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
-import DonutChart from './Chart'; // adjust the import path to where your DonutChart component is located
+import DonutChart from '../Chart';
 import VersionsButton from './VersionsButton';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
-export default function IntTestsTable() {
+export default function SubmitsTable({ data }) {
+  console.log(data);
   return (
     <Table
       aria-label="Example table with client side sorting"
@@ -22,16 +23,16 @@ export default function IntTestsTable() {
         <TableColumn>משוב</TableColumn>
       </TableHeader>
       <TableBody>
-        {data.map((student) => {
+        {data.map((student, index) => {
           const selectedVersion = getSelectedVersion(student.versions);
           const percentage =
             selectedVersion.tests !== 'N/A'
               ? (parseInt(selectedVersion.tests.split('/')[0]) / parseInt(selectedVersion.tests.split('/')[1])) * 100
               : 0;
           return (
-            <TableRow key={student.name}>
+            <TableRow key={`${student.name}-${index}`}>
               <TableCell>{student.name}</TableCell>
-              <TableCell>{selectedVersion.date}</TableCell>
+              <TableCell>{formatDate(selectedVersion.date)}</TableCell>
               <TableCell>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {selectedVersion.tests} <DonutChart percentage={percentage} size={50} />
@@ -83,7 +84,17 @@ const getSelectedVersion = (versions) => {
   return versionsWithBestTestScore.find((version) => new Date(version.date).getTime() === latestDate);
 };
 
-const data = [
+const formatDate = (dateString) => {
+  const dateObj = new Date(dateString);
+  return `${dateObj.getUTCDate().toString().padStart(2, '0')}.${(dateObj.getUTCMonth() + 1)
+    .toString()
+    .padStart(2, '0')}.${dateObj.getUTCFullYear()} | ${dateObj.getUTCHours().toString().padStart(2, '0')}:${dateObj
+    .getUTCMinutes()
+    .toString()
+    .padStart(2, '0')}`;
+};
+
+const data2 = [
   {
     name: 'יוסי אבולעפיה',
     versions: [
