@@ -24,7 +24,7 @@ function Instructors() {
 
   return (
     <>
-      <NavBar />
+      <NavBar isShowTask={false}/>
       <Tabs aria-label="Options">
         <Tab key="tasks" title="משימות">
           <TaskTab studentsRawData={studentsRawData} />

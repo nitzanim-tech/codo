@@ -1,5 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
+import styled from 'styled-components';
+
+const StyledEditor = styled(Editor)`
+  .myContentClass {
+    background: lightyellow;
+  }
+
+  .myGlyphMarginClass::before {
+    content: '!';
+    color: red;
+  }
+`;
 
 export default function MonacoEditor({ code, setCode, theme }) {
   const comments = useRef({});
@@ -7,6 +19,7 @@ export default function MonacoEditor({ code, setCode, theme }) {
   const handleEditorDidMount = (editor, monaco) => {
     editor.onMouseDown((e) => {
       if (e.target.type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS) {
+        console.log('here');
         const lineNumber = e.target.position.lineNumber;
         const comment = window.prompt('Enter your comment');
         if (comment) {
@@ -24,21 +37,27 @@ export default function MonacoEditor({ code, setCode, theme }) {
         isWholeLine: true,
         className: 'myContentClass',
         glyphMarginClassName: 'myGlyphMarginClass',
-        glyphMarginHoverMessage: { value: comment },
+        hoverMessage: { value: comment },
       },
     }));
     editor.deltaDecorations([], decorations);
   };
 
+  const handleSave = () => {
+    console.log(JSON.stringify(comments.current));
+  };
+
   return (
-    <Editor
-      height="315px"
-      defaultLanguage="python"
-      theme={theme}
-      value={code}
-      onChange={(newValue) => setCode(newValue)}
-      options={{ minimap: { enabled: false } }}
-      onMount={handleEditorDidMount}
-    />
+    <div>
+      <StyledEditor
+        height="315px"
+        defaultLanguage="python"
+        theme={theme}
+        value={code}
+        options={{ minimap: { enabled: false }, readOnly: true }}
+        onMount={handleEditorDidMount}
+      />
+      <button onClick={handleSave}>Save</button>
+    </div>
   );
 }

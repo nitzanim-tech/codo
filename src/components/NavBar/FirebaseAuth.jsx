@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import firebaseConfig from '../../util/firebaseConfig';
-
-import { initializeApp } from 'firebase/app';
 import { getAuth, signOut } from 'firebase/auth';
 
 import { User, Dropdown } from '@nextui-org/react';
@@ -11,30 +8,20 @@ import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 
-const FirebaseAuth = () => {
-  const [currentUser, setCurrentUser] = useState(null);
+const FirebaseAuth = ({ auth,app, currentUser, setCurrentUser }) => {
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-    });
-    return unsubscribe;
-  }, []);
-
-const handleSignOut = async () => {
-  try {
-    await signOut(auth);
-    console.log('Signed out');
-    setCurrentUser(null);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      console.log('Signed out');
+      setCurrentUser(null);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <>

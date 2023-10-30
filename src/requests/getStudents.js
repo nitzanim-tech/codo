@@ -1,18 +1,20 @@
-import { getDatabase, ref, get } from 'firebase/database';
+import { getDatabase, ref, query, orderByChild, equalTo, get } from 'firebase/database';
 
 const getStudentData = async ({ app, groups = [] }) => {
   const db = getDatabase(app);
   const usersRef = ref(db, 'users');
 
   try {
-    const snapshot = await get(usersRef);
+    let filteredUsersRef = usersRef;
+
+    if (groups.length > 0) {
+      filteredUsersRef = query(usersRef, orderByChild('group'), equalTo(groups[0]));
+    }
+
+    const snapshot = await get(filteredUsersRef);
     const users = snapshot.val() || {};
 
-    if (groups.length === 0) {
-      return Object.values(users);
-    } else {
-      return Object.values(users).filter((user) => groups.includes(user.group));
-    }
+    return Object.values(users);
   } catch (error) {
     console.error('Error getting data:', error);
     return [];

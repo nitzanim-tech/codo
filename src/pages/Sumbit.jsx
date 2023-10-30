@@ -22,7 +22,7 @@ useEffect(() => {
 
   return (
     <>
-      <NavBar setTask={setTask} />
+      <NavBar setTask={setTask} isShowTask={true}/>
       <PyodideProvider>
         <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
           <Grid item style={{ width: '20%' }}>
