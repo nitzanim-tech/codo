@@ -9,9 +9,9 @@ import TaskTab from '../components/Inst/taskTab/TaskTab';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import getCurrentUser from '../requests/getCurrentUser';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
-const app = initializeApp(firebaseConfig);
-import ExcelIcon from '../assets/svg/excel.svg';
+import ManageTasks from '../components/Inst/manageTab/ManageTasks';
 
+const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 function Instructors() {
@@ -35,7 +35,6 @@ function Instructors() {
       data = data.filter((student) => student.email !== email);
       setStudentsRawData(data);
       setIsLoading(false);
-      console.log('2');
     };
 
     if (userGroup.length > 0) fetchData();
@@ -51,10 +50,6 @@ function Instructors() {
         </h2>
       </div>
 
-      <Button isIconOnly variant="faded" onClick={() => console.log('hi')} radius="full">
-        <img src={ExcelIcon} alt="ExcelIcon" />
-      </Button>
-
       <Tabs aria-label="Options">
         <Tab key="tasks" title="משימות">
           <TaskTab studentsRawData={studentsRawData} />
@@ -63,7 +58,7 @@ function Instructors() {
           <StudentsTable isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
         </Tab>
         <Tab key="manage" title="ניהול משימות">
-          <></>
+          <ManageTasks isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
         </Tab>
       </Tabs>
     </>

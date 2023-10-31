@@ -4,9 +4,12 @@ import DonutChart from '../Chart';
 import VersionsButton from './VersionsButton';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-
+import formatDate from '../../../util/formatDate';
 export default function SubmitsTable({ data }) {
   const [sortOrder, setSortOrder] = useState('name');
+
+  const calculatePresent = (stringRatio) =>
+    (parseInt(stringRatio.split('/')[0]) / parseInt(stringRatio.split('/')[1])) * 100;
 
   const handleSortByName = () => {
     setSortOrder('name');
@@ -17,20 +20,19 @@ export default function SubmitsTable({ data }) {
   };
 
   const sortedData = [...data].sort((a, b) => {
-    if (sortOrder === 'name') {
-      return a.name.localeCompare(b.name);
-    } else if (sortOrder === 'testsSuccess') {
-      const aTestPercentage =
-        a.versions.length > 0 && a.versions[0].tests !== ''
-          ? (parseInt(a.versions[0].tests.split('/')[0]) / parseInt(a.versions[0].tests.split('/')[1])) * 100
-          : 0;
-      const bTestPercentage =
-        b.versions.length > 0 && b.versions[0].tests !== ''
-          ? (parseInt(b.versions[0].tests.split('/')[0]) / parseInt(b.versions[0].tests.split('/')[1])) * 100
-          : 0;
-      return bTestPercentage - aTestPercentage;
-    } else {
-      return 0;
+    switch (sortOrder) {
+      case 'name':
+        return a.name.localeCompare(b.name);
+
+      case 'testsSuccess':
+        const aTestPercentage =
+          a.versions.length > 0 && a.versions[0].tests !== '' ? calculatePresent(a.versions[0].tests) : 0;
+        const bTestPercentage =
+          b.versions.length > 0 && b.versions[0].tests !== '' ? calculatePresent(b.versions[0].tests) : 0;
+        return bTestPercentage - aTestPercentage;
+
+      default:
+        return 0;
     }
   });
 
@@ -52,13 +54,11 @@ export default function SubmitsTable({ data }) {
           <TableColumn style={{ textAlign: 'center' }}>תאריך</TableColumn>
           <TableColumn style={{ textAlign: 'center' }}>שם</TableColumn>
         </TableHeader>
+
         <TableBody>
           {sortedData.map((student, index) => {
             const selectedVersion = getSelectedVersion(student.versions);
-            const percentage =
-              selectedVersion.tests !== ''
-                ? (parseInt(selectedVersion.tests.split('/')[0]) / parseInt(selectedVersion.tests.split('/')[1])) * 100
-                : 0;
+            const percentage = selectedVersion.tests !== '' ? calculatePresent(selectedVersion.tests) : 0;
             return (
               <TableRow key={`${student.name}-${index}`}>
                 <TableCell>
@@ -76,6 +76,7 @@ export default function SubmitsTable({ data }) {
                             name: student.name,
                           };
                           localStorage.setItem('versionToCheck', JSON.stringify(versionToCheck));
+
                           window.open('/review', '_blank');
                         }}
                       >
@@ -89,7 +90,7 @@ export default function SubmitsTable({ data }) {
                     <DonutChart ratio={selectedVersion.tests} percentage={percentage} size={50} />
                   </div>
                 </TableCell>
-                <TableCell>{formatDate(selectedVersion.date)}</TableCell>
+                <TableCell>{selectedVersion.date ? formatDate(selectedVersion.date) : ''}</TableCell>
                 <TableCell>{student.name}</TableCell>
               </TableRow>
             );
@@ -122,13 +123,5 @@ const getSelectedVersion = (versions) => {
   return versionsWithBestTestScore.find((version) => new Date(version.date).getTime() === latestDate);
 };
 
-const formatDate = (dateString) => {
-  const dateObj = new Date(dateString);
-  return `${dateObj.getUTCDate().toString().padStart(2, '0')}.${(dateObj.getUTCMonth() + 1)
-    .toString()
-    .padStart(2, '0')}.${dateObj.getUTCFullYear()} | ${dateObj.getUTCHours().toString().padStart(2, '0')}:${dateObj
-    .getUTCMinutes()
-    .toString()
-    .padStart(2, '0')}`;
-};
+  
 

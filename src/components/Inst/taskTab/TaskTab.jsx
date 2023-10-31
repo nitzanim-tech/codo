@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import SubmitsTable from './SubmitsTable';
 import { Grid } from '@mui/material';
 import InstTasksList from './InstTasksList';
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody, Button } from '@nextui-org/react';
 import { DashboardCard } from '../DashboardCard';
+import ExcelIcon from '../../../assets/svg/excel.svg';
 
 export default function TaskTab({ studentsRawData }) {
   const [formattedData, setFormattedData] = useState([]);
@@ -15,6 +16,10 @@ export default function TaskTab({ studentsRawData }) {
 
   return (
     <>
+      <Button isIconOnly variant="faded" onClick={() => console.log('hi')} radius="full">
+        <img src={ExcelIcon} alt="ExcelIcon" />
+      </Button>
+
       <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
         <Grid item style={{ width: '70%' }}>
           <SubmitsTable data={formattedData} />

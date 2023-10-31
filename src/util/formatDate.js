@@ -1,15 +1,9 @@
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  const formattedDate = date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-  const formattedTime = date.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  return `${formattedDate} | ${formattedTime}`;
+export default function formatDate(dateString) {
+  const dateObj = new Date(dateString);
+  return `${dateObj.getUTCHours().toString().padStart(2, '0')}:${dateObj
+    .getUTCMinutes()
+    .toString()
+    .padStart(2, '0')} | ${dateObj.getUTCDate().toString().padStart(2, '0')}.${(dateObj.getUTCMonth() + 1)
+    .toString()
+    .padStart(2, '0')}.${dateObj.getUTCFullYear()}`;
 }
-
-export { formatDate };
