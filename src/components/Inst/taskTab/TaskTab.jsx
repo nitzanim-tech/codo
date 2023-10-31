@@ -23,11 +23,11 @@ export default function TaskTab({ studentsRawData }) {
         <Grid item style={{ width: '20%' }}>
           <InstTasksList setSelectedTask={setSelectedTask} />
           <DashboardCard ratio={countStudents(formattedData)} text={'הגישו:'} />
-          <Card style={{ marginTop: '10px' }}>
+          {/* <Card style={{ marginTop: '10px' }}>
             <CardBody>
               <h3>מחכים למשוב: 2</h3>
             </CardBody>
-          </Card>
+          </Card> */}
           <DashboardCard ratio={calculateAverage(formattedData)} text={'ממוצע טסטים:'} />
         </Grid>
       </Grid>

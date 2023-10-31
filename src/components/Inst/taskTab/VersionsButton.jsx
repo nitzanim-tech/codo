@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+
 const VersionsButton = ({ versions }) => {
-  // isIconOnly
   return (
     <Dropdown>
       <DropdownTrigger>
