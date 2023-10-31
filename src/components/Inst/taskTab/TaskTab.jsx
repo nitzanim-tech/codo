@@ -23,7 +23,7 @@ export default function TaskTab({ studentsRawData }) {
         <Grid item style={{ width: '20%' }}>
           <InstTasksList setSelectedTask={setSelectedTask} />
           <DashboardCard ratio={countStudents(formattedData)} text={'הגישו:'} />
-          <Card>
+          <Card style={{ marginTop: '10px' }}>
             <CardBody>
               <h3>מחכים למשוב: 2</h3>
             </CardBody>

@@ -7,7 +7,7 @@ export const DashboardCard = ({ ratio, text }) => {
   const percentage = Math.round((numerator / denominator) * 100);
 
   return (
-    <Card>
+    <Card style={{ marginTop: '10px' }}>
       <CardBody>
         {denominator ? (
           <Grid container spacing={1} columns={2} rows={1} style={{ padding: '1.5%' }}>
@@ -26,7 +26,9 @@ export const DashboardCard = ({ ratio, text }) => {
               </div>
             </Grid>
           </Grid>
-        ): <Spinner/>}
+        ) : (
+          <Spinner />
+        )}
       </CardBody>
     </Card>
   );

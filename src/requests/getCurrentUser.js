@@ -1,6 +1,6 @@
 import { getDatabase, ref, get } from 'firebase/database';
 
-const getCurrentStudent = async ({ app, id }) => {
+const getCurrentUser = async ({ app, id }) => {
   const db = getDatabase(app);
   const userRef = ref(db, `users/${id}`);
 
@@ -20,4 +20,4 @@ const getCurrentStudent = async ({ app, id }) => {
   }
 };
 
-export default getCurrentStudent;
+export default getCurrentUser;

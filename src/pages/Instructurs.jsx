@@ -6,32 +6,49 @@ import getStudentData from '../requests/getStudents';
 import { initializeApp } from 'firebase/app';
 import firebaseConfig from '../util/firebaseConfig';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import getCurrentUser from '../requests/getCurrentUser';
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth();
 
 function Instructors() {
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
+  const [userGroup, setUserGroup] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  onAuthStateChanged(auth, async (user) => {
+    const current = await getCurrentUser({ app, id: user.uid });
+    setCurrentUser(current);
+    setUserGroup(current.group);
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getStudentData(app);
+      let data = await getStudentData({ app, groups: userGroup });
+      const email = currentUser.email;
+      data = data.filter((student) => student.email !== email);
       setStudentsRawData(data);
       setIsLoading(false);
     };
-    fetchData();
-  }, []);
+
+    if (userGroup.length > 0) fetchData();
+  }, [userGroup]);
 
   return (
     <>
-      <NavBar isShowTask={false}/>
+      <NavBar isShowTask={false} />
+      <h2>{'קבוצה: ' + userGroup}</h2>
       <Tabs aria-label="Options">
         <Tab key="tasks" title="משימות">
           <TaskTab studentsRawData={studentsRawData} />
         </Tab>
-
         <Tab key="students" title="חניכים">
           <StudentsTable isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
+        </Tab>
+        <Tab key="manage" title="ניהול משימות">
+          <></>
         </Tab>
       </Tabs>
     </>
@@ -50,3 +67,4 @@ const studentTableFormattedData = (data) => {
     return [];
   }
 };
+

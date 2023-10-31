@@ -7,7 +7,7 @@ import firebaseConfig from '../../util/firebaseConfig';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 import { initializeApp } from 'firebase/app';
-import getCurrentStudent from '../../requests/getCurrentStudent';
+import getCurrentUser from '../../requests/getCurrentUser';
 import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
 import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
@@ -28,7 +28,7 @@ export default function NavigateBar({ setTask, isShowTask }) {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       if (user) {
-        const userData = await getCurrentStudent({ app, id: user.uid });
+        const userData = await getCurrentUser({ app, id: user.uid });
         console.log(userData);
         setStudentData(userData);
       } else {

@@ -6,15 +6,15 @@ const getStudentData = async ({ app, groups = [] }) => {
 
   try {
     let filteredUsersRef = usersRef;
-
+    console.log(groups);
     if (groups.length > 0) {
-      filteredUsersRef = query(usersRef, orderByChild('group'), equalTo(groups[0]));
+      filteredUsersRef = query(usersRef, orderByChild('group'), equalTo(groups));
     }
 
     const snapshot = await get(filteredUsersRef);
-    const users = snapshot.val() || {};
+    const students = snapshot.val() || {};
 
-    return Object.values(users);
+    return Object.values(students);
   } catch (error) {
     console.error('Error getting data:', error);
     return [];
