@@ -13,7 +13,7 @@ const StyledEditor = styled(Editor)`
   }
 `;
 
-export default function MonacoEditor({ code, setCode, theme }) {
+export default function MonacoEditor({ code, theme = 'vs-light' }) {
   const comments = useRef({});
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -48,9 +48,9 @@ export default function MonacoEditor({ code, setCode, theme }) {
   };
 
   return (
-    <div>
+    <div style={{marginTop:'30px'}}>
       <StyledEditor
-        height="315px"
+        height="380px"
         defaultLanguage="python"
         theme={theme}
         value={code}

@@ -71,15 +71,12 @@ export default function SubmitsTable({ data }) {
                         isIconOnly
                         variant="faded"
                         onClick={() => {
-                          const newWindow = window.open('/review', '_blank');
-                          newWindow.addEventListener('load', () => {
-                            const versionToCheck = {
-                              ... selectedVersion,
-                              name: student.name,
-                            };
-
-                            newWindow.postMessage(versionToCheck);
-                          });
+                          const versionToCheck = {
+                            ...selectedVersion,
+                            name: student.name,
+                          };
+                          localStorage.setItem('versionToCheck', JSON.stringify(versionToCheck));
+                          window.open('/review', '_blank');
                         }}
                       >
                         <CreateRoundedIcon />

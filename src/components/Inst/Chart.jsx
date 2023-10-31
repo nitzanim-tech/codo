@@ -19,6 +19,7 @@ const Donut = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.05);
 `;
 
 const Hole = styled.div`
@@ -35,7 +36,7 @@ const Text = styled.span`
 const DonutChart = ({ percentage, ratio, size = 200 }) => (
   <Donut percentage={percentage} size={size}>
     <Hole size={size} />
-    <Text>{ratio ? ratio : Math.round(percentage)}</Text>
+    <Text>{ratio ? ratio : Math.round(percentage)+'%'}</Text>
   </Donut>
 );
 

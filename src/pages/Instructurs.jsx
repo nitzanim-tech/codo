@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
-import { Tabs, Tab } from '@nextui-org/react';
+import { Tabs, Tab, Button } from '@nextui-org/react';
 import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
 import getStudentData from '../requests/getStudents';
 import { initializeApp } from 'firebase/app';
@@ -8,8 +8,10 @@ import firebaseConfig from '../util/firebaseConfig';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import getCurrentUser from '../requests/getCurrentUser';
-
+import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 const app = initializeApp(firebaseConfig);
+import ExcelIcon from '../assets/svg/excel.svg';
+
 const auth = getAuth();
 
 function Instructors() {
@@ -19,9 +21,11 @@ function Instructors() {
   const [currentUser, setCurrentUser] = useState(null);
 
   onAuthStateChanged(auth, async (user) => {
-    const current = await getCurrentUser({ app, id: user.uid });
-    setCurrentUser(current);
-    setUserGroup(current.group);
+    if (!currentUser) {
+      const current = await getCurrentUser({ app, id: user.uid });
+      setCurrentUser(current);
+      setUserGroup(current.group);
+    }
   });
 
   useEffect(() => {
@@ -31,6 +35,7 @@ function Instructors() {
       data = data.filter((student) => student.email !== email);
       setStudentsRawData(data);
       setIsLoading(false);
+      console.log('2');
     };
 
     if (userGroup.length > 0) fetchData();
@@ -39,7 +44,17 @@ function Instructors() {
   return (
     <>
       <NavBar isShowTask={false} />
-      <h2>{'קבוצה: ' + userGroup}</h2>
+      <div>
+        <ApartmentRoundedIcon />
+        <h2>
+          <b>{userGroup}</b>
+        </h2>
+      </div>
+
+      <Button isIconOnly variant="faded" onClick={() => console.log('hi')} radius="full">
+        <img src={ExcelIcon} alt="ExcelIcon" />
+      </Button>
+
       <Tabs aria-label="Options">
         <Tab key="tasks" title="משימות">
           <TaskTab studentsRawData={studentsRawData} />
