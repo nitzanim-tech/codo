@@ -52,16 +52,15 @@ export default function SubmitsTable({ data }) {
     }
   });
 
-  const handleSortChange = (descriptorCliked) => {
-    if (sortDescriptor.column === descriptorCliked.column) {
+  const handleSortChange = (descriptorClicked) => {
+    if (sortDescriptor.column === descriptorClicked.column) {
       setSortDescriptor({
-        column: descriptorCliked.column,
+        column: descriptorClicked.column,
         direction: sortDescriptor.direction === 'ascending' ? 'descending' : 'ascending',
       });
     } else {
-      setSortDescriptor({ column: descriptorCliked.column, direction: 'ascending' });
+      setSortDescriptor({ column: descriptorClicked.column, direction: 'ascending' });
     }
-    console.log(sortDescriptor);
   };
 
   return (
