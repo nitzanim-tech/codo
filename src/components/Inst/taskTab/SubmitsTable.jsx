@@ -2,47 +2,74 @@ import React, { useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
 import DonutChart from '../Chart';
 import VersionsButton from './VersionsButton';
-import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import formatDate from '../../../util/formatDate';
+import ReviewButton from './ReviewButton';
+
 export default function SubmitsTable({ data }) {
-  const [sortOrder, setSortOrder] = useState('name');
+  const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
 
   const calculatePresent = (stringRatio) =>
     (parseInt(stringRatio.split('/')[0]) / parseInt(stringRatio.split('/')[1])) * 100;
 
-  const handleSortByName = () => {
-    setSortOrder('name');
+  const maxTestInVersion = (versions) => {
+    let maxTests = -1;
+    for (const version of versions) {
+      if (version.tests !== '') {
+        const newPresent = calculatePresent(version.tests);
+        maxTests = maxTests < newPresent ? newPresent : maxTests;
+      }
+    }
+    return maxTests;
   };
 
-  const handleSortByTestsSuccess = () => {
-    setSortOrder('testsSuccess');
+  const maxDateInVersion = (versions) => {
+    let maxDate = new Date(0);
+    for (const version of versions) {
+      if (version.date !== '') {
+        const newDate = new Date(version.date);
+        maxDate = maxDate < newDate ? newDate : maxDate;
+      }
+    }
+    return maxDate;
   };
 
   const sortedData = [...data].sort((a, b) => {
-    switch (sortOrder) {
+    switch (sortDescriptor.column) {
       case 'name':
-        return a.name.localeCompare(b.name);
+        return sortDescriptor.direction === 'ascending' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+
+      case 'date':
+        const aDate = maxDateInVersion(a.versions);
+        const bDate = maxDateInVersion(b.versions);
+        return sortDescriptor.direction === 'ascending' ? aDate - bDate : bDate - aDate;
 
       case 'testsSuccess':
-        const aTestPercentage =
-          a.versions.length > 0 && a.versions[0].tests !== '' ? calculatePresent(a.versions[0].tests) : 0;
-        const bTestPercentage =
-          b.versions.length > 0 && b.versions[0].tests !== '' ? calculatePresent(b.versions[0].tests) : 0;
-        return bTestPercentage - aTestPercentage;
-
-      default:
-        return 0;
+        const aTestPercentage = maxTestInVersion(a.versions);
+        const bTestPercentage = maxTestInVersion(b.versions);
+        return sortDescriptor.direction === 'ascending'
+          ? aTestPercentage - bTestPercentage
+          : bTestPercentage - aTestPercentage;
     }
   });
 
+  const handleSortChange = (descriptorCliked) => {
+    if (sortDescriptor.column === descriptorCliked.column) {
+      setSortDescriptor({
+        column: descriptorCliked.column,
+        direction: sortDescriptor.direction === 'ascending' ? 'descending' : 'ascending',
+      });
+    } else {
+      setSortDescriptor({ column: descriptorCliked.column, direction: 'ascending' });
+    }
+    console.log(sortDescriptor);
+  };
+
   return (
     <>
-      <Button onClick={handleSortByName}>מיין לפי שם</Button>
-      <Button onClick={handleSortByTestsSuccess}>מיין לפי הצלחת טסטים</Button>
-
       <Table
-        aria-label="Example table with client side sorting"
+        aria-label="Students submit table"
+        sortDescriptor={sortDescriptor}
+        onSortChange={handleSortChange}
         classNames={{
           table: 'min-h-[400px]',
         }}
@@ -50,9 +77,15 @@ export default function SubmitsTable({ data }) {
         <TableHeader>
           <TableColumn style={{ textAlign: 'center' }}>משוב</TableColumn>
           <TableColumn style={{ textAlign: 'center' }}>גרסאות</TableColumn>
-          <TableColumn style={{ textAlign: 'center' }}>טסטים</TableColumn>
-          <TableColumn style={{ textAlign: 'center' }}>תאריך</TableColumn>
-          <TableColumn style={{ textAlign: 'center' }}>שם</TableColumn>
+          <TableColumn key="testsSuccess" style={{ textAlign: 'center' }} allowsSorting>
+            טסטים
+          </TableColumn>
+          <TableColumn key="date" style={{ textAlign: 'center' }} allowsSorting>
+            תאריך
+          </TableColumn>
+          <TableColumn key="name" style={{ textAlign: 'center' }} allowsSorting>
+            שם
+          </TableColumn>
         </TableHeader>
 
         <TableBody>
@@ -62,27 +95,9 @@ export default function SubmitsTable({ data }) {
             return (
               <TableRow key={`${student.name}-${index}`}>
                 <TableCell>
-                  {student.versions.length > 0 &&
-                    (selectedVersion.review ? (
-                      <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
-                    ) : (
-                      <Button
-                        radius="full"
-                        isIconOnly
-                        variant="faded"
-                        onClick={() => {
-                          const versionToCheck = {
-                            ...selectedVersion,
-                            name: student.name,
-                          };
-                          localStorage.setItem('versionToCheck', JSON.stringify(versionToCheck));
-
-                          window.open('/review', '_blank');
-                        }}
-                      >
-                        <CreateRoundedIcon />
-                      </Button>
-                    ))}
+                  {student.versions.length > 0 && (
+                    <ReviewButton selectedVersion={selectedVersion} name={student.name} />
+                  )}
                 </TableCell>
                 <TableCell>{student.versions.length > 1 && <VersionsButton versions={student.versions} />}</TableCell>
                 <TableCell>
@@ -105,23 +120,18 @@ const getSelectedVersion = (versions) => {
   if (versions.length === 0) {
     return { date: '', tests: '' };
   }
-
   const versionWithReview = versions.find((version) => version.review);
   if (versionWithReview) {
-    return versionWithReview;
+    return versionWithReview; // there is a review
   }
-
   const bestTestScore = Math.max(...versions.map((version) => parseInt(version.tests.split('/')[0])));
   const versionsWithBestTestScore = versions.filter(
     (version) => parseInt(version.tests.split('/')[0]) === bestTestScore,
   );
   if (versionsWithBestTestScore.length === 1) {
-    return versionsWithBestTestScore[0];
+    return versionsWithBestTestScore[0]; // unique best score
   }
-
   const latestDate = Math.max(...versionsWithBestTestScore.map((version) => new Date(version.date).getTime()));
   return versionsWithBestTestScore.find((version) => new Date(version.date).getTime() === latestDate);
 };
-
-  
 

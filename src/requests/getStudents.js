@@ -6,10 +6,9 @@ const getStudentData = async ({ app, groups = [] }) => {
 
   try {
     let filteredUsersRef = usersRef;
-    console.log(groups);
-    if (groups.length > 0) {
-      filteredUsersRef = query(usersRef, orderByChild('group'), equalTo(groups));
-    }
+    // if (groups.length > 0) {
+    //   filteredUsersRef = query(usersRef, orderByChild('group'), equalTo(groups));
+    // }
 
     const snapshot = await get(filteredUsersRef);
     const students = snapshot.val() || {};

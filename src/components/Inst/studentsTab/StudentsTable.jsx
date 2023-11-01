@@ -36,7 +36,6 @@ export default function StudentsTable({ isLoading, studentsRawData }) {
       aria-label="Example table with client side sorting"
       sortDescriptor={sortDescriptor}
       onSortChange={handleSortChange}
-      dir="rtl"
       classNames={{
         table: 'min-h-[400px]',
       }}
