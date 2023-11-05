@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
+import { Button } from '@nextui-org/react';
 
 const StyledEditor = styled(Editor)`
   .myContentClass {
@@ -48,7 +49,7 @@ export default function MonacoEditor({ code, theme = 'vs-light' }) {
   };
 
   return (
-    <div style={{marginTop:'30px'}}>
+    <div style={{ marginTop: '30px' }}>
       <StyledEditor
         height="380px"
         defaultLanguage="python"
@@ -57,7 +58,11 @@ export default function MonacoEditor({ code, theme = 'vs-light' }) {
         options={{ minimap: { enabled: false }, readOnly: true }}
         onMount={handleEditorDidMount}
       />
-      <button onClick={handleSave}>Save</button>
+      <div style={{ paddingBottom: '10px ' }}>
+        <Button isDisabled onClick={handleSave}>
+          Save
+        </Button>
+      </div>
     </div>
   );
 }

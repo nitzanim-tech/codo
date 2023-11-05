@@ -10,5 +10,4 @@ div[data-overlay-container="true"] {
 
 .myGlyphMarginClass::before {
   content: "🖊️";
-  
 }

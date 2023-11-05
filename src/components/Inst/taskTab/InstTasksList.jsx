@@ -9,7 +9,7 @@ const ListboxWrapper = ({ children }) => (
 const tasks = [
   { key: 0, name: 'שלום עולם' },
   { key: 1, name: 'אליס והמעלית' },
-  { key: 2, name: 'בוב והחייזרים היפנים' },
+  // { key: 2, name: 'בוב והחייזרים היפנים' },
 ];
 
 export default function InstTasksList({ setSelectedTask }) {

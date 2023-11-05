@@ -16,14 +16,20 @@ export default function TaskTab({ studentsRawData }) {
 
   return (
     <>
-      <Button isIconOnly variant="faded" onClick={() => console.log('hi')} radius="full">
-        <img src={ExcelIcon} alt="ExcelIcon" />
-      </Button>
-
       <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
         <Grid item style={{ width: '70%' }}>
           <SubmitsTable data={formattedData} />
         </Grid>
+        <Button
+          isIconOnly
+          isDisabled
+          variant="faded"
+          onClick={() => console.log('hi')}
+          radius="full"
+          style={{ marginLeft: '-30px' }}
+        >
+          <img src={ExcelIcon} alt="ExcelIcon" />
+        </Button>
 
         <Grid item style={{ width: '20%' }}>
           <InstTasksList setSelectedTask={setSelectedTask} />
