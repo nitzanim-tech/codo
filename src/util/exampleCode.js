@@ -15,4 +15,13 @@ if dist_from_A < dist_from_B:
 else:
     print('B')`;
 
+
+const triangleAns = `
+a = int(input("Please enter A side:"))
+b = int(input("Please enter B side:"))
+c = int(input("Please enter C side:"))
+if (a+b>c and b+c>a and a+c>b):
+    print("The triangle can be constructed") 
+else: 
+    print("The triangle cannot be constructed")`; 
 export { examplecode };

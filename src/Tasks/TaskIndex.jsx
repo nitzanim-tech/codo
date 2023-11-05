@@ -1,9 +1,11 @@
 import * as Experience from './experience';
 import * as BasicElevator from './BasicElevator';
+import * as TriangleInequality from './TriangleInequality';
 
 const tasks = {
   0: Experience,
   1: BasicElevator,
+  2: TriangleInequality,
 };
 
 export function testsName(task) {

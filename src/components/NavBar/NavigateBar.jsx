@@ -18,6 +18,7 @@ const courseBookUrl = 'https://drive.google.com/file/d/19ZABUSmex80nO07J074tY0Ma
 const tasks = [
   { value: 0, label: 'משימה 0 - התנסות', finish: true },
   { value: 1, label: 'משימה 1 - מעלית', finish: false },
+  { value: 2, label: 'תנאים 01 - אי שיוון המשולש', finish: false },
 ];
 
 export default function NavigateBar({ setTask, isShowTask }) {
