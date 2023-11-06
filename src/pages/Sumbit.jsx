@@ -13,11 +13,15 @@ const [task, setTask] = useState(0);
 const initialTestNames = testsName(task);
 const [testsOutputs, setTestsOutputs] = useState(initialTestNames.map((name) => ({ name })));
 
-useEffect(() => {
-  const testNames = testsName(task);
-  const newEmptyTests = testNames.map((name) => ({ name }));
-  setTestsOutputs(newEmptyTests);
-}, [task]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const testNames = testsName(task);
+      const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
+      setTestsOutputs(newEmptyTests);
+    };
+
+    fetchData();
+  }, [task]);
 
 
   return (

@@ -16,9 +16,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const courseBookUrl = 'https://drive.google.com/file/d/19ZABUSmex80nO07J074tY0Ma2Cietb0p/view';
 const tasks = [
-  { value: 0, label: 'משימה 0 - התנסות', finish: true },
+  { value: 0, label: 'משימה 0 - התנסות', finish: false },
   { value: 1, label: 'משימה 1 - מעלית', finish: false },
-  { value: 2, label: 'תנאים 01 - אי שיוון המשולש', finish: false },
+  // { value: 2, label: 'תנאים 01 - אי שיוון המשולש', finish: false },
+  // { value: 3, label: 'תרגול מונחה - השערת קולץ', finish: false },
 ];
 
 export default function NavigateBar({ setTask, isShowTask }) {

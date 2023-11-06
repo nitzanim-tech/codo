@@ -9,19 +9,20 @@ export function getTaskExplanation() {
   return { generateExplanation: (selectedValue) => generateExplanation(selectedValue) };
 }
 export function generateExplanation(selectedValue) {
-  console.log(selectedValue.input);
   return (
     <>
-      <div dir="rtl">
-        <p>
-          עבור המצב: <br />
-          גודל צלע- A {selectedValue.input.A + ','} <br />B {selectedValue.input.B + ','} צלע
-          <br />C{selectedValue.input.C} <br />
-          הפלט הנדרש אמור להכיל {selectedValue.ans} <br />
-          ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"}
-        </p>
-        {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>לא מתאימה לפלט. נסו שוב :)</p>}{' '}
-      </div>
+      {selectedValue.input && (
+        <div dir="rtl">
+          <p>
+            עבור המצב: <br />
+            גודל צלע- A {selectedValue.input.A + ','} <br />B {selectedValue.input.B + ','} צלע
+            <br />C{selectedValue.input.C} <br />
+            הפלט הנדרש אמור להכיל {selectedValue.ans} <br />
+            ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"}
+          </p>
+          {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>לא מתאימה לפלט. נסו שוב :)</p>}{' '}
+        </div>
+      )}
     </>
   );
 }
