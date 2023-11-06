@@ -2,12 +2,13 @@ import * as Experience from './experience';
 import * as BasicElevator from './BasicElevator';
 import * as TriangleInequality from './TriangleInequality';
 import * as CollatzConjecture from './CollatzConjecture';
-
+import * as RecyclingChallenge from './RecyclingChallenge';
 const tasks = {
   0: Experience,
   1: BasicElevator,
   2: TriangleInequality,
   3: CollatzConjecture,
+  4: RecyclingChallenge,
 };
 
 export function testsName(task) {

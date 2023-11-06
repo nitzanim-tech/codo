@@ -16,11 +16,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const courseBookUrl = 'https://drive.google.com/file/d/19ZABUSmex80nO07J074tY0Ma2Cietb0p/view';
 const tasks = [
-  { value: 0, label: 'משימה 0 - התנסות', finish: false },
-  { value: 1, label: 'משימה 1 - מעלית', finish: false },
-  // { value: 2, label: 'תנאים 01 - אי שיוון המשולש', finish: false },
-  // { value: 3, label: 'תרגול מונחה - השערת קולץ', finish: false },
+  { value: 0, label: 'הכנה 0 - התנסות', finish: false },
+  { value: 1, label: 'הכנה 1 - מעלית', finish: false },
+  { value: 2, label: 'תנאים 01 - אי שיוון המשולש', finish: false },
+  { value: 3, label: 'תרגול מונחה - השערת קולץ', finish: false },
+  { value: 4, label: 'תרגול מונחה - אתגר המחזור', finish: false },
 ];
+const selectItemDivide = [1, 2];
 
 export default function NavigateBar({ setTask, isShowTask }) {
   const [currentUser, setCurrentUser] = useState(null);
@@ -62,7 +64,9 @@ export default function NavigateBar({ setTask, isShowTask }) {
                 <SelectItem
                   key={task.value}
                   value={task.value}
+                  showDivider={selectItemDivide.includes(task.value)}
                   dir="rtl"
+                  style={{ textAlign: 'right', direction: 'rtl' }}
                   startContent={
                     studentData ? (
                       studentData?.submissions?.[task.value] ? (
