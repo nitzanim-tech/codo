@@ -15,4 +15,26 @@ if dist_from_A < dist_from_B:
 else:
     print('B')`;
 
+
+const triangleAns = `
+a = int(input("Please enter A side:"))
+b = int(input("Please enter B side:"))
+c = int(input("Please enter C side:"))
+if (a+b>c and b+c>a and a+c>b):
+    print("The triangle can be constructed") 
+else: 
+    print("The triangle cannot be constructed")`; 
+
+const collatzAns = `
+number = int(input('Please enter a number:'))
+collatz_sum = number
+while number > 1:
+    if number % 2 == 0:
+        number //= 2
+    else:
+        number = number * 3 + 1
+    collatz_sum += number
+    print(number)
+print('The Collatz sum is '+ str(collatz_sum))
+`;
 export { examplecode };

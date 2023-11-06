@@ -13,16 +13,20 @@ const [task, setTask] = useState(0);
 const initialTestNames = testsName(task);
 const [testsOutputs, setTestsOutputs] = useState(initialTestNames.map((name) => ({ name })));
 
-useEffect(() => {
-  const testNames = testsName(task);
-  const newEmptyTests = testNames.map((name) => ({ name }));
-  setTestsOutputs(newEmptyTests);
-}, [task]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const testNames = testsName(task);
+      const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
+      setTestsOutputs(newEmptyTests);
+    };
+
+    fetchData();
+  }, [task]);
 
 
   return (
     <>
-      <NavBar setTask={setTask} />
+      <NavBar setTask={setTask} isShowTask={true}/>
       <PyodideProvider>
         <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
           <Grid item style={{ width: '20%' }}>

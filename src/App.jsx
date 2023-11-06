@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
+import Instructurs from './pages/Instructurs';
 import Sumbit from "./pages/Sumbit";
+import Review from "./pages/Review";
+import DevTeam from "./pages/DevTeam";
 import { useEffect } from 'react';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
@@ -17,11 +19,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/inst" element={<Instructurs />} />
         <Route path="/submit" element={<Sumbit />} />
+        <Route path="/review" element={<Review />} />
+        <Route path="/dev" element={<DevTeam />} />
       </Routes>
     </BrowserRouter>
-
   );
 }
 

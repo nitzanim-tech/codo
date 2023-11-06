@@ -18,8 +18,8 @@ const groups = {
 };
 
 const RegisterModal = ({ app, auth, open, setOpen }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
   const [group, setGroup] = useState('');
@@ -33,16 +33,16 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
     return unsubscribe;
   }, []);
 
-  const handleEmailSignUp = async (event) => {
-    event.preventDefault();
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, { displayName: name });
-      console.log(userCredential.user);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  // const handleEmailSignUp = async (event) => {
+  //   event.preventDefault();
+  //   try {
+  //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  //     await updateProfile(userCredential.user, { displayName: name });
+  //     console.log(userCredential.user);
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // };
 
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
