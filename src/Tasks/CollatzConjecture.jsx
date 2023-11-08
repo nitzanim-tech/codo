@@ -70,7 +70,7 @@ export function getInstructions() {
   return { subjects, desription, examples };
 }
 export function subjects() {
-  return ['קאסטינג', 'תנאים', 'ביטוים בוליאנים', 'אופרטורים'];
+  return ['אופרטורים', 'תנאים', 'while'];
 }
 export function desription() {
   return (

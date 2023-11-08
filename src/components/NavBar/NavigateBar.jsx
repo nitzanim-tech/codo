@@ -20,7 +20,7 @@ const tasks = [
   { value: 1, label: 'הכנה 1 - מעלית', finish: false },
   { value: 2, label: 'תנאים 01 - אי שיוון המשולש', finish: false },
   { value: 3, label: 'תרגול מונחה - השערת קולץ', finish: false },
-  { value: 4, label: 'תרגול מונחה - אתגר המחזור', finish: false },
+  { value: 4, label: 'תרגול מונחה - יאללה, למחזורית!', finish: false },
 ];
 const selectItemDivide = [1, 2];
 

@@ -1,9 +1,8 @@
 import React from 'react';
-
 import BottleIcon from '../assets/svg/tasks/bottle.svg';
 
 export function testsName() {
-  return ['ניתן לייצר משולש', 'a+b>c', 'a+c>b', 'c+b>a', 'a+b=c'];
+  return ['3 בקבוקים', '12 בקבוקים', '100 בקבוקים', '2048 בקבוקים', 'פחות מ3 בקבוקים'];
 }
 
 // TestsList.jsx
@@ -16,14 +15,22 @@ export function generateExplanation(selectedValue) {
       {selectedValue.input && (
         <div dir="rtl">
           <p>
-            עבור המצב: <br />
-            גודל צלע- A {selectedValue.input.A + ','} <br />B {selectedValue.input.B + ','} צלע
-            <br />C{selectedValue.input.C} <br />
-            הפלט הנדרש אמור להכיל {selectedValue.ans} <br />
+            <br />
+            עבור הקלט - {selectedValue.input.number} בקבוקים,
+            <br />
+            הפתרון הוא {selectedValue.ans} <br />
             ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"}
           </p>
-          {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>לא מתאימה לפלט. נסו שוב :)</p>}{' '}
-          <RecycleTable initial={100} />
+          {selectedValue.correct ? <p>מכילה את הפתרון. כל הכבוד!</p> : <p>איננה מכילה את הפתרון. נסו שוב :)</p>} <br />
+          <p>
+            תוכלו להיעזר באלגוריתם הבא: אם ניתן, נשתמש במספר בקבוקים המתחלק ב3, ונוסיף לבקבוקים החדשים שייצרנו מהם את
+            הבקבוקים שלא השתמשנו בהם עדיין (השארית)
+          </p>
+          <RecycleTable initial={selectedValue.input.number} />
+          <p>
+            <br />
+            כלומר, סה"כ (שומשו עד כה + הבקבוקים שטרם שומשו) {selectedValue.ans} <br />
+          </p>
         </div>
       )}
     </>
@@ -35,18 +42,16 @@ export function getTaskTests() {
   return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
 }
 export function generateInputList() {
-  return ['3\n4\n5\n', '3\n3\n10\n', '3\n11\n1\n', '9\n2\n3\n', '5\n5\n5\n'];
+  return ['3\n', '12\n', '100\n', '2048\n', '1\n'];
 }
 
 export function processTestsOutputs(testsOutputs) {
   const names = testsName();
-  const answers = ['can ', 'cannot', 'cannot ', 'cannot ', 'can '];
+  const answers = ['4', '17', '149', '3071', '1'];
   return testsOutputs.map((testsOutput, index) => {
     const inputLines = testsOutput.input.split('\n');
     const input = {
-      A: parseInt(inputLines[0]),
-      B: parseInt(inputLines[1]),
-      C: parseInt(inputLines[2]),
+      number: parseInt(inputLines[0]),
     };
     const outputLines = testsOutput.output.split('\n');
     const output = outputLines[outputLines.length - 2];
@@ -61,19 +66,23 @@ export function getInstructions() {
   return { subjects, desription, examples };
 }
 export function subjects() {
-  return ['קאסטינג', 'תנאים', 'ביטוים בוליאנים'];
+  return ['while', 'אלגוריתמיקה'];
 }
 export function desription() {
   return (
     <>
       <p>
-        במתמטיקה, "אי שוויון המשולש" מתאר את העובדה כי אורכה של צלע במשולש בהכרח קטנה מסכום אורכי שתי הצלעות האחרות.
+        בחנות 'לחם חביתה' (בנתניה) מוכרים בין השאר בקבוקי שתיה. איכות הסביבה חשובה לצוות החנות ולכן הם פועלים למחזר את
+        הבקבוקים הריקים.
         <br />
-        כלומר, בהינתן משולש בעל צלעות a, b ו c בהכרח מתקיים: <br />● a+b&gt;c <br />● b+c&gt;a <br />● a+c&gt;b
+        מכל שלושה בקבוקים ריקים, צוות החנות מייצר בקבוק אחד חדש.
         <br /> <br />
-        <b>כתבו תכנית המקבלת 3 אורכים של צלעות b, a ו-c, וקובעת האם ניתן לבנות מהן משולש.</b>
+        <b>
+          כתבו תוכנית המקבלת כקלט את מספר הבקבוקים המלאים, ומחשבת מהו המספר הכולל של הבקבוקים שניתן להשתמש בהם, לאחר
+          מחזור הבקבוקים הריקים.
+        </b>
         <br />
-        בתשובתכם, יש להשתמש במילה 'can' או 'cannot'
+        בתשובתכם, יש להדפיס מספר
       </p>
     </>
   );
@@ -83,59 +92,61 @@ export function examples() {
     <>
       <p style={{ textAlign: 'left', dir: 'rtl' }}>
         <code>
-          Please enter A side:{' '}
+          Enter the quantity of new bottles:{' '}
           <span style={{ color: '#003061' }}>
-            <b> 11</b>
+            <b> 12</b>
           </span>
           <br />
-          Please enter B side:{' '}
-          <span style={{ color: '#003061' }}>
-            <b> 4</b>
-          </span>
-          <br />
-          Please enter C side:{' '}
-          <span style={{ color: '#003061' }}>
-            <b> 7</b>
-          </span>
-          <br />
-          The triangle cannot be constructed
+          You can use 17 bottles{' '}
         </code>
       </p>
       <br />
       <p style={{ textAlign: 'right', dir: 'rtl' }}>
-        בדוגמה זו לא מתקיים 3+4&gt;7, ולכן לא ניתן לייצר משולש מצלעות אלו
+        המשתמש הזין שקיימים 12 בקבוקים חדשים, נשתמש בהם.
         <br />
-        לעומת זאת, אם הקלט היה 3,4,5 כל שלושת התנאים היו מתקיימים וניתן ליצור משולש
+        כרגע יש לנו 12 בקבוקים משומשים. מהם נוכל לייצר 12/3=4 בקבוקים חדשים, נשתמש גם בהם.
+        <br />
+        כרגע יש לנו 4 בקבוקים משומשים שמהם נוכל ליצור עוד בקבוק אחד.
+        <br />
+        כלומר סה"כ השתמשנו ב12+4+1=17 בקבוקים.
+        <br />
+        <br />
+        ודאו שהבנתם - בכמה בקבוקים סה"כ נוכל להשתמש מ 100 בקבוקים חדשים?
+        <br /> <b>תשובה</b> (סמנו את הטקסט):
+        <span style={{ color: 'white' }}>
+          <b> 149</b>
+        </span>
       </p>
     </>
   );
 }
 
 function RecycleTable({ initial }) {
-  const Bottel = ({ index }) => {
+  const Bottle = ({ index }) => {
     return <img key={`full-${index}`} src={BottleIcon} alt="BottleIcon" style={{ height: '20px' }} />;
   };
   function TableHeader({ title }) {
-    return <th style={{ border: '1px solid black', padding: '3px', width: '80px' }}>{title}</th>;
+    return <th style={{ border: '1px solid black', padding: '3px', width: '150px' }}>{title}</th>;
   }
 
   const rows = [];
   let freshBottles = initial;
   let total = 0;
   let rest = 0;
-  while (freshBottles >= 3) {
-    total += Math.floor(freshBottles / 3);
-    rest = freshBottles % 3;
+  while (freshBottles > 0) {
+    rest = freshBottles >= 3 ? freshBottles % 3 : 0;
+    total += freshBottles - rest;
     rows.push(
       <tr key={`row-${freshBottles}`}>
-        <td style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+        <td style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             x {freshBottles}
-            <Bottel index={rows.length} />
+            <Bottle index={rows.length} />
           </div>
         </td>
         <td style={{ textAlign: 'center' }}>{freshBottles - rest}</td>
         <td style={{ textAlign: 'center' }}>{rest}</td>
+        <td style={{ textAlign: 'center' }}>{Math.floor(freshBottles / 3)}</td>
         <td style={{ textAlign: 'center' }}>{total}</td>
       </tr>,
     );
@@ -149,11 +160,11 @@ function RecycleTable({ initial }) {
           <TableHeader title={'בקבוקים'} />
           <TableHeader title={'נשתמש ב'} />
           <TableHeader title={'נשארו'} />
-          <TableHeader title={'סה"כ'} />
+          <TableHeader title={'בקבוקים חדשים שיוצרו'} />
+          <TableHeader title={'סה"כ שומשו'} />
         </tr>
       </thead>
       <tbody>{rows}</tbody>
     </table>
   );
 }
-
