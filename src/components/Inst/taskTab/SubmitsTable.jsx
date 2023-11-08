@@ -133,4 +133,3 @@ const getSelectedVersion = (versions) => {
   const latestDate = Math.max(...versionsWithBestTestScore.map((version) => new Date(version.date).getTime()));
   return versionsWithBestTestScore.find((version) => new Date(version.date).getTime() === latestDate);
 };
-

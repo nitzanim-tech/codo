@@ -37,4 +37,18 @@ while number > 1:
     print(number)
 print('The Collatz sum is '+ str(collatz_sum))
 `;
+
+const recycleAns = `
+# RecycleChallange
+fresh_bottles = int(input('Enter the fresh bottles number: '))
+total = 0
+rest = 0
+while (fresh_bottles >= 3):
+    total += fresh_bottles // 3
+    rest = fresh_bottles % 3
+    print('fresh = '+str(fresh_bottles)+', lets use ' + str(fresh_bottles - rest))
+    fresh_bottles = fresh_bottles // 3 + rest
+    print('new fresh = '+str(fresh_bottles))
+print('total = ' + str(total))
+`;
 export { examplecode };

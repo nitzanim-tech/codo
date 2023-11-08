@@ -1,5 +1,7 @@
 import React from 'react';
 
+import BottleIcon from '../assets/svg/tasks/bottle.svg';
+
 export function testsName() {
   return ['ניתן לייצר משולש', 'a+b>c', 'a+c>b', 'c+b>a', 'a+b=c'];
 }
@@ -21,6 +23,7 @@ export function generateExplanation(selectedValue) {
             ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"}
           </p>
           {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>לא מתאימה לפלט. נסו שוב :)</p>}{' '}
+          <RecycleTable initial={100} />
         </div>
       )}
     </>
@@ -107,3 +110,50 @@ export function examples() {
     </>
   );
 }
+
+function RecycleTable({ initial }) {
+  const Bottel = ({ index }) => {
+    return <img key={`full-${index}`} src={BottleIcon} alt="BottleIcon" style={{ height: '20px' }} />;
+  };
+  function TableHeader({ title }) {
+    return <th style={{ border: '1px solid black', padding: '3px', width: '80px' }}>{title}</th>;
+  }
+
+  const rows = [];
+  let freshBottles = initial;
+  let total = 0;
+  let rest = 0;
+  while (freshBottles >= 3) {
+    total += Math.floor(freshBottles / 3);
+    rest = freshBottles % 3;
+    rows.push(
+      <tr key={`row-${freshBottles}`}>
+        <td style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+            x {freshBottles}
+            <Bottel index={rows.length} />
+          </div>
+        </td>
+        <td style={{ textAlign: 'center' }}>{freshBottles - rest}</td>
+        <td style={{ textAlign: 'center' }}>{rest}</td>
+        <td style={{ textAlign: 'center' }}>{total}</td>
+      </tr>,
+    );
+    freshBottles = Math.floor(freshBottles / 3) + rest;
+  }
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <TableHeader title={'בקבוקים'} />
+          <TableHeader title={'נשתמש ב'} />
+          <TableHeader title={'נשארו'} />
+          <TableHeader title={'סה"כ'} />
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </table>
+  );
+}
+
