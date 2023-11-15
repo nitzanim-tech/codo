@@ -122,12 +122,16 @@ function Managers() {
                           variant="flat"
                           color="success"
                           size="sm"
-                          onClick={() => {
-                            addPermissionToUser({
-                              app: app,
-                              userId: student.id,
-                              permission: autocompleteRef.current.value,
-                            });
+                          onClick={async () => {
+                            const newPermission = autocompleteRef.current.value;
+                            if (newPermission) {
+                              const haveAdded = addPermissionToUser({
+                                app: app,
+                                userId: student.id,
+                                permission: newPermission,
+                              });
+                              if (haveAdded) student.permissions.push(newPermission);
+                            }
                           }}
                         >
                           +
