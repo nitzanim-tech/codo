@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
 import getInsts from '../requests/manager/getInsts';
 import getCurrentUser from '../requests/getCurrentUser';
@@ -22,18 +22,17 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 function Managers() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [studentsRawData, setStudentsRawData] = useState(null);
-  const [userGroup, setUserGroup] = useState([]);
+  const [instructorsData, setInstructorsData] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [unauthorized, setUnauthorized] = useState(true);
+  const [selectedPermissions, setSelectedPermissions] = useState('');
+  const autocompleteRef = useRef();
 
   onAuthStateChanged(auth, async (user) => {
     try {
       if (!currentUser) {
         const current = await getCurrentUser({ app, id: user.uid });
         setCurrentUser(current);
-        setUserGroup(current.group);
       }
       user.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
     } catch {
@@ -43,70 +42,96 @@ function Managers() {
 
   useEffect(() => {
     const fetchData = async () => {
-      let data = await getInsts({ app });
-      console.log(data);
-    //   addPermissionToUser({ app: app, userId: 'kTqDi3pSI5NkUW21FbJF6sxDm3D3', permission: 'ירוחם' });
-      setStudentsRawData(data);
-      setIsLoading(false);
+      const data = await getInsts({ app });
+      setInstructorsData(data);
     };
+    if (currentUser) fetchData();
+  }, [currentUser]);
 
-    if (userGroup.length > 0) fetchData();
-  }, [userGroup]);
+  const handleSelectionChange = (newPerm) => {
+    console.log('Selected value:', newPerm);
+    console.log(autocompleteRef.current.value);
+    console.log(autocompleteRef);
 
+    // Do whatever you need with the selected value
+  };
   return (
     <>
       <NavBar isShowTask={false} />
-      {currentUser && studentsRawData ? (
+      {currentUser && instructorsData ? (
         <>
           {unauthorized ? (
-            <h1>הכניסה למדריכים בלבד</h1>
+            <h1>הכניסה למנהלים בלבד</h1>
           ) : (
             <>
-              <Table>
+              <Autocomplete
+                label="קבוצה להוספה"
+                aria-label="Select permission group"
+                className="max-w-xs"
+                size="sm"
+                ref={autocompleteRef}
+                onSelectionChange={handleSelectionChange}
+              >
+                {Object.values(groups).map((district) =>
+                  district.map((group) => (
+                    <AutocompleteItem variant="flat" key={group}>
+                      {group}
+                    </AutocompleteItem>
+                  )),
+                )}
+                {/* {Object.keys(groups).map((district) => (
+                  <AutocompleteItem variant="flat" key={district} color={'danger'}>
+                    <p style={{ color: '#BF1E2E' }}>{district}</p>
+                  </AutocompleteItem>
+                ))} */}
+              </Autocomplete>
+
+              <Table aria-label="Intstructors table">
                 <TableHeader>
                   <TableColumn>Email</TableColumn>
                   <TableColumn>Group</TableColumn>
-                  <TableColumn>Is Manager</TableColumn>
+                  <TableColumn>Manager</TableColumn>
                   <TableColumn>Last Name</TableColumn>
                   <TableColumn>Name</TableColumn>
                   <TableColumn>Region</TableColumn>
                   <TableColumn>Permissions</TableColumn>
                 </TableHeader>
                 <TableBody>
-                  {studentsRawData.map((student) => (
-                    <TableRow key={student.email}>
+                  {instructorsData.map((student) => (
+                    <TableRow key={student.id}>
                       <TableCell>{student.email}</TableCell>
                       <TableCell>{student.group}</TableCell>
                       <TableCell>{student.is_manager ? 'Yes' : 'No'}</TableCell>
                       <TableCell>{student.lastName}</TableCell>
                       <TableCell>{student.name}</TableCell>
                       <TableCell>{student.region}</TableCell>
-                      <TableCell>
+                      <TableCell style={{ maxWidth: '200px' }}>
                         {student.permissions && (
                           <>
                             {student.permissions.map((permission) => (
-                              <Chip variant="flat" onClose={() => handleClose(fruit)}>
+                              <Chip variant="flat" key={permission} onClose={() => console.log('h')}>
                                 {permission}
                               </Chip>
                             ))}
                           </>
                         )}
 
-                        <Autocomplete label="קבוצה להוספה" className="max-w-xs" style={{ maxWidth: '200px' }}>
-                          {Object.values(groups).map((district) =>
-                            district.map((group) => (
-                              <AutocompleteItem variant="flat" key={group}>
-                                {group}
-                              </AutocompleteItem>
-                            )),
-                          )}
-                          {Object.keys(groups).map((district) => (
-                            <AutocompleteItem variant="flat" key={district} color={'danger'}>
-                              <p style={{ color: '#003061' }}>{district}</p>
-                            </AutocompleteItem>
-                          ))}
-                        </Autocomplete>
-                        <Button color="success">+</Button>
+                        <Button
+                          radius="full"
+                          isIconOnly
+                          variant="flat"
+                          color="success"
+                          size="sm"
+                          onClick={() => {
+                            addPermissionToUser({
+                              app: app,
+                              userId: student.id,
+                              permission: autocompleteRef.current.value,
+                            });
+                          }}
+                        >
+                          +
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}

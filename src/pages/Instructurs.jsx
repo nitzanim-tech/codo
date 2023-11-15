@@ -29,7 +29,6 @@ function Instructors() {
         const current = await getCurrentUser({ app, id: user.uid });
         setCurrentUser(current);
         setUserGroup(current.group);
-        console.log(current.permissions);
       }
       user.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
     } catch {
@@ -39,9 +38,8 @@ function Instructors() {
 
   useEffect(() => {
     const fetchData = async () => {
-      let data = await getStudentData({ app, groups: userGroup });
-      const email = currentUser.email;
-      data = data.filter((student) => student.email !== email);
+      let data = await getStudentData({ app: app, groups: userGroup });
+      data = data.filter((student) => !student.email.includes('@nitzanim.tech'));
       setStudentsRawData(data);
       setIsLoading(false);
     };
@@ -49,6 +47,11 @@ function Instructors() {
     if (userGroup.length > 0) fetchData();
   }, [userGroup]);
 
+  const handleChangeGroup = async (newGroup) => {
+    const data = await getStudentData({ group: newGroup });
+    setUserGroup(newGroup);
+    setStudentsRawData(data);
+  };
   return (
     <>
       <NavBar isShowTask={false} />
@@ -58,22 +61,14 @@ function Instructors() {
             <h1>הכניסה למדריכים בלבד</h1>
           ) : (
             <>
-              <div dir='rtl'>
+              <div dir="rtl">
                 <Dropdown>
                   <DropdownTrigger>
-                    <Button variant="bordered">
-                      <b>{userGroup}</b> <ApartmentRoundedIcon />
+                    <Button variant="bordered" endContent={<ApartmentRoundedIcon />} style={{ marginLeft: '20px' }}>
+                      <b>{userGroup}</b>
                     </Button>
                   </DropdownTrigger>
-                  <DropdownMenu
-                    aria-label="Action event example"
-                    onAction={(key) => {
-                      console.log(key);
-                      setIsLoading(true);
-                      setStudentsRawData(null);
-                      setUserGroup(key);
-                    }}
-                  >
+                  <DropdownMenu aria-label="Action event example" onAction={(key) => handleChangeGroup(key)}>
                     {currentUser.permissions.map((group) => (
                       <DropdownItem group="new" key={group}>
                         {group}
@@ -81,11 +76,12 @@ function Instructors() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                
+
                 <Tabs aria-label="Options">
                   <Tab key="tasks" title="משימות">
-                    <div dir='ltr'>
-                    <TaskTab studentsRawData={studentsRawData} /></div>
+                    <div dir="ltr">
+                      <TaskTab studentsRawData={studentsRawData} />
+                    </div>
                   </Tab>
                   <Tab key="students" title="חניכים">
                     <StudentsTable isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />

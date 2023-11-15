@@ -3,7 +3,7 @@ import Instructurs from './pages/Instructurs';
 import Sumbit from "./pages/Sumbit";
 import Review from "./pages/Review";
 import DevTeam from "./pages/DevTeam";
-import { useEffect } from 'react';
+import { useEffect , useState} from 'react';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
 
@@ -16,7 +16,7 @@ function App() {
     useEffect(() => {
       ReactGA.send('pageview', window.location.pathname + window.location.search);
     }, []);
-
+  
   return (
     <BrowserRouter>
       <Routes>

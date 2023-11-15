@@ -7,11 +7,13 @@ const getInsts = async ({ app }) => {
   try {
     const snapshot = await get(usersRef);
     const allUsers = snapshot.val() || {};
-
-    // Filter users whose email ends with "@nitzanim.tech"
-    const nitzanimUsers = Object.values(allUsers).filter((user) => user.email.endsWith('@nitzanim.tech'));
-
-    console.log('Nitzanim users:', nitzanimUsers);
+    const nitzanimUsers = Object.entries(allUsers)
+      .map(([userId, user]) => ({
+        id: userId,
+        ...user,
+      }))
+      .filter((user) => user.email.endsWith('@nitzanim.tech'));
+    console.log(nitzanimUsers);
     return nitzanimUsers;
   } catch (error) {
     console.error('Error getting data:', error);
