@@ -168,3 +168,4 @@ function RecycleTable({ initial }) {
     </table>
   );
 }
+

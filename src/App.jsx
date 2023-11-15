@@ -8,6 +8,7 @@ import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
 
 import "./App.css";
+import Managers from "./pages/Managers";
 
 ReactGA.initialize(firebaseConfig.measurementId);
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/submit" element={<Sumbit />} />
         <Route path="/review" element={<Review />} />
         <Route path="/dev" element={<DevTeam />} />
+        <Route path="/manager" element={<Managers />} />
       </Routes>
     </BrowserRouter>
   );
