@@ -1,5 +1,5 @@
 import { getDatabase, ref, set, get } from 'firebase/database';
-
+import addPermissionToUser from './manager/addPermission';
 const isUserExists = async ({ uid, app }) => {
   const db = getDatabase(app);
   const userRef = ref(db, `users/${uid}`);
@@ -24,6 +24,16 @@ const registerUserInDB = async ({ user, uid, app }) => {
     } else {
       await set(newUserRef, user);
       console.log('User registered successfully');
+
+      if (user.email.includes('@nitzanim.tech')) {
+        addPermissionToUser({
+          app: app,
+          userId: uid,
+          permission: user.group,
+        });
+        console.log('Instructor got group permission');
+      }
+
       return true;
     }
   } catch (error) {
