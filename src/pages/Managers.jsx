@@ -6,10 +6,10 @@ import { initializeApp } from 'firebase/app';
 import firebaseConfig from '../util/firebaseConfig';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Table, TableHeader, TableRow, TableCell, TableBody, TableColumn } from '@nextui-org/react';
-import { CircularProgress, Chip } from '@nextui-org/react';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
+import { CircularProgress, Chip, Button } from '@nextui-org/react';
 
 import addPermissionToUser from '../requests/manager/addPermission';
+import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 
 const groups = {
   'נגב מזרחי': ['דימונה', 'ירוחם', 'רמת נגב', 'באר שבע'],
@@ -18,33 +18,6 @@ const groups = {
   מרכז: ['אשדוד', 'קריית גת', 'בת ים', 'רמלה'],
   'גליל והעמקים וגליל מערבי': ['קצרין', 'טבריה', 'בית שאן', 'עמק הירדן', 'עפולה', 'נהלל', 'ימין אורד'],
 };
-const groups2 = [
-  'דימונה',
-  'ירוחם',
-  'רמת נגב',
-  'באר שבע',
-  'אשכול',
-  'מרחבים - אופקים',
-  'נתיבות בנות',
-  'נתיבות מעורב',
-  'שער הנגב',
-  'מבואות הנגב',
-  'שקמה',
-  'כפר סילבר',
-  'אשקלון',
-  'אשדוד',
-  'קריית גת',
-  'בת ים',
-  'רמלה',
-  'קצרין',
-  'טבריה',
-  'בית שאן',
-  'עמק הירדן',
-  'עפולה',
-  'נהלל',
-  'ימין אורד',
-];
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
@@ -72,7 +45,7 @@ function Managers() {
     const fetchData = async () => {
       let data = await getInsts({ app });
       console.log(data);
-      //   addPermissionToUser({ app: app, userId: 'kTqDi3pSI5NkUW21FbJF6sxDm3D3', permission: 'test2' });
+    //   addPermissionToUser({ app: app, userId: 'kTqDi3pSI5NkUW21FbJF6sxDm3D3', permission: 'ירוחם' });
       setStudentsRawData(data);
       setIsLoading(false);
     };
@@ -118,16 +91,22 @@ function Managers() {
                             ))}
                           </>
                         )}
-                        <Dropdown>
-                          <DropdownTrigger>
-                            <Chip color="success">+</Chip>
-                          </DropdownTrigger>
-                          <DropdownMenu aria-label="Static Actions">
-                            {groups2.map((group) => (
-                              <DropdownItem variant="flat">{group}</DropdownItem>
-                            ))}
-                          </DropdownMenu>
-                        </Dropdown>
+
+                        <Autocomplete label="קבוצה להוספה" className="max-w-xs" style={{ maxWidth: '200px' }}>
+                          {Object.values(groups).map((district) =>
+                            district.map((group) => (
+                              <AutocompleteItem variant="flat" key={group}>
+                                {group}
+                              </AutocompleteItem>
+                            )),
+                          )}
+                          {Object.keys(groups).map((district) => (
+                            <AutocompleteItem variant="flat" key={district} color={'danger'}>
+                              <p style={{ color: '#003061' }}>{district}</p>
+                            </AutocompleteItem>
+                          ))}
+                        </Autocomplete>
+                        <Button color="success">+</Button>
                       </TableCell>
                     </TableRow>
                   ))}

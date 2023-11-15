@@ -11,6 +11,7 @@ import getCurrentUser from '../requests/getCurrentUser';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageTasks from '../components/Inst/manageTab/ManageTasks';
 import { CircularProgress } from '@nextui-org/react';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -28,6 +29,7 @@ function Instructors() {
         const current = await getCurrentUser({ app, id: user.uid });
         setCurrentUser(current);
         setUserGroup(current.group);
+        console.log(current.permissions);
       }
       user.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
     } catch {
@@ -56,24 +58,43 @@ function Instructors() {
             <h1>הכניסה למדריכים בלבד</h1>
           ) : (
             <>
-              <div>
-                <ApartmentRoundedIcon />
-                <h2>
-                  <b>{userGroup}</b>
-                </h2>
-              </div>
-
-              <Tabs aria-label="Options">
-                <Tab key="tasks" title="משימות">
-                  <TaskTab studentsRawData={studentsRawData} />
-                </Tab>
-                <Tab key="students" title="חניכים">
-                  <StudentsTable isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
-                </Tab>
-                {/* <Tab key="manage" title="ניהול משימות">
+              <div dir='rtl'>
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button variant="bordered">
+                      <b>{userGroup}</b> <ApartmentRoundedIcon />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    aria-label="Action event example"
+                    onAction={(key) => {
+                      console.log(key);
+                      setIsLoading(true);
+                      setStudentsRawData(null);
+                      setUserGroup(key);
+                    }}
+                  >
+                    {currentUser.permissions.map((group) => (
+                      <DropdownItem group="new" key={group}>
+                        {group}
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
+                
+                <Tabs aria-label="Options">
+                  <Tab key="tasks" title="משימות">
+                    <div dir='ltr'>
+                    <TaskTab studentsRawData={studentsRawData} /></div>
+                  </Tab>
+                  <Tab key="students" title="חניכים">
+                    <StudentsTable isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
+                  </Tab>
+                  {/* <Tab key="manage" title="ניהול משימות">
             <ManageTasks isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
           </Tab> */}
-              </Tabs>
+                </Tabs>
+              </div>
             </>
           )}
         </>
