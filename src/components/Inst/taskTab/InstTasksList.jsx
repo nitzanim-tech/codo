@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Listbox, ListboxItem } from '@nextui-org/react';
 
 const ListboxWrapper = ({ children }) => (
@@ -15,13 +15,17 @@ const tasks = [
 ];
 const dividers = [1, 2];
 
-export default function InstTasksList({ setSelectedTask }) {
+export default function InstTasksList({ selectedTask, setSelectedTask }) {
   return (
     <ListboxWrapper>
-      <Listbox aria-label="Example with disabled actions" onAction={(key) => setSelectedTask(key)}>
+      <Listbox
+        aria-label="Example with disabled actions"
+        selectionMode="single"
+        onAction={(key) => setSelectedTask(key)}
+      >
         {tasks.map((task) => (
           <ListboxItem key={task.key} showDivider={dividers.includes(task.key)}>
-            {task.name}
+            {task.key == selectedTask ? <b>{task.name}</b> : task.name}
           </ListboxItem>
         ))}
       </Listbox>
