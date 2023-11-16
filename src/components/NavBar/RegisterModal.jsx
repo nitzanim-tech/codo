@@ -1,25 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 import { ModalBody, ModalFooter, Button } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
-// import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import GoogleIcon from '@mui/icons-material/Google';
 import { registerUserInDB } from '../../requests/registerUser';
-
-const groups = {
-  'נגב מזרחי': ['דימונה', 'ירוחם', 'רמת נגב', 'באר שבע'],
-  'נגב מערבי': ['אשכול', 'מרחבים - אופקים', 'נתיבות בנות', 'נתיבות מעורב', 'שער הנגב', 'מבואות הנגב'],
-  'נגב צפוני': ['שקמה', 'כפר סילבר', 'אשקלון'],
-  מרכז: ['אשדוד', 'קריית גת', 'בת ים', 'רמלה'],
-  'גליל והעמקים וגליל מערבי': ['קצרין', 'טבריה', 'בית שאן', 'עמק הירדן', 'עפולה', 'נהלל', 'ימין אורד'],
-};
+import getGroups from '../../requests/getGroups';
 
 const RegisterModal = ({ app, auth, open, setOpen }) => {
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+  const [groups, setGroups] = useState(null);
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
   const [group, setGroup] = useState('');
@@ -33,16 +23,13 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
     return unsubscribe;
   }, []);
 
-  // const handleEmailSignUp = async (event) => {
-  //   event.preventDefault();
-  //   try {
-  //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  //     await updateProfile(userCredential.user, { displayName: name });
-  //     console.log(userCredential.user);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
+  useEffect(() => {
+    const getGroupFromDb = async () => {
+      const groupFromDB = await getGroups(app);
+      setGroups(groupFromDB);
+    };
+    getGroupFromDb();
+  }, []);
 
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
@@ -82,11 +69,12 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
               }}
               dir="rtl"
             >
-              {Object.keys(groups).map((region) => (
-                <SelectItem key={region} value={region} dir="rtl">
-                  {region}
-                </SelectItem>
-              ))}
+              {groups &&
+                Object.keys(groups).map((region) => (
+                  <SelectItem key={region} value={region} dir="rtl">
+                    {region}
+                  </SelectItem>
+                ))}
             </Select>
 
             <Select

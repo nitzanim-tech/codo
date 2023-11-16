@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
 import getInsts from '../requests/manager/getInsts';
 import getCurrentUser from '../requests/getCurrentUser';
+import getGroups from '../requests/getGroups';
 import { initializeApp } from 'firebase/app';
 import firebaseConfig from '../util/firebaseConfig';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -11,29 +12,32 @@ import { CircularProgress, Chip, Button } from '@nextui-org/react';
 import addPermissionToUser from '../requests/manager/addPermission';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 
-const groups = {
-  'נגב מזרחי': ['דימונה', 'ירוחם', 'רמת נגב', 'באר שבע'],
-  'נגב מערבי': ['אשכול', 'מרחבים - אופקים', 'נתיבות בנות', 'נתיבות מעורב', 'שער הנגב', 'מבואות הנגב'],
-  'נגב צפוני': ['שקמה', 'כפר סילבר', 'אשקלון'],
-  מרכז: ['אשדוד', 'קריית גת', 'בת ים', 'רמלה'],
-  'גליל והעמקים וגליל מערבי': ['קצרין', 'טבריה', 'בית שאן', 'עמק הירדן', 'עפולה', 'נהלל', 'ימין אורד'],
-};
+// const groups = {
+//   'נגב מזרחי': ['דימונה', 'ירוחם', 'רמת נגב', 'באר שבע'],
+//   'נגב מערבי': ['אשכול', 'מרחבים - אופקים', 'נתיבות בנות', 'נתיבות מעורב', 'שער הנגב', 'מבואות הנגב'],
+//   'נגב צפוני': ['שקמה', 'כפר סילבר', 'אשקלון'],
+//   מרכז: ['אשדוד', 'קריית גת', 'בת ים', 'רמלה'],
+//   'גליל והעמקים וגליל מערבי': ['קצרין', 'טבריה', 'בית שאן', 'עמק הירדן', 'עפולה', 'נהלל', 'ימין אורד', 'ניר העמק'],
+// };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 function Managers() {
+  const [groups, setGroups] = useState(null);
   const [instructorsData, setInstructorsData] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [unauthorized, setUnauthorized] = useState(true);
-  const [selectedPermissions, setSelectedPermissions] = useState('');
   const autocompleteRef = useRef();
 
   onAuthStateChanged(auth, async (user) => {
     try {
       if (!currentUser) {
-        const current = await getCurrentUser({ app, id: user.uid });
+        const [groupsFromDB, current] = await Promise.all([getGroups(app), getCurrentUser({ app, id: user.uid })]);
+        setGroups(groupsFromDB);
         setCurrentUser(current);
       }
+
       user.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
     } catch {
       setCurrentUser({ email: '' });
@@ -45,15 +49,13 @@ function Managers() {
       const data = await getInsts({ app });
       setInstructorsData(data);
     };
-    if (currentUser) fetchData();
-  }, [currentUser]);
+    if (!unauthorized) fetchData();
+  }, [unauthorized]);
 
   const handleSelectionChange = (newPerm) => {
     console.log('Selected value:', newPerm);
     console.log(autocompleteRef.current.value);
     console.log(autocompleteRef);
-
-    // Do whatever you need with the selected value
   };
   return (
     <>
@@ -79,11 +81,11 @@ function Managers() {
                     </AutocompleteItem>
                   )),
                 )}
-                {/* {Object.keys(groups).map((district) => (
+                {Object.keys(groups).map((district) => (
                   <AutocompleteItem variant="flat" key={district} color={'danger'}>
                     <p style={{ color: '#BF1E2E' }}>{district}</p>
                   </AutocompleteItem>
-                ))} */}
+                ))}
               </Autocomplete>
 
               <Table aria-label="Intstructors table">
