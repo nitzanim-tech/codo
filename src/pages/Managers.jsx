@@ -12,14 +12,6 @@ import { CircularProgress, Chip, Button } from '@nextui-org/react';
 import addPermissionToUser from '../requests/manager/addPermission';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 
-// const groups = {
-//   'נגב מזרחי': ['דימונה', 'ירוחם', 'רמת נגב', 'באר שבע'],
-//   'נגב מערבי': ['אשכול', 'מרחבים - אופקים', 'נתיבות בנות', 'נתיבות מעורב', 'שער הנגב', 'מבואות הנגב'],
-//   'נגב צפוני': ['שקמה', 'כפר סילבר', 'אשקלון'],
-//   מרכז: ['אשדוד', 'קריית גת', 'בת ים', 'רמלה'],
-//   'גליל והעמקים וגליל מערבי': ['קצרין', 'טבריה', 'בית שאן', 'עמק הירדן', 'עפולה', 'נהלל', 'ימין אורד', 'ניר העמק'],
-// };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
@@ -52,11 +44,6 @@ function Managers() {
     if (!unauthorized) fetchData();
   }, [unauthorized]);
 
-  const handleSelectionChange = (newPerm) => {
-    console.log('Selected value:', newPerm);
-    console.log(autocompleteRef.current.value);
-    console.log(autocompleteRef);
-  };
   return (
     <>
       <NavBar isShowTask={false} />
@@ -72,7 +59,6 @@ function Managers() {
                 className="max-w-xs"
                 size="sm"
                 ref={autocompleteRef}
-                onSelectionChange={handleSelectionChange}
               >
                 {Object.values(groups).map((district) =>
                   district.map((group) => (

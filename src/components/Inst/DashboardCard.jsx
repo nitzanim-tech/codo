@@ -3,9 +3,9 @@ import DonutChart from './Chart';
 import { Grid } from '@mui/material';
 
 export const DashboardCard = ({ ratio, text , size=100}) => {
-  const [numerator, denominator] = ratio.split('/').map(Number);
+  let [numerator, denominator] = ratio.split('/').map(Number);
   const percentage = Math.round((numerator / denominator) * 100);
-
+  if (denominator == 0) denominator = '?';
   return (
     <Card style={{ marginTop: '10px' }}>
       <CardBody>

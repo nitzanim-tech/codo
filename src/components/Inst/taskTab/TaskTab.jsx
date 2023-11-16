@@ -103,7 +103,8 @@ const calculateAverage = (data) => {
       }
     });
   }
-
+  if (!count) count = 1;
+  if (!commonDenominator) commonDenominator = 0;
   const average = total / count;
   return `${average.toFixed(2)}/${commonDenominator}`;
 };

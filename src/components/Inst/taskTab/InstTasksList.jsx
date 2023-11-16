@@ -7,17 +7,22 @@ const ListboxWrapper = ({ children }) => (
   </div>
 );
 const tasks = [
-  { key: 0, name: 'שלום עולם' },
-  { key: 1, name: 'אליס והמעלית' },
-  // { key: 2, name: 'בוב והחייזרים היפנים' },
+  { key: 0, name: 'הכנה 0 - התנסות' },
+  { key: 1, name: 'הכנה 1 - מעלית' },
+  { key: 2, name: 'תנאים - אי שיוון המשולש' },
+  { key: 3, name: 'תרגול מונחה - השערת קולץ' },
+  { key: 4, name: '!תרגול מונחה - יאללה, למחזורית' },
 ];
+const dividers = [1, 2];
 
 export default function InstTasksList({ setSelectedTask }) {
   return (
     <ListboxWrapper>
       <Listbox aria-label="Example with disabled actions" onAction={(key) => setSelectedTask(key)}>
         {tasks.map((task) => (
-          <ListboxItem key={task.key}>{task.name}</ListboxItem>
+          <ListboxItem key={task.key} showDivider={dividers.includes(task.key)}>
+            {task.name}
+          </ListboxItem>
         ))}
       </Listbox>
     </ListboxWrapper>

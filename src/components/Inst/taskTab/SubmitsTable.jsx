@@ -89,8 +89,8 @@ export default function SubmitsTable({ data }) {
 
         <TableBody>
           {sortedData.map((student, index) => {
-            const selectedVersion = getSelectedVersion(student.versions);
-            const percentage = selectedVersion.tests !== '' ? calculatePresent(selectedVersion.tests) : 0;
+            const selectedVersion = getSelectedVersion(student.versions) || { date: '', tests: '' };
+            const percentage = selectedVersion.tests ? calculatePresent(selectedVersion.tests) : 0;
             return (
               <TableRow key={`${student.name}-${index}`}>
                 <TableCell>

@@ -94,7 +94,6 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
 
             <Divider />
 
-            {/* <div style={{ display: 'flex', flexDirection: 'row' }}> */}
             <Button
               onClick={handleGoogleSignIn}
               startContent={<GoogleIcon />}
@@ -102,20 +101,6 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
             >
               הרשמה באמצעות גוגל
             </Button>
-            {/*<Divider orientation="vertical"> או </Divider>
-               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <Input label="מייל" value={email} onChange={(e) => setName(e.target.value)} />
-                <Input label="ססמה" value={password} onChange={(e) => setLastName(e.target.value)} />
-
-            <Button
-              onClick={handleEmailSignUp}
-              startContent={<EmailRoundedIcon />}
-              isDisabled={!name || !lastName || !group}
-            >
-              הרשמה באמצעות מייל וססמה
-            </Button>
-             </div>
-            </div> */}
           </ModalBody>
 
           <ModalFooter>

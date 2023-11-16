@@ -48,9 +48,11 @@ function Instructors() {
   }, [userGroup]);
 
   const handleChangeGroup = async (newGroup) => {
-    const data = await getStudentData({ group: newGroup });
-    setUserGroup(newGroup);
-    setStudentsRawData(data);
+    if (newGroup != userGroup) {
+      const data = await getStudentData({ group: newGroup });
+      setUserGroup(newGroup);
+      setStudentsRawData(data);
+    }
   };
   return (
     <>
@@ -64,7 +66,12 @@ function Instructors() {
               <div dir="rtl">
                 <Dropdown>
                   <DropdownTrigger>
-                    <Button variant="bordered" endContent={<ApartmentRoundedIcon />} style={{ marginLeft: '20px' }}>
+                    <Button
+                      variant="bordered"
+                      endContent={<ApartmentRoundedIcon />}
+                      style={{ marginLeft: '20px' }}
+                      isDisabled={currentUser.permissions.length === 1}
+                    >
                       <b>{userGroup}</b>
                     </Button>
                   </DropdownTrigger>
