@@ -40,13 +40,13 @@ export function getTaskTests() {
   return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
 }
 export function generateInputList() {
-  return ['3\n4\n5\n', '3\n3\n10\n', '3\n11\n1\n', '9\n2\n3\n', '5\n5\n5\n'];
+  return ['3\n4\n5\n', '3\n3\n10\n', '3\n11\n1\n', '9\n2\n3\n', '5\n5\n10\n'];
 }
 
 export function processTestsOutputs(testsOutputs) {
   const names = testsName();
-  const answers = ['can ', 'cannot', 'cannot', 'cannot', 'can '];
-  const fullAns = ['כל התנאים מתקיימים', '3+3 < 10', '3+1 < 11', '2+3 < 9', 'כל התנאים מתקיימים'];
+  const answers = ['can', 'cannot', 'cannot', 'cannot', 'cannot'];
+  const fullAns = ['כל התנאים מתקיימים', '3+3 < 10', '3+1 < 11', '2+3 < 9', '5+5 !> 10'];
   return testsOutputs.map((testsOutput, index) => {
     const inputLines = testsOutput.input.split('\n');
     const input = {
@@ -56,7 +56,7 @@ export function processTestsOutputs(testsOutputs) {
     };
     const outputLines = testsOutput.output.split('\n');
     const output = outputLines[outputLines.length - 2];
-    const correct = output.includes(answers[index]);
+    const correct = (answers[index] == 'can' ? !output.includes('cannot'): true) && output.includes(answers[index]);
     const name = names[index];
     return { name, input, output, correct, ans: answers[index], fullAns: fullAns[index] };
   });

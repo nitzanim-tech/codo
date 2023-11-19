@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Listbox, ListboxItem } from '@nextui-org/react';
 
 const ListboxWrapper = ({ children }) => (

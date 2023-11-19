@@ -105,15 +105,18 @@ export function examples() {
           <b>
             <span style={{ color: '#003061' }}> 11</span>
           </b>
-          <br />
-          34 <br />
-          17 <br /> 52 <br /> 26 <br /> 13 <br /> 40 <br /> 20 <br /> 10 <br /> 5<br /> 16 <br /> 8<br /> 4<br /> 2
-          <br /> 1<br /> The Collatz sum is 259
+          <br /> The Collatz sum is 259
         </code>
       </p>
       <br />
 
       <p style={{ textAlign: 'right', dir: 'rtl' }}>
+        הסדרה המלאה היא:
+        <br />
+        11 <br />
+        34 <br />
+        17 <br /> 52 <br /> 26 <br /> 13 <br /> 40 <br /> 20 <br /> 10 <br /> 5<br /> 16 <br /> 8<br /> 4<br /> 2
+        <br />1 <br />
         נשים לב שעבור מספר אי זוגי (לדוגמה - 11), נכפיל ב3 ונוסיף אחד. עבור מספר זוגי (לדוגמה 34) נחלק ב2. <br />
         בסופו של דבר הגענו למספר 1<br />
         לאחר שחישבנו את הסכום של המספרים (כולל 11) הגענו למספר 259
