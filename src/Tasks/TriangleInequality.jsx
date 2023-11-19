@@ -91,7 +91,7 @@ export function examples() {
         <code>
           Please enter A side:{' '}
           <span style={{ color: '#003061' }}>
-            <b> 11</b>
+            <b> 3</b>
           </span>
           <br />
           Please enter B side:{' '}
