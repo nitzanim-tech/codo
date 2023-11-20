@@ -53,13 +53,20 @@ const formatStudentTestsData = (data, taskIndex) => {
       const { submissions, name, lastName, uid } = item;
       let formattedVersions = [];
       if (submissions && submissions[taskIndex] && submissions[taskIndex].trials) {
-        formattedVersions = submissions[taskIndex].trials.map((trial, index) => ({
-          id: index,
-          date: trial.date,
-          tests: trial.pass,
-          code: trial.code,
-        }));
+        formattedVersions = submissions[taskIndex].trials.map((trial, index) => {
+          const formattedTrial = {
+            id: index,
+            date: trial.date,
+            tests: trial.pass,
+            code: trial.code,
+          };
+          if (trial.review) {
+            formattedTrial.review = trial.review;
+          }
+          return formattedTrial;
+        });
       }
+
       return {
         task: taskIndex,
         uid,

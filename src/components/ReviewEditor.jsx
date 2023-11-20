@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
 import { Button } from '@nextui-org/react';
-import { Input } from '@nextui-org/react';
-import addReview from '../requests/review/addReview'
+import addReview from '../requests/review/addReview';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
 const StyledEditor = styled(Editor)`
   .myContentClass {
@@ -17,8 +17,8 @@ const StyledEditor = styled(Editor)`
 `;
 
 export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
-  const comments = useRef(version.review || {});
-console.log(version);
+  const [saved, setSaved] = useState(false);
+  const comments = useRef(version.review ? JSON.parse(version.review) : {});
   const handleEditorDidMount = (editor, monaco) => {
     updateDecorations(editor, monaco);
 
@@ -34,6 +34,7 @@ console.log(version);
       contextMenuGroupId: 'navigation',
       contextMenuOrder: 1.5,
       run: function (ed) {
+        console.log(ed.getPosition());
         const lineNumber = ed.getPosition().lineNumber;
         const comment = window.prompt('Enter your comment');
         if (comment) {
@@ -60,7 +61,14 @@ console.log(version);
   const handleSave = () => {
     const reviewData = JSON.stringify(comments.current);
     console.log(reviewData);
-    addReview({ app, userId: version.student.uid, task: version.task, trialIndex: version.id, reviewData });
+    const hadSaved = addReview({
+      app,
+      userId: version.student.uid,
+      task: version.task,
+      trialIndex: version.id,
+      reviewData,
+    });
+    setSaved(hadSaved);
   };
 
   return (
@@ -76,7 +84,13 @@ console.log(version);
 
       <div style={{ paddingBottom: '10px ' }}>
         {/* <Button isDisabled onClick={handleSave}> */}
-        <Button onClick={handleSave}>שמור</Button>
+        {saved ? (
+          <p style={{ fontWeight: 'bold', color: '#005395' }}>
+            הועבר לחניך בהצלחה <CheckCircleRoundedIcon />
+          </p>
+        ) : (
+          <Button onClick={handleSave}>העבר לחניך</Button>
+        )}
       </div>
     </div>
   );

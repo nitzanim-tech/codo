@@ -9,19 +9,12 @@ import { Button ,Grid,Card} from "@mui/material";
 import { Accordion, AccordionItem, Tooltip, Badge } from '@nextui-org/react';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import LoopIcon from '@mui/icons-material/Loop';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import FlagCircleRoundedIcon from '@mui/icons-material/FlagCircleRounded';
-import Forward30RoundedIcon from '@mui/icons-material/Forward30Rounded';
-
 import TaskCard from "../components/Home/TaskCard";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-const PPlink = `https://onedrive.live.com/view.aspx?resid=E76849631A0CCAEC%21349&authkey=!AIhEW84wlIykoHM`;
-const PDFlink=`https://1drv.ms/b/s!AuzKDBpjSWjngl5HjCkXY7tOBDQ5?e=6iduU3`
-const wordlink = `https://1drv.ms/w/s!AuzKDBpjSWjngQjXxR9jjkC6ELWN?e=dCI8P4`;
+import filesLinks from '../util/filesLinks.json';
+
 function Home() {
-  const defaultContent =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+  const allKeys = Object.keys(filesLinks).map((category) => category.toString());
 
   return (
     <>
@@ -29,38 +22,24 @@ function Home() {
 
       <Grid container spacing={1} columns={3} rows={1}>
         <Grid item style={{ width: '75%' }}>
-          <Accordion dir="rtl" disabledKeys={['4', '5']} selectedKeys={['1', '2', '3']}>
-            <AccordionItem key="1" aria-label="Accordion 1" title="הכנה" indicator={<FlagCircleRoundedIcon />}>
-              <Card dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
-                <Button radius="full" isIconOnly variant="faded" onClick={() => window.open(PPlink)}>
-                  <SlideshowIcon style={{ color: '#FAE233' }} />
-                </Button>
-                ברוכים הבאים לניצנים
-              </Card>
-
-              <Card dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
-                <Button radius="full" isIconOnly variant="faded" onClick={() => window.open(wordlink)}>
-                  <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />
-                </Button>
-                הוראת התקנת PyCharm
-              </Card>
-
-              <TaskCard text={'משימה 01 - שלום עולם'} />
-              <TaskCard text={'משימה 02 -אליס והמעלית'} />
-            </AccordionItem>
-
-            <AccordionItem key="2" aria-label="Accordion 2" title="תנאים" indicator={<HelpOutlineIcon />}>
-              {defaultContent}
-            </AccordionItem>
-            <AccordionItem key="3" aria-label="Accordion 3" title="לולאת while" indicator={<LoopIcon />}>
-              {defaultContent}
-            </AccordionItem>
-            <AccordionItem key="4" aria-label="Accordion 3" title="לולאת for" indicator={<Forward30RoundedIcon />}>
-              {defaultContent}
-            </AccordionItem>
-            <AccordionItem key="5" aria-label="Accordion 3" title="פונקציות" indicator={<LoopIcon />}>
-              {defaultContent}
-            </AccordionItem>
+          <Accordion dir="rtl" selectedKeys={allKeys}>
+            {Object.entries(filesLinks).map(([category, files]) => (
+              <AccordionItem key={category} aria-label={`Accordion ${category}`} title={category}>
+                {Object.entries(files).map(([fileName, file]) =>
+                  file.type === 'task' ? (
+                    <TaskCard key={fileName} text={fileName} />
+                  ) : (
+                    <Card key={fileName} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
+                      <Button radius="full" isIconOnly variant="faded" onClick={() => window.open(file.link)}>
+                        {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
+                        {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
+                      </Button>
+                      {fileName}
+                    </Card>
+                  ),
+                )}
+              </AccordionItem>
+            ))}
           </Accordion>
         </Grid>
         <Grid item style={{ width: '24%' }}>
@@ -100,7 +79,6 @@ function Home() {
       </Grid>
     </>
   );
-
 }
 
 export default Home;
