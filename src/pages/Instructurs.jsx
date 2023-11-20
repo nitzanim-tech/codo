@@ -116,7 +116,7 @@ const studentTableFormattedData = (data) => {
   if (data) {
     return data.map((item, index) => {
       const { submissions, ...rest } = item;
-      return { ...rest, id: index };
+      return { ...rest, id: index, uid: item.uid };
     });
   } else {
     return [];

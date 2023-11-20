@@ -12,6 +12,7 @@ export default function TaskTab({ studentsRawData }) {
 
   useEffect(() => {
     setFormattedData(formatStudentTestsData(studentsRawData, selectedTask));
+    console.log(formattedData);
   }, [studentsRawData, selectedTask]);
 
   return (
@@ -49,17 +50,19 @@ export default function TaskTab({ studentsRawData }) {
 const formatStudentTestsData = (data, taskIndex) => {
   if (data) {
     return data.map((item, index) => {
-      const { submissions, name, lastName } = item;
+      const { submissions, name, lastName, uid } = item;
       let formattedVersions = [];
       if (submissions && submissions[taskIndex] && submissions[taskIndex].trials) {
         formattedVersions = submissions[taskIndex].trials.map((trial, index) => ({
-          id: index + 1,
+          id: index,
           date: trial.date,
           tests: trial.pass,
           code: trial.code,
         }));
       }
       return {
+        task: taskIndex,
+        uid,
         name: `${name} ${lastName}`,
         versions: formattedVersions,
       };

@@ -18,12 +18,11 @@ const courseBookUrl = 'https://drive.google.com/file/d/19ZABUSmex80nO07J074tY0Ma
 const releasedTasks = [
   { value: 0, label: 'הכנה 0 - התנסות', finish: false },
   { value: 1, label: 'הכנה 1 - מעלית', finish: false },
-];
-const betaTasks = releasedTasks.concat([
   { value: 2, label: 'תנאים - אי שיוון המשולש', finish: false },
   { value: 3, label: 'תרגול מונחה - השערת קולץ', finish: false },
   { value: 4, label: 'תרגול מונחה - יאללה, למחזורית!', finish: false },
-]);
+];
+const betaTasks = releasedTasks.concat([]);
 
 const selectItemDivide = [1, 2];
 

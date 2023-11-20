@@ -3,8 +3,8 @@ import { Button } from '@nextui-org/react';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
-export default function ReviewButton({ selectedVersion, name }) {
-  
+export default function ReviewButton({ selectedVersion, student }) {
+  console.log(selectedVersion);
     return (
     <>
       {selectedVersion.review ? (
@@ -17,10 +17,9 @@ export default function ReviewButton({ selectedVersion, name }) {
           onClick={() => {
             const versionToCheck = {
               ...selectedVersion,
-              name,
+              student,
             };
             localStorage.setItem('versionToCheck', JSON.stringify(versionToCheck));
-
             window.open('/review', '_blank');
           }}
         >

@@ -7,7 +7,6 @@ import ReviewButton from './ReviewButton';
 
 export default function SubmitsTable({ data }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
-
   const calculatePresent = (stringRatio) =>
     (parseInt(stringRatio.split('/')[0]) / parseInt(stringRatio.split('/')[1])) * 100;
 
@@ -89,13 +88,17 @@ export default function SubmitsTable({ data }) {
 
         <TableBody>
           {sortedData.map((student, index) => {
+            console.log(student, index);
             const selectedVersion = getSelectedVersion(student.versions) || { date: '', tests: '' };
             const percentage = selectedVersion.tests ? calculatePresent(selectedVersion.tests) : 0;
             return (
               <TableRow key={`${student.name}-${index}`}>
                 <TableCell>
                   {student.versions.length > 0 && (
-                    <ReviewButton selectedVersion={selectedVersion} name={student.name} />
+                    <ReviewButton
+                      selectedVersion={{ ...selectedVersion, task: student.task }}
+                      student={{ name: student.name, uid: student.uid }}
+                    />
                   )}
                 </TableCell>
                 <TableCell>{student.versions.length > 1 && <VersionsButton versions={student.versions} />}</TableCell>
