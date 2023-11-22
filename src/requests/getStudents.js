@@ -6,7 +6,7 @@ const getStudentData = async ({ app, groups }) => {
 
   try {
     let filteredUsersRef = usersRef;
-    if (groups) {
+    if (groups && groups != 'all') {
       filteredUsersRef = query(usersRef, orderByChild('group'), equalTo(groups));
     }
     const snapshot = await get(filteredUsersRef);

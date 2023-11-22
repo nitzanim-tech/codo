@@ -26,7 +26,7 @@ const betaTasks = releasedTasks.concat([]);
 
 const selectItemDivide = [1, 2];
 
-export default function NavigateBar({ setTask, isShowTask }) {
+export default function NavigateBar({ task, setTask, isShowTask }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [tasks, setTasks] = useState(releasedTasks);
@@ -61,8 +61,8 @@ export default function NavigateBar({ setTask, isShowTask }) {
               }}
               radius="full"
               labelPlacement={'outside-left'}
-              defaultValue={tasks[0].value}
-              placeholder={tasks[0].label}
+              defaultValue={tasks[task].value}
+              placeholder={tasks[task].label}
             >
               {tasks.map((task) => (
                 <SelectItem

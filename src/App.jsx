@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Instructurs from './pages/Instructurs';
-import Sumbit from './pages/Sumbit';
+import Submit from './pages/Submit';
 import Review from './pages/Review';
 import DevTeam from './pages/DevTeam';
 import Home from './pages/Home';
@@ -24,7 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/inst" element={<Instructurs />} />
-        <Route path="/submit" element={<Sumbit />} />
+        <Route path="/submit/:index" element={<Submit />} />
         <Route path="/review" element={<Review />} />
         <Route path="/dev" element={<DevTeam />} />
         <Route path="/manager" element={<Managers />} />

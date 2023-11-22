@@ -97,7 +97,12 @@ function Managers() {
                         {student.permissions && (
                           <>
                             {student.permissions.map((permission) => (
-                              <Chip variant="flat" key={permission} onClose={() => console.log('h')}>
+                              <Chip
+                                variant="flat"
+                                key={permission}
+                                onClose={() => console.log('h')}
+                                color={permission == 'all' ? 'primary' : 'default'}
+                              >
                                 {permission}
                               </Chip>
                             ))}
