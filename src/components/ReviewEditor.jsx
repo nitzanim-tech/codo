@@ -1,20 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
-import { Button } from '@nextui-org/react';
+import { Button, Tooltip, Textarea } from '@nextui-org/react';
 import addReview from '../requests/review/addReview';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import PageviewRoundedIcon from '@mui/icons-material/PageviewRounded';
+import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 
 const StyledEditor = styled(Editor)`
   .myContentClass {
     background: lightyellow;
   }
-
   .myGlyphMarginClass::before {
     content: '!';
     color: red;
   }
 `;
+const LINE_HEGITH = 20;
 
 export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
   const [saved, setSaved] = useState(false);
@@ -72,24 +74,49 @@ export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
   };
 
   return (
-    <div style={{ marginTop: '30px' }}>
+    <div style={{ marginTop: '25px ' }}>
       <StyledEditor
-        height="380px"
+        height={`${version.code.split('\n').length * LINE_HEGITH}px`}
         defaultLanguage="python"
         theme={theme}
         value={version.code}
-        options={{ minimap: { enabled: false }, readOnly: true }}
+        options={{ minimap: { enabled: false }, readOnly: true, scrollBeyondLastLine: false }}
         onMount={handleEditorDidMount}
       />
 
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ width: '80%', paddingBlock: '20px', textAlign: 'right', direction: 'rtl' }}>
+          <Textarea label="משוב כללי" labelPlacement="outside" placeholder="כתבו כאן" />
+        </div>
+      </div>
+
       <div style={{ paddingBottom: '10px ' }}>
-        {/* <Button isDisabled onClick={handleSave}> */}
+        <Tooltip content="תצוגה מקדימה">
+          <Button
+            // isDisabled={comments.current != {}}
+            style={{ margin: '10px ' }}
+            radius="full"
+            isIconOnly
+            variant="faded"
+            onClick={() => {
+              const checkedSubmit = { code: version.code, review: JSON.stringify(comments.current) };
+              localStorage.setItem('checkedSubmit', JSON.stringify(checkedSubmit));
+              window.open('/readReview', '_blank');
+            }}
+          >
+            <PageviewRoundedIcon />
+          </Button>
+        </Tooltip>
         {saved ? (
           <p style={{ fontWeight: 'bold', color: '#005395' }}>
             הועבר לחניך בהצלחה <CheckCircleRoundedIcon />
           </p>
         ) : (
-          <Button onClick={handleSave}>העבר לחניך</Button>
+          <Tooltip content="העבר לחניך">
+            <Button radius="full" isIconOnly variant="faded" onClick={handleSave} style={{ margin: '10px ' }}>
+              <ReplyRoundedIcon />
+            </Button>
+          </Tooltip>
         )}
       </div>
     </div>
