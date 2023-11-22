@@ -7,17 +7,13 @@ import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 
 function TaskCard({ text, index, studentData }) {
-  console.log(studentData ? studentData : 'abc');
-
-  const isReviewed = (trials) => {
+  const findReview = (trials) => {
     for (const trial of trials) {
-      console.log(trial);
       if (trial.review) {
-        console.log('HERE');
-        return true;
+        return { code: trial.code, review: trial.review };
       }
     }
-    return false;
+    return null;
   };
 
   return (
@@ -47,8 +43,12 @@ function TaskCard({ text, index, studentData }) {
             </Tooltip>
             <Tooltip content="למשוב">
               <Button
-                disabled={studentData ? isReviewed(studentData.trials) : true}
-                onClick={() => window.open('./review')}
+                disabled={studentData ? findReview(studentData.trials) == null : true}
+                onClick={() => {
+                  const checkedSubmit = findReview(studentData.trials);
+                  localStorage.setItem('checkedSubmit', JSON.stringify(checkedSubmit));
+                  window.open('/readReview', '_blank');
+                }}
               >
                 {/* <Badge content="" color="primary"> */}
                 <GradingIcon />
