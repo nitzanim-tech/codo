@@ -65,9 +65,11 @@ export default function ReadReview() {
                       },
                     }}
                   />
-                  <p style={{ textAlign: 'right', marginRight: '50px', color: '#005395', direction: 'rtl' }}>
-                    <PersonRoundedIcon />: {editor.comment}
-                  </p>
+                  {editor.comment && (
+                    <p style={{ textAlign: 'right', marginRight: '50px', color: '#005395', direction: 'rtl' }}>
+                      <PersonRoundedIcon />: {editor.comment}
+                    </p>
+                  )}
                 </React.Fragment>
               ))}
             </div>
@@ -81,7 +83,7 @@ export default function ReadReview() {
 }
 
 function convertCommentsToObject(comments, code) {
-  const keys = Object.keys(comments);
+  const keys = comments ? Object.keys(comments) : [];
   const result = [];
 
   let prevEnd = 0;
@@ -93,17 +95,18 @@ function convertCommentsToObject(comments, code) {
       .split('\n')
       .slice(start - 1, end)
       .join('\n')
-      .trimEnd(); // Remove the last newline character if present
+      .trimEnd(); 
     const height = `${LINE_HEGITH * (end - start + 1)}px`;
     result.push({ start, end, comment, code: codeLines, height });
     prevEnd = end;
   }
 
-  const lastEnd = parseInt(keys[keys.length - 1]);
-  const remainingCode = code.split('\n').slice(lastEnd).join('\n');
+  const end = keys.length != 0 ? parseInt(keys[keys.length - 1]) : code.split('\n').length;
+  const remainingCode = keys.length != 0 ? code.split('\n').slice(end).join('\n') : code;
   const remainingLines = remainingCode.split('\n').length;
-  const height = `${LINE_HEGITH * (lastEnd + remainingLines - lastEnd + 2)}px`;
-  result.push({ start: lastEnd + 1, end: lastEnd + remainingLines, comment: '', code: remainingCode, height });
+  const height = `${LINE_HEGITH * (end + remainingLines - end + 2)}px`;
+  result.push({ start: end + 1, end: end + remainingLines, comment: '', code: remainingCode, height });
+  console.log(result);
 
   return result;
 }
