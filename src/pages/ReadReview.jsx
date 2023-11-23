@@ -65,7 +65,11 @@ export default function ReadReview() {
                       },
                     }}
                   />
-                  <p style={{ textAlign: 'right', marginRight: '30px' }}>{editor.comment}</p>
+                  {editor.comment && (
+                    <p style={{ textAlign: 'right', marginRight: '50px', color: '#005395', direction: 'rtl' }}>
+                      <PersonRoundedIcon />: {editor.comment}
+                    </p>
+                  )}
                 </React.Fragment>
               ))}
             </div>
@@ -91,7 +95,7 @@ function convertCommentsToObject(comments, code) {
       .split('\n')
       .slice(start - 1, end)
       .join('\n')
-      .trimEnd(); 
+      .trimEnd();
     const height = `${LINE_HEGITH * (end - start + 1)}px`;
     result.push({ start, end, comment, code: codeLines, height });
     prevEnd = end;
