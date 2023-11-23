@@ -65,11 +65,7 @@ export default function ReadReview() {
                       },
                     }}
                   />
-                  {editor.comment && (
-                    <p style={{ textAlign: 'right', marginRight: '50px', color: '#005395', direction: 'rtl' }}>
-                      <PersonRoundedIcon />: {editor.comment}
-                    </p>
-                  )}
+                  <p style={{ textAlign: 'right', marginRight: '30px' }}>{editor.comment}</p>
                 </React.Fragment>
               ))}
             </div>

@@ -21,11 +21,7 @@ const LINE_HEGITH = 20;
 export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
   console.log(version);
   const [saved, setSaved] = useState(false);
-  const [generalReview, setGeneralReview] = useState(version.review ? JSON.parse(version.review).general : '');
-  const comments = useRef(version.review ? JSON.parse(version.review).comments : {});
-  console.log(generalReview, comments);
-
-  console.log(comments);
+  const comments = useRef(version.review ? JSON.parse(version.review) : {});
   const handleEditorDidMount = (editor, monaco) => {
     updateDecorations(editor, monaco);
 
@@ -95,13 +91,7 @@ export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div style={{ width: '80%', paddingBlock: '20px', textAlign: 'right', direction: 'rtl' }}>
-          <Textarea
-            label="משוב כללי"
-            labelPlacement="outside"
-            placeholder="כתבו כאן"
-            defaultValue={generalReview}
-            onChange={(e) => setGeneralReview(e.target.value)}
-          />
+          <Textarea label="משוב כללי" labelPlacement="outside" placeholder="כתבו כאן" />
         </div>
       </div>
 
