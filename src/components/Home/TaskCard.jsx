@@ -27,7 +27,9 @@ function TaskCard({ text, index, studentData }) {
             {text}
             {studentData ? (
               <Tooltip content="בוצע">
-                <CheckCircleOutlineRoundedIcon style={{ marginRight: '15px', color: '#6ED268' }} />
+                <CheckCircleOutlineRoundedIcon
+                  style={{ marginRight: '15px', color: findReview(studentData.trials) != null ? '#D2F666' : 'grey' }}
+                />
               </Tooltip>
             ) : (
               <Tooltip content="טרם בוצע">

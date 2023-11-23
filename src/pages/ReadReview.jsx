@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import { Card } from '@nextui-org/react';
 import { CircularProgress } from '@nextui-org/react';
-
+import FlutterDashRoundedIcon from '@mui/icons-material/FlutterDashRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 const LINE_HEGITH = 20;
 
 export default function ReadReview() {
@@ -13,12 +14,10 @@ export default function ReadReview() {
   useEffect(() => {
     const storedVersion = localStorage.getItem('checkedSubmit');
     if (storedVersion) {
-      console.log(storedVersion);
-
       const parsedVersion = JSON.parse(storedVersion);
       console.log(parsedVersion);
       setVersion(parsedVersion);
-      const convertedComments = convertCommentsToObject(JSON.parse(parsedVersion.review), parsedVersion.code);
+      const convertedComments = convertCommentsToObject(JSON.parse(parsedVersion.review).comments, parsedVersion.code);
       setComments(convertedComments);
     }
   }, []);
@@ -28,8 +27,17 @@ export default function ReadReview() {
       <Card style={{ width: '60%' }}>
         {comments ? (
           <>
-            <p style={{ textAlign: 'right', marginRight: '30px', marginTop: '30px', direction: 'rtl' }}>
+            <p
+              style={{
+                textAlign: 'right',
+                direction: 'rtl',
+                color: '#005395',
+                padding: '40px 70px 0 40px',
+              }}
+            >
               <b>כללי:</b>
+              <br />
+              {JSON.parse(version.review).general}
             </p>
             <div style={{ marginTop: '30px' }}>
               {comments.map((editor, index) => (
@@ -57,7 +65,9 @@ export default function ReadReview() {
                       },
                     }}
                   />
-                  <p style={{ textAlign: 'right', marginRight: '30px' }}>{editor.comment}</p>
+                  <p style={{ textAlign: 'right', marginRight: '50px', color: '#005395', direction: 'rtl' }}>
+                    <PersonRoundedIcon />: {editor.comment}
+                  </p>
                 </React.Fragment>
               ))}
             </div>

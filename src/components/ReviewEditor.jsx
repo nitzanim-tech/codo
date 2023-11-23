@@ -20,7 +20,9 @@ const LINE_HEGITH = 20;
 
 export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
   const [saved, setSaved] = useState(false);
+  const [generalReview, setGeneralReview] = useState('');
   const comments = useRef(version.review ? JSON.parse(version.review) : {});
+
   const handleEditorDidMount = (editor, monaco) => {
     updateDecorations(editor, monaco);
 
@@ -34,10 +36,10 @@ export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
       precondition: null,
       keybindingContext: null,
       contextMenuGroupId: 'navigation',
-      contextMenuOrder: 1.5,
       run: function (ed) {
+        editor.focus();
         console.log(ed.getPosition());
-        const lineNumber = ed.getPosition().lineNumber;
+        const lineNumber = ed.getPosition().lineNumber - 1;
         const comment = window.prompt('Enter your comment');
         if (comment) {
           comments.current[lineNumber] = comment;
@@ -61,8 +63,12 @@ export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
   };
 
   const handleSave = () => {
-    const reviewData = JSON.stringify(comments.current);
-    console.log(reviewData);
+    const reviewData = JSON.stringify({
+      comments: comments.current,
+      general: generalReview,
+      date: new Date(),
+      hasOpened: false,
+    });
     const hadSaved = addReview({
       app,
       userId: version.student.uid,
@@ -86,11 +92,27 @@ export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div style={{ width: '80%', paddingBlock: '20px', textAlign: 'right', direction: 'rtl' }}>
-          <Textarea label="משוב כללי" labelPlacement="outside" placeholder="כתבו כאן" />
+          <Textarea
+            label="משוב כללי"
+            labelPlacement="outside"
+            placeholder="כתבו כאן"
+            onChange={(e) => setGeneralReview(e.target.value)}
+          />
         </div>
       </div>
 
       <div style={{ paddingBottom: '10px ' }}>
+        {saved ? (
+          <p style={{ fontWeight: 'bold', color: '#005395' }}>
+            הועבר לחניך בהצלחה <CheckCircleRoundedIcon />
+          </p>
+        ) : (
+          <Tooltip content="העבר לחניך">
+            <Button radius="full" isIconOnly variant="faded" onClick={handleSave} style={{ margin: '10px ' }}>
+              <ReplyRoundedIcon />
+            </Button>
+          </Tooltip>
+        )}
         <Tooltip content="תצוגה מקדימה">
           <Button
             // isDisabled={comments.current != {}}
@@ -107,17 +129,6 @@ export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
             <PageviewRoundedIcon />
           </Button>
         </Tooltip>
-        {saved ? (
-          <p style={{ fontWeight: 'bold', color: '#005395' }}>
-            הועבר לחניך בהצלחה <CheckCircleRoundedIcon />
-          </p>
-        ) : (
-          <Tooltip content="העבר לחניך">
-            <Button radius="full" isIconOnly variant="faded" onClick={handleSave} style={{ margin: '10px ' }}>
-              <ReplyRoundedIcon />
-            </Button>
-          </Tooltip>
-        )}
       </div>
     </div>
   );

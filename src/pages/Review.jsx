@@ -14,7 +14,6 @@ function Review() {
   useEffect(() => {
     const storedVersion = localStorage.getItem('versionToCheck');
     if (storedVersion) {
-      console.log(storedVersion);
       setVersion(JSON.parse(storedVersion));
     }
   }, []);
@@ -22,7 +21,7 @@ function Review() {
     <>
       {version ? (
         <>
-          <Grid container spacing={1} columns={3} rows={1} style={{ marginTop: '20px' }}>
+          <Grid container spacing={1} columns={3} rows={1} style={{ marginTop: '20px', padding:'20px' }}>
             <Grid item style={{ width: '80%' }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Card style={{ width: '95%' }}>

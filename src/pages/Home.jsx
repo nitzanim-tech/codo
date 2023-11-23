@@ -38,7 +38,7 @@ function Home() {
       <NavBar isShowTask={false} />
       {student && (
         <Grid container spacing={1} columns={3} rows={1}>
-          <Grid item style={{ width: '75%' }}>
+          <Grid item style={{ width: '70%', margin: '30px' }}>
             <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
               {Object.entries(filesLinks).map(([category, files]) => (
                 <AccordionItem key={category} aria-label={`Accordion ${category}`} title={category}>
@@ -66,7 +66,7 @@ function Home() {
 
           <Grid item style={{ width: '24%' }}>
             <h1 style={{ margin: '40px' }}> שלום {student.name}</h1>
-            <h2>אירועים קרובים</h2>
+            {/*<h2>אירועים קרובים</h2>
             <Card dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
               <CalendarMonthIcon />
               2.3.23 טיול חנוכה
@@ -96,7 +96,7 @@ function Home() {
                 <br />
                 <p style={{ textAlign: 'left' }}>שמעון</p>
               </div>
-            </Card>
+            </Card> */}
           </Grid>
         </Grid>
       )}

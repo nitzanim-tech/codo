@@ -12,8 +12,9 @@ const tasks = [
   { key: 2, name: 'תנאים - אי שיוון המשולש' },
   { key: 3, name: 'תרגול מונחה - השערת קולץ' },
   { key: 4, name: '!תרגול מונחה - יאללה, למחזורית' },
+  { key: 5, name: 'wordle - רשימות' },
 ];
-const dividers = [1, 2];
+const dividers = [1, 2, 4];
 
 export default function InstTasksList({ selectedTask, setSelectedTask }) {
   return (
