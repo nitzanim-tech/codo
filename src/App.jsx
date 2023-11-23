@@ -15,15 +15,21 @@ import Managers from './pages/Managers';
 ReactGA.initialize(firebaseConfig.measurementId);
 
 function App() {
+  useEffect(() => {
+    ReactGA.send('pageview', window.location.pathname + window.location.search);
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/submit" element={<Sumbit />} />
-        <Route path="/check" element={<Check />} />
-        <Route path="/sent" element={<SumbitSent />} />
-        <Route path="/famewall" element={<RegionalFameWall />} />
-        <Route path="/inst" element={<Instructors />} />
+        <Route path="/inst" element={<Instructurs />} />
+        <Route path="/submit/:index" element={<Submit />} />
+        <Route path="/submit" element={<Submit />} />
+        <Route path="/review" element={<Review />} />
+        <Route path="/readReview" element={<ReadReview />} />
+        <Route path="/dev" element={<DevTeam />} />
+        <Route path="/manager" element={<Managers />} />
       </Routes>
     </BrowserRouter>
   );
