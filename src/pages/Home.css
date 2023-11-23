@@ -18,17 +18,31 @@
   justify-content: center;
 }
 
+/* body{
+    background-color: #003061;
 
-.timer-container {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  margin: 50px;
+} */
+
+@font-face {
+  font-family: 'yarden'; 
+  src: url('../assets/fonts/yarden-regular.woff') format('woff');
+  font-weight: normal;
 }
-.home-button {
-  background-color: #008ad1;
-  color: white;
-  margin-bottom: 20px;
-  margin-left: 20px;
+
+@font-face {
+  font-family: 'yarden'; 
+  src: url('../assets/fonts/yarden-bold.woff') format('woff');
+  font-weight: bold;  
 }
+@font-face {
+  font-family: 'JetBrainsMono'; 
+  src: url('../assets/fonts/JetBrainsMono-Bold.ttf') format('ttf');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'JetBrainsMono'; 
+  src: url('../assets/fonts/JetBrainsMono-Medium.ttf') format('ttf');
+  font-weight: normal;
+}
+

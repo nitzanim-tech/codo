@@ -1,7 +1,5 @@
 import React from "react";
-import ReactGA from "react-ga";
-
-ReactGA.initialize('G-T0656S73M1');
+import ReactGA from "react-ga4";
 
 const useAnalyticsEventTracker = (category="Blog category") => {
   const eventTracker = (action = "test action", label = "test label") => {
