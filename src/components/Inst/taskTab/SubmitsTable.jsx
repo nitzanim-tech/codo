@@ -88,7 +88,6 @@ export default function SubmitsTable({ data }) {
 
         <TableBody>
           {sortedData.map((student, index) => {
-            console.log(student, index);
             const selectedVersion = getSelectedVersion(student.versions) || { date: '', tests: '' };
             const percentage = selectedVersion.tests ? calculatePresent(selectedVersion.tests) : 0;
             return (

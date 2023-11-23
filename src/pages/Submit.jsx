@@ -12,7 +12,7 @@ import './Submit.css';
 
 function Submit() {
   const { index } = useParams();
-  const [task, setTask] = useState(parseInt(index, 10));
+  const [task, setTask] = useState(parseInt(index, 10)|| 0);
   const initialTestNames = testsName(task);
   const [testsOutputs, setTestsOutputs] = useState(initialTestNames.map((name) => ({ name })));
 

@@ -1,13 +1,5 @@
 {
   "חזרה": {
-    "ברוכים הבאים לניצנים": {
-      "type": "ppt",
-      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7Dd513ZLFuzAOiqow?e=ETi23c"
-    },
-    "נספח התקנות": {
-      "type": "pdf",
-      "link": "https://1drv.ms/b/s!AhbjJ-PvNB7Ddi1doErWmMGb7tw?e=njl3z4"
-    },
     "הכנה 01 - שלום עולם": {
       "type": "task",
       "index": "0"
@@ -16,6 +8,16 @@
       "type": "task",
       "index": "1"
     },
+    "ברוכים הבאים לניצנים": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7Dd513ZLFuzAOiqow?e=ETi23c"
+    },
+    "נספח התקנות": {
+      "type": "pdf",
+      "link": "https://1drv.ms/b/s!AhbjJ-PvNB7Ddi1doErWmMGb7tw?e=njl3z4"
+    }
+  },
+  "תנאים": {
     "תנאים": {
       "type": "ppt",
       "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DdYy6kaWesn4kS1Y?e=8h9CGJ"
@@ -23,7 +25,9 @@
     "תנאים - אי שייון המשולש": {
       "type": "task",
       "index": "2"
-    },
+    }
+  },
+  "while": {
     "לולאות while": {
       "type": "ppt",
       "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DcRTNz3jvDHPjqgo?e=1gTYIl"

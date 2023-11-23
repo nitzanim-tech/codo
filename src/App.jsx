@@ -25,6 +25,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/inst" element={<Instructurs />} />
         <Route path="/submit/:index" element={<Submit />} />
+        <Route path="/submit" element={<Submit />} />
         <Route path="/review" element={<Review />} />
         <Route path="/readReview" element={<ReadReview />} />
         <Route path="/dev" element={<DevTeam />} />
