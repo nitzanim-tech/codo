@@ -1,15 +1,13 @@
 /* Submit.css */
 body {
   color: rgba(14, 12, 12, 0.87);
-  background-color: #ffffff;
+  /* background-color: #FBF9F9; */
+  background-color: #F0FAFE;
+
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+}
 
-}
-.body--blue {
-  background-color: #003061;
-}
 
 
 .check-button {
@@ -39,8 +37,6 @@ img {
 
 .ace_editor {
   margin-top: 5px;
-  width: 900px !important;
-  height: 530px !important;
 }
 
 .ace_chrome {
@@ -49,18 +45,9 @@ img {
 
 .editor-container {
   background-color: #003061;
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  margin-bottom: -50vw;
   display: flex;
-  justify-content: center;
-  height: 540px; 
+  flex-direction: row;
 }
-
 .central-div {
   display: flex;
   flex-grow: 1;
@@ -68,3 +55,14 @@ img {
   width: 60vw;
   margin-bottom: 5px;
 }
+
+/* @font-face {
+  font-family: 'DejaVuSansMono'; 
+  src: url('../assets/fonts/DejaVuSansMono-Bold.ttf') format('ttf');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'DejaVuSansMono'; 
+  src: url('../assets/fonts/DejaVuSansMono.ttf') format('ttf');
+  font-weight: normal;
+} */
