@@ -21,10 +21,11 @@ const releasedTasks = [
   { value: 2, label: 'תנאים - אי שיוון המשולש', finish: false },
   { value: 3, label: 'תרגול מונחה - השערת קולץ', finish: false },
   { value: 4, label: 'תרגול מונחה - יאללה, למחזורית!', finish: false },
+  { value: 5, label: 'רשימות - wordle', finish: false },
 ];
 const betaTasks = releasedTasks.concat([]);
 
-const selectItemDivide = [1, 2];
+const selectItemDivide = [1, 2, 4];
 
 export default function NavigateBar({ task, setTask, isShowTask }) {
   const [currentUser, setCurrentUser] = useState(null);

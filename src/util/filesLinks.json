@@ -42,5 +42,11 @@
       "type": "task",
       "index": "4"
     }
+  },
+  "רשימות": {
+    "wordle": {
+      "type": "task",
+      "index": "5"
+    }
   }
 }
