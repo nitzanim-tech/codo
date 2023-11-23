@@ -8,15 +8,5 @@
         "destination": "/index.html"
       }
     ]
-  },
-  "functions": {
-    "predeploy": [
-      "npm run build",
-      "npm run dev"
-    ]
-  },
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
   }
 }
