@@ -2,11 +2,14 @@
   "rules": {
     "users": {
       ".read": "auth.token.email.endsWith('nitzanim.tech')",
-      ".indexOn": "email",
+      ".indexOn": ["group", "email"],
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
+        ".write": "$uid === auth.uid || auth.token.email.endsWith('nitzanim.tech')"
       }
+    },
+    "groups": {
+      ".read": true
     }
   }
 }

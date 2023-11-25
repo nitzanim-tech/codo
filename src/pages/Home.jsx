@@ -25,7 +25,6 @@ function Home() {
       if (!student) {
         const current = await getCurrentUser({ app, id: user.uid });
         setStudent(current);
-        console.log(student);
       }
     } catch {
       setStudent(null);
