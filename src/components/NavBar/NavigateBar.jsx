@@ -16,16 +16,19 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const courseBookUrl = 'https://drive.google.com/file/d/19ZABUSmex80nO07J074tY0Ma2Cietb0p/view';
 const releasedTasks = [
-  { value: 0, label: 'הכנה 0 - התנסות', finish: false },
-  { value: 1, label: 'הכנה 1 - מעלית', finish: false },
-  { value: 2, label: 'תנאים - אי שיוון המשולש', finish: false },
-  { value: 3, label: 'תרגול מונחה - השערת קולץ', finish: false },
-  { value: 4, label: 'תרגול מונחה - יאללה, למחזורית!', finish: false },
-  { value: 5, label: 'רשימות - wordle', finish: false },
+  { value: 0, label: 'הכנה 0 - התנסות' },
+  { value: 1, label: 'הכנה 1 - מעלית' },
+  { value: 2, label: 'תנאים - אי שיוון המשולש' },
+  { value: 3, label: 'תרגול מונחה - השערת קולץ' },
+  { value: 4, label: 'תרגול מונחה - יאללה, למחזורית!' },
+  { value: 5, label: 'רשימות - wordle' },
+  { value: 6, label: 'for -  שבע בום' },
+  { value: 7, label: 'מספר משוכלל - for' },
+  { value: 8, label: 'קרץ אותי קרץ- for' },
 ];
 const betaTasks = releasedTasks.concat([]);
 
-const selectItemDivide = [1, 2, 4];
+const selectItemDivide = [1, 2, 4,5];
 
 export default function NavigateBar({ task, setTask, isShowTask }) {
   const [currentUser, setCurrentUser] = useState(null);
