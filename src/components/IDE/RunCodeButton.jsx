@@ -50,11 +50,26 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
       sys.stdout = io.StringIO()
     `);
 
+    pyodide.runPython(`
+        from time import time
+        infinite_loop_watchdog_times = {}
+        def infinite_loop_watchdog(loop_id):
+            if loop_id not in infinite_loop_watchdog_times:
+                infinite_loop_watchdog_times[loop_id] = time()
+            elif time() - infinite_loop_watchdog_times[loop_id] >= 2:
+                raise Exception("Infinite loop")
+
+            return True
+    `)
+
       const asyncCode = `async def pythonCodeWrapper():\n${code
         .split('\n')
         .map((line) => {
           if (line.includes('input(')) {
             return '  ' + line.replace('input(', 'await input(');
+          }
+          if (line.includes('while ')) {
+            return '  ' + line.replace('while ', 'while infinite_loop_watchdog("' + crypto.randomUUID() + '") and ');
           }
           return '  ' + line;
         })
