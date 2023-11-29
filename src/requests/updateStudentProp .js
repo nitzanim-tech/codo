@@ -12,10 +12,12 @@ const updateUserProperties = async ({ app, user }) => {
     await set(userGroupRef, user.group);
     await set(userRegionRef, user.region);
     await set(userLastNameRef, user.lastName);
-
+    
     console.log('User properties updated successfully.');
+    return true
   } catch (error) {
     console.error('Error updating user properties:', error.message);
+    return false;
   }
 };
 
