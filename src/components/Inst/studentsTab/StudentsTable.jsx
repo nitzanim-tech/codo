@@ -80,17 +80,13 @@ export default function StudentsTable({ app, isLoading, studentsRawData }) {
         <TableBody items={sortedData || []} isLoading={isLoading} loadingContent={<Spinner label="Loading..." />}>
           {sortedData.map((item, index) => (
             <TableRow key={index}>
-              {Object.keys(item).map((columnKey) => (
-                <TableCell key={columnKey}>
-                  {columnKey !== 'edit' ? (
-                    getKeyValue(item, columnKey)
-                  ) : groups ? (
-                    <EditStudentButton studentData={item} groups={groups} />
-                  ) : (
-                    <Spinner />
-                  )}
-                </TableCell>
-              ))}
+              <TableCell key={'name'}>{getKeyValue(item, 'name')}</TableCell>
+              <TableCell key={'lastName'}>{getKeyValue(item, 'lastName')}</TableCell>
+              <TableCell key={'email'}>{getKeyValue(item, 'email')}</TableCell>
+              <TableCell key={'group'}>{getKeyValue(item, 'group')}</TableCell>
+              <TableCell key={'edit'}>
+                {groups ? <EditStudentButton studentData={item} groups={groups} app={app} /> : <Spinner />}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
