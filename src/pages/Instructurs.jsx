@@ -91,7 +91,11 @@ function Instructors() {
                     </div>
                   </Tab>
                   <Tab key="students" title="חניכים">
-                    <StudentsTable isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
+                    <StudentsTable
+                      isLoading={isLoading}
+                      studentsRawData={studentTableFormattedData(studentsRawData)}
+                      app={app}
+                    />
                   </Tab>
                   {/* <Tab key="manage" title="ניהול משימות">
             <ManageTasks isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />

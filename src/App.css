@@ -11,3 +11,10 @@ div[data-overlay-container="true"] {
 .myGlyphMarginClass::before {
   content: "🖊️";
 }
+
+@font-face {
+  font-family: 'Bellefair'; 
+  src: url('./assets/fonts/Bellefair-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-display: swap; 
+}
