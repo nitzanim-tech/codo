@@ -15,129 +15,146 @@ export default function EditStudentButton({ studentData, groups, app }) {
   const [lastName, setLastName] = useState(studentData.lastName || '');
   const [group, setGroup] = useState(studentData.group || '');
   const [choosenRegion, setChoosenRegion] = useState(studentData.region || '');
-  const [deleteCliked, setDeleteCliked] = useState(false);
-  return (
-    <>
-      <Button isIconOnly variant="faded" radius="full" style={{ marginLeft: '-30px' }} onPress={onOpen}>
-        <CoPresentRoundedIcon />
-      </Button>
+    const [massage, setMassage] = useState('');
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center" size="xl">
-        <ModalContent>
-          {(onClose) => (
-            <>
-              {console.log(studentData)}
-              <ModalHeader className="flex flex-col gap-1">ערוך פרטי חניך</ModalHeader>
-              <ModalBody>
-                <div style={{ direction: 'rtl', margin: '5px' }}>
-                  <Input autoFocus label="מייל" variant="bordered" readOnly defaultValue={studentData.email || ''} />
-                  <div style={{ display: 'flex', flexDirection: 'row', direction: 'rtl', margin: '5px' }}>
-                    <Input
-                      autoFocus
-                      label="שם"
-                      variant="bordered"
-                      defaultValue={studentData.name || ''}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                    <Input
-                      autoFocus
-                      label="משפחה"
-                      variant="bordered"
-                      defaultValue={studentData.lastName || ''}
-                      onChange={(e) => setLastName(e.target.value)}
-                    />
+    const [deleteCliked, setDeleteCliked] = useState(false);
+    return (
+      <>
+        <Button isIconOnly variant="faded" radius="full" style={{ marginLeft: '-30px' }} onPress={onOpen}>
+          <CoPresentRoundedIcon />
+        </Button>
+
+        <Modal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          placement="top-center"
+          size="xl"
+          onClose={() => {
+            setMassage('');
+            setDeleteCliked(false);
+          }}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                {console.log(studentData)}
+                <ModalHeader className="flex flex-col gap-1">ערוך פרטי חניך</ModalHeader>
+                <ModalBody>
+                  <div style={{ direction: 'rtl', margin: '5px' }}>
+                    <Input autoFocus label="מייל" variant="bordered" readOnly defaultValue={studentData.email || ''} />
+                    <div style={{ display: 'flex', flexDirection: 'row', direction: 'rtl', margin: '5px' }}>
+                      <Input
+                        autoFocus
+                        label="שם"
+                        variant="bordered"
+                        defaultValue={studentData.name || ''}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                      <Input
+                        autoFocus
+                        label="משפחה"
+                        variant="bordered"
+                        defaultValue={studentData.lastName || ''}
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'row', direction: 'rtl', margin: '5px' }}>
+                      <Select
+                        label="מרחב"
+                        variant="bordered"
+                        defaultSelectedKeys={
+                          studentData.region && Object.keys(groups).includes(studentData.region)
+                            ? [studentData.region]
+                            : []
+                        }
+                        onChange={(e) => {
+                          setChoosenRegion(e.target.value);
+                          setGroup('');
+                        }}
+                      >
+                        {groups &&
+                          Object.keys(groups).map((region) => (
+                            <SelectItem key={region} value={region}>
+                              {region}
+                            </SelectItem>
+                          ))}
+                      </Select>
+
+                      <Select
+                        label="קבוצה"
+                        variant="bordered"
+                        defaultSelectedKeys={
+                          studentData.group && groups[choosenRegion]?.includes(studentData.group)
+                            ? [studentData.group]
+                            : []
+                        }
+                        value={group}
+                        onChange={(e) => setGroup(e.target.value)}
+                        disabled={!choosenRegion}
+                      >
+                        {choosenRegion &&
+                          groups[choosenRegion]?.map((group) => (
+                            <SelectItem key={group} value={group} dir="rtl">
+                              {group}
+                            </SelectItem>
+                          ))}
+                      </Select>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'row', direction: 'rtl', margin: '5px' }}>
-                    <Select
-                      label="מרחב"
-                      variant="bordered"
-                      defaultSelectedKeys={
-                        studentData.region && Object.keys(groups).includes(studentData.region)
-                          ? [studentData.region]
-                          : []
-                      }
-                      onChange={(e) => {
-                        setChoosenRegion(e.target.value);
-                        setGroup('');
-                      }}
-                    >
-                      {groups &&
-                        Object.keys(groups).map((region) => (
-                          <SelectItem key={region} value={region}>
-                            {region}
-                          </SelectItem>
-                        ))}
-                    </Select>
+                </ModalBody>
+                <ModalFooter>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Tooltip content="מחק חניך">
+                      <Button isIconOnly variant="ghost" radius="full" color="danger" onPress={setDeleteCliked}>
+                        <DeleteRoundedIcon />
+                      </Button>
+                    </Tooltip>
 
-                    <Select
-                      label="קבוצה"
-                      variant="bordered"
-                      defaultSelectedKeys={
-                        studentData.group && groups[choosenRegion]?.includes(studentData.group)
-                          ? [studentData.group]
-                          : []
-                      }
-                      value={group}
-                      onChange={(e) => setGroup(e.target.value)}
-                      disabled={!choosenRegion}
-                    >
-                      {choosenRegion &&
-                        groups[choosenRegion]?.map((group) => (
-                          <SelectItem key={group} value={group} dir="rtl">
-                            {group}
-                          </SelectItem>
-                        ))}
-                    </Select>
-                  </div>
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Tooltip content="מחק חניך">
-                    <Button isIconOnly variant="ghost" radius="full" color="danger" onPress={setDeleteCliked}>
-                      <DeleteRoundedIcon />
-                    </Button>
-                  </Tooltip>
-
-                  <Button
-                    isIconOnly
-                    variant="ghost"
-                    radius="full"
-                    onPress={() =>
-                      updateUserProperties({
-                        app,
-                        user: {
-                          id: studentData.uid,
-                          name: name,
-                          lastName: lastName,
-                          region: choosenRegion,
-                          group: group,
-                        },
-                      })
-                    }
-                  >
-                    <SaveRoundedIcon />
-                  </Button>
-                </div>
-
-                {deleteCliked && (
-                  <div style={{ alignItems: 'center' }}>
-                    <p>בטוחים?</p>
                     <Button
+                      isIconOnly
                       variant="ghost"
                       radius="full"
-                      color="danger"
-                      onClick={() => removeStudent({ app, id: studentData.uid })}
+                      onPress={() => {
+                        const updated = updateUserProperties({
+                          app,
+                          user: {
+                            id: studentData.uid,
+                            name: name,
+                            lastName: lastName,
+                            region: choosenRegion,
+                            group: group,
+                          },
+                        });
+                        updated ? setMassage('עודכן בהצלחה') : setMassage('שגיאה');
+                      }}
                     >
-                      !כן, למחוק
+                      <SaveRoundedIcon />
                     </Button>
                   </div>
-                )}
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-    </>
-  );
+
+                  {deleteCliked && (
+                    <div style={{ alignItems: 'center' }}>
+                      <p>בטוחים?</p>
+                      <Button
+                        variant="ghost"
+                        radius="full"
+                        color="danger"
+                        onClick={() => {
+                          const removed = removeStudent({ app, id: studentData.uid });
+                          removed ? setMassage('נמחק בהצלחה') : setMassage('שגיאה');
+                          setDeleteCliked(false);
+                        }}
+                      >
+                        !כן, למחוק
+                      </Button>
+                    </div>
+                  )}
+                  <p>{massage}</p>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </>
+    );
 }

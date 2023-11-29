@@ -91,11 +91,20 @@ function Instructors() {
                     </div>
                   </Tab>
                   <Tab key="students" title="חניכים">
-                    <StudentsTable
-                      isLoading={isLoading}
-                      studentsRawData={studentTableFormattedData(studentsRawData)}
-                      app={app}
-                    />
+                    <div
+                      dir="ltr"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <StudentsTable
+                        isLoading={isLoading}
+                        studentsRawData={studentTableFormattedData(studentsRawData)}
+                        app={app}
+                      />
+                    </div>
                   </Tab>
                   {/* <Tab key="manage" title="ניהול משימות">
             <ManageTasks isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
@@ -120,7 +129,12 @@ const studentTableFormattedData = (data) => {
   if (data) {
     return data.map((item, index) => {
       const { submissions, ...rest } = item;
-      return { ...rest, id: index, uid: item.uid };
+      return {
+        ...rest,
+        id: index,
+        uid: item.uid,
+        subLength: submissions ? submissions.length : 0,
+      };
     });
   } else {
     return [];

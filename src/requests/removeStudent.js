@@ -9,8 +9,10 @@ const removeStudent = async ({ app, id }) => {
     await set(userGroupRef, 'נמחק');
     await set(userRegionRef, 'נמחק');
     console.log('User group and region updated successfully.');
+    return true
   } catch (error) {
     console.error('Error updating user properties:', error.message);
+    return false;
   }
 };
 
