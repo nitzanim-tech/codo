@@ -22,9 +22,9 @@ const releasedTasks = [
   { value: 3, label: 'תרגול מונחה - השערת קולץ' },
   { value: 4, label: 'תרגול מונחה - יאללה, למחזורית!' },
   { value: 5, label: 'רשימות - wordle' },
-  { value: 6, label: 'for -  שבע בום' },
-  { value: 7, label: 'מספר משוכלל - for' },
-  { value: 8, label: 'קרץ אותי קרץ- for' },
+  { value: 6, label: 'for -  מספר משוכלל' },
+  { value: 7, label: 'for -  שבע בום' },
+  { value: 8, label: 'for -  קרץ אותי קרץ' },
 ];
 const betaTasks = releasedTasks.concat([]);
 

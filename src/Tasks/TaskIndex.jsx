@@ -6,6 +6,7 @@ import * as RecyclingChallenge from './RecyclingChallenge';
 import * as WordleLists from './WordleLists';
 import * as SevenBoom from './SevenBoom';
 import * as KaratzOtiKaratz from './KaratzOtiKaratz';
+import * as PerfectNumber from './PerfectNumber';
 
 const tasks = {
   0: Experience,
@@ -14,7 +15,8 @@ const tasks = {
   3: CollatzConjecture,
   4: RecyclingChallenge,
   5: WordleLists,
-  6: SevenBoom,
+  6: PerfectNumber,
+  7: SevenBoom,
   8: KaratzOtiKaratz,
 };
 
