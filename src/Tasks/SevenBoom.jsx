@@ -1,13 +1,8 @@
 import React from 'react';
+import BombIcon from '../assets/svg/tasks/bomb.svg';
 
 export function testsName() {
-  return [
-    'המספר הנתון אי זוגי (1)',
-    'המספר הנתון אי זוגי (2)',
-    'המספר הנתון זוגי (1)',
-    'המספר הנתון זוגי (2)',
-    'המספר הנתון הוא 1',
-  ];
+  return ['המספרים שבדוגמה', 'התחלה מ1', 'מספר שני קטן מהראשון', 'מספר יחיד', 'רצף של בום'];
 }
 
 // TestsList.jsx
@@ -20,12 +15,18 @@ export function generateExplanation(selectedValue) {
       {selectedValue.input && (
         <div dir="rtl">
           <p>
-            עבור המספר: {selectedValue.input.number + ','}
+            מספר ראשון: {selectedValue.input.fisrt + ', '}
+            מספר שני: {selectedValue.input.second + '.'}
             <br />
-            הסדרה הינה {selectedValue.fullAns + ', '}
-            ולכן הסכום הוא {selectedValue.ans}
+            מהלך המשחק:
             <br />
-            ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"}
+          </p>
+          <BoomTable gameString={selectedValue.ans} />
+          <p>
+            <br />
+            ההדפסה האחרונה בקוד שכתבת:
+            <br />
+            {selectedValue.output}
           </p>
           {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>לא מתאימה לפלט. נסו שוב :)</p>}{' '}
         </div>
@@ -39,30 +40,34 @@ export function getTaskTests() {
   return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
 }
 export function generateInputList() {
-  return ['3', '9', '60', '4', '1'];
+  return ['63\n72\n', '1\n10\n', '80\n70\n', '7\n7\n', '70\n77\n'];
 }
 
 export function processTestsOutputs(testsOutputs) {
   const names = testsName();
-  const answers = ['49', '339', '784', '7', '1'];
-  const fullAns = [
-    '3 10 5 16 8 4 2 1',
-    '9 28 14 7 22 11 34 17 52 26 13 40 20 10 5 16 8 4 2 1',
-    '60 30 15 46 23 70 35 106 53 160 80 40 20 10 5 16 8 4 2 1',
-    '4 2 1',
-    '1',
+  const answers = [
+    `B\n64\n65\n66\nB\n68\n69\nB\nB\nB`,
+    '1\n2\n3\n4\n5\n6\nB\n8\n9\n10',
+    'Error',
+    'B',
+    'B\nB\nB\nB\nB\nB\nB\nB',
   ];
 
   return testsOutputs.map((testsOutput, index) => {
     const inputLines = testsOutput.input.split('\n');
     const input = {
-      number: parseInt(inputLines[0]),
+      fisrt: parseInt(inputLines[0]),
+      second: parseInt(inputLines[1]),
     };
     const outputLines = testsOutput.output.split('\n');
-    const output = outputLines[outputLines.length - 2];
-    const correct = output.includes(answers[index]);
+    const output = outputLines.slice(2).join(' ');
+    const transformOutput = output.replace(/\s+/g, '').replace(/Boom|boom/g, 'B');
+    const correct =
+      index != 2
+        ? transformOutput == answers[index].replace(/\s+/g, '')
+        : transformOutput.toLowerCase().includes('error');
     const name = names[index];
-    return { name, input, output, correct, ans: answers[index], fullAns: fullAns[index] };
+    return { name, input, output, correct, ans: answers[index] };
   });
 }
 // instruction.jsx
@@ -76,22 +81,18 @@ export function desription() {
   return (
     <>
       <p>
-        השערת קולץ היא תיאוריה שעד היום טובי המתמטיקאים לא הצליחו להוכיח אותה: <br />
-        השערת קולץ אומרת שאם נתחיל ממספר שלם כלשהו ונבצע עליו את הפעולות הבאות שוב ושוב:
+        שבע בום. החוקים פשוטים:
         <br />
-        ● אם מתחלק ב7 <br />
-        ● אם המספר מכיל את הספרה 7  <br />
-        אז בסופו של דבר נגיע תמיד למספר 1.
+        סופרים את כל המספרים השלמים ממספר אחד עד מספר שני, אך אם מגיעים למספר ש<b> מתחלק ב-7 או מכיל את הספרה 7</b>
+        , מחליפים אותו במילה "Boom" וממשיכים למספר הבא.
+        <br />
+        קלוט מהמשתמש 2 מספרים, והדפס את מהלך המשחק מהמספר הראשון (כולל) עד המספר השני (כולל).
         <br />
         <br />
-        <b>
-          המשימה: קלטו מספר שלם מהמשתמש, בצעו את תהליך קולץ החל מהמספר שהתקבל מהמשתמש עד להגעה ל-1, והדפיסו את כל
-          המספרים שנוצרו בתהליך
-          <br />
-          לאחר מכן הדפיסו את <u>סכום</u> כל המספרים שנוצרו בתהליך{' '}
-        </b>
+        <u> דגשים:</u>
         <br />
-        ניתן להניח שהמשתמש יזין מספר שלם חיובי
+        ● מובטח שהמספרים שתקבלו יהיו שלמים בין 0 ל100
+        <br />● אם המספר הראשון שתקבלו גדול מהשני, הדפיסו 'Error'
       </p>
     </>
   );
@@ -101,26 +102,72 @@ export function examples() {
     <>
       <p style={{ textAlign: 'left', dir: 'rtl' }}>
         <code>
-          Please enter a number:
-          <b>
-            <span style={{ color: '#003061' }}> 11</span>
-          </b>
-          <br /> The Collatz sum is 259
+          First number:
+          <span style={{ color: '#003061' }}>
+            <b> 63</b>
+          </span>
+          <br /> Second number:
+          <span style={{ color: '#003061' }}>
+            <b> 72</b>
+          </span>
+          <br /> Boom
+          <br /> 64
+          <br /> 65
+          <br /> 66
+          <br /> Boom
+          <br /> 68
+          <br /> 69
+          <br /> Boom
+          <br /> Boom
+          <br /> Boom
         </code>
       </p>
       <br />
-
-      <p style={{ textAlign: 'right', dir: 'rtl' }}>
-        הסדרה המלאה היא:
-        <br />
-        11 <br />
-        34 <br />
-        17 <br /> 52 <br /> 26 <br /> 13 <br /> 40 <br /> 20 <br /> 10 <br /> 5<br /> 16 <br /> 8<br /> 4<br /> 2
-        <br />1 <br />
-        נשים לב שעבור מספר אי זוגי (לדוגמה - 11), נכפיל ב3 ונוסיף אחד. עבור מספר זוגי (לדוגמה 34) נחלק ב2. <br />
-        בסופו של דבר הגענו למספר 1<br />
-        לאחר שחישבנו את הסכום של המספרים (כולל 11) הגענו למספר 259
-      </p>
     </>
   );
 }
+
+const BoomTable = ({ gameString }) => {
+  const items = gameString.split('\n');
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', direction: 'ltr' }}>
+      <table style={{ borderCollapse: 'collapse' }}>
+        <tbody>
+          <tr>
+            {items.map((item, index) => (
+              <td
+                key={`t-${index}`}
+                style={{
+                  border: '1px solid black',
+                  padding: '2px',
+                  textAlign: 'center',
+                  width: '45px',
+                }}
+              >
+                {item.toLowerCase() === 'b' ? (
+                  <img key={`bomb-${index}`} src={BombIcon} alt="Bomb" style={{ width: '45px', fill: 'blue' }} />
+                ) : (
+                  item
+                )}
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const ans = `
+first = int(input('First number:'))
+second = int(input('Second number:'))
+if first > second:
+    print('Error')
+else:
+    for i in range (first,second+1):
+        if i//10==7 or i%10==7 or i%7==0:
+            print('Boom')
+        else:
+            print(i)
+`;
