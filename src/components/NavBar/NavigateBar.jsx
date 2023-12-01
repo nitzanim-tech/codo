@@ -22,10 +22,13 @@ const releasedTasks = [
   { value: 3, label: 'תרגול מונחה - השערת קולץ' },
   { value: 4, label: 'תרגול מונחה - יאללה, למחזורית!' },
   { value: 5, label: 'רשימות - wordle' },
-  { value: 6, label: 'for -  מספר משוכלל' },
-  { value: 7, label: 'for -  שבע בום' },
-  { value: 8, label: 'for -  קרץ אותי קרץ' },
+  { value: 6, label: 'for -  חימום' },
+  { value: 7, label: 'for -  מספר משוכלל' },
+  { value: 8, label: 'for -  שבע בום' },
+  { value: 9, label: 'אתגר - עיתונאי נולד' },
 ];
+
+
 const betaTasks = releasedTasks.concat([]);
 
 const selectItemDivide = [1, 2, 4,5];
