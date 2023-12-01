@@ -4,9 +4,10 @@ import * as TriangleInequality from './TriangleInequality';
 import * as CollatzConjecture from './CollatzConjecture';
 import * as RecyclingChallenge from './RecyclingChallenge';
 import * as WordleLists from './WordleLists';
-import * as SevenBoom from './SevenBoom';
-import * as KaratzOtiKaratz from './KaratzOtiKaratz';
+import * as ForIntro from './ForIntro';
 import * as PerfectNumber from './PerfectNumber';
+import * as SevenBoom from './SevenBoom';
+import * as ReadableParagraph from './ReadableParagraph';
 
 const tasks = {
   0: Experience,
@@ -15,9 +16,10 @@ const tasks = {
   3: CollatzConjecture,
   4: RecyclingChallenge,
   5: WordleLists,
-  6: PerfectNumber,
-  7: SevenBoom,
-  8: KaratzOtiKaratz,
+  6: ForIntro,
+  7: PerfectNumber,
+  8: SevenBoom,
+  9: ReadableParagraph,
 };
 
 export function testsName(task) {
