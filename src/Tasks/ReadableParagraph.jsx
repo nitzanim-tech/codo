@@ -1,7 +1,7 @@
 import React from 'react';
 
 export function testsName() {
-  return ['משפט שונה'];
+  return ['פסקה תקינה', 'מספר משפטים לא תקינים', 'משפט ארוך עם פסיקים', 'פסקה קצרה', 'פסקה ארוכה, משפט קצר'];
 }
 
 // TestsList.jsx
@@ -13,17 +13,22 @@ export function generateExplanation(selectedValue) {
     <>
       {selectedValue.input && (
         <div dir="rtl">
+          <p>הפסקה:</p>
+          <p style={{ fontFamily: 'yarden', fontSize: '100%' }}>{selectedValue.input.sentence}</p>
           <p>
-            הקלט:
-            <p style={{ fontFamily: 'yarden', fontSize: '130%' }}>{selectedValue.input.sentence}</p>
-            לאחר התיקונים, הפלט הנדרש:
-            <br />
-            <p style={{ fontFamily: 'yarden', fontSize: '130%' }}>{selectedValue.ans}</p>
-            <br />
-            ההדפסה האחרונה בקוד שכתבת:
-            <br />
-            <p style={{ fontFamily: 'yarden', fontSize: '130%' }}>{selectedValue.output}</p>
+            התייחסות לפסקה אמורה להכיל את המילה
+            {' ' + selectedValue.ans.paragraph}
+            {selectedValue.ans.sentences.join(', ') && (
+              <>
+                <br /> {` והמשפטים שאינם תקינים הם:`}
+                {' ' + selectedValue.ans.sentences.join(', ')}
+              </>
+            )}
+            <br /> <br />
+            ההדפסה בקוד שכתבת:
+            <br />{' '}
           </p>
+          <div dir="ltr">{selectedValue.output}</div>
           {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>לא מתאימה לפלט. נסו שוב :)</p>}{' '}
         </div>
       )}
@@ -37,24 +42,36 @@ export function getTaskTests() {
 }
 export function generateInputList() {
   return [
-    'המתמטיקאי והמהפכן הצרפתי אווריסט גלואה, מיוצרי תורת החבורות ומייסדה של תורת גלואה, שני תחומים מרכזיים באלגברה מופשטת, נהרג בדו-קרב ב-30 במאי 1832, בהיותו בן 21 בלבד. בידיעה כי חייו מתקרבים לקיצם, ובניסיון לשמר את מחקריו גם לאחר מותו, העלה גלואה על הכתב בלילה שלפני הדו-קרב את עיקרי רעיונותיו החשובים, בצורה מאוד לא מסודרת.',
+    'הפרחים המצויים על כוכבו של הנסיך הקטן היו פשוטים מאד, ולהם רק מחרזת אחת של עלי כותרת. פרחים אלה לא תפשו מקום רב ולא הפריעו לאיש. בבקר לא עבות היו מופיעים בינות לדשא והיו נובלים עם ערב. יום אחד צץ פרח חדש מזרע שנשא ברוח והגיע ממקום בלתי ידוע. הנסיך הקטן נתן עינו על ציץ זה, שלא היה דומה לפרחים האחרים המצויים על כוכבו. מי יודע – שמא זה זן חדש של עץ באובב?',
+    `המתמטיקאי והמהפכן הצרפתי אווריסט גלואה, מיוצרי תורת החבורות ומייסדה של תורת גלואה, נהרג בדו-קרב ב-30 במאי 1832, בהיותו בן 21 בלבד. חרף כל הסערות שפקדו אותו, המשיך גלואה בעבודתו המתמטית עד יומו האחרון. בידיעה כי חייו מתקרבים לקיצם, ובניסיון לשמר את מחקריו גם לאחר מותו, העלה גלואה על הכתב בלילה שלפני הדו-קרב את עיקרי רעיונותיו החשובים, בצורה מאוד לא מסודרת. מקום קבורתו לא ידוע. עבודתו לא זכתה להכרה בחייו  ורק ב-1843  11 שנים לאחר מותו  השקיע ז'וזף ליוביל חודשים אחדים בבדיקת כתבי היד שהותיר גלואה  והכיר בחשיבותם. `,
+    'במשחק כדורגל, בו יש 11 שחקנים בכל קבוצה ושופט אחד, מרבית הסיכויים הם שלשניים מבין האנשים שעל כר הדשא יהיה יום הולדת באותו תאריך. למעשה, בקבוצה אקראית של 23 אנשים קיים סיכוי של יותר מ-50% לכך, למרות שיש 366 תאריכי לידה אפשריים בשנה. תופעה הסתברותית זו, המכונה פרדוקס יום ההולדת, אינה פרדוקס במובן המקובל של המילה, שכן אין בה סתירה לוגית, אך היא סותרת את האינטואיציה של מרבית האנשים, הסבורים כי ההסתברות תהיה קטנה בהרבה מחצי. בקבוצה אקראית של 57 אנשים, הסיכוי לכך ששניים נולדו באותו יום בשנה עולה על 99%.',
+    `בסוף יהיה, יהיה טוב, הפרחים ישובו לפרוח, תראה שיהיה טוב, יהיה טוב, גם אם יש עוד דרך לעבור. בסוף יהיה, יהיה טוב, הפרחים ישובו לפרוח, תראה שיהיה טוב, יהיה טוב, גם מתוך החושך יידלק האור`,
+    `לואי ארמסטרונג היה חצוצרן וזמר ג'אז מפורסם. היה עני מרוד בילדותו. ארמסטרונג נאלץ להיאבק על קיומו כילד קטן. בני משפחת קרנופסקי, משפחה יהודית שהיגרה מליטא, ריחמו על הנער – ונתנו לו עבודות שונות בעסק ההובלה שהיה ברשותם. אֵם המשפחה התעקשה בכל יום שארמסטרונג לא יחזור לביתו לפני שאכל אצלה ארוחה מלאה. הקורנית הראשונה של ארמסטרונג נרכשה עבורו על ידי משפחת קרנופסקי. כהוקרה על היחס החם והתמיכה, ענד ארמסטרונג על צווארו, עד יומו האחרון, שרשרת ועליה מגן דוד.`,
   ];
 }
 
 export function processTestsOutputs(testsOutputs) {
   const names = testsName();
-  const answers = ['jk'];
-
+  const answers = [
+    { paragraph: 'ok', sentences: [''] },
+    { paragraph: 'ok', sentences: ['3', '4'] },
+    { paragraph: 'ok', sentences: ['2'] },
+    { paragraph: 'short', sentences: [''] },
+    { paragraph: 'long', sentences: ['1'] },
+  ];
   return testsOutputs.map((testsOutput, index) => {
     const inputLines = testsOutput.input.split('\n');
     const input = {
       sentence: inputLines[0],
     };
     const outputLines = testsOutput.output.split('\n');
-    const output = outputLines[outputLines.length - 2];
-    const correct = output.replace(/\s/g, '') === answers[index].replace(/\s/g, '');
+    const firstOutputLine = outputLines[1];
+    const output = outputLines.slice(2).join('\n');
+    const correct =
+      firstOutputLine.includes(answers[index].paragraph) &&
+      answers[index].sentences.every((sentence) => output.includes(sentence));
     const name = names[index];
-    return { name, input, output, correct, ans: answers[index] };
+    return { name, input, output: outputLines.slice(1).join('\n'), correct, ans: answers[index] };
   });
 }
 // instruction.jsx
@@ -62,7 +79,7 @@ export function getInstructions() {
   return { subjects, desription, examples };
 }
 export function subjects() {
-  return ['דגל', 'מחרוזות', 'for'];
+  return ['split', 'מחרוזות', 'רשימות', 'for'];
 }
 export function desription() {
   return (
@@ -82,7 +99,15 @@ export function desription() {
         <br />
         • בדקו עבור כל משפט האם הוא תקין (5-15 מילים במשפט רגיל, ועד 30 במשפט המכיל פסיק)
         <br />
-        • אם יש טעויות, הדפיסו את המשפטים הקצרים מדי או הארוכים מדי, עם הודעת "שגיאה" מתאימה.
+        • אם יש טעויות, הדפיסו את אינדקסי המשפטים הקצרים מדי או הארוכים מדי, עם הודעת "שגיאה" מתאימה.
+        <br />
+        <u>:דגשים</u> <br />• בהתייחסות לאורך הפסקה, יש להשתמש במילים
+        <br />
+        <code>long / short / ok</code>
+        <br />
+        • בהתייחסות למשפטים שאינם באורך תקין יש להשתמש באינדקס המשפטים כאשר המשפט הראשון מתחיל ב0
+        <br />
+        • כל משפט תמיד יסתיים בנקודה (גם האחרון)
         <br /> <br />
         <span style={{ color: 'gray' }}>
           <i>
@@ -99,32 +124,53 @@ export function desription() {
 export function examples() {
   return (
     <>
-      <p style={{ textAlign: 'right', dir: 'rtl' }}>
-        עבור הקלט:
-        <span style={{ color: '#003061' }}>
-          <b>
-            המתמטיקאי והמהפכן הצרפתי אווריסט גלואה, מיוצרי תורת החבורות ומייסדה של תורת גלואה, שני תחומים מרכזיים
-            באלגברה מופשטת, נהרג בדו-קרב ב-30 במאי 1832, בהיותו בן 21 בלבד. בידיעה כי חייו מתקרבים לקיצם, ובניסיון לשמר
-            את מחקריו גם לאחר מותו, העלה גלואה על הכתב בלילה שלפני הדו-קרב את עיקרי רעיונותיו החשובים, בצורה מאוד לא
-            מסודרת.
-          </b>
+      <p style={{ textAlign: 'left' }}>
+        <code>Enter the paragraph</code>
+        <br />
+        <span style={{ fontFamily: 'yarden', color: '#003061', textAlign: 'right', dir: 'rtl' }}>
+          ב-1 באפריל 1981 הודיעו בחדשות הבוקר של קול ישראל כי נפסל תוארה של מכבי תל אביב בכדורסל כאלופת אירופה הטרייה,
+          משום שקהל האוהדים שנכח באולם פרץ למגרש כשנייה אחת לפני תום המשחק ולכן לא נסתיים משחק זה במועדו הרשמי, ולפי
+          חוקת הכדורסל יש לקיים משחק חוזר. במהלך הבוקר ההוא רעשה הארץ, עד אשר חזר בו קול ישראל מדבריו והבהיר כי מדובר
+          בכזב לכבוד אחד באפריל, יום הכזבים הבינלאומי. לאחר ההבהרה רווח לקהל.
         </span>
+        <br />
+        <code>
+          The size of paragraph is ok
+          <br />
+          The sentence in index 0 is too long
+          <br />
+          The sentence in index 2 is too short
+        </code>
+      </p>
+      <br />
+      <p style={{ textAlign: 'right', dir: 'rtl' }}>
+        הפסקה באורך תקין מכוון שמכילה 3 משפטים <br />
+        המשפט הראשון ארוך מידי מכוון שהוא מכיל פסיקים ומכיל יותר מ30 מילים
+        <br />
+        המשפט השלישי קצר מידי מכוון שמכיל פחות מ5 מילים
       </p>
     </>
   );
 }
 
 const ans = `
-txt = input("enter paragraph here: ")
+txt = input("Enter paragraph here: ")
 sen = txt.split(".")
-if len(sen) > 5:
-    print("the paragraph is too long")
-elif len(sen) < 3:
-    print("the paragraph is too short")
+if len(sen)-1 > 5:
+    print("The paragraph is too long")
+elif len(sen)-1 < 3:
+    print("The paragraph is too short")
 else:
-    print("good size of paragraph")
-for s in sen:
-    length = len(s.split(" "))
+    print("The size of paragraph is ok")
+
+for i in range(len(sen)-1):
+    length = len(sen[i].split(" "))-1
     if length < 5:
-        print("the sentence: ", s, "is too short.")
+        print("The sentence in index "+ str(i)+ " is too short.")
+    if ',' in sen[i]:
+        if length > 30:
+            print("The sentence in index "+ str(i)+ " is too long.")
+    else:
+        if length > 15:
+            print("The sentence in index "+ str(i)+ " is too long.")
 `;
