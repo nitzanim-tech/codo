@@ -118,6 +118,7 @@ export default function SubmitsTable({ data }) {
 }
 
 const getSelectedVersion = (versions) => {
+  console.log(versions);
   if (versions.length === 0) {
     return { date: '', tests: '' };
   }
@@ -125,7 +126,7 @@ const getSelectedVersion = (versions) => {
   if (versionWithReview) {
     return versionWithReview; // there is a review
   }
-  const bestTestScore = Math.max(...versions.map((version) => parseInt(version.tests.split('/')[0])));
+  const bestTestScore = Math.max(...versions.map((version) => parseInt(version.tests.split('/')[0])||0));
   const versionsWithBestTestScore = versions.filter(
     (version) => parseInt(version.tests.split('/')[0]) === bestTestScore,
   );

@@ -292,4 +292,5 @@ else:
             index +=1
         print("Green letters: " + str(green_list))
         print("Orange letters: " + str(orange_list))
-        print("Gray letters: " + str(gray_list))`;
+        print("Gray letters: " + str(gray_list))
+        `;
