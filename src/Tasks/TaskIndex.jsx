@@ -8,6 +8,7 @@ import * as ForIntro from './ForIntro';
 import * as PerfectNumber from './PerfectNumber';
 import * as SevenBoom from './SevenBoom';
 import * as ReadableParagraph from './ReadableParagraph';
+import * as MultiplicationTable from './MultiplicationTable'
 
 const tasks = {
   0: Experience,
@@ -20,6 +21,7 @@ const tasks = {
   7: PerfectNumber,
   8: SevenBoom,
   9: ReadableParagraph,
+  10: MultiplicationTable,
 };
 
 export function testsName(task) {

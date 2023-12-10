@@ -29,9 +29,9 @@ const releasedTasks = [
 ];
 
 
-const betaTasks = releasedTasks.concat([]);
+const betaTasks = releasedTasks.concat([{ value: 10, label: 'לולאה מקוננת - לוח הכפל' }]);
 
-const selectItemDivide = [1, 2, 4,5];
+const selectItemDivide = [1, 2, 4, 5, 9];
 
 export default function NavigateBar({ task, setTask, isShowTask }) {
   const [currentUser, setCurrentUser] = useState(null);
