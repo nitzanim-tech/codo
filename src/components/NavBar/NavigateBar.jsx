@@ -29,7 +29,11 @@ const releasedTasks = [
 ];
 
 
-const betaTasks = releasedTasks.concat([{ value: 10, label: 'לולאה מקוננת - לוח הכפל' }]);
+const betaTasks = releasedTasks.concat([
+  { value: 10, label: 'לולאה מקוננת - לוח הכפל' },
+  { value: 11, label: 'לולאה מקוננת - wordle' },
+  { value: 12, label: 'תרגול מונחה - שפע יששכר' },
+]);
 
 const selectItemDivide = [1, 2, 4, 5, 9];
 
