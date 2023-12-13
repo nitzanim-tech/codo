@@ -31,11 +31,7 @@ const FirebaseAuth = ({ auth,app, currentUser, setCurrentUser }) => {
             <DropdownTrigger>
               <User name={currentUser.displayName} style={{ cursor: 'pointer' }} />
             </DropdownTrigger>
-            <DropdownMenu
-              variant="faded"
-              aria-label="Dropdown menu with description"
-              onAction={(key) => console.log(key)}
-            >
+            <DropdownMenu variant="faded" aria-label="Dropdown menu logout" onAction={(key) => console.log(key)}>
               <DropdownItem key="logout" onClick={() => handleSignOut()} startContent={<LogoutRoundedIcon />}>
                 התנתק
               </DropdownItem>
@@ -46,7 +42,7 @@ const FirebaseAuth = ({ auth,app, currentUser, setCurrentUser }) => {
             <DropdownTrigger>
               <User name={'אורח'} style={{ cursor: 'pointer' }} />
             </DropdownTrigger>
-            <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
+            <DropdownMenu variant="faded" aria-label="Dropdown menu sign or login">
               <DropdownItem
                 key="sign"
                 startContent={<AssignmentIndRoundedIcon />}

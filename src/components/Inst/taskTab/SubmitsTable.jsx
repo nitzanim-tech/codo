@@ -103,7 +103,7 @@ export default function SubmitsTable({ data }) {
                 <TableCell>{student.versions.length > 1 && <VersionsButton versions={student.versions} />}</TableCell>
                 <TableCell>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <DonutChart ratio={selectedVersion.tests} percentage={percentage} size={50} />
+                    <DonutChart ratio={selectedVersion.tests} percentage={percentage} size={45} />
                   </div>
                 </TableCell>
                 <TableCell>{selectedVersion.date ? formatDate(selectedVersion.date) : ''}</TableCell>

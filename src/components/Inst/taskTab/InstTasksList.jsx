@@ -9,7 +9,7 @@ const DropdownWrapper = ({ children }) => (
   </div>
 );
 
-const dividers = [1, 2, 4, 5];
+const dividers = [1, 2, 4, 5,9];
 
 export default function InstTasksList({ selectedTask, setSelectedTask }) {
   return (

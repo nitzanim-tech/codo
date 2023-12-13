@@ -5,16 +5,12 @@ import { signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { ModalBody, ModalFooter, Button } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
-import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import GoogleIcon from '@mui/icons-material/Google';
 import { isUserExists } from '../../requests/registerUser';
 import { signOut } from 'firebase/auth';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
 const LoginModal = ({ app, auth, open, setOpen }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
 
   const handleGoogleSignIn = async () => {
@@ -33,15 +29,6 @@ const LoginModal = ({ app, auth, open, setOpen }) => {
     }
   };
 
-  const handleEmailSignIn = async (event) => {
-    event.preventDefault();
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log(userCredential.user);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
   const handleClose = () => {
     setOpen(false);
     setError('');
@@ -57,12 +44,6 @@ const LoginModal = ({ app, auth, open, setOpen }) => {
             </Button>
             <Divider />
 
-            {/* <Input label="מייל" value={email} onChange={(e) => setName(e.target.value)} />
-            <Input label="ססמה" value={password} onChange={(e) => setLastName(e.target.value)} />
-
-            <Button onClick={handleEmailSignIn} startContent={<EmailRoundedIcon />} isDisabled={!email || !password}>
-              התחבר באמצעות מייל וססמה
-            </Button> */}
             {error && (
               <p style={{ fontWeight: 'bold', color: 'red' }}>
                 <CancelRoundedIcon />
