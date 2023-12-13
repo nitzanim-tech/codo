@@ -1,9 +1,17 @@
 import React from 'react';
-import BombIcon from '../assets/svg/tasks/bomb.svg';
+import AngryIcon from '../assets/svg/tasks/angry-woman.svg';
 import Grid from '@mui/material/Grid';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
 export function testsName() {
-  return ['המספר שבדוגמה', 'מסיים לפני ששוני מפריעה', 'מסיים בטווח ההפרעה', 'מסיים בהפרעה האחרונה', 'מסיים לאחר כל ההפרעות'];
+  return [
+    'המספר שבדוגמה',
+    'מסיים לפני ששוני מפריעה',
+    'מסיים בטווח ההפרעה',
+    'מסיים בהפרעה האחרונה',
+    'מסיים לאחר כל ההפרעות',
+  ];
 }
 
 // TestsList.jsx
@@ -16,19 +24,35 @@ export function generateExplanation(selectedValue) {
       {selectedValue.input && (
         <div dir="rtl">
           <p>
-            מספר ראשון: {selectedValue.input.num + ', '}
-            <br />
-            מהלך המשחק:
-            <br />
+            עבור כמות המוצרים: {selectedValue.input.num + ', '}
+            מהלך הספירה:
+            <br /> <br />
           </p>
-          <BoomTable gameString={selectedValue.ans} />
-          <p>
-            <br />
-            ההדפסה האחרונה בקוד שכתבת:
-            <br />
-            {selectedValue.output}
-          </p>
-          {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>לא מתאימה לפלט. נסו שוב :)</p>}{' '}
+          <TableAA number={selectedValue.input.num} />
+          <br />
+          <p>סכום השאלות {selectedValue.ans.questions}</p>
+          <p>בקוד שכתבת,</p>
+          {
+            <>
+              <div style={{ display: 'flex' }}>
+                {selectedValue.reasonPass.sum ? (
+                  <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
+                ) : (
+                  <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
+                )}
+                <p>כל המספרים הודפסו</p>
+              </div>
+              <div style={{ display: 'flex' }}>
+                {selectedValue.reasonPass.questions ? (
+                  <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
+                ) : (
+                  <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
+                )}
+                <p>סכום השאלות נכון</p>
+              </div>
+            </>
+          }
+          {selectedValue.correct ? <p>כל הכבוד!</p> : <p>נסו שוב :)</p>}{' '}
         </div>
       )}
     </>
@@ -40,17 +64,25 @@ export function getTaskTests() {
   return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
 }
 export function generateInputList() {
-  return ['50\n','10\n','22\n', '24\n', '40\n'];
+  return ['50\n', '10\n', '22\n', '24\n', '40\n'];
+}
+
+function checkAns({ outputLines, answer }) {
+  const lines = outputLines.map((line) => line.replace(/[^0-9]/g, ''));
+  const lastLine = lines[lines.length - 2];
+  const nonEmptyLines = lines.filter(Boolean);
+  const sum = nonEmptyLines.slice(0, -1).reduce((acc, curr) => acc + parseInt(curr), 0);
+  return { questions: lastLine == answer.questions, sum: sum == answer.sum };
 }
 
 export function processTestsOutputs(testsOutputs) {
   const names = testsName();
   const answers = [
-    `B\n64\n65\n66\nB\n68\n69\nB\nB\nB`,
-    '1\n2\n3\n4\n5\n6\nB\n8\n9\n10',
-    'Error',
-    'B',
-    'B\nB\nB\nB\nB\nB\nB\nB',
+    { questions: 51, sum: 2545 },
+    { questions: 3, sum: 55 },
+    { questions: 20, sum: 694 },
+    { questions: 35, sum: 1270 },
+    { questions: 48, sum: 2090 },
   ];
 
   return testsOutputs.map((testsOutput, index) => {
@@ -60,13 +92,10 @@ export function processTestsOutputs(testsOutputs) {
     };
     const outputLines = testsOutput.output.split('\n');
     const output = outputLines.slice(2).join(' ');
-    const transformOutput = output.replace(/\s+/g, '').replace(/Boom|boom/g, 'B');
-    const correct =
-      index != 2
-        ? transformOutput == answers[index].replace(/\s+/g, '')
-        : transformOutput.toLowerCase().includes('error');
+    const reasonPass = checkAns({ outputLines, answer: answers[index] });
+    const correct = reasonPass.sum && reasonPass.questions;
     const name = names[index];
-    return { name, input, output, correct, ans: answers[index] };
+    return { name, input, output, correct, ans: answers[index], reasonPass: reasonPass };
   });
 }
 // instruction.jsx
@@ -74,7 +103,7 @@ export function getInstructions() {
   return { subjects, desription, examples };
 }
 export function subjects() {
-  return ['counter', 'לולאה מקוננת', 'for'];
+  return ['counter', 'לולאות', 'אלגוריתמיקה'];
 }
 export function desription() {
   return (
@@ -99,6 +128,8 @@ export function desription() {
         <br />
         <u> דגשים:</u>
         <br />● מובטח שהמספרים שיתקבלו יהיו שלמים
+        <br />● יש להדפיס את כל המספרים שרמזי סופר
+        <br />● בשורה האחרונה יש להדפיס את מספר השאלות שנשאלו
       </p>
     </>
   );
@@ -107,9 +138,13 @@ export function desription() {
 export function examples() {
   return (
     <>
-      <div dir='ltr' style={{ textAlign: 'left' }}>
+      <p>
+        (חילקנו עבורכם את הפלט לעמודות, והוספנו סימון באינקדסים של השאלות כדי שיהיה קל לעקוב)
+        <br /> <br />
+      </p>
+      <div dir="ltr" style={{ textAlign: 'left' }}>
         <code>
-          Enter the number of products Ramsey have to count:{' '}
+          Enter the number of products Ramzi has to count:{' '}
           <span style={{ color: '#003061' }}>
             <b> 50</b>
           </span>
@@ -442,65 +477,97 @@ export function examples() {
         <br />
         <code>Questions for Shira: 51</code>
       </div>
+      <p>
+        מכוון שאם נספור את כל השאלות, נגיע למספר 51
+        <br /> <br />
+      </p>
     </>
   );
 }
 
-const BoomTable = ({ gameString }) => {
-  const items = gameString.split('\n');
-
+const TableAA = ({ number }) => {
+  const interrupts = [20, 21, 22, 23, 24];
+  const numbers = [];
+  interrupts.forEach((inter) => {
+    number > inter && numbers.push(inter);
+  });
+  numbers.push(number);
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', direction: 'ltr' }}>
-      <table style={{ borderCollapse: 'collapse' }}>
-        <tbody>
-          <tr>
-            {items.map((item, index) => (
-              <td
-                key={`t-${index}`}
-                style={{
-                  border: '1px solid black',
-                  padding: '2px',
-                  textAlign: 'center',
-                  width: '45px',
-                }}
-              >
-                {item.toLowerCase() === 'b' ? (
-                  <img key={`bomb-${index}`} src={BombIcon} alt="Bomb" style={{ width: '45px', fill: 'blue' }} />
-                ) : (
-                  item
-                )}
-              </td>
-            ))}
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <>
+      {numbers.map((number, index) => {
+        const rows = [];
+        let currentRow = [];
+        for (let i = 1; i <= number; i++) {
+          currentRow.push(i);
+          if (i % 9 === 0) {
+            rows.push(currentRow);
+            currentRow = [];
+          }
+        }
+
+        if (currentRow.length > 0) {
+          rows.push(currentRow);
+        }
+
+        return (
+          <table key={index}>
+            <tbody>
+              {rows.map((row, index) => (
+                <tr key={index}>
+                  {row.map((cell, index) => (
+                    <td
+                      key={index}
+                      style={{
+                        padding: '2px',
+                        textAlign: 'center',
+                        width: '45px',
+                        color: cell % 3 === 0 ? 'white' : '',
+                        backgroundColor: cell % 3 === 0 ? '#BF1E2E' : 'white',
+                        border: '1px solid black',
+                      }}
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                  {interrupts.includes(row[row.length - 1]) ? (
+                    <td>
+                      <img src={AngryIcon} alt="Angry" style={{ width: '30px' }} />
+                    </td>
+                  ) : null}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      })}
+    </>
   );
 };
 
+
 const ans = `
-products_num = int(input("Please enter the number of products Ramsey needs to count: "))
+products_num = int(input("Please enter the number of products: "))
 questions_counter = 0
 for interrupt_index in range(20, 25):
-    for current_index in range(1, interrupt_index+1):
+        for current_index in range(1, interrupt_index+1):
+            if current_index % 3 == 0:
+                questions_counter += 1
+                print(str(current_index) + " Q?")
+            else:
+                print(str(current_index))
+            if current_index >= products_num:
+                break
+        if current_index >= products_num:
+            break
+        else:
+            print("Shuni interrupts")
+if products_num > 24:
+    for current_index in range(1, products_num + 1):
         if current_index % 3 == 0:
             questions_counter += 1
             print(str(current_index) + " Q?")
         else:
             print(str(current_index))
-        if current_index >= products_num:
-            break
-    if current_index >= products_num:
-        break
-    else:
-        print("Shuni interrupts, starting from the beginning")
 
-for current_index in range(1, products_num + 1):
-    if current_index % 3 == 0:
-        questions_counter += 1
-        print(str(current_index) + " Q?")
-    else:
-        print(str(current_index))
-
-print("The number of questions for Shira: " + str(questions_counter))
+print("Questions: " + str(questions_counter))
 `;
