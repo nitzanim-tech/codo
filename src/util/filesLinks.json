@@ -22,13 +22,13 @@
       "type": "ppt",
       "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DdYy6kaWesn4kS1Y?e=8h9CGJ"
     },
-    "תנאים - אי שייון המשולש": {
+    "תנאים - אי שווין המשולש": {
       "type": "task",
       "index": "2"
     }
   },
   "while": {
-    "לולאות while": {
+    "לולאת while": {
       "type": "ppt",
       "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DcRTNz3jvDHPjqgo?e=1gTYIl"
     }
@@ -48,9 +48,36 @@
     }
   },
   "רשימות": {
+    "רשימות בסיסי": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgQVSSLFKJHdwBqCI?e=ryWRod"
+    },
+
     "wordle": {
       "type": "task",
       "index": "5"
+    }
+  },
+  "לולאת for": {
+    "לולאת for": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgQaxgLr4T5VKNyi5?e=YUiKO7"
+    },
+    "חימום": {
+      "type": "task",
+      "index": "6"
+    },
+    "מספר משוכלל": {
+      "type": "task",
+      "index": "7"
+    },
+    "שבוע בום": {
+      "type": "task",
+      "index": "8"
+    },
+    "אתגר - עיתונאי נולד": {
+      "type": "task",
+      "index": "9"
     }
   }
 }

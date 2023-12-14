@@ -23,8 +23,8 @@ const Donut = styled.div`
 `;
 
 const Hole = styled.div`
-  width: ${({ size }) => size * 0.6}px;
-  height: ${({ size }) => size * 0.6}px;
+  width: ${({ size }) => size * 0.7}px;
+  height: ${({ size }) => size * 0.7}px;
   border-radius: 50%;
   background: #fff;
 `;

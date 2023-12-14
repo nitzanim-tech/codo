@@ -12,7 +12,7 @@ import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageTasks from '../components/Inst/manageTab/ManageTasks';
 import { CircularProgress } from '@nextui-org/react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
-
+import PassMatrix from '../components/Inst/statusTab/PassMatrix';
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
@@ -91,11 +91,36 @@ function Instructors() {
                     </div>
                   </Tab>
                   <Tab key="students" title="חניכים">
-                    <StudentsTable isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
+                    <div
+                      dir="ltr"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <StudentsTable
+                        isLoading={isLoading}
+                        studentsRawData={studentTableFormattedData(studentsRawData)}
+                        app={app}
+                      />
+                    </div>
                   </Tab>
                   {/* <Tab key="manage" title="ניהול משימות">
             <ManageTasks isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
           </Tab> */}
+                  <Tab key="status" title="סטטוס">
+                    <div
+                      dir="ltr"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <PassMatrix studentsRawData={studentsRawData} />
+                    </div>
+                  </Tab>
                 </Tabs>
               </div>
             </>
@@ -113,10 +138,22 @@ function Instructors() {
 export default Instructors;
 
 const studentTableFormattedData = (data) => {
+  console.log(data);
   if (data) {
     return data.map((item, index) => {
       const { submissions, ...rest } = item;
-      return { ...rest, id: index, uid: item.uid };
+      let subLength = 0;
+      if (submissions) {
+        if (Array.isArray(submissions)) subLength = submissions.length;
+        else subLength = Object.keys(submissions).length;
+      }
+
+      return {
+        ...rest,
+        id: index,
+        uid: item.uid,
+        subLength,
+      };
     });
   } else {
     return [];

@@ -123,7 +123,13 @@ function Managers() {
                                 userId: student.id,
                                 permission: newPermission,
                               });
-                              if (haveAdded) student.permissions.push(newPermission);
+                              if (haveAdded) {
+                                student.permissions.push(newPermission);
+                                // const updatedInstructorsData = instructorsData.map((s) =>
+                                //   s.id === student.id ? { ...s, permissions: [...s.permissions, newPermission] } : s,
+                                // );
+                                // setInstructorsData(updatedInstructorsData);
+                              }
                             }
                           }}
                         >

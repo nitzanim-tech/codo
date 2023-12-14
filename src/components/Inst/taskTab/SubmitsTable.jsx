@@ -103,7 +103,7 @@ export default function SubmitsTable({ data }) {
                 <TableCell>{student.versions.length > 1 && <VersionsButton versions={student.versions} />}</TableCell>
                 <TableCell>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <DonutChart ratio={selectedVersion.tests} percentage={percentage} size={50} />
+                    <DonutChart ratio={selectedVersion.tests} percentage={percentage} size={45} />
                   </div>
                 </TableCell>
                 <TableCell>{selectedVersion.date ? formatDate(selectedVersion.date) : ''}</TableCell>
@@ -118,6 +118,7 @@ export default function SubmitsTable({ data }) {
 }
 
 const getSelectedVersion = (versions) => {
+  console.log(versions);
   if (versions.length === 0) {
     return { date: '', tests: '' };
   }
@@ -125,7 +126,7 @@ const getSelectedVersion = (versions) => {
   if (versionWithReview) {
     return versionWithReview; // there is a review
   }
-  const bestTestScore = Math.max(...versions.map((version) => parseInt(version.tests.split('/')[0])));
+  const bestTestScore = Math.max(...versions.map((version) => parseInt(version.tests.split('/')[0])||0));
   const versionsWithBestTestScore = versions.filter(
     (version) => parseInt(version.tests.split('/')[0]) === bestTestScore,
   );

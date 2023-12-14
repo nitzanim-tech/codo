@@ -26,7 +26,7 @@ export default function ExcelButton({ data }) {
     const workbook = new ExcelJS.Workbook();
 
     submissionsByIndex.forEach((submissions, index) => {
-      const sheetName = `Task ${index + 1}`; // Naming the sheets
+      const sheetName = `Task ${index + 1}`; 
       const worksheet = workbook.addWorksheet(sheetName);
       worksheet.addRow(['Name', 'Last Name', 'Region', 'Group', 'Pass', 'Review']);
       submissions.forEach((student) => {
@@ -48,7 +48,7 @@ export default function ExcelButton({ data }) {
     <Button
       isIconOnly
       variant="faded"
-      onClick={handleDownloadExcel} // Call the download function
+      onClick={handleDownloadExcel} 
       radius="full"
       style={{ marginLeft: '-30px' }}
     >
