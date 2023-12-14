@@ -1,35 +1,37 @@
 import React from 'react';
-import { Listbox, ListboxItem } from '@nextui-org/react';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
+import { Directions } from '@mui/icons-material';
+import tasks from '../../../Tasks/TasksList.json';
 
-const ListboxWrapper = ({ children }) => (
+const DropdownWrapper = ({ children }) => (
   <div className="w-full max-w-[260px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100">
     {children}
   </div>
 );
-const tasks = [
-  { key: 0, name: 'הכנה 0 - התנסות' },
-  { key: 1, name: 'הכנה 1 - מעלית' },
-  { key: 2, name: 'תנאים - אי שיוון המשולש' },
-  { key: 3, name: 'תרגול מונחה - השערת קולץ' },
-  { key: 4, name: '!תרגול מונחה - יאללה, למחזורית' },
-  { key: 5, name: 'wordle - רשימות' },
-];
-const dividers = [1, 2, 4];
+
+const dividers = [1, 2, 4, 5,9];
 
 export default function InstTasksList({ selectedTask, setSelectedTask }) {
   return (
-    <ListboxWrapper>
-      <Listbox
-        aria-label="Example with disabled actions"
-        selectionMode="single"
-        onAction={(key) => setSelectedTask(key)}
-      >
-        {tasks.map((task) => (
-          <ListboxItem key={task.key} showDivider={dividers.includes(task.key)}>
-            {task.key == selectedTask ? <b>{task.name}</b> : task.name}
-          </ListboxItem>
-        ))}
-      </Listbox>
-    </ListboxWrapper>
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <DropdownWrapper>
+        <Dropdown>
+          <DropdownTrigger>
+            <button className="py-2 px-4 w-full text-left">{tasks[selectedTask]?.name || 'בחר משימה'}</button>
+          </DropdownTrigger>
+          <DropdownMenu>
+            {tasks.map((task) => (
+              <DropdownItem
+                key={task.key}
+                onClick={() => setSelectedTask(task.key)}
+                showDivider={dividers.includes(task.key)}
+              >
+                {task.name}
+              </DropdownItem>
+            ))}
+          </DropdownMenu>
+        </Dropdown>
+      </DropdownWrapper>
+    </div>
   );
 }
