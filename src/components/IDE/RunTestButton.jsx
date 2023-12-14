@@ -33,7 +33,7 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, task })
     return builtins.input()
   `);
 
-      pyodide.runPython(String(code));
+      pyodide.runPython(code);
       let output = pyodide.runPython('sys.stdout.getvalue()');
       return output;
     } catch (error) {
