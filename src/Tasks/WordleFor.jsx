@@ -1,41 +1,33 @@
 import React from 'react';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
 // instruction.jsx
 export function getInstructions() {
   return { subjects, desription, examples };
 }
 export function subjects() {
-  return ['while', 'רשימות', 'תנאים'];
+  return ['לולאות מקוננות', 'רשימות', 'for', 'while'];
 }
 
 export function desription() {
   return (
     <>
       <p>
-        Wordle הוא משחק ניחוש מילים שכבש את העולם. במשחק, עליכם לנחש מילה סודית בת 5 אותיות. לאחר כל ניחוש, כל אות מקבלת
-        צבע:
+        Wordle, התגעתגעתם?
         <br />
-        אפור – אם האות אינה חלק מהמילה הסודית
-        <br />
-        כתום – אם האות היא חלק מהמילה אבל לא בעמדה שניחשתם
-        <br />
-        ירוק – אם האות נמצאת בעמדה הנכונה שניחשתם
-        <br />
-        לדוגמה, אם המילה הסודית היא "lists" והניחוש הוא "light", האותיות l ו-i יהיו ירוקות, האותיות g ו-h יהיו אפורות,
-        והאות t תהיה כתומה.
-        <br /> <br />
-        בתרגיל זה, תאפשרו למשתמש ניחוש אחד בלבד (בהמשך נלמד איך לאפשר מספר ניחושים).
-        <b>ממשו סיבוב אחד של המשחק וורדל עם המילה הסודית "lists".</b> <br />
-        לאחר שהמשתמש מנחש מילה, הדפיסו את צבעי האותיות כמשוב. שימו לב שמותרות רק מילים בנות 5 אותיות.
-        <br />
+        אותם כללים, עם כמה דגשים חדשים <br />
         <u>דגשים:</u>
         <br />
-        ● אם המילה שניחש הכילה מספר אותיות שגוי, הדפיסו כמה אותיות יש במילה שלו
+        ● לפני המשחק, יש לקלוט מהמשתמש את המילה הסודית
         <br />
-        ● אם המשתמש ניחש נכון, הדפיסו "Correct"
+        ● במשחק יהיו מספר תורות. המשחק יסתיים כאשר השחקן ינחש 3 פעמים, או כאשר ינחש את המילה הראשונה
         <br />
-        ● אם מספר האותיות נכון אבל הניחוש שגוי, הדפיסו את הצבע (ירוק, כתום, אפור) ואז את כל האותיות באותו הצבע
+        ● לפני כל סבב יש להדפיס את האינדקס שלו (הסבב הראשון הוא 1). יש להדפיס גם את המילה Round
         <br />
+        ● בכל סבב, יש להדפיס את כל האותיות האפורות, הירוקות והכתומות של אותו הסבב <br />
+        ● בין אם השחק ניצח או הפסיד, יש להדפיס הודעה מתאימה הכוללת 'won' או 'lost' <br />● השתדלו להשתמש גם בלולאת for
+        וגם בלולאת while
       </p>
     </>
   );
@@ -49,47 +41,53 @@ export function examples() {
           דוגמה 1:
           <br />{' '}
         </p>
-        <code>
-          Enter guess:
-          <span style={{ color: '#003061' }}>
-            <b> python</b>
-          </span>
-          <br />
-          Your guess has 6 letters and should have 5<br />
-        </code>
+        <div dir="ltr">
+          <code>
+            Enter secrete word:
+            <span style={{ color: '#003061' }}>
+              <b> world</b>
+            </span>
+            <br />
+            Round 1: weird <br />
+            Green letters: ['w', 'd'] <br />
+            Orange letters: ['r'] <br />
+            Gray letters: ['e', 'i'] <br />
+            Round 2: world <br />
+            Green letters: ['w', 'o', 'r', 'l', 'd'] <br />
+            Orange letters: [] <br />
+            Gray letters: [] <br />
+            Correct. You won! <br />
+          </code>
+        </div>
         <p style={{ textAlign: 'right', dir: 'rtl' }}>
           <br />
           דוגמה 2:
           <br />{' '}
         </p>
-        <code>
-          Enter guess:
-          <span style={{ color: '#003061' }}>
-            <b> light</b>
-          </span>
-          <br />
-          Green letters: ['l', 'i']
-          <br />
-          Orange letters: ['t']
-          <br />
-          Gray letters: ['g', 'h']
-          <br />
-        </code>
-
-        <p style={{ textAlign: 'right', dir: 'rtl' }}>
-          {' '}
-          דוגמה 3:
-          <br />{' '}
-        </p>
-        <code>
-          Enter guess:
-          <span style={{ color: '#003061' }}>
-            <b> lists</b>
-          </span>
-          <br />
-          !Correct
-          <br />
-        </code>
+        <div dir="ltr">
+          <code>
+            Enter secrete word:
+            <span style={{ color: '#003061' }}>
+              <b> python</b>
+            </span>
+            <br />
+            Round 1: driven <br />
+            Green letters: ['n']
+            <br />
+            Orange letters: []
+            <br /> Gray letters: ['d', 'r', 'i', 'v', 'e']
+            <br /> Round 2: client
+            <br /> Green letters: []
+            <br /> Orange letters: ['n', 't']
+            <br /> Gray letters: ['c', 'l', 'i', 'e']
+            <br /> Round 3: pycnic
+            <br /> Green letters: ['p', 'y']
+            <br /> Orange letters: ['n']
+            <br /> Gray letters: ['c', 'i', 'c']
+            <br /> Out of trials. You lost
+            <br />
+          </code>
+        </div>
       </p>
     </>
   );
@@ -97,82 +95,105 @@ export function examples() {
 
 // RunTestButton.jsx
 export function testsName() {
-  return [
-    'פחות מ5 אותיות',
-    'יותר מ5 אותיות',
-    'מילה נכונה',
-    'אותיות אפורות',
-    'אותיות כתומות',
-    'אותיות ירוקות',
-    'שילוב של כמה סוגי אותיות',
-  ];
+  return ['נצחון בתור הראשון', 'נצחון בתור השני', 'נצחון בתור השלישי', 'הפסד'];
 }
 export function getTaskTests() {
   return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
 }
 export function generateInputList() {
-  return ['ben', 'supercalifragilisticexpialidocious', 'lists', 'crane', 'climb', 'liked', 'light'];
+  return [
+    'nitzanim\nnitzanim\n',
+    'world\nweird\nworld\n',
+    'program\ntroilus\nproduct\nprogram\n',
+    'python\ndriven\nclient\npycnic\n',
+  ];
 }
 
 export function processTestsOutputs(testsOutputs) {
   const names = testsName();
   const answers = [
-    { lastLine: '3' },
-    { lastLine: '34' },
-    { green: 'list', lastLine: 'correct' },
-    { gray: 'crane' },
-    { orange: 'li', gray: 'cmb' },
-    { green: 'li', gray: 'ked' },
-    { green: 'li', orange: 't', gray: 'gh' },
+    {
+      feedback: [{ green: 'nitzanim', orange: '', gray: '' }],
+      lastLine: 'won',
+    },
+    {
+      feedback: [
+        { green: 'wd', orange: 'r', gray: 'ei' },
+        { green: 'world', orange: '', gray: '' },
+      ],
+      lastLine: 'won',
+    },
+    {
+      feedback: [
+        { green: 'ro', orange: '', gray: 'tilus' },
+        { green: 'pro', orange: '', gray: 'duct' },
+        { green: 'program', orange: '', gray: '' },
+      ],
+      lastLine: 'won',
+    },
+    {
+      feedback: [
+        { green: 'n', orange: '', gray: 'drive' },
+        { green: '', orange: 'nt', gray: 'clie' },
+        { green: 'py', orange: 'n', gray: 'clie' },
+      ],
+      lastLine: 'lost',
+    },
   ];
 
   return testsOutputs.map((testsOutput, index) => {
     const inputLines = testsOutput.input.split('\n');
     const input = {
       word: inputLines[0],
+      trials: [inputLines[1], inputLines[2] || null, inputLines[3] || null],
     };
-    const outputLines = testsOutput.output.split('\n');
-
-    const output = {
-      lastLine: outputLines[outputLines.length - 2],
-      gray: outputLines.find((line) => line.includes('gray') || line.includes('Gray')) || null,
-      orange: outputLines.find((line) => line.includes('orange') || line.includes('Orange')) || null,
-      green: outputLines.find((line) => line.includes('green') || line.includes('Green')) || null,
-    };
+    const output = textToBlocks(testsOutput.output);
 
     function checkColor(output, color, answer) {
-      if (output[color] === null) {
-        return false;
-      }
-      for (const letter of answer) {
-        if (!output[color].replace(new RegExp(color, 'gi'), '').includes(letter)) {
+      try {
+        if (output[color] === null) {
           return false;
         }
+        for (const letter of answer) {
+          if (!output[color].replace(new RegExp(color, 'gi'), '').includes(letter)) {
+            return false;
+          }
+        }
+        return true;
+      } catch {
+        return false;
       }
-      return true;
     }
-    const correct = (index) => {
-      switch (index) {
-        case 0:
-        case 1:
-        case 2:
-          return output.lastLine.toLowerCase().includes(answers[index].lastLine);
-        case 3:
-          return checkColor(output, 'gray', answers[index].gray);
-        case 4:
-          return checkColor(output, 'orange', answers[index].orange) && checkColor(output, 'gray', answers[index].gray);
-        case 5:
-          return checkColor(output, 'green', answers[index].green) && checkColor(output, 'gray', answers[index].gray);
-        case 6:
-          return (
-            checkColor(output, 'green', answers[index].green) &&
-            checkColor(output, 'orange', answers[index].orange) &&
-            checkColor(output, 'gray', answers[index].gray)
-          );
-      }
+
+    const checkSingleTrial = (output, answer) => {
+      return output && answer
+        ? checkColor(output, 'green', answer.green || '') &&
+            checkColor(output, 'orange', answer.orange || '') &&
+            checkColor(output, 'gray', answer.gray || '')
+        : null;
     };
+
+    const makeFullCorrect = (index) => {
+      const feedback = output?.trialsFeedback || {};
+      const answer = answers[index].feedback;
+      console.log(output, index);
+      return {
+        0: checkSingleTrial(feedback[0], answer[0]),
+        1: checkSingleTrial(feedback[1], answer[1]),
+        2: checkSingleTrial(feedback[2], answer[2]),
+        lastLine: output.lastLine.toLowerCase().includes(answers[index].lastLine),
+      };
+    };
+    const checkCorrect = (fullCorrect) =>
+      Object.values(fullCorrect)
+        .filter((value) => value !== null)
+        .every((value) => value);
+
+    const fullCorrect = makeFullCorrect(index);
+    const correct = checkCorrect(fullCorrect);
     const name = names[index];
-    return { name, input, output, correct: correct(index), ans: answers[index] };
+
+    return { name, input, output, correct, fullCorrect, ans: answers[index] };
   });
 }
 
@@ -181,52 +202,92 @@ export function getTaskExplanation() {
   return { generateExplanation: (selectedValue) => generateExplanation(selectedValue) };
 }
 export function generateExplanation(selectedValue) {
-  const isColorExist = (output) => output.green || output.orange || output.gray;
-  function ShowAns({ output }) {
-    return (
-      <>
-        {isColorExist(output) ? (
-          <>
-            <p>בהדפסות בקוד שכתבת:</p>
-            {Object.entries(output).map(([key, value]) => {
-              if (value !== null && key != 'lastLine') {
-                return (
-                  <p key={key} dir="ltr">
-                    {key}: {value}
-                  </p>
-                );
-              }
-              return null;
-            })}
-          </>
-        ) : (
-          <p>בשורה האחרונה בהדפסה: {output.lastLine} </p>
-        )}
-      </>
-    );
-  }
-
   return (
     <>
       {selectedValue.input && (
         <div dir="rtl">
           <p>
-            עבור הקלט - {selectedValue.input.word} ,
+            עבור המילה הסודית - {selectedValue.input.word} , ועבור הניחושים:
             <br />
-            הפתרון הוא {!isColorExist(selectedValue.output) && selectedValue.ans.lastLine}
             <br />
-            <WordleTable colorMap={selectedValue.ans} word={selectedValue.input.word} />
-            <br />
-            <ShowAns output={selectedValue.output} />
+            {selectedValue.ans.feedback.map((trialFeedback, i) => (
+              <div key={i}>
+                <WordleTable colorMap={trialFeedback} word={selectedValue.input.trials[i]} />
+                <p direction="ltr">
+                  {selectedValue.fullCorrect[i] ? (
+                    <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
+                  ) : (
+                    <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
+                  )}
+                  הפלט שלך: <br />
+                  <div style={{ textAlign: 'left', dir: 'ltr' }}>
+                    {Object.values(selectedValue.output.trialsFeedback[i] || {}).map((value) => (
+                      <span>{value.replace(/['"\[\]]/g, '') + ' | '}</span>
+                    ))}
+                  </div>
+                </p>
+                <br />
+              </div>
+            ))}
+            {selectedValue.fullCorrect['lastLine'] ? (
+              <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
+            ) : (
+              <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
+            )}
+            השחקן {selectedValue.ans.lastLine == 'won' ? 'ניצח. ' : 'הפסיד. '}
+            השורה האחרונה בהדפסה: <br />
+            {selectedValue.output.lastLine}
           </p>
-          {selectedValue.correct ? <p>מוכל הפתרון. כל הכבוד!</p> : <p>לא מוכל הפתרון. נסו שוב :)</p>} <br />
+          <br />
+          {selectedValue.correct ? <p> כל הכבוד!</p> : <p>נסו שוב :)</p>}
         </div>
       )}
     </>
   );
 }
 
-const WordleTable = ({ colorMap, word }) => {
+function textToBlocks(input) {
+  const lines = input.split('\n');
+  const blocks = [];
+  let currentBlock = '';
+  let currentRound = '';
+  const rounds = {};
+  const trialsFeedback = [];
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (/^Round \d+:/.test(line) || /^round \d+:/.test(line)) {
+      if (currentBlock) {
+        blocks.push(currentBlock.trim());
+        rounds[currentRound] = currentBlock.trim();
+      }
+      currentBlock = line;
+      currentRound = line;
+      trialsFeedback.push({});
+    } else if (/^\d+$/.test(line)) {
+      currentBlock += '\n' + line;
+    } else {
+      currentBlock += '\n' + line;
+      const feedback = trialsFeedback[trialsFeedback.length - 1];
+      if (/^green/.test(line) || /^Green/.test(line)) {
+        feedback.green = line;
+      } else if (/^Orange/.test(line) || /^orange/.test(line)) {
+        feedback.orange = line;
+      } else if (/^Gray/.test(line) || /^gray/.test(line) || /^Grey/.test(line) || /^grey/.test(line)) {
+        feedback.gray = line;
+      }
+    }
+  }
+  if (currentBlock) {
+    blocks.push(currentBlock.trim());
+    rounds[currentRound] = currentBlock.trim();
+  }
+  return {
+    trialsFeedback,
+    lastLine: lines[lines.length - 2],
+  };
+}
+
+const WordleTable = ({ key, colorMap, word }) => {
   const getColor = (letter) => {
     if (colorMap.green && colorMap.green.includes(letter)) {
       return '#6AAA64';
@@ -239,7 +300,7 @@ const WordleTable = ({ colorMap, word }) => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', justifyContent: 'center' }} key={key}>
       {(colorMap.green || colorMap.orange || colorMap.gray) && (
         <table style={{ borderCollapse: 'collapse', direction: 'ltr' }}>
           <tbody>
@@ -269,28 +330,31 @@ const WordleTable = ({ colorMap, word }) => {
 };
 
 const ans = `
-gray_list = []
-orange_list = []
-green_list =[]
-index = 0
-SECRETE_WORD = 'lists'
-word = input('Enter guess:')
-if len(word)!=5:
-    print(len(word))
-else:
-    if word == 'lists':
-        print('Correct')
-    else: 
-        while index < len(SECRETE_WORD):
-            if word[index] in SECRETE_WORD[index]:
-                green_list.append(word[index])
+secrete_word = input('Enter secrete word: ') 
+won = False
+trials = 1
+while not won and trials <= 3:
+    word = input('Round ' + str(trials) + ': ')
+    gray_list = []
+    orange_list = []
+    green_list =[]
+    for i in range(len(secrete_word)):
+        if word[i] in secrete_word[i]:
+            green_list.append(word[i])
+        else:
+            if word[i] in secrete_word:
+                orange_list.append(word[i])
             else:
-                if word[index] in SECRETE_WORD:
-                    orange_list.append(word[index])
-                else:
-                    gray_list.append(word[index])
-            index +=1
-        print("Green letters: " + str(green_list))
-        print("Orange letters: " + str(orange_list))
-        print("Gray letters: " + str(gray_list))
-        `;
+                gray_list.append(word[i])
+    print("Green letters: " + str(green_list))
+    print("Orange letters: " + str(orange_list))
+    print("Gray letters: " + str(gray_list))
+    if word == secrete_word:
+        won = True
+        print('Correct. You won!')
+
+    trials += 1
+
+if not won:
+    print('Out of trials. You lost')
+`;
