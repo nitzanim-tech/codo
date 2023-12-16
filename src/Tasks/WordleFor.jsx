@@ -46,10 +46,10 @@ export function examples() {
             <b> world</b>
           </span>
           <br />
-          Round 1: hello <br />
-          Green letters: ['l'] <br />
-          Orange letters: ['l', 'o'] <br />
-          Gray letters: ['h', 'e'] <br />
+          Round 1: weird <br />
+          Green letters: ['w', 'd'] <br />
+          Orange letters: ['r'] <br />
+          Gray letters: ['e', 'i'] <br />
           Round 2: world <br />
           Green letters: ['w', 'o', 'r', 'l', 'd'] <br />
           Orange letters: [] <br />
@@ -89,13 +89,13 @@ export function examples() {
 
 // RunTestButton.jsx
 export function testsName() {
-  return ['נצחון בתור השני', 'הפסד', 'מילה נכונה'];
+  return ['נצחון בתור השני', 'הפסד', 'נצחון בתור הראשון', 'נצחון בתור השלישי'];
 }
 export function getTaskTests() {
   return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
 }
 export function generateInputList() {
-  return ['world\nhello\nworld\n', 'python\ndriven\nclient\npycnic\n', 'lists\naaaa\naaaaa'];
+  return ['world\nweird\nworld\n', 'python\ndriven\nclient\npycnic\n', 'nitzanim\nnitzanim\n'];
 }
 
 export function processTestsOutputs(testsOutputs) {
@@ -103,7 +103,7 @@ export function processTestsOutputs(testsOutputs) {
   const answers = [
     {
       feedback: [
-        { green: 'l', orange: 'lo', gray: 'he' },
+        { green: 'wd', orange: 'r', gray: 'ei' },
         { green: 'world', orange: '', gray: '' },
       ],
       lastLine: 'won',
@@ -117,10 +117,7 @@ export function processTestsOutputs(testsOutputs) {
       lastLine: 'loose',
     },
     {
-      feedback: [
-        { green: 'li', orange: 't', gray: 'gh' },
-        { green: 'li', orange: 't', gray: 'gh' },
-      ],
+      feedback: [{ green: 'nitzanim', orange: '', gray: '' }],
       lastLine: 'won',
     },
   ];
@@ -131,40 +128,53 @@ export function processTestsOutputs(testsOutputs) {
       word: inputLines[0],
       trials: [inputLines[1], inputLines[2] || null, inputLines[3] || null],
     };
-    const outputLines = testsOutput.output.split('\n');
     const output = textToBlocks(testsOutput.output);
-    console.log(output);
 
     function checkColor(output, color, answer) {
-      if (output[color] === null) {
-        return false;
-      }
-      for (const letter of answer) {
-        if (!output[color].replace(new RegExp(color, 'gi'), '').includes(letter)) {
+      try {
+        if (output[color] === null) {
           return false;
         }
+        for (const letter of answer) {
+          if (!output[color].replace(new RegExp(color, 'gi'), '').includes(letter)) {
+            return false;
+          }
+        }
+        return true;
+      } catch {
+        return false;
       }
-      return true;
     }
-    const checkSingleTrial = (output) => {
-      return (
-        checkColor(output, 'green', answers[index].green) &&
-        checkColor(output, 'orange', answers[index].orange) &&
-        checkColor(output, 'gray', answers[index].gray)
-      );
+
+    const checkSingleTrial = (output, answer) => {
+      return output && answer
+        ? checkColor(output, 'green', answer.green || '') &&
+            checkColor(output, 'orange', answer.orange || '') &&
+            checkColor(output, 'gray', answer.gray || '')
+        : null;
     };
 
-const correct = (index) => {
-  const feedback = output[index].trialsFeedback || {};
-  return {
-    0: checkSingleTrial(feedback[0]),
-    1: checkSingleTrial(feedback[1]),
-    2: checkSingleTrial(feedback[2]),
-    lastLine: output.lastLine.toLowerCase().includes(answers[index].lastLine),
-  };
-};
+    const makeFullCorrect = (index) => {
+      const feedback = output?.trialsFeedback || {};
+      const answer = answers[index].feedback;
+      console.log(output, index);
+      return {
+        0: checkSingleTrial(feedback[0], answer[0]),
+        1: checkSingleTrial(feedback[1], answer[1]),
+        2: checkSingleTrial(feedback[2], answer[2]),
+        lastLine: output.lastLine.toLowerCase().includes(answers[index].lastLine),
+      };
+    };
+    const checkCorrect = (fullCorrect) =>
+      Object.values(fullCorrect)
+        .filter((value) => value !== null)
+        .every((value) => value);
+
+    const fullCorrect = makeFullCorrect(index);
+    const correct = checkCorrect(fullCorrect);
     const name = names[index];
-    return { name, input, output, correct: correct(index), ans: answers[index] };
+
+    return { name, input, output, correct, fullCorrect, ans: answers[index] };
   });
 }
 
@@ -173,30 +183,30 @@ export function getTaskExplanation() {
   return { generateExplanation: (selectedValue) => generateExplanation(selectedValue) };
 }
 export function generateExplanation(selectedValue) {
-  const isColorExist = (output) => output.green || output.orange || output.gray;
-  function ShowAns({ output }) {
-    return (
-      <>
-        {isColorExist(output) ? (
-          <>
-            <p>בהדפסות בקוד שכתבת:</p>
-            {Object.entries(output).map(([key, value]) => {
-              if (value !== null && key != 'lastLine') {
-                return (
-                  <p key={key} dir="ltr">
-                    {key}: {value}
-                  </p>
-                );
-              }
-              return null;
-            })}
-          </>
-        ) : (
-          <p>בשורה האחרונה בהדפסה: {output.lastLine} </p>
-        )}
-      </>
-    );
-  }
+  // const isColorExist = (output) => output.green || output.orange || output.gray;
+  // function ShowAns({ output }) {
+  //   return (
+  //     <>
+  //       {isColorExist(output) ? (
+  //         <>
+  //           <p>בהדפסות בקוד שכתבת:</p>
+  //           {Object.entries(output).map(([key, value]) => {
+  //             if (value !== null && key != 'lastLine') {
+  //               return (
+  //                 <p key={key} dir="ltr">
+  //                   {key}: {value}
+  //                 </p>
+  //               );
+  //             }
+  //             return null;
+  //           })}
+  //         </>
+  //       ) : (
+  //         <p>בשורה האחרונה בהדפסה: {output.lastLine} </p>
+  //       )}
+  //     </>
+  //   );
+  // }
 
   return (
     <>
@@ -210,18 +220,30 @@ export function generateExplanation(selectedValue) {
               <div key={i}>
                 <WordleTable colorMap={trialFeedback} word={selectedValue.input.trials[i]} />
                 <p direction="ltr">
+                  {selectedValue.fullCorrect[i] ? (
+                    <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
+                  ) : (
+                    <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
+                  )}
                   הפלט שלך: <br />
-                  {Object.values(selectedValue.output.trialsFeedback[i] || {}).map((value) => (
-                    <span>{value.replace(/['"\[\]]/g, '') + ' | '}</span>
-                  ))}
-                </p>{' '}
+                  <div style={{ textAlign: 'left', dir: 'ltr' }}>
+                    {Object.values(selectedValue.output.trialsFeedback[i] || {}).map((value) => (
+                      <span>{value.replace(/['"\[\]]/g, '') + ' | '}</span>
+                    ))}
+                  </div>
+                </p>
                 <br />
               </div>
             ))}
+            {selectedValue.fullCorrect['lastLine'] ? (
+              <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
+            ) : (
+              <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
+            )}
             השחקן {selectedValue.ans.lastLine == 'won' ? 'ניצח ' : 'הפסיד '}
-            <ShowAns output={selectedValue.output} />
+            ובשורה האחרונה בהדפסה: {output.lastLine}
           </p>
-          {selectedValue.correct ? <p>מוכל הפתרון. כל הכבוד!</p> : <p>לא מוכל הפתרון. נסו שוב :)</p>} <br />
+          {selectedValue.correct ? <p> כל הכבוד!</p> : <p>נסו שוב :)</p>} <br />
         </div>
       )}
     </>
@@ -251,7 +273,6 @@ function textToBlocks(input) {
       currentBlock += '\n' + line;
       const feedback = trialsFeedback[trialsFeedback.length - 1];
       if (/^green/.test(line) || /^Green/.test(line)) {
-        feedback.green = line;
         feedback.green = line;
       } else if (/^Orange/.test(line) || /^orange/.test(line)) {
         feedback.orange = line;
