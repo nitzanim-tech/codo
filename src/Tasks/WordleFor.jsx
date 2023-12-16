@@ -23,9 +23,10 @@ export function desription() {
         <br />
         ● במשחק יהיו מספר תורות. המשחק יסתיים כאשר השחקן ינחש 3 פעמים, או כאשר ינחש את המילה הראשונה
         <br />
-        ● לפני כל סבב יש להדפיס את האינדקס שלו (הסבב הראשון הוא 1) <br />
+        ● לפני כל סבב יש להדפיס את האינדקס שלו (הסבב הראשון הוא 1). יש להדפיס גם את המילה Round
+        <br />
         ● בכל סבב, יש להדפיס את כל האותיות האפורות, הירוקות והכתומות של אותו הסבב <br />
-        ● בין אם השחק ניצח או הפסיד, יש להדפיס הודעה מתאימה הכוללת 'won' או 'lose' <br />● השתדלו להשתמש גם בלולאת for
+        ● בין אם השחק ניצח או הפסיד, יש להדפיס הודעה מתאימה הכוללת 'won' או 'lost' <br />● השתדלו להשתמש גם בלולאת for
         וגם בלולאת while
       </p>
     </>
@@ -40,48 +41,53 @@ export function examples() {
           דוגמה 1:
           <br />{' '}
         </p>
-        <code>
-          Enter secrete word:
-          <span style={{ color: '#003061' }}>
-            <b> world</b>
-          </span>
-          <br />
-          Round 1: weird <br />
-          Green letters: ['w', 'd'] <br />
-          Orange letters: ['r'] <br />
-          Gray letters: ['e', 'i'] <br />
-          Round 2: world <br />
-          Green letters: ['w', 'o', 'r', 'l', 'd'] <br />
-          Orange letters: [] <br />
-          Gray letters: [] <br />
-          Correct. You won! <br />
-        </code>
+        <div dir="ltr">
+          <code>
+            Enter secrete word:
+            <span style={{ color: '#003061' }}>
+              <b> world</b>
+            </span>
+            <br />
+            Round 1: weird <br />
+            Green letters: ['w', 'd'] <br />
+            Orange letters: ['r'] <br />
+            Gray letters: ['e', 'i'] <br />
+            Round 2: world <br />
+            Green letters: ['w', 'o', 'r', 'l', 'd'] <br />
+            Orange letters: [] <br />
+            Gray letters: [] <br />
+            Correct. You won! <br />
+          </code>
+        </div>
         <p style={{ textAlign: 'right', dir: 'rtl' }}>
           <br />
           דוגמה 2:
           <br />{' '}
         </p>
-        <code>
-          Enter secrete word:
-          <span style={{ color: '#003061' }}>
-            <b> python</b>
-          </span>
-          Round 1: driven <br />
-          Green letters: ['n']
-          <br />
-          Orange letters: []
-          <br /> Gray letters: ['d', 'r', 'i', 'v', 'e']
-          <br /> Round 2: client
-          <br /> Green letters: []
-          <br /> Orange letters: ['n', 't']
-          <br /> Gray letters: ['c', 'l', 'i', 'e']
-          <br /> Round 3: pycnic
-          <br /> Green letters: ['p', 'y']
-          <br /> Orange letters: ['n']
-          <br /> Gray letters: ['c', 'i', 'c']
-          <br /> Out of trials. You loose
-          <br />
-        </code>
+        <div dir="ltr">
+          <code>
+            Enter secrete word:
+            <span style={{ color: '#003061' }}>
+              <b> python</b>
+            </span>
+            <br />
+            Round 1: driven <br />
+            Green letters: ['n']
+            <br />
+            Orange letters: []
+            <br /> Gray letters: ['d', 'r', 'i', 'v', 'e']
+            <br /> Round 2: client
+            <br /> Green letters: []
+            <br /> Orange letters: ['n', 't']
+            <br /> Gray letters: ['c', 'l', 'i', 'e']
+            <br /> Round 3: pycnic
+            <br /> Green letters: ['p', 'y']
+            <br /> Orange letters: ['n']
+            <br /> Gray letters: ['c', 'i', 'c']
+            <br /> Out of trials. You lost
+            <br />
+          </code>
+        </div>
       </p>
     </>
   );
@@ -89,18 +95,27 @@ export function examples() {
 
 // RunTestButton.jsx
 export function testsName() {
-  return ['נצחון בתור השני', 'הפסד', 'נצחון בתור הראשון', 'נצחון בתור השלישי'];
+  return ['נצחון בתור הראשון', 'נצחון בתור השני', 'נצחון בתור השלישי', 'הפסד'];
 }
 export function getTaskTests() {
   return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
 }
 export function generateInputList() {
-  return ['world\nweird\nworld\n', 'python\ndriven\nclient\npycnic\n', 'nitzanim\nnitzanim\n'];
+  return [
+    'nitzanim\nnitzanim\n',
+    'world\nweird\nworld\n',
+    'program\ntroilus\nproduct\nprogram\n',
+    'python\ndriven\nclient\npycnic\n',
+  ];
 }
 
 export function processTestsOutputs(testsOutputs) {
   const names = testsName();
   const answers = [
+    {
+      feedback: [{ green: 'nitzanim', orange: '', gray: '' }],
+      lastLine: 'won',
+    },
     {
       feedback: [
         { green: 'wd', orange: 'r', gray: 'ei' },
@@ -110,15 +125,19 @@ export function processTestsOutputs(testsOutputs) {
     },
     {
       feedback: [
+        { green: 'ro', orange: '', gray: 'tilus' },
+        { green: 'pro', orange: '', gray: 'duct' },
+        { green: 'program', orange: '', gray: '' },
+      ],
+      lastLine: 'won',
+    },
+    {
+      feedback: [
         { green: 'n', orange: '', gray: 'drive' },
         { green: '', orange: 'nt', gray: 'clie' },
         { green: 'py', orange: 'n', gray: 'clie' },
       ],
-      lastLine: 'loose',
-    },
-    {
-      feedback: [{ green: 'nitzanim', orange: '', gray: '' }],
-      lastLine: 'won',
+      lastLine: 'lost',
     },
   ];
 
@@ -183,31 +202,6 @@ export function getTaskExplanation() {
   return { generateExplanation: (selectedValue) => generateExplanation(selectedValue) };
 }
 export function generateExplanation(selectedValue) {
-  // const isColorExist = (output) => output.green || output.orange || output.gray;
-  // function ShowAns({ output }) {
-  //   return (
-  //     <>
-  //       {isColorExist(output) ? (
-  //         <>
-  //           <p>בהדפסות בקוד שכתבת:</p>
-  //           {Object.entries(output).map(([key, value]) => {
-  //             if (value !== null && key != 'lastLine') {
-  //               return (
-  //                 <p key={key} dir="ltr">
-  //                   {key}: {value}
-  //                 </p>
-  //               );
-  //             }
-  //             return null;
-  //           })}
-  //         </>
-  //       ) : (
-  //         <p>בשורה האחרונה בהדפסה: {output.lastLine} </p>
-  //       )}
-  //     </>
-  //   );
-  // }
-
   return (
     <>
       {selectedValue.input && (
@@ -240,10 +234,12 @@ export function generateExplanation(selectedValue) {
             ) : (
               <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
             )}
-            השחקן {selectedValue.ans.lastLine == 'won' ? 'ניצח ' : 'הפסיד '}
-            ובשורה האחרונה בהדפסה: {output.lastLine}
+            השחקן {selectedValue.ans.lastLine == 'won' ? 'ניצח. ' : 'הפסיד. '}
+            השורה האחרונה בהדפסה: <br />
+            {selectedValue.output.lastLine}
           </p>
-          {selectedValue.correct ? <p> כל הכבוד!</p> : <p>נסו שוב :)</p>} <br />
+          <br />
+          {selectedValue.correct ? <p> כל הכבוד!</p> : <p>נסו שוב :)</p>}
         </div>
       )}
     </>
@@ -259,7 +255,7 @@ function textToBlocks(input) {
   const trialsFeedback = [];
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    if (/^Round \d+:/.test(line)) {
+    if (/^Round \d+:/.test(line) || /^round \d+:/.test(line)) {
       if (currentBlock) {
         blocks.push(currentBlock.trim());
         rounds[currentRound] = currentBlock.trim();
@@ -360,5 +356,5 @@ while not won and trials <= 3:
     trials += 1
 
 if not won:
-    print('Out of trials. You loose')
+    print('Out of trials. You lost')
 `;
