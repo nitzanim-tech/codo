@@ -79,5 +79,28 @@
       "type": "task",
       "index": "9"
     }
+  },
+  "לולאות מקוננות": {
+    "לולאות מקוננות": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgQiE4fs-J1byOYp3?e=TbJgea"
+    },
+    "לוח הכפל": {
+      "type": "task",
+      "index": "10"
+    },
+    "wordle 2": {
+      "type": "task",
+      "index": "11"
+    },
+
+    "מסמך - שפע יששכר": {
+      "type": "pdf",
+      "link": "https://1drv.ms/w/s!AhbjJ-PvNB7DgQmv_m-btHNsm6CA?e=LjKjS5"
+    },
+    "שפע יששכר": {
+      "type": "task",
+      "index": "12"
+    }
   }
 }
