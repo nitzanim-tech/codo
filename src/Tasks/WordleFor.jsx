@@ -184,12 +184,13 @@ export function processTestsOutputs(testsOutputs) {
         lastLine: output.lastLine.toLowerCase().includes(answers[index].lastLine),
       };
     };
+    const fullCorrect = makeFullCorrect(index);
     const checkCorrect = (fullCorrect) =>
+      fullCorrect[0] != null &&
       Object.values(fullCorrect)
         .filter((value) => value !== null)
         .every((value) => value);
 
-    const fullCorrect = makeFullCorrect(index);
     const correct = checkCorrect(fullCorrect);
     const name = names[index];
 
