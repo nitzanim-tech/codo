@@ -9,8 +9,7 @@ import { getTaskExplanation } from '../../Tasks/TaskIndex';
 
 export default function TestsList({ testsOutputs, task }) {
   const [selectedValue, setSelectedValue] = useState(testsOutputs[0]);
-  const [open, setOpen] = useState(false);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [explanationTask, setExplanationTask] = useState(getTaskExplanation(task));
 
@@ -21,7 +20,7 @@ export default function TestsList({ testsOutputs, task }) {
   const handleSelect = (value) => {
     const selectedObject = testsOutputs.find((obj) => obj.name === value);
     setSelectedValue(selectedObject);
-    setOpen(true);
+    onOpen();
   };
 
   return (
@@ -53,22 +52,26 @@ export default function TestsList({ testsOutputs, task }) {
         </Listbox>
       </ListboxWrapper>
 
-      <Modal isOpen={open} onOpenChange={onOpenChange} dir="rtl" hideCloseButton>
-        <ModalContent onClose={() => setOpen(false)}>
-          <ModalHeader>
-            {selectedValue.correct ? (
-              <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
-            ) : (
-              <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
-            )}
-            {selectedValue.name}
-          </ModalHeader>
+      <Modal isOpen={isOpen} onClose={onClose} dir="rtl" hideCloseButton>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>
+                {selectedValue.correct ? (
+                  <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
+                ) : (
+                  <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
+                )}
+                {selectedValue.name}
+              </ModalHeader>
 
-          <ModalBody>{explanationTask.generateExplanation(selectedValue)}</ModalBody>
+              <ModalBody>{explanationTask.generateExplanation(selectedValue)}</ModalBody>
 
-          <ModalFooter>
-            <button onClick={() => setOpen(false)}>סגור</button>
-          </ModalFooter>
+              <ModalFooter>
+                <button onClick={onClose}>סגור</button>
+              </ModalFooter>
+            </>
+          )}
         </ModalContent>
       </Modal>
     </>
