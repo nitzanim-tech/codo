@@ -8,16 +8,21 @@ import TestsList from '../components/TestsList/TestsList';
 import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { testsName } from '../Tasks/TaskIndex';
+import filesLinks from '../util/filesLinks.json';
+
 import './Submit.css';
 
 function Submit() {
   const { index } = useParams();
-  const [task, setTask] = useState(parseInt(index, 10)|| 0);
+  const [task, setTask] = useState(parseInt(index, 10) || 0);
   const initialTestNames = testsName(task);
   const [testsOutputs, setTestsOutputs] = useState(initialTestNames.map((name) => ({ name })));
+  const [taskObject, setTaskObject] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setTaskObject(getTaskByIndex({ jsonObj: filesLinks, index: task }));
+      console.log(taskObject, taskObject.hideTests);
       const testNames = testsName(task);
       const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
       setTestsOutputs(newEmptyTests);
@@ -32,7 +37,7 @@ function Submit() {
       <PyodideProvider>
         <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
           <Grid item style={{ width: '20%' }}>
-            <TestsList testsOutputs={testsOutputs} task={task} />
+            {!taskObject?.hideTests && <TestsList testsOutputs={testsOutputs} task={task} />}
           </Grid>
 
           <Grid item style={{ width: '50%' }}>
@@ -40,7 +45,7 @@ function Submit() {
           </Grid>
 
           <Grid item style={{ width: '30%' }}>
-            <Instructions task={task} />
+            {!taskObject?.hideTests &&<Instructions task={task} />}
           </Grid>
         </Grid>
       </PyodideProvider>
@@ -49,3 +54,14 @@ function Submit() {
 }
 
 export default Submit;
+
+function getTaskByIndex({ jsonObj, index }) {
+  for (let lesson in jsonObj) {
+    for (let task in jsonObj[lesson]) {
+      if (jsonObj[lesson][task].type === 'task' && jsonObj[lesson][task].index == index) {
+        return jsonObj[lesson][task];
+      }
+    }
+  }
+  return null;
+}
