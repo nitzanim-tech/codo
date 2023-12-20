@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardBody, Divider } from "@nextui-org/react";
 
-import { examplecode } from "../../util/exampleCode";
+import { examplecode } from "../../util/examples/exampleCode";
 import Terminal from "./Terminal";
 import IDEButtons from './IDEButtons';
 import MonacoEditor from './MonacoEditor';

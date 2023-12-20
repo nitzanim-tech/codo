@@ -8,8 +8,7 @@ import TestsList from '../components/TestsList/TestsList';
 import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { testsName } from '../Tasks/TaskIndex';
-import filesLinks from '../util/filesLinks.json';
-
+import { getTaskByIndex } from '../components/IDE/getTaskByIndex';
 import './Submit.css';
 
 function Submit() {
@@ -21,8 +20,7 @@ function Submit() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setTaskObject(getTaskByIndex({ jsonObj: filesLinks, index: task }));
-      console.log(taskObject, taskObject.hideTests);
+      setTaskObject(getTaskByIndex({ index: task }));
       const testNames = testsName(task);
       const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
       setTestsOutputs(newEmptyTests);
@@ -45,7 +43,7 @@ function Submit() {
           </Grid>
 
           <Grid item style={{ width: '30%' }}>
-            {!taskObject?.hideTests &&<Instructions task={task} />}
+            {!taskObject?.hideTests && <Instructions task={task} />}
           </Grid>
         </Grid>
       </PyodideProvider>
@@ -55,13 +53,3 @@ function Submit() {
 
 export default Submit;
 
-function getTaskByIndex({ jsonObj, index }) {
-  for (let lesson in jsonObj) {
-    for (let task in jsonObj[lesson]) {
-      if (jsonObj[lesson][task].type === 'task' && jsonObj[lesson][task].index == index) {
-        return jsonObj[lesson][task];
-      }
-    }
-  }
-  return null;
-}
