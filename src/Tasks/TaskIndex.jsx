@@ -11,6 +11,7 @@ import * as ReadableParagraph from './ReadableParagraph';
 import * as MultiplicationTable from './MultiplicationTable'
 import * as WordleFor from './WordleFor';
 import * as ShefaIssaschar from './ShefaIssaschar';
+import * as FirstTest from './FirstTest'
 
 const tasks = {
   0: Experience,
@@ -26,6 +27,7 @@ const tasks = {
   10: MultiplicationTable,
   11: WordleFor,
   12: ShefaIssaschar,
+  13: FirstTest,
 };
 
 export function testsName(task) {
