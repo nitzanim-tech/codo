@@ -3,20 +3,18 @@ import NavBar from '../components/NavBar/NavigateBar';
 import { Tabs, Tab, Button } from '@nextui-org/react';
 import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
 import getStudentData from '../requests/getStudents';
-import { initializeApp } from 'firebase/app';
-import firebaseConfig from '../util/firebaseConfig';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import getCurrentUser from '../requests/getCurrentUser';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageTasks from '../components/Inst/manageTab/ManageTasks';
 import { CircularProgress } from '@nextui-org/react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import PassMatrix from '../components/Inst/statusTab/PassMatrix';
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+import { useFirebase } from '../util/FirebaseProvider';
 
 function Instructors() {
+  const { app, auth } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
   const [userGroup, setUserGroup] = useState([]);

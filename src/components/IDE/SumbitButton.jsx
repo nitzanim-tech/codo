@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Tooltip } from '@nextui-org/react';
-import firebaseConfig from '../../util/firebaseConfig';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+// import firebaseConfig from '../../util/firebaseConfig';
+// import { initializeApp } from 'firebase/app';
+// import { getAuth } from 'firebase/auth';
 
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
@@ -11,12 +11,12 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import sumbitCode from '../../requests/sumbitCode';
 import { ModalBody, ModalFooter } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+import { useContext } from 'react';
+import { FirebaseContext } from '../../util/FirebaseProvider';
 
 function SumbitButton({ code, testsOutputs, setRunTests, task }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const { app, auth } = useContext(FirebaseContext);
+const [currentUser, setCurrentUser] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [succesfulySent, setSuccesfulySent] = useState(false);
   const [errorSent, setErrorSent] = useState(false);

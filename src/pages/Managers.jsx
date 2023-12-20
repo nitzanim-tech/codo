@@ -3,19 +3,16 @@ import NavBar from '../components/NavBar/NavigateBar';
 import getInsts from '../requests/manager/getInsts';
 import getCurrentUser from '../requests/getCurrentUser';
 import getGroups from '../requests/getGroups';
-import { initializeApp } from 'firebase/app';
-import firebaseConfig from '../util/firebaseConfig';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import { Table, TableHeader, TableRow, TableCell, TableBody, TableColumn } from '@nextui-org/react';
 import { CircularProgress, Chip, Button } from '@nextui-org/react';
 
 import addPermissionToUser from '../requests/manager/addPermission';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+import { useFirebase } from '../util/FirebaseProvider';
 
 function Managers() {
+  const { app, auth } = useFirebase();
   const [groups, setGroups] = useState(null);
   const [instructorsData, setInstructorsData] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
