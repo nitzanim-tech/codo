@@ -1,10 +1,10 @@
 import { getDatabase, ref, get } from 'firebase/database';
 
-const getGroups = async ({ app }) => {
-  const db = getDatabase(app);
-  const groupsRef = ref(db, 'groups');
-
+const getGroups = async (app) => {
   try {
+    const db = getDatabase(app);
+    const groupsRef = ref(db, 'groups');
+
     const snapshot = await get(groupsRef);
     const rawGroups = snapshot.val() || {};
     const transformedGroups = {};

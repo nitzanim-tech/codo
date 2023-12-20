@@ -10,15 +10,12 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import TaskCard from '../components/Home/TaskCard';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import filesLinks from '../util/filesLinks.json';
-import { initializeApp } from 'firebase/app';
-import firebaseConfig from '../util/firebaseConfig';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import getCurrentUser from '../requests/getCurrentUser';
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+import { useFirebase } from '../util/FirebaseProvider';
 
 function Home() {
+  const { app, auth } = useFirebase();
   const [student, setStudent] = useState();
   onAuthStateChanged(auth, async (user) => {
     try {
