@@ -9,17 +9,7 @@ export function getTaskExplanation() {
   return { generateExplanation: (selectedValue) => generateExplanation(selectedValue) };
 }
 export function generateExplanation(selectedValue) {
-  return (
-    <>
-      <div dir="rtl">
-        <p>
-          הפלט הנדרש הוא {selectedValue.ans} <br />
-          ההדפסה האחרונה בקוד שכתבת {"('" + selectedValue.output + "')"}
-        </p>
-        {selectedValue.correct ? <p>מתאימה לפלט הנדרש. כל הכבוד!</p> : <p>לא מתאימה לפלט. נסו שוב :)</p>}{' '}
-      </div>
-    </>
-  );
+  return <></>;
 }
 
 // RunTestButton.jsx
@@ -49,16 +39,8 @@ export function subjects() {
   return ['הדפסה'];
 }
 export function desription() {
-  return (
-    <>
-      <p>
-        הדפיסו את המילים 'Hello world' <br />
-        רמז - תוכלו לעשות זאת על ידי הקוד: <br />
-        <code>print('Hello world')</code>
-      </p>
-    </>
-  );
+  return <></>;
 }
 export function examples() {
-  return <p style={{ textAlign: 'right', dir: 'rtl' }}>אין דוגמה, תרקדו </p>;
+  return <></>;
 }
