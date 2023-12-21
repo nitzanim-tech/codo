@@ -1,7 +1,16 @@
 import React from 'react';
 
 export function testsName() {
-  return ['הודפס Hello world', 'לא הודפס Sababa Egozim'];
+  return [
+    'טסט 1',
+    'טסט 2',
+    'טסט 3',
+    'תרשים זרימה / עברית מבנית',
+    'כללי',
+    'סטנדרטים ונראות',
+    'שימוש בלולאות מתאימות',
+    'מיקום הקלט בתא הנכון במטריצה',
+  ];
 }
 
 // TestsList.jsx
@@ -17,11 +26,11 @@ export function getTaskTests() {
   return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
 }
 export function generateInputList() {
-  return ['', ''];
+  return ['1', '2', '3', '4', '5'];
 }
 export function processTestsOutputs(testsOutputs) {
   const names = testsName();
-  const answers = ['Hello world', 'לא Sababa Egozim'];
+  const answers = ['Hello world', 'לא Sababa Egozim','a','a','a'];
   return testsOutputs.map((testsOutput, index) => {
     const input = null;
     const output = testsOutput.output ? testsOutput.output.replace(/\n/g, '') : '';
