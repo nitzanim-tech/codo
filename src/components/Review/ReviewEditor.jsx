@@ -2,28 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
 import { Button, Tooltip, Textarea } from '@nextui-org/react';
-import addReview from '../requests/review/addReview';
+import addReview from '../../requests/review/addReview';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import PageviewRoundedIcon from '@mui/icons-material/PageviewRounded';
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
-const StyledEditor = styled(Editor)`
-  .myContentClass {
-    background: lightyellow;
-  }
-  .myGlyphMarginClass::before {
-    content: '!';
-    color: red;
-  }
-`;
+
 const LINE_HEGITH = 20;
+
 export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
-  console.log(version);
   const [saved, setSaved] = useState(false);
   const [generalReview, setGeneralReview] = useState(version.review ? JSON.parse(version.review).general : '');
   const comments = useRef(version.review ? JSON.parse(version.review).comments : {});
-  console.log(generalReview, comments);
 
-  console.log(comments);
   const handleEditorDidMount = (editor, monaco) => {
     updateDecorations(editor, monaco);
 
@@ -114,7 +104,6 @@ export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
         )}
         <Tooltip content="תצוגה מקדימה">
           <Button
-            // isDisabled={comments.current != {}}
             style={{ margin: '10px ' }}
             radius="full"
             isIconOnly
@@ -136,6 +125,17 @@ export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
     </div>
   );
 }
+
+const StyledEditor = styled(Editor)`
+  .myContentClass {
+    background: lightyellow;
+  }
+  .myGlyphMarginClass::before {
+    content: '!';
+    color: red;
+  }
+`;
+
 // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 // const [inputPlace, setInputPlace] = useState({ x: 0, y: 0 });
 // const handleMouseMove = (e) => {

@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import ReviewEditor from '../components/ReviewEditor';
+import ReviewEditor from '../components/Review/ReviewEditor';
 import { Card, Spinner } from '@nextui-org/react';
 import { DashboardCard } from '../components/Inst/DashboardCard';
 import formatDate from '../util/formatDate';
 import { useFirebase } from '../util/FirebaseProvider';
+import { testsName } from '../Tasks/TaskIndex';
+import TestsCheckbox from '../components/Review/TestsCheckbox';
 
 function Review() {
   const { app } = useFirebase();
   const [version, setVersion] = useState(null);
+  const pass = [true, false, true, null, null, null, null];
+  const passTestsIndexes = pass.reduce((acc, val, index) => (val === true ? [...acc, index] : acc), []);
+  const [selectedTests, setSelectedTests] = useState(passTestsIndexes);
 
   useEffect(() => {
     const storedVersion = localStorage.getItem('versionToCheck');
@@ -21,7 +26,7 @@ function Review() {
       {version ? (
         <>
           <Grid container spacing={1} columns={3} rows={1} style={{ marginTop: '20px', padding: '20px' }}>
-            <Grid item style={{ width: '80%' }}>
+            <Grid item style={{ width: '74%' }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Card style={{ width: '95%' }}>
                   <ReviewEditor version={version} app={app} />
@@ -29,14 +34,19 @@ function Review() {
               </div>
             </Grid>
 
-            <Grid item style={{ width: '15%' }}>
+            <Grid item style={{ width: '25%' }}>
               <h2 style={{ fontSize: '1.7vw' }}>
                 <b>{version.student.name}</b>
               </h2>
               <h2 style={{ fontSize: '1.7vw' }}>{formatDate(version.date)}</h2>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <DashboardCard ratio={version.tests} text={'טסטים'} size={80} />
+                <DashboardCard
+                  ratio={selectedTests.length + '/' + testsName(version.task).length}
+                  text={'סה"כ'}
+                  size={70}
+                />
               </div>
+              <TestsCheckbox task={version.task} />
             </Grid>
           </Grid>
         </>
@@ -48,3 +58,4 @@ function Review() {
 }
 
 export default Review;
+
