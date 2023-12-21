@@ -1,18 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
-import { Button, Tooltip, Textarea } from '@nextui-org/react';
-import addReview from '../../requests/review/addReview';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import PageviewRoundedIcon from '@mui/icons-material/PageviewRounded';
-import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 
 const LINE_HEGITH = 20;
+const theme = 'vs-light';
 
-export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
-  const [saved, setSaved] = useState(false);
-  const [generalReview, setGeneralReview] = useState(version.review ? JSON.parse(version.review).general : '');
-  const comments = useRef(version.review ? JSON.parse(version.review).comments : {});
+export default function ReviewEditor({ version, comments }) {
 
   const handleEditorDidMount = (editor, monaco) => {
     updateDecorations(editor, monaco);
@@ -51,78 +44,16 @@ export default function ReviewEditor({ version, app, theme = 'vs-light' }) {
     }));
     editor.deltaDecorations([], decorations);
   };
-  const handleSave = () => {
-    const reviewData = JSON.stringify({
-      comments: comments.current,
-      general: generalReview,
-      date: new Date(),
-      hasOpened: false,
-    });
-    const hadSaved = addReview({
-      app,
-      userId: version.student.uid,
-      task: version.task,
-      trialIndex: version.id,
-      reviewData,
-    });
-    setSaved(hadSaved);
-  };
+
   return (
-    <div style={{ marginTop: '25px ' }}>
-      <StyledEditor
-        height={`${version.code.split('\n').length * LINE_HEGITH}px`}
-        defaultLanguage="python"
-        theme={theme}
-        value={version.code}
-        options={{ minimap: { enabled: false }, readOnly: true, scrollBeyondLastLine: false }}
-        onMount={handleEditorDidMount}
-      />
-
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '80%', paddingBlock: '20px', textAlign: 'right', direction: 'rtl' }}>
-          <Textarea
-            label="משוב כללי"
-            labelPlacement="outside"
-            placeholder="כתבו כאן"
-            defaultValue={generalReview}
-            onChange={(e) => setGeneralReview(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div style={{ paddingBottom: '10px ' }}>
-        {saved ? (
-          <p style={{ fontWeight: 'bold', color: '#005395' }}>
-            הועבר לחניך בהצלחה <CheckCircleRoundedIcon />
-          </p>
-        ) : (
-          <Tooltip content="העבר לחניך">
-            <Button radius="full" isIconOnly variant="faded" onClick={handleSave} style={{ margin: '10px ' }}>
-              <ReplyRoundedIcon />
-            </Button>
-          </Tooltip>
-        )}
-        <Tooltip content="תצוגה מקדימה">
-          <Button
-            style={{ margin: '10px ' }}
-            radius="full"
-            isIconOnly
-            variant="faded"
-            onClick={() => {
-              const checkedSubmit = {
-                code: version.code,
-                review: JSON.stringify({ comments: comments.current, general: generalReview }),
-              };
-              console.log(JSON.stringify(checkedSubmit));
-              localStorage.setItem('checkedSubmit', JSON.stringify(checkedSubmit));
-              window.open('/readReview', '_blank');
-            }}
-          >
-            <PageviewRoundedIcon />
-          </Button>
-        </Tooltip>
-      </div>
-    </div>
+    <StyledEditor
+      height={`${version.code.split('\n').length * LINE_HEGITH}px`}
+      defaultLanguage="python"
+      theme={theme}
+      value={version.code}
+      options={{ minimap: { enabled: false }, readOnly: true, scrollBeyondLastLine: false }}
+      onMount={handleEditorDidMount}
+    />
   );
 }
 
