@@ -4,10 +4,8 @@ import { testsName } from '../../Tasks/TaskIndex';
 import { CheckboxGroup, Checkbox } from '@nextui-org/react';
 import styled from 'styled-components';
 
-function TestsCheckbox({ task }) {
+function TestsCheckbox({ task, selectedTests, setSelectedTests }) {
   const pass = [true, false, true, null, null, null, null];
-  const passTestsIndexes = pass.reduce((acc, val, index) => (val === true ? [...acc, index] : acc), []);
-  const [selectedTests, setSelectedTests] = useState(passTestsIndexes);
 
   return (
     <div style={{ padding: '25px' }}>
@@ -15,12 +13,12 @@ function TestsCheckbox({ task }) {
         <StyledCheckboxDiv>
           <CheckboxGroup label="פרמטרים" value={selectedTests} onValueChange={setSelectedTests}>
             {testsName(task).map((testName, index) => (
-              <>
+              <React.Fragment key={index}>
                 <Checkbox value={index} radius="full" style={{ marginLeft: '5px' }}>
                   {testName}
                 </Checkbox>
                 {pass.indexOf(null) == index + 1 && <Divider />}
-              </>
+              </React.Fragment>
             ))}
           </CheckboxGroup>
         </StyledCheckboxDiv>

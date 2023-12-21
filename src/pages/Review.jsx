@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import ReviewEditor from '../components/Review/ReviewEditor';
+import ReviewComponent from '../components/Review/ReviewComponent';
 import { Card, Spinner } from '@nextui-org/react';
 import { DashboardCard } from '../components/Inst/DashboardCard';
 import formatDate from '../util/formatDate';
@@ -29,7 +29,7 @@ function Review() {
             <Grid item style={{ width: '74%' }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Card style={{ width: '95%' }}>
-                  <ReviewEditor version={version} app={app} />
+                  <ReviewComponent version={version} app={app} />
                 </Card>
               </div>
             </Grid>
@@ -46,7 +46,7 @@ function Review() {
                   size={70}
                 />
               </div>
-              <TestsCheckbox task={version.task} />
+              <TestsCheckbox task={version.task} selectedTests={selectedTests} setSelectedTests={setSelectedTests} />
             </Grid>
           </Grid>
         </>
