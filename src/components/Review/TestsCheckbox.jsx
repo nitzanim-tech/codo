@@ -4,9 +4,7 @@ import { testsName } from '../../Tasks/TaskIndex';
 import { CheckboxGroup, Checkbox } from '@nextui-org/react';
 import styled from 'styled-components';
 
-function TestsCheckbox({ task, selectedTests, setSelectedTests }) {
-  const pass = [true, false, true, null, null, null, null];
-
+function TestsCheckbox({ task, selectedTests, setSelectedTests, pass }) {
   return (
     <div style={{ padding: '5%' }}>
       <Card>

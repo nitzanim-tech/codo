@@ -10,16 +10,22 @@ import TestsCheckbox from '../components/Review/TestsCheckbox';
 
 function Review() {
   const [version, setVersion] = useState(null);
-  const pass = [true, false, true, null, null, null, null];
-  const passTestsIndexes = pass.reduce((acc, val, index) => (val === true ? [...acc, index] : acc), []);
-  const [selectedTests, setSelectedTests] = useState(passTestsIndexes);
+  const [selectedTests, setSelectedTests] = useState([]);
 
   useEffect(() => {
     const storedVersion = localStorage.getItem('versionToCheck');
     if (storedVersion) {
-      setVersion(JSON.parse(storedVersion));
+      const parsedVersion = JSON.parse(storedVersion); 
+      setVersion(parsedVersion);
+      const passTestsIndexes = parsedVersion.tests.reduce(
+        (acc, val, index) => (val === true ? [...acc, index] : acc),
+        [],
+      );
+      setSelectedTests(passTestsIndexes);
     }
   }, []);
+
+
   return (
     <>
       {version ? (
@@ -45,7 +51,12 @@ function Review() {
                   size={70}
                 />
               </div>
-              <TestsCheckbox task={version.task} selectedTests={selectedTests} setSelectedTests={setSelectedTests} />
+              <TestsCheckbox
+                task={version.task}
+                selectedTests={selectedTests}
+                setSelectedTests={setSelectedTests}
+                pass={version.tests}
+              />
             </Grid>
           </Grid>
         </>
