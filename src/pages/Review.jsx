@@ -5,12 +5,10 @@ import ReviewComponent from '../components/Review/ReviewComponent';
 import { Card, Spinner } from '@nextui-org/react';
 import { DashboardCard } from '../components/Inst/DashboardCard';
 import formatDate from '../util/formatDate';
-import { useFirebase } from '../util/FirebaseProvider';
 import { testsName } from '../Tasks/TaskIndex';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
 
 function Review() {
-  const { app } = useFirebase();
   const [version, setVersion] = useState(null);
   const pass = [true, false, true, null, null, null, null];
   const passTestsIndexes = pass.reduce((acc, val, index) => (val === true ? [...acc, index] : acc), []);
@@ -30,7 +28,7 @@ function Review() {
             <Grid item style={{ width: '74%' }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Card style={{ width: '95%' }}>
-                  <ReviewComponent version={version} app={app} selectedTests={selectedTests} />
+                  <ReviewComponent version={version} selectedTests={selectedTests} />
                 </Card>
               </div>
             </Grid>
