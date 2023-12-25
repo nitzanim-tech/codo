@@ -136,7 +136,6 @@ function Instructors() {
 export default Instructors;
 
 const studentTableFormattedData = (data) => {
-  console.log(data);
   if (data) {
     return data.map((item, index) => {
       const { submissions, ...rest } = item;
