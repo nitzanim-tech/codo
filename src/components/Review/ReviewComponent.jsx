@@ -13,10 +13,7 @@ export default function ReviewComponent({ version, selectedTests }) {
   const [saved, setSaved] = useState(false);
   const [generalReview, setGeneralReview] = useState(version.review ? JSON.parse(version.review).general : '');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
   const comments = useRef(version.review ? JSON.parse(version.review).comments : {});
-
-  const pass = [true, false, true, null, null, null, null];
 
   const handlePreviewClick = () => {
     const checkedSubmit = {
@@ -42,13 +39,13 @@ export default function ReviewComponent({ version, selectedTests }) {
       trialIndex: version.id,
       reviewData,
     });
-    if (haveTestsChanged(selectedTests, pass, false))
+    if (haveTestsChanged(selectedTests, version.tests, false))
       await console.log(version.student.uid, version.date, version.task);
 
     setSaved(hadSaved);
   };
   const handleSendClick = () => {
-    if (haveTestsChanged(selectedTests, pass, true)) onOpen();
+    if (haveTestsChanged(selectedTests, version.tests, true)) onOpen();
     else sendReview();
   };
   const handleChangeTestsGrade = () => {
@@ -119,7 +116,7 @@ export default function ReviewComponent({ version, selectedTests }) {
 }
 
 function haveTestsChanged(selectedTests, pass, isRunningTest) {
-  const maxCheckIndex = isRunningTest ? pass.indexOf(null) : selectedTests.length;
+  const maxCheckIndex = isRunningTest && pass.includes(null) ? pass.indexOf(null) : selectedTests.length;
   for (let i = 0; i < maxCheckIndex; i++) {
     if (pass[i] && !selectedTests.includes(i)) return true;
     if (!pass[i] && selectedTests.includes(i)) return true;
