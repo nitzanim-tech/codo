@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import ReviewComponent from '../components/Review/ReviewComponent';
@@ -29,12 +30,12 @@ function Review() {
             <Grid item style={{ width: '74%' }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Card style={{ width: '95%' }}>
-                  <ReviewComponent version={version} app={app} />
+                  <ReviewComponent version={version} app={app} selectedTests={selectedTests} />
                 </Card>
               </div>
             </Grid>
 
-            <Grid item style={{ width: '25%' }}>
+            <Grid item style={{ width: '20%' }}>
               <h2 style={{ fontSize: '1.7vw' }}>
                 <b>{version.student.name}</b>
               </h2>
@@ -58,4 +59,3 @@ function Review() {
 }
 
 export default Review;
-
