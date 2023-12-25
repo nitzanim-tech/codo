@@ -31,7 +31,8 @@ export default function ReviewEditor({ version, comments }) {
       },
     });
   };
-  const updateDecorations = (editor, monaco) => {
+const updateDecorations = (editor, monaco) => {
+  if (comments.current) {
     const decorations = Object.entries(comments.current).map(([line, comment]) => ({
       range: new monaco.Range(parseInt(line), 1, parseInt(line), 1),
       options: {
@@ -42,7 +43,8 @@ export default function ReviewEditor({ version, comments }) {
       },
     }));
     editor.deltaDecorations([], decorations);
-  };
+  }
+};
 
   return (
     <StyledEditor

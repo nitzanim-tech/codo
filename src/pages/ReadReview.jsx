@@ -17,7 +17,7 @@ export default function ReadReview() {
       const parsedVersion = JSON.parse(storedVersion);
       console.log(parsedVersion);
       setVersion(parsedVersion);
-      const convertedComments = convertCommentsToObject(JSON.parse(parsedVersion.review).comments, parsedVersion.code);
+      const convertedComments = convertCommentsToObject(parsedVersion.review.comments, parsedVersion.code);
       setComments(convertedComments);
     }
   }, []);
@@ -37,7 +37,7 @@ export default function ReadReview() {
             >
               <b>כללי:</b>
               <br />
-              {JSON.parse(version.review).general}
+              {version.review.general}
             </p>
             <div style={{ marginTop: '30px' }}>
               {comments.map((editor, index) => (
