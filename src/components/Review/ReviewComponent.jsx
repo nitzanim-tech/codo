@@ -6,8 +6,10 @@ import PageviewRoundedIcon from '@mui/icons-material/PageviewRounded';
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import ReviewEditor from './ReviewEditor';
 import { Modal, ModalHeader, ModalBody, ModalContent, ModalFooter, useDisclosure } from '@nextui-org/react';
+import { useFirebase } from '../../util/FirebaseProvider';
 
-export default function ReviewComponent({ version, app, selectedTests }) {
+export default function ReviewComponent({ version, selectedTests }) {
+  const { app } = useFirebase();
   const [saved, setSaved] = useState(false);
   const [generalReview, setGeneralReview] = useState(version.review ? JSON.parse(version.review).general : '');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
