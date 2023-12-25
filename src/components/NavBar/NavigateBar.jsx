@@ -50,7 +50,6 @@ const [currentUser, setCurrentUser] = useState(null);
       if (user) {
         if (user.email.includes('@nitzanim.tech')) setTasks(betaTasks);
         const userData = await getCurrentUser({ app, id: user.uid });
-        console.log(userData);
         setStudentData(userData);
       } else {
         setStudentData(null);

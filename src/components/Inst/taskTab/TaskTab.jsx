@@ -78,7 +78,6 @@ const countStudents = (data) => {
       (student) => Array.isArray(student.versions) && student.versions.length > 0,
     ).length;
   }
-
   return `${studentsWithVersions}/${totalStudents}`;
 };
 
@@ -91,11 +90,13 @@ const calculateAverage = (data) => {
     data.forEach((student) => {
       if (Array.isArray(student.versions) && student.versions.length > 0) {
         const highestNumeratorVersion = student.versions.reduce((highest, current) => {
-          const [highestNumerator] = highest.tests.split('/').map(Number);
-          const [currentNumerator] = current.tests.split('/').map(Number);
+          const highestNumerator = highest.tests.filter(Boolean).length;
+          const currentNumerator = current.tests.filter(Boolean).length;
           return highestNumerator > currentNumerator ? highest : current;
         });
-        const [numerator, denominator] = highestNumeratorVersion.tests.split('/').map(Number);
+
+        const numerator = highestNumeratorVersion.tests.filter(Boolean).length;
+        const denominator = highestNumeratorVersion.tests.length;
         total += numerator;
         count++;
         commonDenominator = denominator;

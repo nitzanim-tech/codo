@@ -11,7 +11,8 @@ export default function PassMatrix({ studentsRawData }) {
       if (student.submissions && index < student.submissions.length) {
         const submission = student.submissions[index];
         if (submission && submission.trials && submission.trials[0]) {
-          const [passed, total] = submission.trials[0].pass.split('/');
+          const passed = submission.trials[0].pass.filter(Boolean).length;
+          const total = submission.trials[0].pass.length;
           return parseFloat(passed) / parseFloat(total);
         }
       }
