@@ -8,7 +8,7 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests }) {
   const pass = [true, false, true, null, null, null, null];
 
   return (
-    <div style={{ padding: '25px' }}>
+    <div style={{ padding: '5%' }}>
       <Card>
         <StyledCheckboxDiv>
           <CheckboxGroup label="פרמטרים" value={selectedTests} onValueChange={setSelectedTests}>
