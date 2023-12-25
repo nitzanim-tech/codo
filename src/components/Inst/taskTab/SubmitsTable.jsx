@@ -128,7 +128,8 @@ const getSelectedVersion = (versions) => {
   if (versions.length === 0) {
     return { date: '', tests: [] };
   }
-  const versionWithReview = versions.find((version) => version.review);
+  console.log(versions);
+  const versionWithReview = versions.find((version) => version?.review);
   if (versionWithReview) {
     return versionWithReview; // there is a review
   }

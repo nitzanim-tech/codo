@@ -14,14 +14,14 @@ export default function ReviewComponent({ version, selectedTests }) {
   const { app } = useFirebase();
   const [saved, setSaved] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const [generalReview, setGeneralReview] = useState(version.review ? JSON.parse(version.review).general : '');
+  const [generalReview, setGeneralReview] = useState(version.review ? version.review.general : '');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const comments = useRef(version.review ? JSON.parse(version.review).comments : {});
+  const comments = useRef(version.review ? version.review.comments : {});
 
   const handlePreviewClick = () => {
     const checkedSubmit = {
       code: version.code,
-      review: JSON.stringify({ comments: comments.current, general: generalReview }),
+      review: { comments: comments.current, general: generalReview },
     };
     console.log(JSON.stringify(checkedSubmit));
     localStorage.setItem('checkedSubmit', JSON.stringify(checkedSubmit));
@@ -29,6 +29,7 @@ export default function ReviewComponent({ version, selectedTests }) {
   };
 
   const sendReview = async () => {
+    console.log(comments);
     if (haveTestsChanged(selectedTests, version.tests, false)) {
       const passedChanged = await changePassScore({
         app,
