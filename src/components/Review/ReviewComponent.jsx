@@ -1,16 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Tooltip, Textarea } from '@nextui-org/react';
 import addReview from '../../requests/review/addReview';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import PageviewRoundedIcon from '@mui/icons-material/PageviewRounded';
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import ReviewEditor from './ReviewEditor';
 import { Modal, ModalHeader, ModalBody, ModalContent, ModalFooter, useDisclosure } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
+import changePassScore from '../../requests/review/changePassScore';
 
 export default function ReviewComponent({ version, selectedTests }) {
   const { app } = useFirebase();
   const [saved, setSaved] = useState(false);
+  const [errorText, setErrorText] = useState('');
   const [generalReview, setGeneralReview] = useState(version.review ? JSON.parse(version.review).general : '');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const comments = useRef(version.review ? JSON.parse(version.review).comments : {});
@@ -26,6 +29,17 @@ export default function ReviewComponent({ version, selectedTests }) {
   };
 
   const sendReview = async () => {
+    if (haveTestsChanged(selectedTests, version.tests, false)) {
+      const passedChanged = await changePassScore({
+        app,
+        userId: version.student.uid,
+        task: version.task,
+        trialIndex: version.id,
+        pass: indexToBooleanArray(selectedTests, version.tests),
+      });
+      if (!passedChanged) setErrorText('שגיאה בתיקון ציון הטסטים');
+    }
+
     const reviewData = {
       comments: comments.current,
       general: generalReview,
@@ -39,8 +53,7 @@ export default function ReviewComponent({ version, selectedTests }) {
       trialIndex: version.id,
       reviewData,
     });
-    if (haveTestsChanged(selectedTests, version.tests, false))
-      await console.log(version.student.uid, version.date, version.task);
+    if (!hadSaved) setErrorText('שגיאה בשליחת המשוב לחניך');
 
     setSaved(hadSaved);
   };
@@ -85,6 +98,9 @@ export default function ReviewComponent({ version, selectedTests }) {
             <PageviewRoundedIcon />
           </Button>
         </Tooltip>
+        <p style={{ fontWeight: 'bold', color: 'red' }}>
+          {errorText} {errorText && <CancelRoundedIcon />}
+        </p>
       </div>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center" size="xl">
@@ -124,3 +140,11 @@ function haveTestsChanged(selectedTests, pass, isRunningTest) {
   return false;
 }
 
+function indexToBooleanArray(indexArray, oldArray) {
+  const booleanArray = [];
+  for (let i = 0; i < oldArray.length; i++) {
+    if (indexArray.includes(i)) booleanArray[i] = true;
+    else booleanArray[i] = false;
+  }
+  return booleanArray;
+}
