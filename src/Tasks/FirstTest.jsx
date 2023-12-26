@@ -34,7 +34,7 @@ export function processTestsOutputs(testsOutputs) {
   return testsOutputs.map((testsOutput, index) => {
     const input = null;
     const output = testsOutput.output ? testsOutput.output.replace(/\n/g, '') : '';
-    const correct = index == 0 ? output.includes(answers[index]) : !output.includes('Sababa Egozim');
+    const correct = index < 3 ? output.includes(answers[index]) : null;
     const name = names[index];
     return { name, input, output, correct, ans: answers[index] };
   });

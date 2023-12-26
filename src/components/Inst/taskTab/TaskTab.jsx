@@ -4,6 +4,7 @@ import { Grid } from '@mui/material';
 import InstTasksList from './InstTasksList';
 import { DashboardCard } from '../DashboardCard';
 import ExcelButton from './ExcelButton';
+import { testsName } from '../../../Tasks/TaskIndex';
 
 export default function TaskTab({ studentsRawData }) {
   const [formattedData, setFormattedData] = useState([]);
@@ -84,8 +85,7 @@ const countStudents = (data) => {
 const calculateAverage = (data) => {
   let total = 0;
   let count = 0;
-  let commonDenominator = null;
-
+  let denominator = data.length ? testsName(data[0].task).length : 0;
   if (Array.isArray(data)) {
     data.forEach((student) => {
       if (Array.isArray(student.versions) && student.versions.length > 0) {
@@ -94,17 +94,14 @@ const calculateAverage = (data) => {
           const currentNumerator = current.tests.filter(Boolean).length;
           return highestNumerator > currentNumerator ? highest : current;
         });
-
+        console.log(student.versions, highestNumeratorVersion);
         const numerator = highestNumeratorVersion.tests.filter(Boolean).length;
-        const denominator = highestNumeratorVersion.tests.length;
         total += numerator;
         count++;
-        commonDenominator = denominator;
       }
     });
   }
   if (!count) count = 1;
-  if (!commonDenominator) commonDenominator = 0;
   const average = total / count;
-  return `${average.toFixed(2)}/${commonDenominator}`;
+  return `${average.toFixed(2)}/${denominator}`;
 };
