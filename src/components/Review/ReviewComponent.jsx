@@ -9,6 +9,7 @@ import ReviewEditor from './ReviewEditor';
 import { Modal, ModalHeader, ModalBody, ModalContent, ModalFooter, useDisclosure } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
 import changePassScore from '../../requests/review/changePassScore';
+import { testsName } from '../../Tasks/TaskIndex';
 
 export default function ReviewComponent({ version, selectedTests }) {
   const { app } = useFirebase();
@@ -36,7 +37,7 @@ export default function ReviewComponent({ version, selectedTests }) {
         userId: version.student.uid,
         task: version.task,
         trialIndex: version.id,
-        pass: indexToBooleanArray(selectedTests, version.tests),
+        pass: indexToBooleanArray(selectedTests, version.task),
       });
       if (!passedChanged) setErrorText('שגיאה בתיקון ציון הטסטים');
     }
@@ -141,9 +142,9 @@ function haveTestsChanged(selectedTests, pass, isRunningTest) {
   return false;
 }
 
-function indexToBooleanArray(indexArray, oldArray) {
+function indexToBooleanArray(indexArray, taskIndex) {
   const booleanArray = [];
-  for (let i = 0; i < oldArray.length; i++) {
+  for (let i = 0; i < testsName(taskIndex).length; i++) {
     if (indexArray.includes(i)) booleanArray[i] = true;
     else booleanArray[i] = false;
   }
