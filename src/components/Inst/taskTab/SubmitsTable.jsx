@@ -4,6 +4,7 @@ import DonutChart from '../Chart';
 import VersionsButton from './VersionsButton';
 import formatDate from '../../../util/formatDate';
 import ReviewButton from './ReviewButton';
+import { testsName } from '../../../Tasks/TaskIndex';
 
 export default function SubmitsTable({ data }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
@@ -107,7 +108,7 @@ export default function SubmitsTable({ data }) {
                 <TableCell>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <DonutChart
-                      ratio={selectedVersion.tests.filter(Boolean).length + '/' + selectedVersion.tests.length}
+                      ratio={selectedVersion.tests.filter(Boolean).length + '/' + testsName(student.task).length}
                       percentage={percentage}
                       size={45}
                     />
@@ -128,7 +129,6 @@ const getSelectedVersion = (versions) => {
   if (versions.length === 0) {
     return { date: '', tests: [] };
   }
-  console.log(versions);
   const versionWithReview = versions.find((version) => version?.review);
   if (versionWithReview) {
     return versionWithReview; // there is a review

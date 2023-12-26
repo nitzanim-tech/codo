@@ -44,7 +44,8 @@ function SumbitButton({ code, testsOutputs, setRunTests, task }) {
   };
 
   const callSumbitCode = () => {
-    sumbitCode({ user: currentUser, app, code, task, pass: testStatus }).then((succesfulySent) => {
+    const pass = testsOutputs.map((test) => test.correct);
+    sumbitCode({ user: currentUser, app, code, task, pass }).then((succesfulySent) => {
       succesfulySent ? setSuccesfulySent(true) : setErrorSent(true);
     });
   };
