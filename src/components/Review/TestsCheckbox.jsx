@@ -15,7 +15,7 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, pass }) {
                 <Checkbox value={index} radius="full" style={{ marginLeft: '5px' }}>
                   {testName}
                 </Checkbox>
-                {pass.indexOf(null) == index + 1 && <Divider />}
+                {pass.length == index + 1 && <Divider />}
               </React.Fragment>
             ))}
           </CheckboxGroup>

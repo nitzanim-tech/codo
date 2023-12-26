@@ -4,6 +4,10 @@ import { Card } from '@nextui-org/react';
 import { CircularProgress } from '@nextui-org/react';
 import FlutterDashRoundedIcon from '@mui/icons-material/FlutterDashRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import { testsName } from '../Tasks/TaskIndex';
+import { Grid } from '@mui/material';
+import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
+import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
 const LINE_HEGITH = 20;
 
 export default function ReadReview() {
@@ -77,10 +81,40 @@ export default function ReadReview() {
         ) : (
           <CircularProgress />
         )}
+        <Grid container spacing={1} columns={2} rows={1}>
+          <Grid item style={{ width: '45%', display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+              <div style={{ flexDirection: 'row' }}>
+                <span style={{ color: '#cc4b58', marginRight: '10px' }}>
+                  <b>שיפור</b> <ThumbDownRoundedIcon />
+                </span>
+              </div>
+              {testsName(13).map((item, index) => (
+                <p key={index}>{item}</p>
+              ))}
+            </div>
+          </Grid>
+          <Grid item style={{ width: '45%', display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+              <div style={{ flexDirection: 'row' }}>
+                <span style={{ color: '#46c813', marginRight: '10px' }}>
+                  <b>שימור</b> <ThumbUpRoundedIcon />
+                </span>
+              </div>
+              {testsName(13).map((item, index) => (
+                <p key={index}>{item}</p>
+              ))}
+            </div>
+          </Grid>
+        </Grid>
       </Card>
     </div>
   );
 }
+
+
+
+
 
 function convertCommentsToObject(comments, code) {
   const keys = comments ? Object.keys(comments) : [];
