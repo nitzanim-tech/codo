@@ -8,16 +8,19 @@ import TestsList from '../components/TestsList/TestsList';
 import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { testsName } from '../Tasks/TaskIndex';
+import { getTaskByIndex } from '../components/IDE/getTaskByIndex';
 import './Submit.css';
 
 function Submit() {
   const { index } = useParams();
-  const [task, setTask] = useState(parseInt(index, 10)|| 0);
+  const [task, setTask] = useState(parseInt(index, 10) || 0);
   const initialTestNames = testsName(task);
   const [testsOutputs, setTestsOutputs] = useState(initialTestNames.map((name) => ({ name })));
+  const [taskObject, setTaskObject] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setTaskObject(getTaskByIndex({ index: task }));
       const testNames = testsName(task);
       const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
       setTestsOutputs(newEmptyTests);
@@ -32,7 +35,7 @@ function Submit() {
       <PyodideProvider>
         <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
           <Grid item style={{ width: '20%' }}>
-            <TestsList testsOutputs={testsOutputs} task={task} />
+            {!taskObject?.hideTests && <TestsList testsOutputs={testsOutputs} task={task} />}
           </Grid>
 
           <Grid item style={{ width: '50%' }}>
@@ -40,7 +43,7 @@ function Submit() {
           </Grid>
 
           <Grid item style={{ width: '30%' }}>
-            <Instructions task={task} />
+            {!taskObject?.hideTests && <Instructions task={task} />}
           </Grid>
         </Grid>
       </PyodideProvider>
