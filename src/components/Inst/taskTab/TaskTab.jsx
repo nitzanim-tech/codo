@@ -89,8 +89,6 @@ const calculateAverage = (data) => {
 
   if (Array.isArray(data)) {
     data.forEach((student) => {
-      console.log(student);
-
       if (Array.isArray(student.versions) && student.versions.length > 0) {
         const highestNumeratorVersion = student.versions.reduce((highest, current) => {
           const [highestNumerator] = highest.tests.split('/').map(Number);

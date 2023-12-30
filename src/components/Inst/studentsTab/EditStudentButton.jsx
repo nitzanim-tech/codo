@@ -37,7 +37,6 @@ export default function EditStudentButton({ studentData, groups, app }) {
           <ModalContent>
             {(onClose) => (
               <>
-                {console.log(studentData)}
                 <ModalHeader className="flex flex-col gap-1">ערוך פרטי חניך</ModalHeader>
                 <ModalBody>
                   <div style={{ direction: 'rtl', margin: '5px' }}>
