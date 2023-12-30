@@ -8,7 +8,6 @@ export default function StudentsTable({ app, isLoading, studentsRawData }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
   const [groups, setGroups] = useState(null);
   
-  console.log(studentsRawData);
   useEffect(() => {
     const getGroupFromDb = async () => {
       try {

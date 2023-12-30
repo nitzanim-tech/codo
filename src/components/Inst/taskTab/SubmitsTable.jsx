@@ -118,7 +118,6 @@ export default function SubmitsTable({ data }) {
 }
 
 const getSelectedVersion = (versions) => {
-  console.log(versions);
   if (versions.length === 0) {
     return { date: '', tests: '' };
   }
