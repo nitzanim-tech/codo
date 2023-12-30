@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Tooltip } from '@nextui-org/react';
-// import firebaseConfig from '../../util/firebaseConfig';
-// import { initializeApp } from 'firebase/app';
-// import { getAuth } from 'firebase/auth';
-
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
@@ -11,12 +7,12 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import sumbitCode from '../../requests/sumbitCode';
 import { ModalBody, ModalFooter } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
-import { useContext } from 'react';
-import { FirebaseContext } from '../../util/FirebaseProvider';
+import { useFirebase } from '../../util/FirebaseProvider';
+import { getTaskByIndex } from './getTaskByIndex';
 
 function SumbitButton({ code, testsOutputs, setRunTests, task }) {
-  const { app, auth } = useContext(FirebaseContext);
-const [currentUser, setCurrentUser] = useState(null);
+  const { app, auth } = useFirebase();
+  const [currentUser, setCurrentUser] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [succesfulySent, setSuccesfulySent] = useState(false);
   const [errorSent, setErrorSent] = useState(false);
@@ -38,7 +34,8 @@ const [currentUser, setCurrentUser] = useState(null);
   function countCorrectTests(tests) {
     const total = tests.length;
     const correct = tests.filter((test) => test.correct).length;
-    setTestStatus(`${correct}/${total}`);
+    const taskObject = getTaskByIndex({ index: task });
+    if (!taskObject?.hideTests) setTestStatus(`${correct}/${total}`);
   }
 
   const runTestBeforeSumbit = () => {
@@ -47,7 +44,10 @@ const [currentUser, setCurrentUser] = useState(null);
   };
 
   const callSumbitCode = () => {
-    sumbitCode({ user: currentUser, app, code, task, pass: testStatus }).then((succesfulySent) => {
+    const total = testsOutputs.length;
+    const correct = testsOutputs.filter((test) => test.correct).length;
+    const pass = `${correct}/${total}`;
+    sumbitCode({ user: currentUser, app, code, task, pass }).then((succesfulySent) => {
       succesfulySent ? setSuccesfulySent(true) : setErrorSent(true);
     });
   };

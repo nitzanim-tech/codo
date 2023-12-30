@@ -30,11 +30,12 @@ const releasedTasks = [
   { value: 10, label: 'לולאה מקוננת - לוח הכפל' },
   { value: 11, label: 'לולאה מקוננת - wordle' },
   { value: 12, label: 'תרגול מונחה - שפע יששכר' },
+  { value: 13, label: 'תרגול מונחה - הכנה לבוחן' },
 ];
 
 const betaTasks = releasedTasks.concat([]);
 
-const selectItemDivide = [1, 2, 4, 5, 9];
+const selectItemDivide = [1, 2, 4, 5, 9, 12];
 
 export default function NavigateBar({ task, setTask, isShowTask }) {
   // const { app, auth } = useFirebase();
