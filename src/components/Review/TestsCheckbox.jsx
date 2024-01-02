@@ -4,7 +4,7 @@ import { testsName } from '../../Tasks/TaskIndex';
 import { CheckboxGroup, Checkbox } from '@nextui-org/react';
 import styled from 'styled-components';
 
-function TestsCheckbox({ task, selectedTests, setSelectedTests, pass }) {
+function TestsCheckbox({ task, selectedTests, setSelectedTests, pass, gradesVector }) {
   return (
     <div style={{ padding: '5%' }}>
       <Card>
@@ -13,7 +13,7 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, pass }) {
             {testsName(task).map((testName, index) => (
               <React.Fragment key={index}>
                 <Checkbox value={index} radius="full" style={{ marginLeft: '5px' }}>
-                  {testName}
+                  {`${testName} (${gradesVector[index]} נק')`}
                 </Checkbox>
                 {pass.length == index + 1 && <Divider />}
               </React.Fragment>

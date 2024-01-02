@@ -8,14 +8,21 @@ import formatDate from '../util/formatDate';
 import { testsName } from '../Tasks/TaskIndex';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
 
+
 function Review() {
   const [version, setVersion] = useState(null);
   const [selectedTests, setSelectedTests] = useState([]);
+  const [gradesVector, setGradesVector] = useState(null);
 
   useEffect(() => {
     const storedVersion = localStorage.getItem('versionToCheck');
     if (storedVersion) {
-      const parsedVersion = JSON.parse(storedVersion); 
+      const parsedVersion = JSON.parse(storedVersion);
+      if (parsedVersion.task == 13) {
+        //first test
+        const grades = new Array(35).fill(3, 0, 30).fill(5, 30, 35);
+        setGradesVector(grades);
+      }
       setVersion(parsedVersion);
       const passTestsIndexes = parsedVersion.tests.reduce(
         (acc, val, index) => (val === true ? [...acc, index] : acc),
@@ -25,6 +32,9 @@ function Review() {
     }
   }, []);
 
+  const calculateSum = (gradesVector, selectedTests) => {
+    return selectedTests.reduce((sum, testIndex) => sum + gradesVector[testIndex], 0);
+  };
 
   return (
     <>
@@ -46,9 +56,14 @@ function Review() {
               <h2 style={{ fontSize: '1.7vw' }}>{formatDate(version.date)}</h2>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <DashboardCard
-                  ratio={selectedTests.length + '/' + testsName(version.task).length}
+                  ratio={
+                    gradesVector
+                      ? calculateSum(gradesVector, selectedTests) + '/' + gradesVector.reduce((a, b) => a + b, 0)
+                      : selectedTests.length + '/' + testsName(version.task).length
+                  }
                   text={'סה"כ'}
                   size={70}
+                  max={100}
                 />
               </div>
               <TestsCheckbox
@@ -56,6 +71,7 @@ function Review() {
                 selectedTests={selectedTests}
                 setSelectedTests={setSelectedTests}
                 pass={version.tests}
+                gradesVector={gradesVector}
               />
             </Grid>
           </Grid>
