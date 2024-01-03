@@ -1,25 +1,53 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, Divider } from '@nextui-org/react';
 import { testsName } from '../../Tasks/TaskIndex';
-import { CheckboxGroup, Checkbox } from '@nextui-org/react';
+import { CheckboxGroup, Checkbox, ScrollShadow } from '@nextui-org/react';
 import styled from 'styled-components';
 
 function TestsCheckbox({ task, selectedTests, setSelectedTests, pass, gradesVector }) {
+  const headers = {
+    10: 'חלק 1- הצגת התפריט',
+    14: 'חלק 2- הרכבת המנה',
+    18: 'חלק 3- גביית תשלום',
+    22: 'חלק 4- הוספת לקוחות',
+    26: 'חלק 5- סגירת קופה',
+    30: 'נראה שהחניך שולט ב:',
+  };
   return (
     <div style={{ padding: '5%' }}>
       <Card>
-        <StyledCheckboxDiv>
-          <CheckboxGroup label="פרמטרים" value={selectedTests} onValueChange={setSelectedTests}>
-            {testsName(task).map((testName, index) => (
-              <React.Fragment key={index}>
-                <Checkbox value={index} radius="full" style={{ marginLeft: '5px' }}>
-                  {`${testName} (${gradesVector[index]} נק')`}
-                </Checkbox>
-                {pass.length == index + 1 && <Divider />}
-              </React.Fragment>
-            ))}
-          </CheckboxGroup>
-        </StyledCheckboxDiv>
+        <ScrollShadow className="h-[450px]" size={20}>
+          <StyledCheckboxDiv>
+            <CheckboxGroup label="הרצות" value={selectedTests} onValueChange={setSelectedTests}>
+              <table>
+                <tbody>
+                  {testsName(task).map((testName, index) => (
+                    <React.Fragment key={index}>
+                      {Object.keys(headers).includes(index.toString()) && (
+                        <tr>
+                          <td colSpan={2} style={{ textAlign: 'right', color: 'gray' }}>
+                            {headers[index.toString()]}
+                          </td>
+                        </tr>
+                      )}
+                      <tr>
+                        <td>
+                          <Checkbox value={index} radius="full">
+                            {testName}
+                          </Checkbox>
+                        </td>
+                        <td style={{ width: '20%', color: 'gray', fontSize: '80%', textAlign: 'center' }}>
+                          {gradesVector && `${gradesVector[index]} נק'`}
+                        </td>
+                      </tr>
+                      {pass.length === index + 1 && <Divider />}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </CheckboxGroup>
+          </StyledCheckboxDiv>{' '}
+        </ScrollShadow>
       </Card>
     </div>
   );
@@ -35,4 +63,6 @@ const StyledCheckboxDiv = styled.div`
   text-align: right;
   align-content: right;
   margin: 9px;
+  display: 'flex';
+  justifycontent: 'center';
 `;

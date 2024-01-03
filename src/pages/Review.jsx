@@ -41,7 +41,7 @@ function Review() {
       {version ? (
         <>
           <Grid container spacing={1} columns={3} rows={1} style={{ marginTop: '20px', padding: '20px' }}>
-            <Grid item style={{ width: '74%' }}>
+            <Grid item style={{ width: '69%' }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Card style={{ width: '95%' }}>
                   <ReviewComponent version={version} selectedTests={selectedTests} />
@@ -49,7 +49,7 @@ function Review() {
               </div>
             </Grid>
 
-            <Grid item style={{ width: '20%' }}>
+            <Grid item style={{ width: '30%' }}>
               <h2 style={{ fontSize: '1.7vw' }}>
                 <b>{version.student.name}</b>
               </h2>
