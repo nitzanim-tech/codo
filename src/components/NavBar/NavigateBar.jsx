@@ -3,17 +3,12 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@nextui-org/reac
 import logoImg from '../../assets/img/logo.png';
 import FirebaseAuth from './FirebaseAuth';
 import { Select, SelectItem, Button, Tooltip } from '@nextui-org/react';
-// import firebaseConfig from '../../util/firebaseConfig';
-import {  onAuthStateChanged } from 'firebase/auth';
-
-// import { initializeApp } from 'firebase/app';
+import { onAuthStateChanged } from 'firebase/auth';
 import getCurrentUser from '../../requests/getCurrentUser';
 import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
 import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
-
-import { useContext } from 'react';
-import { FirebaseContext } from '../../util/FirebaseProvider';
+import { useFirebase } from '../../util/FirebaseProvider';
 
 const courseBookUrl = 'https://drive.google.com/file/d/19ZABUSmex80nO07J074tY0Ma2Cietb0p/view';
 const releasedTasks = [
@@ -39,9 +34,8 @@ const betaTasks = releasedTasks.concat([]);
 const selectItemDivide = [1, 2, 4, 5, 9, 12];
 
 export default function NavigateBar({ task, setTask, isShowTask }) {
-  // const { app, auth } = useFirebase();
-const { app, auth } = useContext(FirebaseContext);
-const [currentUser, setCurrentUser] = useState(null);
+  const { app, auth } = useFirebase();
+  const [currentUser, setCurrentUser] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [tasks, setTasks] = useState(releasedTasks);
 

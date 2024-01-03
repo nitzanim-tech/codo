@@ -40,13 +40,13 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, pass, gradesVect
                           {gradesVector && `${gradesVector[index]} נק'`}
                         </td>
                       </tr>
-                      {pass.length === index + 1 && <Divider />}
+                      {/* {pass.length === index + 1 && <Divider />} */}
                     </React.Fragment>
                   ))}
                 </tbody>
               </table>
             </CheckboxGroup>
-          </StyledCheckboxDiv>{' '}
+          </StyledCheckboxDiv>
         </ScrollShadow>
       </Card>
     </div>

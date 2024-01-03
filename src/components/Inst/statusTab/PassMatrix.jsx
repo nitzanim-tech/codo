@@ -5,15 +5,17 @@ import tasks from '../../../Tasks/TasksList.json';
 export default function PassMatrix({ studentsRawData }) {
   const reversedTaskList = [...tasks].reverse();
   const maxSubmissions = tasks.length;
-
   const taskData = studentsRawData.map((student) => {
     const passRatios = Array.from({ length: maxSubmissions }, (_, index) => {
       if (student.submissions && index < student.submissions.length) {
         const submission = student.submissions[index];
-        if (submission && submission.trials && submission.trials[0]) {
-          const passed = submission.trials[0].pass.filter(Boolean).length;
+        if (submission && submission.trials) {
+          const maxGradeTrial = submission.trials.reduce((max, trial) => {
+            const passed = Array.isArray(trial.pass) ? trial.pass.filter(Boolean).length : 0;
+            return Math.max(max, passed);
+          }, 0);
           const total = submission.trials[0].pass.length;
-          return parseFloat(passed) / parseFloat(total);
+          return parseFloat(maxGradeTrial) / parseFloat(total);
         }
       }
       return -1;

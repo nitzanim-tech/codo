@@ -18,7 +18,7 @@ function Review() {
     const storedVersion = localStorage.getItem('versionToCheck');
     if (storedVersion) {
       const parsedVersion = JSON.parse(storedVersion);
-      if (parsedVersion.task == 13) {
+      if (parsedVersion.task == 14) {
         //first test
         const grades = new Array(35).fill(3, 0, 30).fill(5, 30, 35);
         setGradesVector(grades);
@@ -63,7 +63,7 @@ function Review() {
                   }
                   text={'סה"כ'}
                   size={70}
-                  max={100}
+                  max={gradesVector ? 100 : null}
                 />
               </div>
               <TestsCheckbox
