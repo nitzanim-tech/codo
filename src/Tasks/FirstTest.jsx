@@ -65,6 +65,8 @@ export function generateInputList() {
     '1\nhumus\npickles\ntehini\nsalad\n1\n10\n20\nno',
     '3\nsalad\nstop\n1\n10\n20\nno',
     '2\nsalad\nstop\n1\n10\n20\nno',
+    '1\nsalad\nstop\n1\n5\n8\n10\nno',
+    '3\nsalad\nstop\n33\nno',
   ];
 }
 const isLineContains = (output, includeWords, excludeWords) => {
@@ -73,7 +75,7 @@ const isLineContains = (output, includeWords, excludeWords) => {
     let excludeAny = excludeWords.some((word) => line.toLowerCase().includes(word));
     if (includeAll && !excludeAny) {
       return true;
-    } else console.log({ line,includeAll, excludeAny });
+    } else console.log({ line, includeAll, excludeAny });
   }
   return false;
 };
@@ -89,8 +91,8 @@ const isCorrect = ({ index, outputLines }) => {
     case 1: //updating the list of salads
       const Salads = ['salad', 'humus', 'tehini', 'harif', 'amba', 'cabbage', 'pickles', 'chips', 'onion'];
       const SaladsWithoutHumus = Salads.filter((item) => item !== 'humus');
-      const SaladsWithoutPickles = SaladsWithoutHumus.filter((item) => item !== 'humus');
-      const SaladsWithoutThini = SaladsWithoutPickles.filter((item) => item !== 'humus');
+      const SaladsWithoutPickles = SaladsWithoutHumus.filter((item) => item !== 'pickles');
+      const SaladsWithoutThini = SaladsWithoutPickles.filter((item) => item !== 'tehini');
       return (
         isLineContains(outputLines, Salads, []) &&
         isLineContains(outputLines, SaladsWithoutHumus, ['humus']) &&
@@ -98,12 +100,24 @@ const isCorrect = ({ index, outputLines }) => {
         isLineContains(outputLines, SaladsWithoutThini, ['humus', 'pickles', 'tehini'])
       );
     case 2: // printing the list of selected salads
-      return isLineContains(outputLines, ['humus', 'pickles', 'tehini', 'salad'], []);
+      return isLineContains(
+        outputLines,
+        ['humus', 'pickles', 'tehini', 'salad'],
+        ['harif', 'amba', 'cabbage', 'onion'],
+      );
     case 3: // printing Chips and Soda for a deal
       return isLineContains(outputLines, ['chips', 'soda'], []);
     case 4: // printing the correct price
       return isLineContains(outputLines, ['pay', '25'], []);
     case 5: // cash in several currencies and excess
+      return isLineContains(outputLines, ['back', '8'], []);
+    case 6: //Cash Exact Price
+      return isLineContains(outputLines, ['back', '0'], []);
+    case 7: //credit
+      return false;
+    case 8: //some customers
+      return false;
+    case 9: //correct profit amount
       return false;
   }
 };
