@@ -12,6 +12,7 @@ import * as MultiplicationTable from './MultiplicationTable'
 import * as WordleFor from './WordleFor';
 import * as ShefaIssaschar from './ShefaIssaschar';
 import * as FirstTest from './FirstTest'
+import * as BeforeFirstTask from './BeforeFirstTest';
 
 const tasks = {
   0: Experience,
@@ -27,7 +28,8 @@ const tasks = {
   10: MultiplicationTable,
   11: WordleFor,
   12: ShefaIssaschar,
-  13: FirstTest,
+  13: BeforeFirstTask,
+  14: FirstTest,
 };
 
 export function testsName(task) {

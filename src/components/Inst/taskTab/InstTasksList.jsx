@@ -1,6 +1,5 @@
 import React from 'react';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
-import { Directions } from '@mui/icons-material';
+import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import tasks from '../../../Tasks/TasksList.json';
 
 const DropdownWrapper = ({ children }) => (
@@ -9,12 +8,24 @@ const DropdownWrapper = ({ children }) => (
   </div>
 );
 
-const dividers = [1, 2, 4, 5,9];
+const dividers = [1, 2, 4, 5, 9, 12, 13];
 
 export default function InstTasksList({ selectedTask, setSelectedTask }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <DropdownWrapper>
+      <Autocomplete dir="rtl" placeholder="בחר משימה" className="max-w-xs" defaultSelectedKey={tasks[0].key}>
+        {tasks.map((task) => (
+          <AutocompleteItem
+            key={task.key}
+            onClick={() => setSelectedTask(task.key)}
+            showDivider={dividers.includes(task.key)}
+          >
+            {task.name}
+          </AutocompleteItem>
+        ))}
+      </Autocomplete>
+
+      {/* <DropdownWrapper>
         <Dropdown>
           <DropdownTrigger>
             <button className="py-2 px-4 w-full text-left">{tasks[selectedTask]?.name || 'בחר משימה'}</button>
@@ -31,7 +42,7 @@ export default function InstTasksList({ selectedTask, setSelectedTask }) {
             ))}
           </DropdownMenu>
         </Dropdown>
-      </DropdownWrapper>
+      </DropdownWrapper> */}
     </div>
   );
 }

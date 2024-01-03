@@ -2,7 +2,6 @@ import React from 'react';
 
 export function testsName() {
   return [
-    //טסטים:
     'הרצה 1- הודפס התפריט',
     'הרצה 2- עדכון רשימת תוספות',
     'הרצה 3- הדפסת רשימת התוספות שנבחרו',
@@ -39,7 +38,6 @@ export function testsName() {
     'חלק 5 - עיצוב וקריאות',
     'חלק 5 - מקרי קצה (בונוס)',
 
-    //שימוש נכון ב:
     'קלט פלט ומשתנים',
     'תנאים',
     'לולאות WHILE',
@@ -63,10 +61,10 @@ export function getTaskTests() {
 export function generateInputList() {
   return [
     '1\nsalad\nstop\n1\n10\n20\nno',
-    '1\nhumus\npickles\tehini\nsalad\n1\n10\n20\nno',
+    '1\nhumus\npickles\ntehini\nsalad\n1\n10\n20\nno',
+    '1\nhumus\npickles\ntehini\nsalad\n1\n10\n20\nno',
     '3\nsalad\nstop\n1\n10\n20\nno',
-    '1\nhumus\npickles\tehini\nsalad\n1\n10\n20\nno',
-    '1\nsalad\nstop\n1\n10\n20\nno',
+    '2\nsalad\nstop\n1\n10\n20\nno',
   ];
 }
 const isLineContains = (output, includeWords, excludeWords) => {
@@ -75,12 +73,12 @@ const isLineContains = (output, includeWords, excludeWords) => {
     let excludeAny = excludeWords.some((word) => line.toLowerCase().includes(word));
     if (includeAll && !excludeAny) {
       return true;
-    }
+    } else console.log({ line,includeAll, excludeAny });
   }
   return false;
 };
 
-const isCorrect = ({ index, outputLines, answer }) => {
+const isCorrect = ({ index, outputLines }) => {
   switch (index) {
     case 0: // printing the menu
       return (
@@ -103,20 +101,23 @@ const isCorrect = ({ index, outputLines, answer }) => {
       return isLineContains(outputLines, ['humus', 'pickles', 'tehini', 'salad'], []);
     case 3: // printing Chips and Soda for a deal
       return isLineContains(outputLines, ['chips', 'soda'], []);
+    case 4: // printing the correct price
+      return isLineContains(outputLines, ['pay', '25'], []);
+    case 5: // cash in several currencies and excess
+      return false;
   }
 };
 
 export function processTestsOutputs(testsOutputs) {
   const names = testsName();
-  const answers = ['0', `0`, '0', '0', '0'];
   return testsOutputs.map((testsOutput, index) => {
     const input = null;
     const outputLines = testsOutput.output ? testsOutput.output.split('\n') : '';
 
-    const correct = index < 10 ? isCorrect({ index, outputLines, answer: answers[index] }) : null;
+    const correct = index < 10 ? isCorrect({ index, outputLines }) : null;
     const name = names[index];
-    console.log({ name, input, output: testsOutput.output, correct, ans: answers[index] });
-    return { name, input, output: testsOutput.output, correct, ans: answers[index] };
+    console.log({ name, input, output: testsOutput.output, correct });
+    return { name, input, output: testsOutput.output, correct };
   });
 }
 
