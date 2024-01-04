@@ -3,7 +3,7 @@ import { Button, Tooltip } from "@nextui-org/react";
 import RuleRoundedIcon from "@mui/icons-material/RuleRounded";
 import { usePyodide } from './PyodideProvider';
 import {getTaskTests} from "../../Tasks/TaskIndex"
-import { cleanTracebackTest } from '../../util/general';
+import { cleanTracebackTest } from '../../util/cleanTraceback';
 
 export default function RunTestButton({ code, setTestsOutputs, runTests, task }) {
   const [rowTestsOutputs, setRowTestsOutputs] = useState([]);

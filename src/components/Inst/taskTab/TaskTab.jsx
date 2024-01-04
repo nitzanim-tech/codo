@@ -4,6 +4,7 @@ import { Grid } from '@mui/material';
 import InstTasksList from './InstTasksList';
 import { DashboardCard } from '../DashboardCard';
 import ExcelButton from './ExcelButton';
+import { testsName } from '../../../Tasks/TaskIndex';
 
 export default function TaskTab({ studentsRawData }) {
   const [formattedData, setFormattedData] = useState([]);
@@ -78,32 +79,29 @@ const countStudents = (data) => {
       (student) => Array.isArray(student.versions) && student.versions.length > 0,
     ).length;
   }
-
   return `${studentsWithVersions}/${totalStudents}`;
 };
 
 const calculateAverage = (data) => {
   let total = 0;
   let count = 0;
-  let commonDenominator = null;
-
+  let denominator = data.length ? testsName(data[0].task).length : 0;
   if (Array.isArray(data)) {
     data.forEach((student) => {
       if (Array.isArray(student.versions) && student.versions.length > 0) {
         const highestNumeratorVersion = student.versions.reduce((highest, current) => {
-          const [highestNumerator] = highest.tests.split('/').map(Number);
-          const [currentNumerator] = current.tests.split('/').map(Number);
+          const highestNumerator = highest.tests.filter(Boolean).length;
+          const currentNumerator = current.tests.filter(Boolean).length;
           return highestNumerator > currentNumerator ? highest : current;
         });
-        const [numerator, denominator] = highestNumeratorVersion.tests.split('/').map(Number);
+        console.log(student.versions, highestNumeratorVersion);
+        const numerator = highestNumeratorVersion.tests.filter(Boolean).length;
         total += numerator;
         count++;
-        commonDenominator = denominator;
       }
     });
   }
   if (!count) count = 1;
-  if (!commonDenominator) commonDenominator = 0;
   const average = total / count;
-  return `${average.toFixed(2)}/${commonDenominator}`;
+  return `${average.toFixed(2)}/${denominator}`;
 };

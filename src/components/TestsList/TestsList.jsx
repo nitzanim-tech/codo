@@ -10,7 +10,6 @@ import { getTaskExplanation } from '../../Tasks/TaskIndex';
 export default function TestsList({ testsOutputs, task }) {
   const [selectedValue, setSelectedValue] = useState(testsOutputs[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [explanationTask, setExplanationTask] = useState(getTaskExplanation(task));
 
   useEffect(() => {

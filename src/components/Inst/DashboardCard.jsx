@@ -2,8 +2,9 @@ import { Card, CardBody, Spinner } from '@nextui-org/react';
 import DonutChart from './Chart';
 import { Grid } from '@mui/material';
 
-export const DashboardCard = ({ ratio, text , size=80}) => {
+export const DashboardCard = ({ ratio, text, size = 80, max }) => {
   let [numerator, denominator] = ratio.split('/').map(Number);
+  if (max) denominator = max;
   const percentage = Math.round((numerator / denominator) * 100);
   if (denominator == 0) denominator = '?';
   return (

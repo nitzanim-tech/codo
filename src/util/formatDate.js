@@ -7,3 +7,11 @@ export default function formatDate(dateString) {
     .toString()
     .padStart(2, '0')}.${dateObj.getUTCFullYear()}`;
 }
+
+  // "בוחן תנאים ולולאות": {
+  //   "בוחן 1": {
+  //     "type": "task",
+  //     "index": "14",
+  //     "hideTests": true
+  //   }
+  // }
