@@ -4,11 +4,15 @@ import DonutChart from '../Chart';
 import VersionsButton from './VersionsButton';
 import formatDate from '../../../util/formatDate';
 import ReviewButton from './ReviewButton';
+import { testsName } from '../../../Tasks/TaskIndex';
 
 export default function SubmitsTable({ data }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
-  const calculatePresent = (stringRatio) =>
-    (parseInt(stringRatio.split('/')[0]) / parseInt(stringRatio.split('/')[1])) * 100;
+  const calculatePresent = (tests) => {
+    const passedTests = tests.filter(Boolean).length;
+    const totalTests = tests.length;
+    return (passedTests / totalTests) * 100;
+  };
 
   const maxTestInVersion = (versions) => {
     let maxTests = -1;
@@ -103,7 +107,11 @@ export default function SubmitsTable({ data }) {
                 <TableCell>{student.versions.length > 1 && <VersionsButton versions={student.versions} />}</TableCell>
                 <TableCell>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <DonutChart ratio={selectedVersion.tests} percentage={percentage} size={45} />
+                    <DonutChart
+                      ratio={selectedVersion.tests.filter(Boolean).length + '/' + testsName(student.task).length}
+                      percentage={percentage}
+                      size={45}
+                    />
                   </div>
                 </TableCell>
                 <TableCell>{selectedVersion.date ? formatDate(selectedVersion.date) : ''}</TableCell>
@@ -119,15 +127,15 @@ export default function SubmitsTable({ data }) {
 
 const getSelectedVersion = (versions) => {
   if (versions.length === 0) {
-    return { date: '', tests: '' };
+    return { date: '', tests: [] };
   }
-  const versionWithReview = versions.find((version) => version.review);
+  const versionWithReview = versions.find((version) => version?.review);
   if (versionWithReview) {
     return versionWithReview; // there is a review
   }
-  const bestTestScore = Math.max(...versions.map((version) => parseInt(version.tests.split('/')[0])||0));
+  const bestTestScore = Math.max(...versions.map((version) => version.tests.filter(Boolean).length));
   const versionsWithBestTestScore = versions.filter(
-    (version) => parseInt(version.tests.split('/')[0]) === bestTestScore,
+    (version) => version.tests.filter(Boolean).length === bestTestScore,
   );
   if (versionsWithBestTestScore.length === 1) {
     return versionsWithBestTestScore[0]; // unique best score

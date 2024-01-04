@@ -3,7 +3,7 @@ import React from 'react';
 import PlayCircleRoundedIcon from '@mui/icons-material/PlayCircleRounded';
 import { Tooltip, Button } from '@nextui-org/react';
 import { usePyodide } from './PyodideProvider.jsx';
-import { cleanTraceback } from '../../util/general.js';
+import { cleanTraceback } from '../../util/cleanTraceback.js';
 
 
 function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
@@ -33,11 +33,12 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
         },
       });
 
-      pyodide.runPython(`
-      import customPrint
-      def print(prompt=""):
-          return customPrint.print(prompt)
-      `);
+    pyodide.runPython(`
+    import customPrint
+    def print(*args, sep=" "):
+        prompt = sep.join(str(arg) for arg in args)
+        customPrint.print(prompt)
+    `);
 
       pyodide.runPython(`
       import customInput

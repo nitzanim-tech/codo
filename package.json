@@ -1,11 +1,12 @@
 {
-  "name": "my_projct",
+  "name": "codo",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "vite --mode development",
+    "prod": "vite --mode production",
+    "build": "vite build --mode production",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "format": "prettier --write src/**/*.{js,json,jsx,css}"

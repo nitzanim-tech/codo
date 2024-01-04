@@ -176,7 +176,6 @@ export function processTestsOutputs(testsOutputs) {
     const makeFullCorrect = (index) => {
       const feedback = output?.trialsFeedback || {};
       const answer = answers[index].feedback;
-      console.log(output, index);
       return {
         0: checkSingleTrial(feedback[0], answer[0]),
         1: checkSingleTrial(feedback[1], answer[1]),
