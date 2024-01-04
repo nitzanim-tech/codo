@@ -66,7 +66,10 @@ export function generateInputList() {
     '3\nsalad\nstop\n1\n10\n20\nno',
     '2\nsalad\nstop\n1\n10\n20\nno',
     '1\nsalad\nstop\n1\n5\n8\n10\nno',
-    '3\nsalad\nstop\n33\nno',
+    '3\nsalad\nstop\n1\n33\nno',
+    '2\nsalad\nstop\n2\n4a32\n4322\nno',
+    '3\nnhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
+    '3\nnhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
   ];
 }
 const isLineContains = (output, includeWords, excludeWords) => {
@@ -114,11 +117,11 @@ const isCorrect = ({ index, outputLines }) => {
     case 6: //Cash Exact Price
       return isLineContains(outputLines, ['back', '0'], []);
     case 7: //credit
-      return false;
+      return isLineContains(outputLines, ['received'], []);
     case 8: //some customers
-      return false;
+      return isLineContains(outputLines, ['pay', '25'], []) && isLineContains(outputLines, ['pay', '33'], []);
     case 9: //correct profit amount
-      return false;
+      return isLineContains(outputLines, ['earned', '34'], []);
   }
 };
 
