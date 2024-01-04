@@ -25,10 +25,10 @@ const releasedTasks = [
   { value: 10, label: 'לולאה מקוננת - לוח הכפל' },
   { value: 11, label: 'לולאה מקוננת - wordle' },
   { value: 12, label: 'תרגול מונחה - שפע יששכר' },
-  { value: 13, label: 'תרגול מונחה - הכנה לבוחן' },{ value: 14, label: 'בוחן 1 - תנאים ולולאות' }
+  { value: 13, label: 'תרגול מונחה - הכנה לבוחן' },
 ];
 
-const betaTasks = releasedTasks.concat([]);
+const betaTasks = releasedTasks.concat([{ value: 14, label: 'בוחן 1 - תנאים ולולאות' }]);
 
 const selectItemDivide = [1, 2, 4, 5, 9, 12];
 

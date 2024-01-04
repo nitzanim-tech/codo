@@ -19,7 +19,6 @@ export default function ReadReview() {
     const storedVersion = localStorage.getItem('checkedSubmit');
     if (storedVersion) {
       const parsedVersion = JSON.parse(storedVersion);
-      console.log(parsedVersion);
       setVersion(parsedVersion);
       const convertedComments = convertCommentsToObject(parsedVersion.review.comments, parsedVersion.code);
       setComments(convertedComments);
@@ -140,7 +139,6 @@ function convertCommentsToObject(comments, code) {
   const remainingLines = remainingCode.split('\n').length;
   const height = `${LINE_HEGITH * (end + remainingLines - end + 2)}px`;
   result.push({ start: end + 1, end: end + remainingLines, comment: '', code: remainingCode, height });
-  console.log(result);
 
   return result;
 }
