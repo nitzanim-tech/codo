@@ -109,12 +109,5 @@
       "index": "13",
       "hideTests": true
     }
-  },
-  "בוחן תנאים ולולאות": {
-    "בוחן 1": {
-      "type": "task",
-      "index": "14",
-      "hideTests": true
-    }
   }
 }
