@@ -5,12 +5,12 @@ export function testsName() {
     'הרצה 1- הודפס התפריט',
     'הרצה 2- עדכון רשימת תוספות',
     'הרצה 3- הדפסת רשימת התוספות שנבחרו',
-    'הרצה 4- הדפסת ציפס וסודה',
-    'הרצה 5- הדפסת מחיר נכון',
-    'הרצה 6- מזומן בכמה מטבעות ועודף',
-    'הרצה 7- מזומן מחיר מדויק',
-    'הרצה 8- אשראי',
-    'הרצה 9- מספר לקוחות',
+    'הרצה 4- הדפסת מחיר נכון',
+    'הרצה 5- מזומן בכמה מטבעות ועודף',
+    'הרצה 6- מזומן מחיר מדויק',
+    'הרצה 7- אשראי',
+    'הרצה 8- מספר לקוחות',
+    'הרצה 9- הדפסת סיכום הזמנות',
     'הרצה 10- סכום רווח נכון',
 
     'חלק 1 - לוגיקה',
@@ -63,11 +63,11 @@ export function generateInputList() {
     '1\nsalad\nstop\n1\n10\n20\nno',
     '1\nhumus\npickles\ntehini\nsalad\n1\n10\n20\nno',
     '1\nhumus\npickles\ntehini\nsalad\n1\n10\n20\nno',
-    '3\nsalad\nstop\n1\n10\n20\nno',
     '2\nsalad\nstop\n1\n10\n20\nno',
     '1\nsalad\nstop\n1\n5\n8\n10\nno',
     '3\nsalad\nstop\n1\n33\nno',
     '2\nsalad\nstop\n2\n4a32\n4322\nno',
+    '3\nnhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
     '3\nnhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
     '3\nnhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
   ];
@@ -78,7 +78,7 @@ const isLineContains = (output, includeWords, excludeWords) => {
     let excludeAny = excludeWords.some((word) => line.toLowerCase().includes(word));
     if (includeAll && !excludeAny) {
       return true;
-    } else console.log({ line, includeAll, excludeAny });
+    }
   }
   return false;
 };
@@ -108,18 +108,23 @@ const isCorrect = ({ index, outputLines }) => {
         ['humus', 'pickles', 'tehini', 'salad'],
         ['harif', 'amba', 'cabbage', 'onion'],
       );
-    case 3: // printing Chips and Soda for a deal
-      return isLineContains(outputLines, ['chips', 'soda'], []);
-    case 4: // printing the correct price
+    case 3: // printing the correct price
       return isLineContains(outputLines, ['pay', '25'], []);
-    case 5: // cash in several currencies and excess
+    case 4: // cash in several currencies and excess
       return isLineContains(outputLines, ['back', '8'], []);
-    case 6: //Cash Exact Price
+    case 5: //Cash Exact Price
       return isLineContains(outputLines, ['back', '0'], []);
-    case 7: //credit
+    case 6: //credit
       return isLineContains(outputLines, ['received'], []);
-    case 8: //some customers
+    case 7: //some customers
       return isLineContains(outputLines, ['pay', '25'], []) && isLineContains(outputLines, ['pay', '33'], []);
+    case 8: // printing all the recives
+      const lastLines = outputLines.slice(-8);
+      return (
+        isLineContains(lastLines, ['deal', '33'], []) &&
+        isLineContains(lastLines, ['mana', '25'], []) &&
+        !isLineContains(lastLines, ['half', '15'], [])
+      );
     case 9: //correct profit amount
       return isLineContains(outputLines, ['earned', '34'], []);
   }
