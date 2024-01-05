@@ -30,7 +30,7 @@ const releasedTasks = [
 
 const betaTasks = releasedTasks.concat([{ value: 14, label: 'בוחן 1 - תנאים ולולאות' }]);
 
-const selectItemDivide = [1, 2, 4, 5, 9, 12];
+const selectItemDivide = [1, 2, 4, 5, 9, 12, 13];
 
 export default function NavigateBar({ task, setTask, isShowTask }) {
   const { app, auth } = useFirebase();
