@@ -16,7 +16,7 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, pass, gradesVect
   return (
     <div style={{ padding: '5%' }}>
       <Card>
-        <ScrollShadow className="h-[450px]" size={20}>
+        {/* <ScrollShadow className="h-[450px]" size={20}> */}
           <StyledCheckboxDiv>
             <CheckboxGroup label="הרצות" value={selectedTests} onValueChange={setSelectedTests}>
               <table>
@@ -47,7 +47,7 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, pass, gradesVect
               </table>
             </CheckboxGroup>
           </StyledCheckboxDiv>
-        </ScrollShadow>
+        {/* </ScrollShadow> */}
       </Card>
     </div>
   );
