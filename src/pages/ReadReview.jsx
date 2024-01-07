@@ -80,7 +80,7 @@ export default function ReadReview() {
         ) : (
           <CircularProgress />
         )}
-        <Grid container spacing={1} columns={2} rows={1}>
+        {/* <Grid container spacing={1} columns={2} rows={1}>
           <Grid item style={{ width: '45%', display: 'flex', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
               <div style={{ flexDirection: 'row' }}>
@@ -105,7 +105,7 @@ export default function ReadReview() {
               ))}
             </div>
           </Grid>
-        </Grid>
+        </Grid> */}
       </Card>
     </div>
   );
