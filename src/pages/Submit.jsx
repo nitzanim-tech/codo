@@ -35,8 +35,10 @@ function Submit() {
       <PyodideProvider>
         <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
           <Grid item style={{ width: '20%' }}>
-            {!taskObject?.hideTests && <TestsList testsOutputs={testsOutputs} task={task} />}
-            {/* {(!taskObject?.hideTests || taskObject?.index==14) && <TestsList testsOutputs={testsOutputs} task={task} />} */}
+            {/* {!taskObject?.hideTests && <TestsList testsOutputs={testsOutputs} task={task} />} */}
+            {(!taskObject?.hideTests || taskObject?.index == 15) && (
+              <TestsList testsOutputs={testsOutputs} task={task} />
+            )}
           </Grid>
 
           <Grid item style={{ width: '50%' }}>
