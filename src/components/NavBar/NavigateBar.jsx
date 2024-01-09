@@ -31,7 +31,7 @@ const releasedTasks = [
 
 const betaTasks = releasedTasks.concat([
   { value: 15, label: 'בוחן 1 - למדריכים בלבד' },
-  { value: 16, label: 'טסט' },
+  // { value: 16, label: 'טסט' },
 ]);
 
 const selectItemDivide = [1, 2, 4, 5, 9, 12, 13];
