@@ -1,5 +1,4 @@
 import 'suneditor/dist/css/suneditor.min.css';
-import 'react-diff-view/style/index.css';
 
 import ReactDiffViewer from 'react-diff-viewer-continued';
 import {highlight, languages} from 'prismjs';
