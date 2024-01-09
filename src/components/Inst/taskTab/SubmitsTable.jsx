@@ -113,7 +113,6 @@ export default function SubmitsTable({ data }) {
                       (() => {
                         const tests = selectedVersion.tests.map((test) => (test ? 1 : 0));
                         const sum = tests.reduce((acc, pass, index) => acc + pass * grades[index], 0);
-                        console.log({ tests, sum });
                         return <DonutChart percentage={sum || 0} size={45} />;
                       })()
                     ) : (
