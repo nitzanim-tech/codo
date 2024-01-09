@@ -16,7 +16,6 @@ export default function ReadReview() {
     if (storedVersion) {
       const parsedVersion = JSON.parse(storedVersion);
       setVersion(parsedVersion);
-      console.log(parsedVersion);
       const convertedComments = convertCommentsToObject(parsedVersion.review.comments, parsedVersion.code);
       setComments(convertedComments);
     }
