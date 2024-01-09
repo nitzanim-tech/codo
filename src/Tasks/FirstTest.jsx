@@ -138,7 +138,6 @@ export function processTestsOutputs(testsOutputs) {
 
     const correct = index < 10 ? isCorrect({ index, outputLines }) : null;
     const name = names[index];
-    console.log({ name, input, output: testsOutput.output, correct });
     return { name, input, output: testsOutput.output, correct };
   });
 }
