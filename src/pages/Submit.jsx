@@ -10,13 +10,37 @@ import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { testsName } from '../Tasks/TaskIndex';
 import { getTaskByIndex } from '../components/IDE/getTaskByIndex';
 import './Submit.css';
+import { onAuthStateChanged } from 'firebase/auth';
+import getCurrentUser from '../requests/getCurrentUser';
+
+import { useFirebase } from '../util/FirebaseProvider';
 
 function Submit() {
+  const { app, auth } = useFirebase();
   const { index } = useParams();
   const [task, setTask] = useState(parseInt(index, 10) || 0);
   const initialTestNames = testsName(task);
   const [testsOutputs, setTestsOutputs] = useState(initialTestNames.map((name) => ({ name })));
   const [taskObject, setTaskObject] = useState(null);
+  const [student, setStudent] = useState();
+  const [isShowTask, setIsShowTask] = useState(false);
+
+  const isReviewExist = (submissions) => {
+    if (!submissions[task]) return false;
+    for (const trial of submissions[task].trials) if (trial.review) return true;
+    return false;
+  };
+
+  onAuthStateChanged(auth, async (user) => {
+    try {
+      if (!student) {
+        const current = await getCurrentUser({ app, id: user.uid });
+        setStudent(current);
+      }
+    } catch {
+      setStudent(null);
+    }
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,10 +48,15 @@ function Submit() {
       const testNames = testsName(task);
       const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
       setTestsOutputs(newEmptyTests);
+      setIsShowTask(
+        (taskObject?.hideTests === undefined ? true : !taskObject.hideTests) ||
+          isReviewExist(student.submissions) ||
+          taskObject?.index == 15,
+      );
     };
 
     fetchData();
-  }, [task]);
+  }, [task,[]]);
 
   return (
     <>
@@ -35,10 +64,7 @@ function Submit() {
       <PyodideProvider>
         <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
           <Grid item style={{ width: '20%' }}>
-            {/* {!taskObject?.hideTests && <TestsList testsOutputs={testsOutputs} task={task} />} */}
-            {(!taskObject?.hideTests || taskObject?.index == 15) && (
-              <TestsList testsOutputs={testsOutputs} task={task} />
-            )}
+            {isShowTask && <TestsList testsOutputs={testsOutputs} task={task} />}
           </Grid>
 
           <Grid item style={{ width: '50%' }}>
@@ -46,7 +72,7 @@ function Submit() {
           </Grid>
 
           <Grid item style={{ width: '30%' }}>
-            {!taskObject?.hideTests && <Instructions task={task} />}
+            {isShowTask && <Instructions task={task} />}
           </Grid>
         </Grid>
       </PyodideProvider>
