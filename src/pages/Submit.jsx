@@ -9,15 +9,19 @@ import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { testsName } from '../Tasks/TaskIndex';
 import { getTaskByIndex } from '../components/IDE/getTaskByIndex';
+import { useFirebase } from '../util/FirebaseProvider';
+
 import './Submit.css';
 
 function Submit() {
+  const { app, auth, userData } = useFirebase();
   const { index } = useParams();
   const [task, setTask] = useState(parseInt(index, 10) || 0);
   const initialTestNames = testsName(task);
   const [testsOutputs, setTestsOutputs] = useState(initialTestNames.map((name) => ({ name })));
   const [taskObject, setTaskObject] = useState(null);
-
+  
+  console.log(userData);
   useEffect(() => {
     const fetchData = async () => {
       setTaskObject(getTaskByIndex({ index: task }));

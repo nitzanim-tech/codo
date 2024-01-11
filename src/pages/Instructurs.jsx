@@ -5,7 +5,6 @@ import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
 import getStudentData from '../requests/getStudents';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
 import { onAuthStateChanged } from 'firebase/auth';
-import getCurrentUser from '../requests/getCurrentUser';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageTasks from '../components/Inst/manageTab/ManageTasks';
 import { CircularProgress } from '@nextui-org/react';
@@ -14,25 +13,18 @@ import PassMatrix from '../components/Inst/statusTab/PassMatrix';
 import { useFirebase } from '../util/FirebaseProvider';
 
 function Instructors() {
-  const { app, auth } = useFirebase();
+  const { app, auth, userData } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
-  const [userGroup, setUserGroup] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [userGroup, setUserGroup] = useState(userData ? userData.group : []);
   const [unauthorized, setUnauthorized] = useState(true);
 
-  onAuthStateChanged(auth, async (user) => {
-    try {
-      if (!currentUser) {
-        const current = await getCurrentUser({ app, id: user.uid });
-        setCurrentUser(current);
-        setUserGroup(current.group);
-      }
-      user.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
-    } catch {
-      setCurrentUser({ email: '' });
+  useEffect(() => {
+    if (userData) {
+      setUserGroup(userData.group);
+      userData.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
     }
-  });
+  }, [userData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,10 +44,11 @@ function Instructors() {
       setStudentsRawData(data);
     }
   };
+
   return (
     <>
       <NavBar isShowTask={false} />
-      {currentUser ? (
+      {userData ? (
         <>
           {unauthorized ? (
             <h1>הכניסה למדריכים בלבד</h1>
@@ -68,13 +61,13 @@ function Instructors() {
                       variant="bordered"
                       endContent={<ApartmentRoundedIcon />}
                       style={{ marginLeft: '20px' }}
-                      isDisabled={currentUser.permissions.length === 1}
+                      isDisabled={userData.permissions.length === 1}
                     >
                       <b>{userGroup}</b>
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu aria-label="Action event example" onAction={(key) => handleChangeGroup(key)}>
-                    {currentUser.permissions.map((group) => (
+                    {userData.permissions.map((group) => (
                       <DropdownItem group="new" key={group}>
                         {group}
                       </DropdownItem>
