@@ -10,40 +10,38 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import TaskCard from '../components/Home/TaskCard';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import filesLinks from '../util/filesLinks.json';
-import { onAuthStateChanged } from 'firebase/auth';
-import getCurrentUser from '../requests/getCurrentUser';
 import { useFirebase } from '../util/FirebaseProvider';
+import { CircularProgress } from '@nextui-org/react';
 
 function Home() {
-  const { app, auth } = useFirebase();
-  const [student, setStudent] = useState();
-  onAuthStateChanged(auth, async (user) => {
-    try {
-      if (!student) {
-        const current = await getCurrentUser({ app, id: user.uid });
-        setStudent(current);
-      }
-    } catch {
-      setStudent(null);
-    }
-  });
+  const { userData } = useFirebase();
+  const [isLoading, setIsLoading] = useState(true); // Add this line
 
+  useEffect(() => {
+    if (userData !== null) setIsLoading(false);
+  }, [userData]);
   const allKeys = Object.keys(filesLinks).map((category) => category.toString());
+
   return (
     <>
       <NavBar isShowTask={false} />
-      {student ? (
+      {isLoading ? (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <CircularProgress />
+        </div>
+      ) : userData ? (
         <Grid container spacing={1} columns={3} rows={1}>
           <Grid item style={{ width: '70%', margin: '30px' }}>
             <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
               {Object.entries(filesLinks).map(([category, files]) => (
-                <AccordionItem key={category} aria-label={`Accordion ${category}`} title={category}>
+                <AccordionItem key={`${category}`} aria-label={`Accordion ${category}`} title={category}>
                   {Object.entries(files).map(([fileName, file]) =>
                     file.type === 'task' ? (
                       <TaskCard
+                        key={fileName}
                         index={file.index}
                         text={fileName}
-                        studentData={student.submissions ? student.submissions[file.index] : null}
+                        studentData={userData.submissions ? userData.submissions[file.index] : null}
                       />
                     ) : (
                       <Card key={fileName} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
@@ -61,7 +59,7 @@ function Home() {
           </Grid>
 
           <Grid item style={{ width: '24%' }}>
-            <h1 style={{ margin: '40px' }}> שלום {student.name}</h1>
+            <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
             {/*<h2>אירועים קרובים</h2>
             <Card dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
               <CalendarMonthIcon />
@@ -101,5 +99,6 @@ function Home() {
     </>
   );
 }
+
 
 export default Home;
