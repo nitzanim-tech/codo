@@ -14,19 +14,14 @@ import { useFirebase } from '../util/FirebaseProvider';
 import { CircularProgress } from '@nextui-org/react';
 
 function Home() {
-  const { userData } = useFirebase();
-  const [isLoading, setIsLoading] = useState(true); // Add this line
-
-  useEffect(() => {
-    if (userData !== null) setIsLoading(false);
-  }, [userData]);
+const { userData, isUserLoading } = useFirebase();  
   const allKeys = Object.keys(filesLinks).map((category) => category.toString());
 
   return (
     <>
       <NavBar isShowTask={false} />
-      {isLoading ? (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      {isUserLoading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',margin:'30px' }}>
           <CircularProgress />
         </div>
       ) : userData ? (
