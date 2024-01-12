@@ -70,8 +70,8 @@ function Review() {
                 task={version.task}
                 selectedTests={selectedTests}
                 setSelectedTests={setSelectedTests}
-                pass={version.tests}
                 gradesVector={gradesVector}
+                // viewOnly={false}
               />
             </Grid>
           </Grid>

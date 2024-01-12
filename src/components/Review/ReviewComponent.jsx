@@ -21,16 +21,16 @@ export default function ReviewComponent({ version, selectedTests }) {
 
   const handlePreviewClick = () => {
     const checkedSubmit = {
+      task: version.task,
+      selectedTests,
       code: version.code,
       review: { comments: comments.current, general: generalReview },
     };
-    console.log(JSON.stringify(checkedSubmit));
     localStorage.setItem('checkedSubmit', JSON.stringify(checkedSubmit));
     window.open('/readReview', '_blank');
   };
 
   const sendReview = async () => {
-    console.log(comments);
     if (haveTestsChanged(selectedTests, version.tests, false)) {
       const passedChanged = await changePassScore({
         app,

@@ -51,7 +51,7 @@ export default function TestsList({ testsOutputs, task }) {
         </Listbox>
       </ListboxWrapper>
 
-      <Modal isOpen={isOpen} onClose={onClose} dir="rtl" hideCloseButton>
+      <Modal isOpen={isOpen} onClose={onClose} dir="rtl" hideCloseButton size='3xl'> 
         <ModalContent>
           {(onClose) => (
             <>

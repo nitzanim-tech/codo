@@ -25,11 +25,6 @@ export default function TaskTab({ studentsRawData }) {
         <Grid item style={{ width: '20%' }}>
           <InstTasksList selectedTask={selectedTask} setSelectedTask={setSelectedTask} />
           <DashboardCard ratio={countStudents(formattedData)} text={'הגישו:'} />
-          {/* <Card style={{ marginTop: '10px' }}>
-            <CardBody>
-              <h3>מחכים למשוב: 2</h3>
-            </CardBody>
-          </Card> */}
           <DashboardCard ratio={calculateAverage(formattedData)} text={'ממוצע טסטים:'} />
         </Grid>
       </Grid>
@@ -94,7 +89,6 @@ const calculateAverage = (data) => {
           const currentNumerator = current.tests.filter(Boolean).length;
           return highestNumerator > currentNumerator ? highest : current;
         });
-        console.log(student.versions, highestNumeratorVersion);
         const numerator = highestNumeratorVersion.tests.filter(Boolean).length;
         total += numerator;
         count++;

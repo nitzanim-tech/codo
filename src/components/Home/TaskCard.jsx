@@ -10,62 +10,62 @@ function TaskCard({ text, index, studentData }) {
   const findReview = (trials) => {
     for (const trial of trials) {
       if (trial.review) {
-        return { code: trial.code, review: trial.review };
+        const selectedTests = trial.pass.reduce((acc, val, index) => (val === true ? [...acc, index] : acc), []);
+        return { code: trial.code, review: trial.review, selectedTests };
       }
     }
     return null;
   };
-const onTaskButtonClick = (index) => {
-  if (studentData) localStorage.setItem('code', studentData.trials[studentData.trials.length - 1].code);
-
-  window.open(`./submit/${index}`);
-};
-return (
-  <>
-    <Card dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ width: '40%' }}>
-          <Button radius="full" variant="faded" onClick={() => onTaskButtonClick(index)}>
-            <BorderColorRoundedIcon style={{ color: '#005395' }} />
-          </Button>
-          {text}
-          {studentData ? (
-            <Tooltip content="בוצע">
-              <CheckCircleOutlineRoundedIcon
-                style={{ marginRight: '15px', color: findReview(studentData.trials) != null ? '#6ED268' : 'grey' }}
-              />
-            </Tooltip>
-          ) : (
-            <Tooltip content="טרם בוצע">
-              <RadioButtonUncheckedRoundedIcon sx={{ marginRight: '15px', color: 'grey' }} />
-            </Tooltip>
-          )}
-        </div>
-        <div style={{ width: '40%', textAlign: 'left' }}>
-          <Tooltip content="לפורום">
-            <Button disabled>
-              <QuestionAnswerIcon />
+  const onTaskButtonClick = (index) => {
+    if (studentData) localStorage.setItem('code', studentData.trials[studentData.trials.length - 1].code);
+    window.open(`./submit/${index}`);
+  };
+  return (
+    <>
+      <Card dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ width: '40%' }}>
+            <Button radius="full" variant="faded" onClick={() => onTaskButtonClick(index)}>
+              <BorderColorRoundedIcon style={{ color: '#005395' }} />
             </Button>
-          </Tooltip>
-          <Tooltip content="למשוב">
-            <Button
-              disabled={studentData ? findReview(studentData.trials) == null : true}
-              onClick={() => {
-                const checkedSubmit = findReview(studentData.trials);
-                localStorage.setItem('checkedSubmit', JSON.stringify(checkedSubmit));
-                window.open('/readReview', '_blank');
-              }}
-            >
-              {/* <Badge content="" color="primary"> */}
-              <GradingIcon />
-              {/* </Badge> */}
-            </Button>
-          </Tooltip>
+            {text}
+            {studentData ? (
+              <Tooltip content="בוצע">
+                <CheckCircleOutlineRoundedIcon
+                  style={{ marginRight: '15px', color: findReview(studentData.trials) != null ? '#6ED268' : 'grey' }}
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip content="טרם בוצע">
+                <RadioButtonUncheckedRoundedIcon sx={{ marginRight: '15px', color: 'grey' }} />
+              </Tooltip>
+            )}
+          </div>
+          <div style={{ width: '40%', textAlign: 'left' }}>
+            <Tooltip content="לפורום">
+              <Button disabled>
+                <QuestionAnswerIcon />
+              </Button>
+            </Tooltip>
+            <Tooltip content="למשוב">
+              <Button
+                disabled={studentData ? findReview(studentData.trials) == null : true}
+                onClick={() => {
+                  const checkedSubmit = { ...findReview(studentData.trials), task: index };
+                  localStorage.setItem('checkedSubmit', JSON.stringify(checkedSubmit));
+                  window.open('/readReview', '_blank');
+                }}
+              >
+                {/* <Badge content="" color="primary"> */}
+                <GradingIcon />
+                {/* </Badge> */}
+              </Button>
+            </Tooltip>
+          </div>
         </div>
-      </div>
-    </Card>
-  </>
-);
+      </Card>
+    </>
+  );
 }
 
 export default TaskCard;
