@@ -4,7 +4,6 @@ import { Tabs, Tab, Button } from '@nextui-org/react';
 import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
 import getStudentData from '../requests/getStudents';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
-import { onAuthStateChanged } from 'firebase/auth';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageTasks from '../components/Inst/manageTab/ManageTasks';
 import { CircularProgress } from '@nextui-org/react';
@@ -13,7 +12,7 @@ import PassMatrix from '../components/Inst/statusTab/PassMatrix';
 import { useFirebase } from '../util/FirebaseProvider';
 
 function Instructors() {
-  const { app, auth, userData } = useFirebase();
+  const { app, userData } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
   const [userGroup, setUserGroup] = useState(userData ? userData.group : []);
