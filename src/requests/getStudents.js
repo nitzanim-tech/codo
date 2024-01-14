@@ -6,14 +6,14 @@ const getStudentData = async ({ app, groups }) => {
 
   try {
     let filteredUsersRef = usersRef;
-    if (groups && groups != 'all') {
+    if (groups && groups !== 'all') {
       filteredUsersRef = query(usersRef, orderByChild('group'), equalTo(groups));
     }
     const snapshot = await get(filteredUsersRef);
-    
+
     const students = snapshot.val() || {};
     const studentArray = Object.entries(students).map(([uid, student]) => {
-      return { ...student, uid }; 
+      return { ...student, uid };
     });
 
     return studentArray;
