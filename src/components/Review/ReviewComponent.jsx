@@ -43,18 +43,20 @@ export default function ReviewComponent({ version, selectedTests }) {
     }
 
     const reviewData = {
-      comments: comments.current,
+      comments: comments.current || {},
       general: generalReview,
       date: new Date(),
       hasOpened: false,
     };
-    const hadSaved = addReview({
+    console.log(reviewData);
+    const hadSaved = await addReview({
       app,
       userId: version.student.uid,
       task: version.task,
       trialIndex: version.id,
       reviewData,
     });
+    console.log({ hadSaved });
     if (!hadSaved) setErrorText('שגיאה בשליחת המשוב לחניך');
 
     setSaved(hadSaved);

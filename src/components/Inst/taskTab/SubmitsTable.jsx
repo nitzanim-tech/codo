@@ -66,6 +66,8 @@ export default function SubmitsTable({ data }) {
       setSortDescriptor({ column: descriptorClicked.column, direction: 'ascending' });
     }
   };
+
+  console.log(data);
   const grades = new Array(35).fill(3, 0, 30).fill(5, 30, 35);
   return (
     <>

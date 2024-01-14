@@ -10,6 +10,7 @@ import { CircularProgress } from '@nextui-org/react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import PassMatrix from '../components/Inst/statusTab/PassMatrix';
 import { useFirebase } from '../util/FirebaseProvider';
+import styled from 'styled-components';
 
 function Instructors() {
   const { app, userData } = useFirebase();
@@ -54,7 +55,7 @@ function Instructors() {
           ) : (
             <>
               <div dir="rtl">
-                <Dropdown>
+                <Dropdown aria-label="User Group Dropdown">
                   <DropdownTrigger>
                     <Button
                       variant="bordered"
@@ -65,7 +66,7 @@ function Instructors() {
                       <b>{userGroup}</b>
                     </Button>
                   </DropdownTrigger>
-                  <DropdownMenu aria-label="Action event example" onAction={(key) => handleChangeGroup(key)}>
+                  <DropdownMenu onAction={(key) => handleChangeGroup(key)}>
                     {userData.permissions.map((group) => (
                       <DropdownItem group="new" key={group}>
                         {group}
@@ -75,41 +76,27 @@ function Instructors() {
                 </Dropdown>
 
                 <Tabs aria-label="Options">
-                  <Tab key="tasks" title="משימות">
+                  <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
                       <TaskTab studentsRawData={studentsRawData} />
                     </div>
                   </Tab>
-                  <Tab key="students" title="חניכים">
-                    <div
-                      dir="ltr"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                  <Tab key="students" title="חניכים" aria-label="Students tab">
+                    <CenteredDiv>
                       <StudentsTable
                         isLoading={isLoading}
                         studentsRawData={studentTableFormattedData(studentsRawData)}
                         app={app}
                       />
-                    </div>
+                    </CenteredDiv>
                   </Tab>
                   {/* <Tab key="manage" title="ניהול משימות">
             <ManageTasks isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
           </Tab> */}
                   <Tab key="status" title="סטטוס">
-                    <div
-                      dir="ltr"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                    <CenteredDiv>
                       <PassMatrix studentsRawData={studentsRawData} />
-                    </div>
+                    </CenteredDiv>
                   </Tab>
                 </Tabs>
               </div>
@@ -126,6 +113,13 @@ function Instructors() {
 }
 
 export default Instructors;
+
+const CenteredDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  direction: ltr;
+`;
 
 const studentTableFormattedData = (data) => {
   if (data) {

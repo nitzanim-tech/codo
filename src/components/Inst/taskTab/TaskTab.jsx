@@ -89,6 +89,7 @@ const calculateAverage = (data) => {
           const currentNumerator = current.tests.filter(Boolean).length;
           return highestNumerator > currentNumerator ? highest : current;
         });
+        console.log(student);
         const numerator = highestNumeratorVersion.tests.filter(Boolean).length;
         total += numerator;
         count++;
