@@ -21,16 +21,16 @@ export default function ReviewComponent({ version, selectedTests }) {
 
   const handlePreviewClick = () => {
     const checkedSubmit = {
+      task: version.task,
+      selectedTests,
       code: version.code,
       review: { comments: comments.current, general: generalReview },
     };
-    console.log(JSON.stringify(checkedSubmit));
     localStorage.setItem('checkedSubmit', JSON.stringify(checkedSubmit));
     window.open('/readReview', '_blank');
   };
 
   const sendReview = async () => {
-    console.log(comments);
     if (haveTestsChanged(selectedTests, version.tests, false)) {
       const passedChanged = await changePassScore({
         app,
@@ -43,18 +43,20 @@ export default function ReviewComponent({ version, selectedTests }) {
     }
 
     const reviewData = {
-      comments: comments.current,
+      comments: comments.current || {},
       general: generalReview,
       date: new Date(),
       hasOpened: false,
     };
-    const hadSaved = addReview({
+    console.log(reviewData);
+    const hadSaved = await addReview({
       app,
       userId: version.student.uid,
       task: version.task,
       trialIndex: version.id,
       reviewData,
     });
+    console.log({ hadSaved });
     if (!hadSaved) setErrorText('שגיאה בשליחת המשוב לחניך');
 
     setSaved(hadSaved);
