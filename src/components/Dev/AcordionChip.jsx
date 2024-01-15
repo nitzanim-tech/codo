@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { AccordionItem, Accordion, Chip, Button, Input } from '@nextui-org/react';
 import { Grid } from '@mui/material';
-import ControlPointRoundedIcon from '@mui/icons-material/ControlPointRounded';
+import AddIcon from '@mui/icons-material/Add';
 import 'suneditor/dist/css/suneditor.min.css';
 
-const AcordionChip = ({ title }) => {
-  const [chipsList, setChipsList] = useState([]);
-
+const AcordionChip = ({ title, chipsList, setChipsList }) => {
   function handleAddClick() {
     const inputText = document.querySelector('input').value;
     setChipsList([...chipsList, inputText]);
@@ -18,9 +16,9 @@ const AcordionChip = ({ title }) => {
       <Grid container spacing={1} columns={2} rows={1}>
         <Grid item style={{ width: '45%', display: 'flex', alignItems: 'center' }}>
           <div style={{ width: '40%', display: 'flex', alignItems: 'center' }}>
-            <Input />
+            <Input variant="bordered" />
             <Button radius="full" isIconOnly variant="faded" onClick={handleAddClick}>
-              <ControlPointRoundedIcon />
+              <AddIcon />
             </Button>
           </div>
         </Grid>

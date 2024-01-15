@@ -9,6 +9,7 @@ const getCurrentUser = async ({ app, id }) => {
     const user = snapshot.val();
 
     if (user) {
+      user.id = id;
       return user;
     } else {
       console.error('No user found with the given id:', id);
