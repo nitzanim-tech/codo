@@ -8,6 +8,7 @@ import { testsName } from '../../../Tasks/TaskIndex';
 
 export default function SubmitsTable({ data }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
+
   const calculatePresent = (tests) => {
     const passedTests = tests.filter(Boolean).length;
     const totalTests = tests.length;
@@ -66,6 +67,8 @@ export default function SubmitsTable({ data }) {
     }
   };
 
+  console.log(data);
+  const grades = new Array(35).fill(3, 0, 30).fill(5, 30, 35);
   return (
     <>
       <Table
@@ -94,6 +97,7 @@ export default function SubmitsTable({ data }) {
           {sortedData.map((student, index) => {
             const selectedVersion = getSelectedVersion(student.versions) || { date: '', tests: '' };
             const percentage = selectedVersion.tests ? calculatePresent(selectedVersion.tests) : 0;
+
             return (
               <TableRow key={`${student.name}-${index}`}>
                 <TableCell>
@@ -107,11 +111,19 @@ export default function SubmitsTable({ data }) {
                 <TableCell>{student.versions.length > 1 && <VersionsButton versions={student.versions} />}</TableCell>
                 <TableCell>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <DonutChart
-                      ratio={selectedVersion.tests.filter(Boolean).length + '/' + testsName(student.task).length}
-                      percentage={percentage}
-                      size={45}
-                    />
+                    {student.task === 14 && selectedVersion.tests ? (
+                      (() => {
+                        const tests = selectedVersion.tests.map((test) => (test ? 1 : 0));
+                        const sum = tests.reduce((acc, pass, index) => acc + pass * grades[index], 0);
+                        return <DonutChart percentage={sum || 0} size={45} />;
+                      })()
+                    ) : (
+                      <DonutChart
+                        ratio={selectedVersion.tests.filter(Boolean).length + '/' + testsName(student.task).length}
+                        percentage={percentage}
+                        size={45}
+                      />
+                    )}
                   </div>
                 </TableCell>
                 <TableCell>{selectedVersion.date ? formatDate(selectedVersion.date) : ''}</TableCell>

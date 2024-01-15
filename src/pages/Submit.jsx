@@ -9,9 +9,12 @@ import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { testsName } from '../Tasks/TaskIndex';
 import { getTaskByIndex } from '../components/IDE/getTaskByIndex';
+import { useFirebase } from '../util/FirebaseProvider';
+
 import './Submit.css';
 
 function Submit() {
+  const { userData } = useFirebase();
   const { index } = useParams();
   const [task, setTask] = useState(parseInt(index, 10) || 0);
   const initialTestNames = testsName(task);
@@ -35,8 +38,9 @@ function Submit() {
       <PyodideProvider>
         <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
           <Grid item style={{ width: '20%' }}>
-            {!taskObject?.hideTests && <TestsList testsOutputs={testsOutputs} task={task} />}
-            {/* {(!taskObject?.hideTests || taskObject?.index==14) && <TestsList testsOutputs={testsOutputs} task={task} />} */}
+            {((userData ? isReviewExist(userData.submissions, task) : false) ||
+              !taskObject?.hideTests ||
+              taskObject?.index == 15) && <TestsList testsOutputs={testsOutputs} task={task} />}
           </Grid>
 
           <Grid item style={{ width: '50%' }}>
@@ -54,3 +58,8 @@ function Submit() {
 
 export default Submit;
 
+const isReviewExist = (submissions, task) => {
+  if (!submissions || !submissions[task]) return false;
+  for (const trial of submissions[task].trials) if (trial.review) return true;
+  return false;
+};

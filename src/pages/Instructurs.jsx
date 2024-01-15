@@ -4,35 +4,27 @@ import { Tabs, Tab, Button } from '@nextui-org/react';
 import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
 import getStudentData from '../requests/getStudents';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
-import { onAuthStateChanged } from 'firebase/auth';
-import getCurrentUser from '../requests/getCurrentUser';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageTasks from '../components/Inst/manageTab/ManageTasks';
 import { CircularProgress } from '@nextui-org/react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import PassMatrix from '../components/Inst/statusTab/PassMatrix';
 import { useFirebase } from '../util/FirebaseProvider';
+import styled from 'styled-components';
 
 function Instructors() {
-  const { app, auth } = useFirebase();
+  const { app, userData } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
-  const [userGroup, setUserGroup] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [userGroup, setUserGroup] = useState(userData ? userData.group : []);
   const [unauthorized, setUnauthorized] = useState(true);
 
-  onAuthStateChanged(auth, async (user) => {
-    try {
-      if (!currentUser) {
-        const current = await getCurrentUser({ app, id: user.uid });
-        setCurrentUser(current);
-        setUserGroup(current.group);
-      }
-      user.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
-    } catch {
-      setCurrentUser({ email: '' });
+  useEffect(() => {
+    if (userData) {
+      setUserGroup(userData.group);
+      userData.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
     }
-  });
+  }, [userData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,29 +44,30 @@ function Instructors() {
       setStudentsRawData(data);
     }
   };
+
   return (
     <>
       <NavBar isShowTask={false} />
-      {currentUser ? (
+      {userData ? (
         <>
           {unauthorized ? (
             <h1>הכניסה למדריכים בלבד</h1>
           ) : (
             <>
               <div dir="rtl">
-                <Dropdown>
+                <Dropdown aria-label="User Group Dropdown">
                   <DropdownTrigger>
                     <Button
                       variant="bordered"
                       endContent={<ApartmentRoundedIcon />}
                       style={{ marginLeft: '20px' }}
-                      isDisabled={currentUser.permissions.length === 1}
+                      isDisabled={userData.permissions.length === 1}
                     >
                       <b>{userGroup}</b>
                     </Button>
                   </DropdownTrigger>
-                  <DropdownMenu aria-label="Action event example" onAction={(key) => handleChangeGroup(key)}>
-                    {currentUser.permissions.map((group) => (
+                  <DropdownMenu onAction={(key) => handleChangeGroup(key)}>
+                    {userData.permissions.map((group) => (
                       <DropdownItem group="new" key={group}>
                         {group}
                       </DropdownItem>
@@ -83,41 +76,27 @@ function Instructors() {
                 </Dropdown>
 
                 <Tabs aria-label="Options">
-                  <Tab key="tasks" title="משימות">
+                  <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
                       <TaskTab studentsRawData={studentsRawData} />
                     </div>
                   </Tab>
-                  <Tab key="students" title="חניכים">
-                    <div
-                      dir="ltr"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                  <Tab key="students" title="חניכים" aria-label="Students tab">
+                    <CenteredDiv>
                       <StudentsTable
                         isLoading={isLoading}
                         studentsRawData={studentTableFormattedData(studentsRawData)}
                         app={app}
                       />
-                    </div>
+                    </CenteredDiv>
                   </Tab>
                   {/* <Tab key="manage" title="ניהול משימות">
             <ManageTasks isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
           </Tab> */}
                   <Tab key="status" title="סטטוס">
-                    <div
-                      dir="ltr"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                    <CenteredDiv>
                       <PassMatrix studentsRawData={studentsRawData} />
-                    </div>
+                    </CenteredDiv>
                   </Tab>
                 </Tabs>
               </div>
@@ -134,6 +113,13 @@ function Instructors() {
 }
 
 export default Instructors;
+
+const CenteredDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  direction: ltr;
+`;
 
 const studentTableFormattedData = (data) => {
   if (data) {

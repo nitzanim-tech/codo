@@ -13,6 +13,7 @@ import * as WordleFor from './WordleFor';
 import * as ShefaIssaschar from './ShefaIssaschar';
 import * as FirstTest from './FirstTest'
 import * as BeforeFirstTask from './BeforeFirstTest';
+import * as Default from './Default';
 
 const tasks = {
   0: Experience,
@@ -30,6 +31,8 @@ const tasks = {
   12: ShefaIssaschar,
   13: BeforeFirstTask,
   14: FirstTest,
+  15: FirstTest,
+  16: Default
 };
 
 export function testsName(task) {

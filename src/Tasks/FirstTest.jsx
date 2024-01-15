@@ -1,147 +1,221 @@
 import React from 'react';
-
-export function testsName() {
-  return [
-    'הרצה 1- הודפס התפריט',
-    'הרצה 2- עדכון רשימת תוספות',
-    'הרצה 3- הדפסת רשימת התוספות שנבחרו',
-    'הרצה 4- הדפסת מחיר נכון',
-    'הרצה 5- מזומן בכמה מטבעות ועודף',
-    'הרצה 6- מזומן מחיר מדויק',
-    'הרצה 7- אשראי',
-    'הרצה 8- מספר לקוחות',
-    'הרצה 9- הדפסת סיכום הזמנות',
-    'הרצה 10- סכום רווח נכון',
-
-    'חלק 1 - לוגיקה',
-    'חלק 1 - סינטקס',
-    'חלק 1 - עיצוב וקריאות',
-    'חלק 1 - מקרי קצה (בונוס)',
-
-    'חלק 2 - לוגיקה',
-    'חלק 2 - סינטקס',
-    'חלק 2 - עיצוב וקריאות',
-    'חלק 2 - מקרי קצה (בונוס)',
-
-    'חלק 3 - לוגיקה',
-    'חלק 3 - סינטקס',
-    'חלק 3 - עיצוב וקריאות',
-    'חלק 3 - מקרי קצה (בונוס)',
-
-    'חלק 4 - לוגיקה',
-    'חלק 4 - סינטקס',
-    'חלק 4 - עיצוב וקריאות',
-    'חלק 4 - מקרי קצה (בונוס)',
-
-    'חלק 5 - לוגיקה',
-    'חלק 5 - סינטקס',
-    'חלק 5 - עיצוב וקריאות',
-    'חלק 5 - מקרי קצה (בונוס)',
-
-    'קלט פלט ומשתנים',
-    'תנאים',
-    'לולאות WHILE',
-    'לולאות FOR',
-    'רשימות',
-  ];
-}
-
-// TestsList.jsx
-export function getTaskExplanation() {
-  return { generateExplanation: (selectedValue) => generateExplanation(selectedValue) };
-}
-export function generateExplanation(selectedValue) {
-  return <></>;
-}
-
-// RunTestButton.jsx
-export function getTaskTests() {
-  return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
-}
-export function generateInputList() {
-  return [
-    '1\nsalad\nstop\n1\n10\n20\nno',
-    '1\nhumus\npickles\ntehini\nsalad\n1\n10\n20\nno',
-    '1\nhumus\npickles\ntehini\nsalad\n1\n10\n20\nno',
-    '2\nsalad\nstop\n1\n10\n20\nno',
-    '1\nsalad\nstop\n1\n5\n8\n10\nno',
-    '3\nsalad\nstop\n1\n33\nno',
-    '2\nsalad\nstop\n2\n4a32\n4322\nno',
-    '3\nnhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
-    '3\nnhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
-    '3\nnhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
-  ];
-}
-const isLineContains = (output, includeWords, excludeWords) => {
-  for (let line of output) {
-    let includeAll = includeWords.every((word) => line.toLowerCase().includes(word));
-    let excludeAny = excludeWords.some((word) => line.toLowerCase().includes(word));
-    if (includeAll && !excludeAny) {
-      return true;
-    }
-  }
-  return false;
-};
-
-const isCorrect = ({ index, outputLines }) => {
-  switch (index) {
-    case 0: // printing the menu
-      return (
-        isLineContains(outputLines, ['half', '15'], []) &&
-        isLineContains(outputLines, ['mana', '25'], []) &&
-        isLineContains(outputLines, ['deal', '33'], [])
-      );
-    case 1: //updating the list of salads
       const Salads = ['salad', 'humus', 'tehini', 'harif', 'amba', 'cabbage', 'pickles', 'chips', 'onion'];
       const SaladsWithoutHumus = Salads.filter((item) => item !== 'humus');
       const SaladsWithoutPickles = SaladsWithoutHumus.filter((item) => item !== 'pickles');
       const SaladsWithoutThini = SaladsWithoutPickles.filter((item) => item !== 'tehini');
-      return (
-        isLineContains(outputLines, Salads, []) &&
-        isLineContains(outputLines, SaladsWithoutHumus, ['humus']) &&
-        isLineContains(outputLines, SaladsWithoutPickles, ['humus', 'pickles']) &&
-        isLineContains(outputLines, SaladsWithoutThini, ['humus', 'pickles', 'tehini'])
-      );
-    case 2: // printing the list of selected salads
-      return isLineContains(
-        outputLines,
-        ['humus', 'pickles', 'tehini', 'salad'],
-        ['harif', 'amba', 'cabbage', 'onion'],
-      );
-    case 3: // printing the correct price
-      return isLineContains(outputLines, ['pay', '25'], []);
-    case 4: // cash in several currencies and excess
-      return isLineContains(outputLines, ['back', '8'], []);
-    case 5: //Cash Exact Price
-      return isLineContains(outputLines, ['back', '0'], []);
-    case 6: //credit
-      return isLineContains(outputLines, ['received'], []);
-    case 7: //some customers
-      return isLineContains(outputLines, ['pay', '25'], []) && isLineContains(outputLines, ['pay', '33'], []);
-    case 8: // printing all the recives
-      const lastLines = outputLines.slice(-8);
-      return (
-        isLineContains(lastLines, ['deal', '33'], []) &&
-        isLineContains(lastLines, ['mana', '25'], []) &&
-        !isLineContains(lastLines, ['half', '15'], [])
-      );
-    case 9: //correct profit amount
-      return isLineContains(outputLines, ['earned', '34'], []);
-  }
-};
 
-export function processTestsOutputs(testsOutputs) {
-  const names = testsName();
-  return testsOutputs.map((testsOutput, index) => {
-    const input = null;
-    const outputLines = testsOutput.output ? testsOutput.output.split('\n') : '';
+      export function testsName() {
+        return [
+          'הרצה 1- הודפס התפריט',
+          'הרצה 2- עדכון רשימת תוספות',
+          'הרצה 3- הדפסת רשימת התוספות שנבחרו',
+          'הרצה 4- הדפסת מחיר נכון',
+          'הרצה 5- מזומן בכמה מטבעות ועודף',
+          'הרצה 6- מזומן מחיר מדויק',
+          'הרצה 7- אשראי',
+          'הרצה 8- מספר לקוחות',
+          'הרצה 9- הדפסת סיכום הזמנות',
+          'הרצה 10- סכום רווח נכון',
 
-    const correct = index < 10 ? isCorrect({ index, outputLines }) : null;
-    const name = names[index];
-    console.log({ name, input, output: testsOutput.output, correct });
-    return { name, input, output: testsOutput.output, correct };
-  });
-}
+          'חלק 1 - לוגיקה',
+          'חלק 1 - סינטקס',
+          'חלק 1 - עיצוב וקריאות',
+          'חלק 1 - מקרי קצה (בונוס)',
+
+          'חלק 2 - לוגיקה',
+          'חלק 2 - סינטקס',
+          'חלק 2 - עיצוב וקריאות',
+          'חלק 2 - מקרי קצה (בונוס)',
+
+          'חלק 3 - לוגיקה',
+          'חלק 3 - סינטקס',
+          'חלק 3 - עיצוב וקריאות',
+          'חלק 3 - מקרי קצה (בונוס)',
+
+          'חלק 4 - לוגיקה',
+          'חלק 4 - סינטקס',
+          'חלק 4 - עיצוב וקריאות',
+          'חלק 4 - מקרי קצה (בונוס)',
+
+          'חלק 5 - לוגיקה',
+          'חלק 5 - סינטקס',
+          'חלק 5 - עיצוב וקריאות',
+          'חלק 5 - מקרי קצה (בונוס)',
+
+          'קלט פלט ומשתנים',
+          'תנאים',
+          'לולאות WHILE',
+          'לולאות FOR',
+          'רשימות',
+        ];
+      }
+
+      // TestsList.jsx
+      export function getTaskExplanation() {
+        return { generateExplanation: (selectedValue) => generateExplanation(selectedValue) };
+      }
+      export function generateExplanation(selectedValue) {
+        let miniTestsList = [{}, {}, {}, {}];
+        switch (selectedValue.index) {
+          case 0: // printing the menu
+            miniTestsList[0].include = ['half', '15'];
+            miniTestsList[1].include = ['mana', '25'];
+            miniTestsList[2].include = ['deal', '33'];
+            break;
+          case 1: //updating the list of salads
+            miniTestsList[0] = { include: Salads };
+            miniTestsList[1] = { include: SaladsWithoutHumus, notInclude: ['humus'] };
+            miniTestsList[2] = { include: SaladsWithoutPickles, notInclude: ['humus', 'pickles'] };
+            miniTestsList[3] = {
+              include: SaladsWithoutThini,
+              notInclude: ['humus', 'pickles', 'tehini'],
+            };
+            break;
+          case 2: // printing the list of selected salads
+            miniTestsList[0] = {
+              include: ['humus', 'pickles', 'tehini', 'salad'],
+              notInclude: ['harif', 'amba', 'cabbage', 'onion'],
+            };
+            break;
+          case 3: // printing the correct price
+            miniTestsList[0].include = ['pay', '25'];
+            break;
+          case 4: // cash in several currencies and excess
+            miniTestsList[0].include = ['back', '8'];
+            break;
+          case 5: //Cash Exact Price
+            miniTestsList[0].include = ['back', '0'];
+            break;
+          case 6: //credit
+            miniTestsList[0].include = ['received'];
+            break;
+          case 7: //some customers
+            miniTestsList[0].include = ['pay', '25'];
+            miniTestsList[1].include = ['pay', '33'];
+            break;
+          case 8: // printing all the recives
+            miniTestsList[0].include = ['(בשמונה ההדפסות האחרונות)', 'deal', '33'];
+            miniTestsList[1].include = ['(בשמונה ההדפסות האחרונות)', 'mana', '25'];
+            miniTestsList[2].include = ['(בשמונה ההדפסות האחרונות)', 'half', '15'];
+            break;
+          case 9: //correct profit amount
+            miniTestsList[0].include = ['earned', '34'];
+        }
+        return (
+          <>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <div style={{ flex: 0.3, marginLeft: '50px' }}>
+                <p>עבור הקלט: </p>
+                <pre
+                  style={{
+                    color: '#0b7309',
+                    fontWeight: 'bold',
+                    fontFamily: 'Courier',
+                    direction: 'ltr',
+                  }}
+                >
+                  {selectedValue.input}
+                </pre>
+              </div>
+              <div style={{ flex: 1 }}>
+                <p>חיפשנו:</p>
+                {miniTestsList.map((miniTest, index) => (
+                  <React.Fragment key={index}>
+                    {miniTest.include && <p>● שורה המכילה את המילים {miniTest.include.join(', ')}</p>}
+                    {miniTest.notInclude && <p>ולא מכילה את המילים {miniTest.notInclude.join(', ')}</p>}
+                  </React.Fragment>
+                ))}
+                <br />
+                {selectedValue.correct ? <p>ומצאנו. כל הכבוד!</p> : <p>ולא מצאנו. נסו שוב :)</p>}{' '}
+              </div>
+            </div>
+          </>
+        );
+      }
+
+      // RunTestButton.jsx
+      export function getTaskTests() {
+        return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
+      }
+      export function generateInputList() {
+        return [
+          '1\nsalad\nstop\n1\n10\n20\nno',
+          '1\nhumus\npickles\ntehini\nsalad\n1\n10\n20\nno',
+          '1\nhumus\npickles\ntehini\nsalad\n1\n10\n20\nno',
+          '2\nsalad\nstop\n1\n10\n20\nno',
+          '1\nsalad\nstop\n1\n5\n8\n10\nno',
+          '3\nsalad\nstop\n1\n33\nno',
+          '2\nsalad\nstop\n2\n4a32\n4322\nno',
+          '3\nhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
+          '3\nhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
+          '3\nhumus\nstop\n1\n33\nyes\n2\nsalad\nstop\n2\n4322\nno',
+        ];
+      }
+      const isLineContains = (output, includeWords, excludeWords) => {
+        for (let line of output) {
+          let includeAll = includeWords.every((word) => line.toLowerCase().includes(word));
+          let excludeAny = excludeWords.some((word) => line.toLowerCase().includes(word));
+          if (includeAll && !excludeAny) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      const isCorrect = ({ index, outputLines }) => {
+        switch (index) {
+          case 0: // printing the menu
+            return (
+              isLineContains(outputLines, ['half', '15'], []) &&
+              isLineContains(outputLines, ['mana', '25'], []) &&
+              isLineContains(outputLines, ['deal', '33'], [])
+            );
+          case 1: //updating the list of salads
+            return (
+              isLineContains(outputLines, Salads, []) &&
+              isLineContains(outputLines, SaladsWithoutHumus, ['humus']) &&
+              isLineContains(outputLines, SaladsWithoutPickles, ['humus', 'pickles']) &&
+              isLineContains(outputLines, SaladsWithoutThini, ['humus', 'pickles', 'tehini'])
+            );
+          case 2: // printing the list of selected salads
+            return isLineContains(
+              outputLines,
+              ['humus', 'pickles', 'tehini', 'salad'],
+              ['harif', 'amba', 'cabbage', 'onion'],
+            );
+          case 3: // printing the correct price
+            return isLineContains(outputLines, ['pay', '25'], []);
+          case 4: // cash in several currencies and excess
+            return isLineContains(outputLines, ['back', '8'], []);
+          case 5: //Cash Exact Price
+            return isLineContains(outputLines, ['back', '0'], []);
+          case 6: //credit
+            return isLineContains(outputLines, ['received'], []);
+          case 7: //some customers
+            return isLineContains(outputLines, ['pay', '25'], []) && isLineContains(outputLines, ['pay', '33'], []);
+          case 8: // printing all the recives
+            const lastLines = outputLines.slice(-8);
+            return (
+              isLineContains(lastLines, ['deal', '33'], []) &&
+              isLineContains(lastLines, ['mana', '25'], []) &&
+              !isLineContains(lastLines, ['half', '15'], [])
+            );
+          case 9: //correct profit amount
+            return isLineContains(outputLines, ['earned', '34'], []);
+        }
+      };
+
+      export function processTestsOutputs(testsOutputs) {
+        const names = testsName();
+        return testsOutputs.map((testsOutput, index) => {
+          const input = testsOutput.input;
+          const outputLines = testsOutput.output ? testsOutput.output.split('\n') : '';
+
+          const correct = index < 10 ? isCorrect({ index, outputLines }) : null;
+          const name = names[index];
+          return { name, input, output: testsOutput.output, correct, index };
+        });
+      }
 
 // instruction.jsx
 export function getInstructions() {
