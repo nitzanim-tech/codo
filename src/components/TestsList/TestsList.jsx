@@ -6,15 +6,17 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 
 import { getTaskExplanation } from '../../Tasks/TaskIndex';
+import { DefaultExplanation } from './DefaultExplanation';
 
-export default function TestsList({ testsOutputs, task }) {
+export default function TestsList({ testsOutputs, taskObject }) {
+  console.log(taskObject);
   const [selectedValue, setSelectedValue] = useState(testsOutputs[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [explanationTask, setExplanationTask] = useState(getTaskExplanation(task));
+  const [explanationTask, setExplanationTask] = useState(DefaultExplanation());
 
-  useEffect(() => {
-    setExplanationTask(getTaskExplanation(task));
-  }, [task]);
+  // useEffect(() => {
+  //   setExplanationTask(getTaskExplanation(task));
+  // }, [task]);
 
   const handleSelect = (value) => {
     const selectedObject = testsOutputs.find((obj) => obj.name === value);
@@ -51,7 +53,7 @@ export default function TestsList({ testsOutputs, task }) {
         </Listbox>
       </ListboxWrapper>
 
-      <Modal isOpen={isOpen} onClose={onClose} dir="rtl" hideCloseButton size='3xl'> 
+      <Modal isOpen={isOpen} onClose={onClose} dir="rtl" hideCloseButton size="3xl">
         <ModalContent>
           {(onClose) => (
             <>
