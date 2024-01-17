@@ -45,9 +45,21 @@ async function runTest({ code, tests }) {
 
 async function handleClick() {
   const userTestOutputs = await runTest({ code, tests: taskObject.tests });
-  const ansTestOutputs = await runTest({ code: taskObject.code, tests: taskObject.tests });
-  const testsOutput = processTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
-  setTestsOutputs(testsOutput);
+  const isTaskDefault = Boolean(taskObject.code);
+  if (isTaskDefault) {
+    const ansTestOutputs = await runTest({ code: taskObject.code, tests: taskObject.tests });
+    const testsOutput = processTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
+    setTestsOutputs(testsOutput);
+  } else {
+    const codeFromDB = taskObject.processTestsCode;
+    let processOutput = new Function('parameters', codeFromDB);
+    let parameters = {
+      taskTests: taskObject.tests,
+      testsOutputs: userTestOutputs,
+    };
+    const testsOutput = processOutput(parameters);
+    setTestsOutputs(testsOutput);
+  }
 }
 
 

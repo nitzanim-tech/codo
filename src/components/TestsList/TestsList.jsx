@@ -5,8 +5,8 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 
-import { getTaskExplanation } from '../../Tasks/TaskIndex';
 import { DefaultExplanation } from './DefaultExplanation';
+import { getTaskExplanation } from '../../Tasks/TaskComponents';
 
 export default function TestsList({ testsOutputs, taskObject }) {
   // console.log({ testsOutputs, taskObject });
@@ -61,8 +61,11 @@ export default function TestsList({ testsOutputs, taskObject }) {
                 {selectedValue.name}
               </ModalHeader>
 
-              <ModalBody>{DefaultExplanation(selectedValue)}</ModalBody>
-
+              <ModalBody>
+                {taskObject.code
+                  ? DefaultExplanation(selectedValue)
+                  : getTaskExplanation({ task: taskObject.id, selectedValue })}
+              </ModalBody>
               <ModalFooter>
                 <button onClick={onClose}>סגור</button>
               </ModalFooter>
@@ -73,6 +76,8 @@ export default function TestsList({ testsOutputs, taskObject }) {
     </>
   );
 }
+
+
 
 const ListboxWrapper = ({ children }) => (
   <div
