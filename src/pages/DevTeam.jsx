@@ -16,7 +16,7 @@ const DevTeam = () => {
   const [exampleText, setExampleText] = useState('');
 
   const onSendClick = () => {
-    const newTask = { code, chipsList, description, exampleText, testsList, writer: userData.id };
+    const newTask = { code, subjects:chipsList, description, exampleText, testsList, writer: userData.id };
     addTask({ app, newTask });
   };
 

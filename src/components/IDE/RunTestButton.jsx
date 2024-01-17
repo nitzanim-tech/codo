@@ -5,17 +5,17 @@ import { usePyodide } from './PyodideProvider';
 import {getTaskTests} from "../../Tasks/TaskIndex"
 import { cleanTracebackTest } from '../../util/cleanTraceback';
 
-export default function RunTestButton({ code, setTestsOutputs, runTests, task }) {
+export default function RunTestButton({ code, setTestsOutputs, runTests, taskTests }) {
   const [rowTestsOutputs, setRowTestsOutputs] = useState([]);
-  const [taskTestFunctions, setTaskTestFunctions] = useState(getTaskTests(task));
+  // const [taskTestFunctions, setTaskTestFunctions] = useState(getTaskTests(task));
+
+  // useEffect(() => {
+  //   setTaskTestFunctions(getTaskTests(task));
+  // }, [task, rowTestsOutputs]);
 
   useEffect(() => {
-    setTaskTestFunctions(getTaskTests(task));
-  }, [task, rowTestsOutputs]);
-
-    useEffect(() => {
-      if (runTests) handleClick();
-    }, [runTests]);
+    if (runTests) handleClick();
+  }, [runTests]);
 
   const pyodide = usePyodide();
 
@@ -52,10 +52,12 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, task })
   }
 
   async function handleClick() {
-    const inputList = taskTestFunctions.generateInputList();
-    const testResult = await runTest({ code, inputList });
-    setRowTestsOutputs(testResult);
-    const testsOutput = taskTestFunctions.processTestsOutputs(testResult);
+    const inputList = taskTests.map((test) => test.input);
+    const userTestResult = await runTest({ code, inputList });
+    const ansTestResult = await runTest({ code: taskTests.code, inputList });
+    console.log({ userTestResult, ansTestResult });
+    setRowTestsOutputs(userTestResult);
+    const testsOutput = taskTestFunctions.processTestsOutputs(userTestResult);
     setTestsOutputs(testsOutput);
   }
 

@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import { Button } from '@nextui-org/react';
+import { Button, Checkbox } from '@nextui-org/react';
 import { Listbox, ListboxItem, Input, Textarea, Card } from '@nextui-org/react';
 import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded';
 import AddIcon from '@mui/icons-material/Add';
+import Editor from '@monaco-editor/react';
 
 const AddTests = ({ testsList, setTestList }) => {
   const [openAddTest, setOpenAddTest] = useState(false);
   const [name, setName] = useState('');
   const [score, setScore] = useState('');
   const [input, setInput] = useState('');
+  const [isHidden, setIsHidden] = useState(false);
+  const [runningCode, setRunningCode] = useState('');
 
   const ListboxWrapper = ({ children }) => (
     <div className="w-full max-w-[260px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100">
@@ -17,7 +20,7 @@ const AddTests = ({ testsList, setTestList }) => {
   );
 
   const handleAddTestClick = () => {
-    const newTest = { name, score, input };
+    const newTest = { name, input, score, isHidden, runningCode };
     setTestList([...testsList, newTest]);
     setOpenAddTest(false);
   };
@@ -56,6 +59,18 @@ const AddTests = ({ testsList, setTestList }) => {
               input: 'resize-y min-h-[80px]',
             }}
           />
+          <p>קוד הרצה</p>
+          <Editor
+            height="315px"
+            defaultLanguage="python"
+            value={runningCode}
+            onChange={(newValue) => setRunningCode(newValue)}
+            options={{ minimap: { enabled: false } }}
+          />
+          <Checkbox isSelected={isHidden} onValueChange={setIsHidden}>
+            טסט מוסתר
+          </Checkbox>
+          
           <Button
             radius="full"
             isIconOnly
