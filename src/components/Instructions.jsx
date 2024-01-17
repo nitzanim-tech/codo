@@ -23,7 +23,7 @@ export default function Instructions({ taskObject }) {
           <div dangerouslySetInnerHTML={{ __html: taskObject.description }} />
         </AccordionItem>
         <AccordionItem title="דוגמה">
-          <div dangerouslySetInnerHTML={{ __html: taskObject.exampleText }} />
+          <div dangerouslySetInnerHTML={{ __html: taskObject.example }} />
         </AccordionItem>
       </Accordion>
     </div>
