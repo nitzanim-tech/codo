@@ -57,6 +57,8 @@ const DevTeam = () => {
       <div style={{ marginTop: '20px' }}>
         <h2>טסטים</h2>
         <AddTests testsList={tests} setTestList={setTests} />
+        <Divider style={{ marginTop: '20px' }} />
+
         <Tabs radius="full" aria-label="Tabs radius" style={{ marginTop: '20px' }}>
           <Tab key="default" title="ברירת מחדל">
             <h2> (python) קוד פתרון</h2>

@@ -7,8 +7,11 @@ const getAllTasks = async ({ app }) => {
   try {
     const snapshot = await get(tasksRef);
     if (snapshot.exists()) {
-      console.log(snapshot.val());
-      return snapshot.val();
+      const tasks = snapshot.val();
+      for (let id in tasks) {
+        tasks[id].id = id;
+      }
+      return tasks;
     } else {
       console.log('No tasks found');
       return null;
