@@ -38,7 +38,7 @@ function IDEButtons({
         <SumbitButton code={code} testsOutputs={testsOutputs} setRunTests={setRunTests} taskId={taskObject.id} />
       </ButtonWrapper>
       <ButtonWrapper>
-        <RunTestButton code={code} setTestsOutputs={setTestsOutputs} runTests={runTests} taskTests={taskObject.tests} />
+        <RunTestButton code={code} setTestsOutputs={setTestsOutputs} runTests={runTests} taskObject={taskObject} />
       </ButtonWrapper>
       <ButtonWrapper>
         <RunCodeButton code={code} setOutput={setOutput} setInputCallback={setInputCallback} setError={setError} />

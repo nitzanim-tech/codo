@@ -2,22 +2,14 @@ import { useEffect, useState } from 'react';
 import { Button, Tooltip } from "@nextui-org/react";
 import RuleRoundedIcon from "@mui/icons-material/RuleRounded";
 import { usePyodide } from './PyodideProvider';
-import {getTaskTests} from "../../Tasks/TaskIndex"
 import { cleanTracebackTest } from '../../util/cleanTraceback';
 
-export default function RunTestButton({ code, setTestsOutputs, runTests, taskTests }) {
-  const [rowTestsOutputs, setRowTestsOutputs] = useState([]);
-  // const [taskTestFunctions, setTaskTestFunctions] = useState(getTaskTests(task));
-
-  // useEffect(() => {
-  //   setTaskTestFunctions(getTaskTests(task));
-  // }, [task, rowTestsOutputs]);
+export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject }) {
+  const pyodide = usePyodide();
 
   useEffect(() => {
     if (runTests) handleClick();
   }, [runTests]);
-
-  const pyodide = usePyodide();
 
   async function runPython({ code, input }) {
     try {
@@ -32,7 +24,6 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskTes
         print(prompt)
     return builtins.input()
   `);
-
       pyodide.runPython(code);
       let output = pyodide.runPython('sys.stdout.getvalue()');
       return output;
@@ -42,24 +33,23 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskTes
     }
   }
 
-  async function runTest({ code, inputList }) {
-    let testsOutputs = [];
-    for (const input of inputList) {
-      const output = await runPython({ code, input: input.replace(/\n/g, '\\n') });
-      testsOutputs.push({ input, output });
-    }
-    return testsOutputs;
+async function runTest({ code, tests }) {
+  let testsOutputs = [];
+  for (const test of tests) {
+    const codeToRun = code + '\n' + (test.runningCode || '');
+    const output = await runPython({ code: codeToRun, input: test.input.replace(/\n/g, '\\n') });
+    testsOutputs.push({ input: test.input, output });
   }
+  return testsOutputs;
+}
 
-  async function handleClick() {
-    const inputList = taskTests.map((test) => test.input);
-    const userTestResult = await runTest({ code, inputList });
-    const ansTestResult = await runTest({ code: taskTests.code, inputList });
-    console.log({ userTestResult, ansTestResult });
-    setRowTestsOutputs(userTestResult);
-    const testsOutput = taskTestFunctions.processTestsOutputs(userTestResult);
-    setTestsOutputs(testsOutput);
-  }
+async function handleClick() {
+  const userTestOutputs = await runTest({ code, tests: taskObject.tests });
+  const ansTestOutputs = await runTest({ code: taskObject.code, tests: taskObject.tests });
+  const testsOutput = processTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
+  setTestsOutputs(testsOutput);
+}
+
 
   return (
     <Tooltip content={'בדוק'} placement={'bottom'}>
@@ -70,3 +60,14 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskTes
   );
 }
 
+function processTestsOutputs({ taskTests, userTestOutputs, ansTestOutputs }) {
+  const names = taskTests.map((test) => test.name);
+
+  return userTestOutputs.map((testsOutput, index) => {
+    const userOutputNoSpaces = testsOutput.output.replace(/\s/g, '');
+    const ansOutputNoSpaces = ansTestOutputs[index].output.replace(/\s/g, '');
+    const correct = userOutputNoSpaces === ansOutputNoSpaces;
+    const name = names[index];
+    return { name, input: testsOutput.input, output: testsOutput.output, ans: ansTestOutputs[index].output, correct };
+  });
+}
