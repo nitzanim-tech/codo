@@ -9,14 +9,9 @@ import { getTaskExplanation } from '../../Tasks/TaskIndex';
 import { DefaultExplanation } from './DefaultExplanation';
 
 export default function TestsList({ testsOutputs, taskObject }) {
-  console.log({ testsOutputs, taskObject });
+  // console.log({ testsOutputs, taskObject });
   const [selectedValue, setSelectedValue] = useState(testsOutputs[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [explanationTask, setExplanationTask] = useState(DefaultExplanation());
-
-  // useEffect(() => {
-  //   setExplanationTask(getTaskExplanation(task));
-  // }, [task]);
 
   const handleSelect = (value) => {
     const selectedObject = testsOutputs.find((obj) => obj.name === value);
@@ -66,7 +61,7 @@ export default function TestsList({ testsOutputs, taskObject }) {
                 {selectedValue.name}
               </ModalHeader>
 
-              <ModalBody>{explanationTask.generateExplanation(selectedValue)}</ModalBody>
+              <ModalBody>{DefaultExplanation(selectedValue)}</ModalBody>
 
               <ModalFooter>
                 <button onClick={onClose}>סגור</button>

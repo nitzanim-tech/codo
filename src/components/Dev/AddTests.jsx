@@ -25,21 +25,19 @@ const AddTests = ({ testsList, setTestList }) => {
     setOpenAddTest(false);
   };
 
-  return (
-    <>
-      <ListboxWrapper>
-        <Listbox aria-label="Actions" onAction={(key) => alert(key)}>
-          {testsList.map((test, index) => (
-            <ListboxItem key={index}>{test.name}</ListboxItem>
-          ))}
-        </Listbox>
-      </ListboxWrapper>
-
-      <Button radius="full" isIconOnly variant="faded" onClick={setOpenAddTest}>
-        <PostAddRoundedIcon />
-      </Button>
+return (
+  <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+    <div
+      style={{
+        display: 'flex',
+        marginRight: '20px',
+        width: '400px',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       {openAddTest && (
-        <Card>
+        <Card fullWidth>
           <Input label="שם" variant="bordered" className="max-w-xs" onChange={(e) => setName(e.target.value)} />
           <Input
             label="נקודות"
@@ -59,9 +57,9 @@ const AddTests = ({ testsList, setTestList }) => {
               input: 'resize-y min-h-[80px]',
             }}
           />
-          <p>קוד הרצה</p>
+          <p>(python) קוד הרצה</p>
           <Editor
-            height="315px"
+            height="130px"
             defaultLanguage="python"
             value={runningCode}
             onChange={(newValue) => setRunningCode(newValue)}
@@ -70,7 +68,7 @@ const AddTests = ({ testsList, setTestList }) => {
           <Checkbox isSelected={isHidden} onValueChange={setIsHidden}>
             טסט מוסתר
           </Checkbox>
-          
+
           <Button
             radius="full"
             isIconOnly
@@ -82,8 +80,22 @@ const AddTests = ({ testsList, setTestList }) => {
           </Button>
         </Card>
       )}
-    </>
-  );
+    </div>
+    <Button radius="full" isIconOnly variant="faded" onClick={setOpenAddTest}>
+      <PostAddRoundedIcon />
+    </Button>
+
+    <div>
+      <ListboxWrapper>
+        <Listbox aria-label="Actions" onAction={(key) => alert(key)}>
+          {testsList.map((test, index) => (
+            <ListboxItem key={index}>{test.name}</ListboxItem>
+          ))}
+        </Listbox>
+      </ListboxWrapper>
+    </div>
+  </div>
+);
 };
 
 export default AddTests;

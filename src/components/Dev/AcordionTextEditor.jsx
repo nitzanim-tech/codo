@@ -13,8 +13,9 @@ const AcordionTextEditor = ({ title, setText }) => {
     ['fontColor', 'hiliteColor'],
 
     ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
-    ['outdent', 'indent'],
-    ['align', 'horizontalRule', 'list'],
+    // ['outdent', 'indent'],
+    ['align', 'horizontalRule'],
+    ['codeView'],
   ];
 
   function handleChange(content) {

@@ -61,7 +61,7 @@ export default function NavigateBar({ task, setTask, isShowTask }) {
       <NavbarBrand style={{ flex: 1 }}>
         <img src={logoImg} style={{ width: '180px', marginRight: '-30%' }} />
       </NavbarBrand>
-      {isShowTask && (
+      {/* {isShowTask && (
         <>
           <NavbarItem isActive style={{ width: '30%' }}>
             <Select
@@ -105,7 +105,7 @@ export default function NavigateBar({ task, setTask, isShowTask }) {
             </Tooltip>
           </NavbarItem>
         </>
-      )}
+      )} */}
       <NavbarContent justify="end" style={{ flex: 1 }}>
         <FirebaseAuth auth={auth} app={app} currentUser={currentUser} setCurrentUser={setCurrentUser} />
       </NavbarContent>
