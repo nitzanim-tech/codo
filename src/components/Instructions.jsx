@@ -3,12 +3,7 @@ import { Chip, Divider } from '@nextui-org/react';
 import { Accordion, AccordionItem } from '@nextui-org/react';
 import { getInstructions } from '../Tasks/TaskIndex';
 
-export default function Instructions({task}) {
-  const [instructionFunctions, setIntsructionFunctions] = useState(getInstructions(task));
-
-  useEffect(() => {
-    setIntsructionFunctions(getInstructions(task));
-  }, [task]);
+export default function Instructions({ taskObject }) {
 
   return (
     <div style={{ width: '100%', textAlign: 'right', direction: 'rtl' }}>
@@ -16,7 +11,7 @@ export default function Instructions({task}) {
         <AccordionItem title="מה צריך לדעת?">
           <p style={{ marginBottom: '10px' }}>נושאים עיקריים: </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-            {instructionFunctions.subjects().map((subject) => (
+            {taskObject.subjects.map((subject) => (
               <Chip key={subject} variant="faded">
                 {subject}
               </Chip>
@@ -24,8 +19,12 @@ export default function Instructions({task}) {
           </div>
         </AccordionItem>
 
-        <AccordionItem title="תיאור המשימה">{instructionFunctions.desription()}</AccordionItem>
-        <AccordionItem title="דוגמה"> {instructionFunctions.examples()}</AccordionItem>
+        <AccordionItem title="תיאור המשימה">
+          <div dangerouslySetInnerHTML={{ __html: taskObject.description }} />
+        </AccordionItem>
+        <AccordionItem title="דוגמה">
+          <div dangerouslySetInnerHTML={{ __html: taskObject.exampleText }} />
+        </AccordionItem>
       </Accordion>
     </div>
   );

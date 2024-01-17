@@ -10,21 +10,28 @@ import { useFirebase } from '../util/FirebaseProvider';
 const DevTeam = () => {
   const { app, userData } = useFirebase();
   const [code, setCode] = useState('# write here');
-  const [chipsList, setChipsList] = useState([]);
+  const [subjects, setSubjects] = useState([]);
   const [testsList, setTestList] = useState([]);
   const [description, setDescription] = useState('');
-  const [exampleText, setExampleText] = useState('');
+  const [example, setExample] = useState('');
 
   const onSendClick = () => {
-    const newTask = { code, subjects:chipsList, description, exampleText, testsList, writer: userData.id };
+    const newTask = {
+      code,
+      subjects,
+      description,
+      example,
+      tests: testsList,
+      writer: userData.id,
+    };
     addTask({ app, newTask });
   };
 
   return (
     <div style={{ width: '80%', margin: '30px', justifyContent: 'center' }}>
-      <AcordionChip chipsList={chipsList} setChipsList={setChipsList} title={'מה צריך לדעת'} />
+      <AcordionChip chipsList={subjects} setChipsList={setSubjects} title={'מה צריך לדעת'} />
       <AcordionTextEditor setText={setDescription} title={'תיאור המשימה'} />
-      <AcordionTextEditor setText={setExampleText} title={'דוגמה'} />
+      <AcordionTextEditor setText={setExample} title={'דוגמה'} />
       <h2>קוד פתרון</h2>
       <Editor
         height="315px"

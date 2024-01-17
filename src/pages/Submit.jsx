@@ -29,12 +29,9 @@ function Submit() {
     const fetchData = async () => {
       const tasks = await getAllTasks({ app });
       setAllTasks(tasks);
-
-      const testNames = tasks[choosenTaskIndex].testsList.map((test) => test.name);
-      console.log(testNames);
+      const testNames = tasks[choosenTaskIndex].tests.map((test) => test.name);
       const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
       setTestsOutputs(newEmptyTests);
-      console.log({ testNames, newEmptyTests });
     };
 
     fetchData();
@@ -44,23 +41,25 @@ function Submit() {
     <>
       <NavBar task={task} setTask={setTask} isShowTask={true} />
       <PyodideProvider>
-        <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
-          <Grid item style={{ width: '20%' }}>
-            {allTasks && <TestsList testsOutputs={testsOutputs} taskObject={allTasks[choosenTaskIndex]} />}
-          </Grid>
+        {allTasks && testsOutputs && (
+          <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
+            <Grid item style={{ width: '20%' }}>
+              <TestsList testsOutputs={testsOutputs} taskObject={allTasks[choosenTaskIndex]} />
+            </Grid>
 
-          <Grid item style={{ width: '50%' }}>
-            <PythonIDE
-              testsOutputs={testsOutputs}
-              setTestsOutputs={setTestsOutputs}
-              taskObject={allTasks[choosenTaskIndex]}
-            />
-          </Grid>
+            <Grid item style={{ width: '50%' }}>
+              <PythonIDE
+                testsOutputs={testsOutputs}
+                setTestsOutputs={setTestsOutputs}
+                taskObject={allTasks[choosenTaskIndex]}
+              />
+            </Grid>
 
-          {/*<Grid item style={{ width: '30%' }}>
-            {!taskObject?.hideTests && <Instructions task={task} />}
-          </Grid> */}
-        </Grid>
+            <Grid item style={{ width: '30%' }}>
+              {!taskObject?.hideTests && <Instructions taskObject={allTasks[choosenTaskIndex]} />}
+            </Grid>
+          </Grid>
+        )}
       </PyodideProvider>
     </>
   );
