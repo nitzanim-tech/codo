@@ -6,50 +6,40 @@ import Editor from '@monaco-editor/react';
 import AddTests from '../components/Dev/AddTests';
 import addTask from '../requests/tasks/addTask';
 import { useFirebase } from '../util/FirebaseProvider';
-import { Tabs, Tab, Divider } from '@nextui-org/react';
+import { Tabs, Tab, Divider, Input } from '@nextui-org/react';
 
 // import './DevTeam.css';
 
 const DevTeam = () => {
   const { app, userData } = useFirebase();
-
+  const [name, setName] = useState('');
   const [subjects, setSubjects] = useState([]);
   const [description, setDescription] = useState('');
   const [example, setExample] = useState('');
 
   const [code, setCode] = useState('# write here');
   const [tests, setTests] = useState([]);
-
-  const [explanationCode, setExplanationCode] = useState('// write here');
   const [processTestsCode, setProcessTestsCode] = useState('// write here');
 
-  const onDefaultSendClick = () => {
-    const newTask = { code, subjects, description, example, tests, writer: userData.id };
+  const onSendDefaultClick = () => {
+    const newTask = { name, code, subjects, description, example, tests, writer: userData.id };
     addTask({ app, newTask });
   };
-  const onCustomSendClick = () => {
-    const newTask = {
-      explanationCode,
-      processTestsCode,
-      subjects,
-      description,
-      example,
-      tests: tests,
-      writer: userData.id,
-    };
+  const onSendCustomClick = () => {
+    const newTask = { name, processTestsCode, subjects, description, example, tests, writer: userData.id };
     addTask({ app, newTask });
   };
 
   return (
     <div
       style={{
-        width: '80%',
         margin: '30px',
         justifyContent: 'center',
         padding: '40px',
         backgroundColor: 'rgba(255,255,255, 0.8)',
       }}
     >
+      <Input label="שם" variant="bordered" className="max-w-xs" onChange={(e) => setName(e.target.value)} />
       <AcordionChip chipsList={subjects} setChipsList={setSubjects} title={'מה צריך לדעת'} />
       <AcordionTextEditor setText={setDescription} title={'תיאור המשימה'} />
       <AcordionTextEditor setText={setExample} title={'דוגמה'} />
@@ -70,23 +60,11 @@ const DevTeam = () => {
               onChange={(newValue) => setCode(newValue)}
               options={{ minimap: { enabled: false } }}
             />
-            <button onClick={onDefaultSendClick}>שלח</button>
+            <button onClick={onSendDefaultClick}>שלח</button>
           </Tab>
 
           <Tab key="custom" title="מותאם אישית">
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <div>
-                <h2>generateExplanation (js)</h2>
-                <Editor
-                  height="315px"
-                  width="550px"
-                  theme="vs-dark"
-                  defaultLanguage="javascript"
-                  value={explanationCode}
-                  onChange={(newValue) => setExplanationCode(newValue)}
-                  options={{ minimap: { enabled: false } }}
-                />
-              </div>
               <div>
                 <h2>processTestsOutputs (js)</h2>
                 <Editor
@@ -100,7 +78,7 @@ const DevTeam = () => {
                 />
               </div>
             </div>
-            <button onClick={onCustomSendClick}>שלח</button>
+            <button onClick={onSendCustomClick}>שלח</button>
           </Tab>
         </Tabs>
       </div>
@@ -109,3 +87,18 @@ const DevTeam = () => {
 };
 
 export default DevTeam;
+
+{
+  /* <div>
+                <h2>generateExplanation (js)</h2>
+                <Editor
+                  height="315px"
+                  width="550px"
+                  theme="vs-dark"
+                  defaultLanguage="javascript"
+                  value={explanationCode}
+                  onChange={(newValue) => setExplanationCode(newValue)}
+                  options={{ minimap: { enabled: false } }}
+                />
+              </div> */
+}

@@ -5,10 +5,17 @@ import AddIcon from '@mui/icons-material/Add';
 import 'suneditor/dist/css/suneditor.min.css';
 
 const AcordionChip = ({ title, chipsList, setChipsList }) => {
+  const [inputText, setInputText] = useState('');
+
   function handleAddClick() {
-    const inputText = document.querySelector('input').value;
     setChipsList([...chipsList, inputText]);
-    document.querySelector('input').value = '';
+    setInputText('');
+  }
+
+  function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+      handleAddClick();
+    }
   }
 
   return (
@@ -16,7 +23,12 @@ const AcordionChip = ({ title, chipsList, setChipsList }) => {
       <Grid container spacing={1} columns={2} rows={1}>
         <Grid item style={{ width: '45%', display: 'flex', alignItems: 'center' }}>
           <div style={{ width: '40%', display: 'flex', alignItems: 'center' }}>
-            <Input variant="bordered" />
+            <Input
+              variant="bordered"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
             <Button radius="full" isIconOnly variant="faded" onClick={handleAddClick}>
               <AddIcon />
             </Button>
