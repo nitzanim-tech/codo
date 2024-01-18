@@ -1,11 +1,7 @@
-import * as Experience from './experience';
-import * as BasicElevator from './BasicElevator';
-import * as TriangleInequality from './TriangleInequality';
 import * as CollatzConjecture from './CollatzConjecture';
 import * as RecyclingChallenge from './RecyclingChallenge';
 import * as WordleLists from './WordleLists';
 import * as ForIntro from './ForIntro';
-import * as PerfectNumber from './PerfectNumber';
 import * as SevenBoom from './SevenBoom';
 import * as ReadableParagraph from './ReadableParagraph';
 import * as MultiplicationTable from './MultiplicationTable'
@@ -15,14 +11,10 @@ import * as FirstTest from './FirstTest'
 import * as BeforeFirstTask from './BeforeFirstTest';
 
 const tasks = {
-  0: Experience,
-  1: BasicElevator,
-  2: TriangleInequality,
   3: CollatzConjecture,
   4: RecyclingChallenge,
   5: WordleLists,
   6: ForIntro,
-  7: PerfectNumber,
   8: SevenBoom,
   9: ReadableParagraph,
   10: MultiplicationTable,

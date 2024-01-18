@@ -8,7 +8,8 @@ const addTask = async ({ app, newTask }) => {
   }
 
   const db = getDatabase(app);
-  const taskId = uuidv4();
+  const splittedTaskId = uuidv4().split('-');
+  const taskId = splittedTaskId[splittedTaskId.length - 1];
   const userSubmitsRef = ref(db, `tasks/${taskId}`);
 
   try {

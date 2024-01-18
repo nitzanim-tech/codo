@@ -52,7 +52,6 @@ async function handleClick() {
     setTestsOutputs(testsOutput);
   } else {
     const codeFromDB = taskObject.processTestsCode;
-    console.log(codeFromDB);
     let processOutput = new Function('parameters', codeFromDB);
     let parameters = {
       taskTests: taskObject.tests,
