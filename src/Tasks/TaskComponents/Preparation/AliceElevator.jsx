@@ -2,56 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Divider } from '@nextui-org/react';
 import { Grid } from '@mui/material';
 import styled from 'styled-components';
-import elevatorImg from '../assets/img/elevator/elevator.png';
-import childImg from '../assets/img/elevator/child.png';
-
-export function testsName() {
-  return [
-    'אליס קרובה למעלית A',
-    'אליס קרובה למעלית B',
-    'אליס מעל שתי המעליות',
-    'אליס מתחת לשתי המעליות',
-    'אליס בדיוק באמצע',
-    'קומת חניון',
-  ];
-}
-
-// instruction.jsx
-export function getInstructions() {
-  return { subjects, desription, examples };
-}
-export function subjects() {
-  return ['משתנים', 'ביטויים בוליאניים', 'תנאים'];
-}
-export function desription() {
-  return (
-    <>
-      <p>
-        בבניין רב קומות יש שתי מעליות- מעלית A ומעלית B. המעליות נמצאות בקומות שונות. <br />
-        כשאדם קורא למעלית, תגיע המעלית הקרובה אליו ביותר. <br />
-      </p>
-      <Divider />
-      <p>
-        קלטו מהמשתמש את הקומה של שבה המעלית A נמצאת, ואת הקומה שבה B נמצאת.
-        <br />
-        לאחר מכן קלטו את הקומה בה אליס נמצאת. הדפיסו את שם המעלית הקרובה ביותר לאליס - A או B. אם שתיהן קרובות באותה
-        המידה הדפיסו אחת מהן (שתי הבחירות נכונות)
-      </p>
-    </>
-  );
-}
-export function examples() {
-  return (
-    <p style={{ textAlign: 'right', dir: 'rtl' }}>
-      נקלוט את המיקום של המעליות ושל אליס מהמשתמש. <br />
-      נניח שהוזן: מעלית A נמצאת בקומה 3,
-      <br />
-      מעלית B נמצאת בקומה 7 ואליס נמצאת בקומה 4. המרחק של אליס מקומה A הוא 1, המרחק שלה ממעלית B הוא 3, לכן נבחר את
-      מעלית A <br />
-      נדפיס: <code>A</code> <br />
-    </p>
-  );
-}
+import elevatorImg from '../../../assets/img/elevator/elevator.png';
+import childImg from '../../../assets/img/elevator/child.png';
 
 const ElevatorTable = ({ test }) => {
   const input = test.input;
@@ -155,61 +107,7 @@ const ElevatorImg = styled.img`
   width: 100%;
 `;
 
-// RunTestButton.jsx
-export function getTaskTests() {
-  return { generateInputList, processTestsOutputs: (testsOutputs) => processTestsOutputs(testsOutputs) };
-}
-const range = (from, to) => {
-  return Math.floor(Math.random() * (to - from + 1)) + from;
-};
-export function generateInputList() {
-  // A, B, P
-  const closeToA = [7, 1, 6].join('\n'); // A
-  const closeToB = [2, 8, 6].join('\n'); // B
-  const aboveBoth = [1, 4, 7].join('\n'); //B
-  const underBoth = [6, 4, 2].join('\n'); // B
-  const middle = [1, 5, 3].join('\n'); // A || B
-  const underground = [-3, 4, -1].join('\n'); // A
-
-  return [closeToA, closeToB, aboveBoth, underBoth, middle, underground];
-}
-export function processTestsOutputs(testsOutputs) {
-  const isCorect = (output, ans) => {
-    if (ans == 'A או B') return output.includes('A') || output.includes('B');
-    if (ans == 'A') return output.includes('A') && !output.includes('B');
-    return output.includes('B') && !output.includes('A ');
-  };
-  // const { taskTests, testsOutputs } = parameters;
-  const names = taskTests.map((test) => test.name);
-  const answers = ['A', 'B', 'B', 'B', 'A או B', 'A'];
-  return testsOutputs.map((testsOutput, index) => {
-    const inputLines = testsOutput.input.split('\n');
-    const input = {
-      A: parseInt(inputLines[0]),
-      B: parseInt(inputLines[1]),
-      P: parseInt(inputLines[2]),
-    };
-    const outputLines = testsOutput.output.split('\n');
-    const output = outputLines[outputLines.length - 2];
-    const correct = isCorect(output, answers[index]);
-    const name = names[index];
-    return { name, input, output, correct, ans: answers[index] };
-  });
-}
-
-function isCorect(output, ans){
-  if (ans == 'A או B')
-    return output.includes('A') || output.includes('B')
-  if (ans == 'A')
-    return output.includes('A') && !output.includes('B')
-  return output.includes('B') && !output.includes('A')
-}
-
-// TestList.jsx
-export function getTaskExplanation() {
-  return { generateExplanation: (selectedValue) => generateExplanation(selectedValue) };
-}
-export function generateExplanation(selectedValue) {
+export function getTaskExplanation(selectedValue) {
   return (
     <Grid container spacing={2} columns={3} rows={1}>
       <Grid item style={{ width: '30%' }}>
@@ -250,4 +148,3 @@ export function generateExplanation(selectedValue) {
     </Grid>
   );
 }
-
