@@ -115,7 +115,8 @@ export function generateInputList() {
 }
 
 export function processTestsOutputs(testsOutputs) {
-  const names = testsName();
+  // const { taskTests, testsOutputs } = parameters;
+  const names = taskTests.map((test) => test.name);
   const answers = [
     { lastLine: '3' },
     { lastLine: '34' },
