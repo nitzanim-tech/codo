@@ -4,7 +4,6 @@ import DonutChart from '../Chart';
 import VersionsButton from './VersionsButton';
 import formatDate from '../../../util/formatDate';
 import ReviewButton from './ReviewButton';
-import { testsName } from '../../../Tasks/TaskIndex';
 
 export default function SubmitsTable({ data }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });

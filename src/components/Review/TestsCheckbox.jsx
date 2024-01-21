@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, Divider } from '@nextui-org/react';
-import { testsName } from '../../Tasks/TaskIndex';
 import { CheckboxGroup, Checkbox, ScrollShadow } from '@nextui-org/react';
 import styled from 'styled-components';
 

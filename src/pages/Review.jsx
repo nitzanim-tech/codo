@@ -5,7 +5,6 @@ import ReviewComponent from '../components/Review/ReviewComponent';
 import { Card, Spinner } from '@nextui-org/react';
 import { DashboardCard } from '../components/Inst/DashboardCard';
 import formatDate from '../util/formatDate';
-import { testsName } from '../Tasks/TaskIndex';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
 
 

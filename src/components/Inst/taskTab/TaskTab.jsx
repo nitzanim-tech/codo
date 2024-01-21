@@ -4,7 +4,6 @@ import { Grid } from '@mui/material';
 import InstTasksList from './InstTasksList';
 import { DashboardCard } from '../DashboardCard';
 import ExcelButton from './ExcelButton';
-import { testsName } from '../../../Tasks/TaskIndex';
 
 export default function TaskTab({ studentsRawData }) {
   const [formattedData, setFormattedData] = useState([]);
