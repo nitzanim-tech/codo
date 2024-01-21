@@ -9,7 +9,6 @@ import ReviewEditor from './ReviewEditor';
 import { Modal, ModalHeader, ModalBody, ModalContent, ModalFooter, useDisclosure } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
 import changePassScore from '../../requests/review/changePassScore';
-import { testsName } from '../../Tasks/TaskIndex';
 
 export default function ReviewComponent({ version, selectedTests }) {
   const { app } = useFirebase();

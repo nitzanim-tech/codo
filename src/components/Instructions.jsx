@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Chip, Divider } from '@nextui-org/react';
 import { Accordion, AccordionItem } from '@nextui-org/react';
-import { getInstructions } from '../Tasks/TaskIndex';
 
 export default function Instructions({ taskObject }) {
 
