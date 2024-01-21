@@ -1,7 +1,3 @@
-import * as CollatzConjecture from './CollatzConjecture';
-import * as RecyclingChallenge from './RecyclingChallenge';
-import * as WordleLists from './WordleLists';
-import * as ForIntro from './ForIntro';
 import * as SevenBoom from './SevenBoom';
 import * as ReadableParagraph from './ReadableParagraph';
 import * as MultiplicationTable from './MultiplicationTable'
@@ -11,10 +7,6 @@ import * as FirstTest from './FirstTest'
 import * as BeforeFirstTask from './BeforeFirstTest';
 
 const tasks = {
-  3: CollatzConjecture,
-  4: RecyclingChallenge,
-  5: WordleLists,
-  6: ForIntro,
   8: SevenBoom,
   9: ReadableParagraph,
   10: MultiplicationTable,
