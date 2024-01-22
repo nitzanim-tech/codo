@@ -5,7 +5,7 @@ import VersionsButton from './VersionsButton';
 import formatDate from '../../../util/formatDate';
 import ReviewButton from './ReviewButton';
 
-export default function SubmitsTable({ data }) {
+export default function SubmitsTable({ data , task}) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
 
   const calculatePresent = (tests) => {
@@ -118,7 +118,7 @@ export default function SubmitsTable({ data }) {
                       })()
                     ) : (
                       <DonutChart
-                        ratio={selectedVersion.tests.filter(Boolean).length + '/' + testsName(student.task).length}
+                        ratio={selectedVersion.tests.filter(Boolean).length + '/' + task.scoreSum}
                         percentage={percentage}
                         size={45}
                       />

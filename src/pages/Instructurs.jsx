@@ -11,6 +11,7 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-o
 import PassMatrix from '../components/Inst/statusTab/PassMatrix';
 import { useFirebase } from '../util/FirebaseProvider';
 import styled from 'styled-components';
+import getTasksData from '../requests/tasks/getTasksData';
 
 function Instructors() {
   const { app, userData } = useFirebase();
@@ -18,6 +19,7 @@ function Instructors() {
   const [studentsRawData, setStudentsRawData] = useState(null);
   const [userGroup, setUserGroup] = useState(userData ? userData.group : []);
   const [unauthorized, setUnauthorized] = useState(true);
+  const [tasksList, setTasksList] = useState(null);
 
   useEffect(() => {
     if (userData) {
@@ -25,6 +27,15 @@ function Instructors() {
       userData.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
     }
   }, [userData]);
+
+  useEffect(() => {
+    const fetchTasksData = async () => {
+      const tasksData = await getTasksData({ app });
+      console.log({ tasksData });
+      setTasksList(tasksData);
+    };
+    fetchTasksData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +58,7 @@ function Instructors() {
 
   return (
     <>
-      <NavBar  />
+      <NavBar />
       {userData ? (
         <>
           {unauthorized ? (
@@ -78,7 +89,7 @@ function Instructors() {
                 <Tabs aria-label="Options">
                   <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
-                      <TaskTab studentsRawData={studentsRawData} />
+                      {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}{' '}
                     </div>
                   </Tab>
                   <Tab key="students" title="חניכים" aria-label="Students tab">

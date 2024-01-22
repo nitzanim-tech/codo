@@ -6,11 +6,10 @@ import { DashboardCard } from '../DashboardCard';
 import ExcelButton from './ExcelButton';
 
 const firstTaskIndex = '7e9e4f50c46c';
-export default function TaskTab({ studentsRawData }) {
+export default function TaskTab({ tasksList, studentsRawData }) {
   const [formattedData, setFormattedData] = useState([]);
   const [selectedTask, setSelectedTask] = useState(localStorage.getItem('lastSelectedTask') || firstTaskIndex);
 
-  console.log(studentsRawData);
   useEffect(() => {
     setFormattedData(formatStudentTestsData(studentsRawData, selectedTask));
   }, [studentsRawData, selectedTask]);
@@ -19,13 +18,17 @@ export default function TaskTab({ studentsRawData }) {
     <>
       <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
         <Grid item style={{ width: '70%' }}>
-          <SubmitsTable data={formattedData} />
+          <SubmitsTable data={formattedData} task={tasksList[selectedTask]} />
         </Grid>
         <ExcelButton data={studentsRawData} />
         <Grid item style={{ width: '20%' }}>
           <InstTasksList selectedTask={selectedTask} setSelectedTask={setSelectedTask} />
+
           <DashboardCard ratio={countStudents(formattedData)} text={'הגישו:'} />
-          <DashboardCard ratio={calculateAverage(formattedData)} text={'ממוצע טסטים:'} />
+          <DashboardCard
+            ratio={calculateAverage({ data: formattedData, task: tasksList[selectedTask] })}
+            text={'ממוצע טסטים:'}
+          />
         </Grid>
       </Grid>
     </>
@@ -77,11 +80,10 @@ const countStudents = (data) => {
   return `${studentsWithVersions}/${totalStudents}`;
 };
 
-const calculateAverage = (data) => {
+const calculateAverage = ({ data, task }) => {
   let total = 0;
   let count = 0;
-  console.log(data);
-  let denominator = data.length ? data[0].task.length : 0;
+  let denominator = data.length ? task.scoreSum : 0;
   if (Array.isArray(data)) {
     data.forEach((student) => {
       if (Array.isArray(student.versions) && student.versions.length > 0) {
