@@ -11,15 +11,13 @@ const getTasksData = async ({ app }) => {
       const tasksWithScoreSums = [];
       for (let id in tasks) {
         const task = tasks[id];
-        task.id = id;
         let scoreSum = 0;
         if (task.tests) {
           for (let test of task.tests) {
             scoreSum += test.score;
           }
         }
-        task.scoreSum = scoreSum;
-        tasksWithScoreSums.push(task);
+        tasksWithScoreSums[id] = { name: task.name, scoreSum };
       }
       return tasksWithScoreSums;
     } else {
