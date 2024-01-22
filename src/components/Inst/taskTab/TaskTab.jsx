@@ -5,10 +5,12 @@ import InstTasksList from './InstTasksList';
 import { DashboardCard } from '../DashboardCard';
 import ExcelButton from './ExcelButton';
 
+const firstTaskIndex = '7e9e4f50c46c';
 export default function TaskTab({ studentsRawData }) {
   const [formattedData, setFormattedData] = useState([]);
-  const [selectedTask, setSelectedTask] = useState(0);
+  const [selectedTask, setSelectedTask] = useState(localStorage.getItem('lastSelectedTask') || firstTaskIndex);
 
+  console.log(studentsRawData);
   useEffect(() => {
     setFormattedData(formatStudentTestsData(studentsRawData, selectedTask));
   }, [studentsRawData, selectedTask]);
@@ -20,7 +22,6 @@ export default function TaskTab({ studentsRawData }) {
           <SubmitsTable data={formattedData} />
         </Grid>
         <ExcelButton data={studentsRawData} />
-
         <Grid item style={{ width: '20%' }}>
           <InstTasksList selectedTask={selectedTask} setSelectedTask={setSelectedTask} />
           <DashboardCard ratio={countStudents(formattedData)} text={'הגישו:'} />
@@ -79,7 +80,8 @@ const countStudents = (data) => {
 const calculateAverage = (data) => {
   let total = 0;
   let count = 0;
-  let denominator = data.length ? testsName(data[0].task).length : 0;
+  console.log(data);
+  let denominator = data.length ? data[0].task.length : 0;
   if (Array.isArray(data)) {
     data.forEach((student) => {
       if (Array.isArray(student.versions) && student.versions.length > 0) {
@@ -88,7 +90,6 @@ const calculateAverage = (data) => {
           const currentNumerator = current.tests.filter(Boolean).length;
           return highestNumerator > currentNumerator ? highest : current;
         });
-        console.log(student);
         const numerator = highestNumeratorVersion.tests.filter(Boolean).length;
         total += numerator;
         count++;

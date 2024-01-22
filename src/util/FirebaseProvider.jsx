@@ -20,6 +20,8 @@ export const FirebaseProvider = ({ children }) => {
       if (user) {
         const current = await getCurrentUser({ app, id: user.uid });
         setUserData(current);
+      } else {
+        setUserData(null);
       }
       setIsUserLoading(false); 
     });
