@@ -47,7 +47,7 @@ function Instructors() {
 
   return (
     <>
-      <NavBar isShowTask={false} />
+      <NavBar  />
       {userData ? (
         <>
           {unauthorized ? (

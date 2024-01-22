@@ -18,7 +18,10 @@ export default function InstTasksList({ selectedTask, setSelectedTask }) {
         {tasks.map((task) => (
           <AutocompleteItem
             key={task.key}
-            onClick={() => setSelectedTask(task.key)}
+            onClick={() => {
+              localStorage.setItem('lastSelectedTask', task.key);
+              setSelectedTask(task.key);
+            }}
             showDivider={dividers.includes(task.key)}
           >
             {task.name}

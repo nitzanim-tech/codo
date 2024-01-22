@@ -31,7 +31,7 @@ function Submit() {
 
   return (
     <>
-      <NavBar task={1} setTask={() => {}} isShowTask={true} />
+      <NavBar />
       <PyodideProvider>
         {allTasks && testsOutputs && (
           <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
