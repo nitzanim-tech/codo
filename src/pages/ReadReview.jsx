@@ -4,20 +4,30 @@ import { Card } from '@nextui-org/react';
 import { CircularProgress } from '@nextui-org/react';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
+import getTaskById from '../requests/tasks/getTaskById';
+import { useFirebase } from '../util/FirebaseProvider';
 const LINE_HEGITH = 20;
 
 export default function ReadReview() {
   const theme = 'vs-light';
+  const { app } = useFirebase();
+
   const [version, setVersion] = useState(null);
   const [comments, setComments] = useState(null);
+  const [taskData, setTaskData] = useState(null);
 
   useEffect(() => {
     const storedVersion = localStorage.getItem('checkedSubmit');
     if (storedVersion) {
       const parsedVersion = JSON.parse(storedVersion);
-      setVersion(parsedVersion);
-      const convertedComments = convertCommentsToObject(parsedVersion.review.comments, parsedVersion.code);
-      setComments(convertedComments);
+      const fetchData = async () => {
+        const taskFromDb = await getTaskById({ app, taskId: parsedVersion.task });
+        setVersion(parsedVersion);
+        setTaskData(taskFromDb);
+        const convertedComments = convertCommentsToObject(parsedVersion.review.comments, parsedVersion.code);
+        setComments(convertedComments);
+      };
+      fetchData();
     }
   }, []);
 
@@ -78,20 +88,11 @@ export default function ReadReview() {
         )}
       </Card>
       {version && (
-        <TestsCheckbox
-          task={version.task}
-          selectedTests={version.selectedTests}
-          setSelectedTests={() => {}}
-          gradesVector={[]}
-          viewOnly
-        />
+        <TestsCheckbox task={taskData} selectedTests={version.selectedTests} setSelectedTests={() => {}} viewOnly />
       )}
     </div>
   );
 }
-
-
-
 
 
 function convertCommentsToObject(comments, code) {
