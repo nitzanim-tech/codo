@@ -6,44 +6,51 @@ import { Card, Spinner } from '@nextui-org/react';
 import { DashboardCard } from '../components/Inst/DashboardCard';
 import formatDate from '../util/formatDate';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
-
+import getTaskById from '../requests/tasks/getTaskById';
+import { useFirebase } from '../util/FirebaseProvider';
 
 function Review() {
+  const { app } = useFirebase();
   const [version, setVersion] = useState(null);
   const [selectedTests, setSelectedTests] = useState([]);
-  const [gradesVector, setGradesVector] = useState(null);
+  const [taskData, setTaskData] = useState(null);
 
   useEffect(() => {
     const storedVersion = localStorage.getItem('versionToCheck');
     if (storedVersion) {
       const parsedVersion = JSON.parse(storedVersion);
-      if (parsedVersion.task == 14) {
-        //first test
-        const grades = new Array(35).fill(3, 0, 30).fill(5, 30, 35);
-        setGradesVector(grades);
-      }
-      setVersion(parsedVersion);
-      const passTestsIndexes = parsedVersion.tests.reduce(
-        (acc, val, index) => (val === true ? [...acc, index] : acc),
-        [],
-      );
-      setSelectedTests(passTestsIndexes);
+      const fetchData = async () => {
+        const taskFromDb = await getTaskById({ app, taskId: parsedVersion.task });
+        setTaskData(taskFromDb);
+        setVersion(parsedVersion);
+        const passTestsIndexes = parsedVersion.tests.reduce(
+          (acc, val, index) => (val === true ? [...acc, index] : acc),
+          [],
+        );
+        setSelectedTests(passTestsIndexes);
+      };
+      fetchData();
     }
   }, []);
 
-  const calculateSum = (gradesVector, selectedTests) => {
-    return selectedTests.reduce((sum, testIndex) => sum + gradesVector[testIndex], 0);
+  const calculateGrade = (taskData, selectedTests) => {
+    return selectedTests.reduce((sum, testIndex) => sum + taskData.tests[testIndex].score, 0);
   };
-
+  const maxGrade = (taskData) => {
+    return Math.min(
+      taskData.tests.reduce((sum, test) => sum + test.score, 0),
+      100,
+    );
+  };
   return (
     <>
-      {version ? (
+      {taskData ? (
         <>
           <Grid container spacing={1} columns={3} rows={1} style={{ marginTop: '20px', padding: '20px' }}>
             <Grid item style={{ width: '69%' }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Card style={{ width: '95%' }}>
-                  <ReviewComponent version={version} selectedTests={selectedTests} />
+                  <ReviewComponent version={version} selectedTests={selectedTests} testsAmount={taskData.tests.length} />
                 </Card>
               </div>
             </Grid>
@@ -56,20 +63,20 @@ function Review() {
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <DashboardCard
                   ratio={
-                    gradesVector
-                      ? calculateSum(gradesVector, selectedTests) + '/' + gradesVector.reduce((a, b) => a + b, 0)
-                      : selectedTests.length + '/' + testsName(version.task).length
+                    // gradesVector ?
+                    calculateGrade(taskData, selectedTests) + '/' + maxGrade(taskData)
+                    // : selectedTests.length + '/' + testsName(version.task).length
                   }
                   text={'סה"כ'}
                   size={70}
-                  max={gradesVector ? 100 : null}
+                  max={100}
                 />
               </div>
               <TestsCheckbox
-                task={version.task}
+                task={taskData}
                 selectedTests={selectedTests}
                 setSelectedTests={setSelectedTests}
-                gradesVector={gradesVector}
+                // gradesVector={gradesVector}
                 // viewOnly={false}
               />
             </Grid>

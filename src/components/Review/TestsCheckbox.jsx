@@ -3,15 +3,7 @@ import { Card, Divider } from '@nextui-org/react';
 import { CheckboxGroup, Checkbox, ScrollShadow } from '@nextui-org/react';
 import styled from 'styled-components';
 
-function TestsCheckbox({ task, selectedTests, setSelectedTests, gradesVector, viewOnly }) {
-  const headers = {
-    10: 'חלק 1- הצגת התפריט',
-    14: 'חלק 2- הרכבת המנה',
-    18: 'חלק 3- גביית תשלום',
-    22: 'חלק 4- הוספת לקוחות',
-    26: 'חלק 5- סגירת קופה',
-    30: 'ראיתי שליטה ב:',
-  };
+function TestsCheckbox({ task, selectedTests, setSelectedTests, viewOnly }) {
   return (
     <div style={{ padding: '5%' }}>
       <Card>
@@ -20,24 +12,24 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, gradesVector, vi
           <CheckboxGroup label="הרצות" value={selectedTests} onValueChange={setSelectedTests} isDisabled={viewOnly}>
             <table>
               <tbody>
-                {testsName(task).map((testName, index) => (
+                {task.tests.map((test, index) => (
                   <React.Fragment key={index}>
-                    {Object.keys(headers).includes(index.toString()) && (
+                    {task.headers && Object.keys(task.headers).includes(index.toString()) && (
                       <tr>
                         <td colSpan={2} style={{ textAlign: 'right', color: 'gray' }}>
-                          {headers[index.toString()]}
+                          {task.headers[index.toString()]}
                         </td>
                       </tr>
                     )}
                     <tr>
                       <td>
                         <Checkbox value={index} radius="full">
-                          {testName}
+                          {test.name}
                         </Checkbox>
                       </td>
                       {!viewOnly && (
                         <td style={{ width: '20%', color: 'gray', fontSize: '80%', textAlign: 'center' }}>
-                          {gradesVector && `${gradesVector[index]} נק'`}
+                          {`${test.score} נק'`}
                         </td>
                       )}
                     </tr>

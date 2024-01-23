@@ -7,6 +7,7 @@
     "dev": "vite --mode development",
     "prod": "vite --mode production",
     "build": "vite build --mode production",
+    "builddev": "vite build --mode development",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "format": "prettier --write src/**/*.{js,json,jsx,css}"
