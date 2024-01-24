@@ -12,7 +12,7 @@ export default function InstTasksList({ selectedTask, setSelectedTask }) {
         dir="rtl"
         placeholder="בחר משימה"
         className="max-w-xs"
-        defaultSelectedKey={tasks[0].key}
+        defaultSelectedKey={selectedTask}
         variant="bordered"
       >
         {tasks.map((task) => (
@@ -29,30 +29,6 @@ export default function InstTasksList({ selectedTask, setSelectedTask }) {
         ))}
       </Autocomplete>
 
-      {/*
-      const DropdownWrapper = ({ children }) => (
-  <div className="w-full max-w-[260px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100">
-    {children}
-  </div>
-);
- <DropdownWrapper>
-        <Dropdown>
-          <DropdownTrigger>
-            <button className="py-2 px-4 w-full text-left">{tasks[selectedTask]?.name || 'בחר משימה'}</button>
-          </DropdownTrigger>
-          <DropdownMenu>
-            {tasks.map((task) => (
-              <DropdownItem
-                key={task.key}
-                onClick={() => setSelectedTask(task.key)}
-                showDivider={dividers.includes(task.key)}
-              >
-                {task.name}
-              </DropdownItem>
-            ))}
-          </DropdownMenu>
-        </Dropdown>
-      </DropdownWrapper> */}
     </div>
   );
 }

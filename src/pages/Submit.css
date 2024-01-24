@@ -9,6 +9,9 @@ body {
 }
 
 
+code {
+  text-align: left;
+}
 
 .check-button {
   color: white;

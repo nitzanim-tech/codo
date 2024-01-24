@@ -69,7 +69,7 @@
     },
     "מספר משוכלל": {
       "type": "task",
-      "index": "lri4kgr3s5k5p3943h"
+      "index": "kgr3s5k5p394"
     },
     "שבוע בום": {
       "type": "task",
@@ -115,10 +115,20 @@
       "type": "task",
       "index": "ca8e2ed044c0",
       "hideTests": true
-    },
-    "סתם משהו1": {
+    }
+  },
+  "פונקציות": {
+    "חימום": {
       "type": "task",
-      "index": "lrhmfr4wyg4w7l2a8ch"
+      "index": "c38805768973"
+    },
+    "מה יש במקרר?": {
+      "type": "task",
+      "index": "0cfe28ed6295"
+    },
+    "רשימת המחלקים": {
+      "type": "task",
+      "index": "4ee3e30cef3f"
     }
   }
 }

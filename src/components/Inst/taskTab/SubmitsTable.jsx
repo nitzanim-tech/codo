@@ -8,7 +8,7 @@ import ReviewButton from './ReviewButton';
 export default function SubmitsTable({ data , task}) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
 
-  const calculatePresent = (tests) => {
+  const calculatePrecent = (tests) => {
     const passedTests = tests.filter(Boolean).length;
     const totalTests = tests.length;
     return (passedTests / totalTests) * 100;
@@ -18,7 +18,7 @@ export default function SubmitsTable({ data , task}) {
     let maxTests = -1;
     for (const version of versions) {
       if (version.tests !== '') {
-        const newPresent = calculatePresent(version.tests);
+        const newPresent = calculatePrecent(version.tests);
         maxTests = maxTests < newPresent ? newPresent : maxTests;
       }
     }
@@ -66,8 +66,6 @@ export default function SubmitsTable({ data , task}) {
     }
   };
 
-  console.log(data);
-  const grades = new Array(35).fill(3, 0, 30).fill(5, 30, 35);
   return (
     <>
       <Table
@@ -95,7 +93,7 @@ export default function SubmitsTable({ data , task}) {
         <TableBody>
           {sortedData.map((student, index) => {
             const selectedVersion = getSelectedVersion(student.versions) || { date: '', tests: '' };
-            const percentage = selectedVersion.tests ? calculatePresent(selectedVersion.tests) : 0;
+            const percentage = selectedVersion.tests ? calculatePrecent(selectedVersion.tests) : 0;
 
             return (
               <TableRow key={`${student.name}-${index}`}>
@@ -110,6 +108,11 @@ export default function SubmitsTable({ data , task}) {
                 <TableCell>{student.versions.length > 1 && <VersionsButton versions={student.versions} />}</TableCell>
                 <TableCell>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {
+                      //////
+                      ///////
+                      //////
+                    }
                     {student.task === 14 && selectedVersion.tests ? (
                       (() => {
                         const tests = selectedVersion.tests.map((test) => (test ? 1 : 0));
