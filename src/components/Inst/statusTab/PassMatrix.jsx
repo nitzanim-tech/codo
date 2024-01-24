@@ -53,13 +53,13 @@ export default function PassMatrix({ studentsRawData }) {
   );
 
   return (
-    <div style={{ padding: '10px', width: '70%', direction: 'ltr' }}>
+    <div style={{ padding: '10px', width: '80%', direction: 'ltr' }}>
       <Table aria-label="Task Matrix">
         <TableHeader>
           {reversedTaskList.map((task) => (
-            <TableColumn key={task.key}>
+            <TableColumn key={task.key} width="1px">
               <Tooltip showArrow={true} content={task.name}>
-                <p>{task.key}</p>
+                <p>*</p>
               </Tooltip>
             </TableColumn>
           ))}
@@ -70,7 +70,7 @@ export default function PassMatrix({ studentsRawData }) {
           {taskData.map((student) => (
             <TableRow key={student.uid}>
               {student.passRatios.reverse().map((ratio, index) => (
-                <TableCell key={index} width={'80px'}>
+                <TableCell key={index} width={'10px'}>
                   <div style={{ backgroundColor: getColor(ratio), height: '100%', width: '100%' }}>
                     <p style={{ color: getColor(ratio) }}>{ratio.toFixed(2)}</p>
                   </div>
