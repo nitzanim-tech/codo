@@ -33,10 +33,10 @@ const Text = styled.span`
   position: absolute;
 `;
 
-const DonutChart = ({ percentage, ratio, size = 200 }) => (
+const DonutChart = ({ percentage, ratio, size = 200, showPrecent }) => (
   <Donut percentage={percentage} size={size}>
     <Hole size={size} />
-    <Text>{ratio ? ratio : Math.round(percentage)+'%'}</Text>
+    <Text>{ratio && !showPrecent ? ratio : Math.round(percentage) + '%'}</Text>
   </Donut>
 );
 

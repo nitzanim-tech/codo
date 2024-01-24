@@ -8,18 +8,22 @@ const getTasksData = async ({ app }) => {
     const snapshot = await get(tasksRef);
     if (snapshot.exists()) {
       const tasks = snapshot.val();
-      const tasksWithScoreSums = [];
+      const tasksWithDetails = [];
       for (let id in tasks) {
         const task = tasks[id];
         let scoreSum = 0;
+        let scores = [];
         if (task.tests) {
           for (let test of task.tests) {
             scoreSum += test.score;
+            scores.push(test.score);
           }
         }
-        tasksWithScoreSums[id] = { name: task.name, scoreSum };
+        scoreSum = Math.min(scoreSum, 100);
+        tasksWithDetails[id] = { name: task.name, scoreSum, scores };
+        if (task.isTest) tasksWithDetails[id].isTest = true;
       }
-      return tasksWithScoreSums;
+      return tasksWithDetails;
     } else {
       console.log('No tasks found');
       return null;
