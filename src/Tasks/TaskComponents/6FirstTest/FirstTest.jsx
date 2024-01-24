@@ -1,3 +1,5 @@
+import React from 'react';
+
 export function getTaskExplanation(selectedValue) {
   let miniTestsList = [{}, {}, {}, {}];
   const Salads = ['salad', 'humus', 'tehini', 'harif', 'amba', 'cabbage', 'pickles', 'chips', 'onion'];

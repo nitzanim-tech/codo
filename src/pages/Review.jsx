@@ -50,7 +50,11 @@ function Review() {
             <Grid item style={{ width: '69%' }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Card style={{ width: '95%' }}>
-                  <ReviewComponent version={version} selectedTests={selectedTests} testsAmount={taskData.tests.length} />
+                  <ReviewComponent
+                    version={version}
+                    selectedTests={selectedTests}
+                    testsAmount={taskData.tests.length}
+                  />
                 </Card>
               </div>
             </Grid>
@@ -62,11 +66,7 @@ function Review() {
               <h2 style={{ fontSize: '1.7vw' }}>{formatDate(version.date)}</h2>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <DashboardCard
-                  ratio={
-                    // gradesVector ?
-                    calculateGrade(taskData, selectedTests) + '/' + maxGrade(taskData)
-                    // : selectedTests.length + '/' + testsName(version.task).length
-                  }
+                  ratio={calculateGrade(taskData, selectedTests) + '/' + maxGrade(taskData)}
                   text={'סה"כ'}
                   size={70}
                   max={100}
@@ -76,8 +76,6 @@ function Review() {
                 task={taskData}
                 selectedTests={selectedTests}
                 setSelectedTests={setSelectedTests}
-                // gradesVector={gradesVector}
-                // viewOnly={false}
               />
             </Grid>
           </Grid>

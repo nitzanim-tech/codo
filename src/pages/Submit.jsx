@@ -12,7 +12,7 @@ import getTaskById from '../requests/tasks/getTaskById';
 import './Submit.css';
 
 function Submit() {
-  const { app } = useFirebase();
+  const { app, userData } = useFirebase();
   const { index } = useParams();
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState(null);
@@ -37,7 +37,9 @@ function Submit() {
         {taskData && testsOutputs && (
           <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
             <Grid item style={{ width: '20%' }}>
-              <TestsList testsOutputs={testsOutputs} taskObject={taskData} />
+              {((userData ? isReviewExist(userData.submissions, taskData.id) : false) || !taskData?.isTest) && (
+                <TestsList testsOutputs={testsOutputs} taskObject={taskData} />
+              )}
             </Grid>
 
             <Grid item style={{ width: '50%' }}>
@@ -45,7 +47,9 @@ function Submit() {
             </Grid>
 
             <Grid item style={{ width: '30%' }}>
-              <Instructions taskObject={taskData} />
+              {((userData ? isReviewExist(userData.submissions, taskData.id) : false) || !taskData?.isTest) && (
+                <Instructions taskObject={taskData} />
+              )}
             </Grid>
           </Grid>
         )}
@@ -56,8 +60,8 @@ function Submit() {
 
 export default Submit;
 
-const isReviewExist = (submissions, task) => {
-  if (!submissions || !submissions[task]) return false;
-  for (const trial of submissions[task].trials) if (trial.review) return true;
+const isReviewExist = (submissions, taskId) => {
+  if (!submissions || !submissions[taskId]) return false;
+  for (const trial of submissions[taskId].trials) if (trial.review) return true;
   return false;
 };

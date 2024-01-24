@@ -17,7 +17,6 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
       pyodide.runPython(`sys.stdin = io.StringIO("${input}")`);
       pyodide.runPython('sys.stdout = io.StringIO()');
       pyodide.runPython(`from builtins import print`);
-
       pyodide.runPython(`def input(prompt=None):
     import builtins
     if prompt:
@@ -61,7 +60,6 @@ async function handleClick() {
     setTestsOutputs(testsOutput);
   }
 }
-
 
   return (
     <Tooltip content={'בדוק'} placement={'bottom'}>

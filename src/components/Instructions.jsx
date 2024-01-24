@@ -10,7 +10,7 @@ export default function Instructions({ taskObject }) {
         <AccordionItem title="מה צריך לדעת?">
           <p style={{ marginBottom: '10px' }}>נושאים עיקריים: </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-            {taskObject.subjects.map((subject) => (
+            {taskObject.subjects && taskObject.subjects.map((subject) => (
               <Chip key={subject} variant="faded">
                 {subject}
               </Chip>
@@ -22,7 +22,9 @@ export default function Instructions({ taskObject }) {
           <div dangerouslySetInnerHTML={{ __html: taskObject.description }} />
         </AccordionItem>
         <AccordionItem title="דוגמה">
-          <div dangerouslySetInnerHTML={{ __html: taskObject.example }} />
+          <div style={{ direction: 'ltr', textAlign: 'left' }}>
+            <div dangerouslySetInnerHTML={{ __html: taskObject.example }} />
+          </div>
         </AccordionItem>
       </Accordion>
     </div>

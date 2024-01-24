@@ -31,7 +31,6 @@ function Instructors() {
   useEffect(() => {
     const fetchTasksData = async () => {
       const tasksData = await getTasksData({ app });
-      console.log({ tasksData });
       setTasksList(tasksData);
     };
     fetchTasksData();

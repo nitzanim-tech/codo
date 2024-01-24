@@ -142,338 +142,326 @@ export function examples() {
         (חילקנו עבורכם את הפלט לעמודות, והוספנו סימון באינקדסים של השאלות כדי שיהיה קל לעקוב)
         <br /> <br />
       </p>
-      <div dir="ltr" style={{ textAlign: 'left' }}>
+      <div dir="ltr" style="text-align: left;">
         <code>
           Enter the number of products Ramzi has to count:{' '}
-          <span style={{ color: '#003061' }}>
+          <span style="color: #003061;">
             <b> 50</b>
           </span>
         </code>
-        <Grid container direction="row" justifyContent="space-evenly" alignItems="flex-start">
-          <Grid>
-            <>
-              <code>
-                1<br />
-                2<br />
-                3 Q?
-                <br />
-                4<br />
-                5<br />
-                6 Q?
-                <br />
-                7<br />
-                8<br />
-                9 Q?
-                <br />
-                10
-                <br />
-                11
-                <br />
-                12 Q?
-                <br />
-                13
-                <br />
-                14
-                <br />
-                15 Q?
-                <br />
-                16
-                <br />
-                17
-                <br />
-                18 Q?
-                <br />
-                19
-                <br />
-                20
-                <br />
-                Shuni
-              </code>
-            </>
-          </Grid>
-          <Grid>
-            <>
-              <code>
-                1<br />
-                2<br />
-                3 Q?
-                <br />
-                4<br />
-                5<br />
-                6 Q?
-                <br />
-                7<br />
-                8<br />
-                9 Q?
-                <br />
-                10
-                <br />
-                11
-                <br />
-                12 Q?
-                <br />
-                13
-                <br />
-                14
-                <br />
-                15 Q?
-                <br />
-                16
-                <br />
-                17
-                <br />
-                18 Q?
-                <br />
-                19
-                <br />
-                20
-                <br />
-                21 Q?
-                <br />
-                Shuni
-              </code>
-            </>
-          </Grid>
-          <Grid>
-            <>
-              <code>
-                1<br />
-                2<br />
-                3 Q?
-                <br />
-                4<br />
-                5<br />
-                6 Q?
-                <br />
-                7<br />
-                8<br />
-                9 Q?
-                <br />
-                10
-                <br />
-                11
-                <br />
-                12 Q?
-                <br />
-                13
-                <br />
-                14
-                <br />
-                15 Q?
-                <br />
-                16
-                <br />
-                17
-                <br />
-                18 Q?
-                <br />
-                19
-                <br />
-                20
-                <br />
-                21 Q?
-                <br />
-                22
-                <br />
-                Shuni
-              </code>
-            </>
-          </Grid>
-          <Grid>
-            <>
-              <code>
-                1<br />
-                2<br />
-                3 Q?
-                <br />
-                4<br />
-                5<br />
-                6 Q?
-                <br />
-                7<br />
-                8<br />
-                9 Q?
-                <br />
-                10
-                <br />
-                11
-                <br />
-                12 Q?
-                <br />
-                13
-                <br />
-                14
-                <br />
-                15 Q?
-                <br />
-                16
-                <br />
-                17
-                <br />
-                18 Q?
-                <br />
-                19
-                <br />
-                20
-                <br />
-                21 Q?
-                <br />
-                22
-                <br />
-                23
-                <br />
-                Shuni
-              </code>
-            </>
-          </Grid>
-          <Grid>
-            <>
-              <code>
-                1<br />
-                2<br />
-                3 Q?
-                <br />
-                4<br />
-                5<br />
-                6 Q?
-                <br />
-                7<br />
-                8<br />
-                9 Q?
-                <br />
-                10
-                <br />
-                11
-                <br />
-                12 Q?
-                <br />
-                13
-                <br />
-                14
-                <br />
-                15 Q?
-                <br />
-                16 <br />
-                17
-                <br />
-                18 Q?
-                <br />
-                19
-                <br />
-                20
-                <br />
-                21 Q?
-                <br />
-                22
-                <br />
-                23
-                <br />
-                24 Q?
-                <br />
-                Shuni
-              </code>
-            </>
-          </Grid>
-          <Grid>
-            <>
-              <code>
-                1<br />
-                2<br />
-                3 Q?
-                <br />
-                4<br />
-                5<br />
-                6 Q?
-                <br />
-                7<br />
-                8<br />
-                9 Q?
-                <br />
-                10
-                <br />
-                11
-                <br />
-                12 Q?
-                <br />
-                13
-                <br />
-                14
-                <br />
-                15 Q?
-                <br />
-                16
-                <br />
-                17
-                <br />
-                18 Q?
-                <br />
-                19
-                <br />
-                20
-                <br />
-                21 Q?
-                <br />
-                22
-                <br />
-                23
-                <br />
-                24 Q?
-                <br />
-                25
-                <br />
-                26
-                <br />
-                27 Q?
-                <br />
-                28
-                <br />
-                29
-                <br />
-                30 Q?
-                <br />
-                31
-                <br />
-                32
-                <br />
-                33 Q?
-                <br />
-                34
-                <br />
-                35
-                <br />
-                36 Q?
-                <br />
-                37
-                <br />
-                38
-                <br />
-                39 Q?
-                <br />
-                40
-                <br />
-                41
-                <br />
-                42 Q?
-                <br />
-                43
-                <br />
-                44
-                <br />
-                45 Q?
-                <br />
-                46
-                <br />
-                47
-                <br />
-                48 Q?
-                <br />
-                49
-                <br />
-                50
-              </code>
-            </>
-          </Grid>
-        </Grid>
+        <div style="display: flex; justify-content: space-evenly;">
+          <div>
+            <code>
+              1<br />
+              2<br />
+              3 Q?
+              <br />
+              4<br />
+              5<br />
+              6 Q?
+              <br />
+              7<br />
+              8<br />
+              9 Q?
+              <br />
+              10
+              <br />
+              11
+              <br />
+              12 Q?
+              <br />
+              13
+              <br />
+              14
+              <br />
+              15 Q?
+              <br />
+              16
+              <br />
+              17
+              <br />
+              18 Q?
+              <br />
+              19
+              <br />
+              20
+              <br />
+              Shuni
+            </code>
+          </div>
+          <div>
+            <code>
+              1<br />
+              2<br />
+              3 Q?
+              <br />
+              4<br />
+              5<br />
+              6 Q?
+              <br />
+              7<br />
+              8<br />
+              9 Q?
+              <br />
+              10
+              <br />
+              11
+              <br />
+              12 Q?
+              <br />
+              13
+              <br />
+              14
+              <br />
+              15 Q?
+              <br />
+              16
+              <br />
+              17
+              <br />
+              18 Q?
+              <br />
+              19
+              <br />
+              20
+              <br />
+              21 Q?
+              <br />
+              Shuni
+            </code>
+          </div>
+          <div>
+            <code>
+              1<br />
+              2<br />
+              3 Q?
+              <br />
+              4<br />
+              5<br />
+              6 Q?
+              <br />
+              7<br />
+              8<br />
+              9 Q?
+              <br />
+              10
+              <br />
+              11
+              <br />
+              12 Q?
+              <br />
+              13
+              <br />
+              14
+              <br />
+              15 Q?
+              <br />
+              16
+              <br />
+              17
+              <br />
+              18 Q?
+              <br />
+              19
+              <br />
+              20
+              <br />
+              21 Q?
+              <br />
+              22
+              <br />
+              Shuni
+            </code>
+          </div>
+          <div>
+            <code>
+              1<br />
+              2<br />
+              3 Q?
+              <br />
+              4<br />
+              5<br />
+              6 Q?
+              <br />
+              7<br />
+              8<br />
+              9 Q?
+              <br />
+              10
+              <br />
+              11
+              <br />
+              12 Q?
+              <br />
+              13
+              <br />
+              14
+              <br />
+              15 Q?
+              <br />
+              16
+              <br />
+              17
+              <br />
+              18 Q?
+              <br />
+              19
+              <br />
+              20
+              <br />
+              21 Q?
+              <br />
+              22
+              <br />
+              23
+              <br />
+              Shuni
+            </code>
+          </div>
+          <div>
+            <code>
+              1<br />
+              2<br />
+              3 Q?
+              <br />
+              4<br />
+              5<br />
+              6 Q?
+              <br />
+              7<br />
+              8<br />
+              9 Q?
+              <br />
+              10
+              <br />
+              11
+              <br />
+              12 Q?
+              <br />
+              13
+              <br />
+              14
+              <br />
+              15 Q?
+              <br />
+              16 <br />
+              17
+              <br />
+              18 Q?
+              <br />
+              19
+              <br />
+              20
+              <br />
+              21 Q?
+              <br />
+              22
+              <br />
+              23
+              <br />
+              24 Q?
+              <br />
+              Shuni
+            </code>
+          </div>
+          <div>
+            <code>
+              1<br />
+              2<br />
+              3 Q?
+              <br />
+              4<br />
+              5<br />
+              6 Q?
+              <br />
+              7<br />
+              8<br />
+              9 Q?
+              <br />
+              10
+              <br />
+              11
+              <br />
+              12 Q?
+              <br />
+              13
+              <br />
+              14
+              <br />
+              15 Q?
+              <br />
+              16
+              <br />
+              17
+              <br />
+              18 Q?
+              <br />
+              19
+              <br />
+              20
+              <br />
+              21 Q?
+              <br />
+              22
+              <br />
+              23
+              <br />
+              24 Q?
+              <br />
+              25
+              <br />
+              26
+              <br />
+              27 Q?
+              <br />
+              28
+              <br />
+              29
+              <br />
+              30 Q?
+              <br />
+              31
+              <br />
+              32
+              <br />
+              33 Q?
+              <br />
+              34
+              <br />
+              35
+              <br />
+              36 Q?
+              <br />
+              37
+              <br />
+              38
+              <br />
+              39 Q?
+              <br />
+              40
+              <br />
+              41
+              <br />
+              42 Q?
+              <br />
+              43
+              <br />
+              44
+              <br />
+              45 Q?
+              <br />
+              46
+              <br />
+              47
+              <br />
+              48 Q?
+              <br />
+              49
+              <br />
+              50
+            </code>
+          </div>
+        </div>
         <br />
         <code>Questions for Shira: 51</code>
       </div>
