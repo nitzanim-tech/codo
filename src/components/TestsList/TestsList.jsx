@@ -9,7 +9,6 @@ import { DefaultExplanation } from './DefaultExplanation';
 import { getTaskExplanation } from '../../Tasks/TaskComponents';
 
 export default function TestsList({ testsOutputs, taskObject }) {
-  // console.log({ testsOutputs, taskObject });
   const [selectedValue, setSelectedValue] = useState(testsOutputs[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 

@@ -8,34 +8,6 @@ import ReviewButton from './ReviewButton';
 export default function SubmitsTable({ data , task}) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
 
-  const calculatePrecent = (tests) => {
-    const passedTests = tests.filter(Boolean).length;
-    const totalTests = tests.length;
-    return (passedTests / totalTests) * 100;
-  };
-
-  const maxTestInVersion = (versions) => {
-    let maxTests = -1;
-    for (const version of versions) {
-      if (version.tests !== '') {
-        const newPresent = calculatePrecent(version.tests);
-        maxTests = maxTests < newPresent ? newPresent : maxTests;
-      }
-    }
-    return maxTests;
-  };
-
-  const maxDateInVersion = (versions) => {
-    let maxDate = new Date(0);
-    for (const version of versions) {
-      if (version.date !== '') {
-        const newDate = new Date(version.date);
-        maxDate = maxDate < newDate ? newDate : maxDate;
-      }
-    }
-    return maxDate;
-  };
-
   const sortedData = [...data].sort((a, b) => {
     switch (sortDescriptor.column) {
       case 'name':
@@ -138,6 +110,13 @@ export default function SubmitsTable({ data , task}) {
     </>
   );
 }
+  const calculatePrecent = (tests) => {
+    const passedTests = tests.filter(Boolean).length;
+    const totalTests = tests.length;
+    return (passedTests / totalTests) * 100;
+  };
+
+
 
 const getSelectedVersion = (versions) => {
   if (versions.length === 0) {
@@ -157,3 +136,25 @@ const getSelectedVersion = (versions) => {
   const latestDate = Math.max(...versionsWithBestTestScore.map((version) => new Date(version.date).getTime()));
   return versionsWithBestTestScore.find((version) => new Date(version.date).getTime() === latestDate);
 };
+
+  const maxTestInVersion = (versions) => {
+    let maxTests = -1;
+    for (const version of versions) {
+      if (version.tests !== '') {
+        const newPresent = calculatePrecent(version.tests);
+        maxTests = maxTests < newPresent ? newPresent : maxTests;
+      }
+    }
+    return maxTests;
+  };
+
+  const maxDateInVersion = (versions) => {
+    let maxDate = new Date(0);
+    for (const version of versions) {
+      if (version.date !== '') {
+        const newDate = new Date(version.date);
+        maxDate = maxDate < newDate ? newDate : maxDate;
+      }
+    }
+    return maxDate;
+  };

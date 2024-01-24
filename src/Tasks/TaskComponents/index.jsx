@@ -10,6 +10,7 @@ import * as SevenBoom from './4for/SevenBoom';
 import * as ReadableParagraph from './4for/ReadableParagraph';
 import * as WordleFor from './5nestedLoop/WordleFor';
 import * as MultiplicationTable from './5nestedLoop/MultiplicationTable';
+import * as ShefaIssaschar from './5nestedLoop/ShefaIssaschar';
 import * as BeforeFirstTest from './6FirstTest/BeforeFirstTest';
 import * as FirstTest from './6FirstTest/FirstTest';
 
@@ -26,7 +27,7 @@ const tasks = {
   '40458c1a53ee': ReadableParagraph, //9
   '79c9fb0d3074': MultiplicationTable, //10
   b6565fbea41a: WordleFor, //11
-  //7cfa6c3a94ba: ShefaIssaschar //12
+  '7cfa6c3a94ba': ShefaIssaschar, //12
   '991be3a0d2c7': BeforeFirstTest, //13
   ca8e2ed044c0: FirstTest, //14
 };
