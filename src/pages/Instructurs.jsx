@@ -105,7 +105,7 @@ function Instructors() {
           </Tab> */}
                   <Tab key="status" title="סטטוס">
                     <CenteredDiv>
-                      <PassMatrix studentsRawData={studentsRawData} />
+                      <PassMatrix studentsRawData={studentsRawData} tasksList={tasksList} />
                     </CenteredDiv>
                   </Tab>
                 </Tabs>

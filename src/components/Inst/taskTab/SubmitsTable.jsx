@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import DonutChart from '../Chart';
 import VersionsButton from './VersionsButton';
@@ -110,11 +110,6 @@ export default function SubmitsTable({ data, task }) {
     </>
   );
 }
-// const calculatePrecent = (tests) => {
-//   const passedTests = tests.filter(Boolean).length;
-//   const totalTests = tests.length;
-//   return (passedTests / totalTests) * 100;
-// };
 
 const getSelectedVersion = (versions) => {
   if (versions.length === 0) {
@@ -139,8 +134,8 @@ const maxTestInVersion = (versions) => {
   let maxTests = -1;
   for (const version of versions) {
     if (version.tests !== '') {
-      const newPresent = calculatePrecent(version.tests);
-      maxTests = maxTests < newPresent ? newPresent : maxTests;
+      const passes = version.tests.filter(Boolean).length;
+      maxTests = maxTests < passes ? passes : maxTests;
     }
   }
   return maxTests;
