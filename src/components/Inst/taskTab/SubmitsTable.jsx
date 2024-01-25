@@ -1,40 +1,16 @@
 import React, { useState } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import DonutChart from '../Chart';
 import VersionsButton from './VersionsButton';
 import formatDate from '../../../util/formatDate';
 import ReviewButton from './ReviewButton';
-import { testsName } from '../../../Tasks/TaskIndex';
 
-export default function SubmitsTable({ data }) {
+export default function SubmitsTable({ data, task }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
 
-  const calculatePresent = (tests) => {
-    const passedTests = tests.filter(Boolean).length;
-    const totalTests = tests.length;
-    return (passedTests / totalTests) * 100;
-  };
-
-  const maxTestInVersion = (versions) => {
-    let maxTests = -1;
-    for (const version of versions) {
-      if (version.tests !== '') {
-        const newPresent = calculatePresent(version.tests);
-        maxTests = maxTests < newPresent ? newPresent : maxTests;
-      }
-    }
-    return maxTests;
-  };
-
-  const maxDateInVersion = (versions) => {
-    let maxDate = new Date(0);
-    for (const version of versions) {
-      if (version.date !== '') {
-        const newDate = new Date(version.date);
-        maxDate = maxDate < newDate ? newDate : maxDate;
-      }
-    }
-    return maxDate;
+  const calculateGrade = (scores, selectedTests) => {
+    const selectedTestsNumeric = selectedTests.map(Number);
+    return selectedTestsNumeric.reduce((sum, value, index) => sum + value * scores[index], 0);
   };
 
   const sortedData = [...data].sort((a, b) => {
@@ -67,8 +43,6 @@ export default function SubmitsTable({ data }) {
     }
   };
 
-  console.log(data);
-  const grades = new Array(35).fill(3, 0, 30).fill(5, 30, 35);
   return (
     <>
       <Table
@@ -95,8 +69,11 @@ export default function SubmitsTable({ data }) {
 
         <TableBody>
           {sortedData.map((student, index) => {
-            const selectedVersion = getSelectedVersion(student.versions) || { date: '', tests: '' };
-            const percentage = selectedVersion.tests ? calculatePresent(selectedVersion.tests) : 0;
+            const versionsWithGrades = student.versions.map((version) => ({
+              ...version,
+              grade: calculateGrade(task.scores, version.tests),
+            }));
+            const selectedVersion = getSelectedVersion(versionsWithGrades) || { date: '', tests: '', grade: 0 };
 
             return (
               <TableRow key={`${student.name}-${index}`}>
@@ -108,22 +85,19 @@ export default function SubmitsTable({ data }) {
                     />
                   )}
                 </TableCell>
-                <TableCell>{student.versions.length > 1 && <VersionsButton versions={student.versions} />}</TableCell>
+                <TableCell>
+                  {student.versions.length > 1 && (
+                    <VersionsButton versions={versionsWithGrades} scoreSum={task.scoreSum} />
+                  )}
+                </TableCell>
                 <TableCell>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {student.task === 14 && selectedVersion.tests ? (
-                      (() => {
-                        const tests = selectedVersion.tests.map((test) => (test ? 1 : 0));
-                        const sum = tests.reduce((acc, pass, index) => acc + pass * grades[index], 0);
-                        return <DonutChart percentage={sum || 0} size={45} />;
-                      })()
-                    ) : (
-                      <DonutChart
-                        ratio={selectedVersion.tests.filter(Boolean).length + '/' + testsName(student.task).length}
-                        percentage={percentage}
-                        size={45}
-                      />
-                    )}
+                    <DonutChart
+                      ratio={`${selectedVersion.grade || 0}/${task.scoreSum}`}
+                      percentage={(selectedVersion.grade / task.scoreSum) * 100}
+                      size={45}
+                      showPrecent={task.isTest}
+                    />
                   </div>
                 </TableCell>
                 <TableCell>{selectedVersion.date ? formatDate(selectedVersion.date) : ''}</TableCell>
@@ -154,4 +128,26 @@ const getSelectedVersion = (versions) => {
   }
   const latestDate = Math.max(...versionsWithBestTestScore.map((version) => new Date(version.date).getTime()));
   return versionsWithBestTestScore.find((version) => new Date(version.date).getTime() === latestDate);
+};
+
+const maxTestInVersion = (versions) => {
+  let maxTests = -1;
+  for (const version of versions) {
+    if (version.tests !== '') {
+      const passes = version.tests.filter(Boolean).length;
+      maxTests = maxTests < passes ? passes : maxTests;
+    }
+  }
+  return maxTests;
+};
+
+const maxDateInVersion = (versions) => {
+  let maxDate = new Date(0);
+  for (const version of versions) {
+    if (version.date !== '') {
+      const newDate = new Date(version.date);
+      maxDate = maxDate < newDate ? newDate : maxDate;
+    }
+  }
+  return maxDate;
 };

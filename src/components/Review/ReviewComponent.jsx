@@ -9,9 +9,8 @@ import ReviewEditor from './ReviewEditor';
 import { Modal, ModalHeader, ModalBody, ModalContent, ModalFooter, useDisclosure } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
 import changePassScore from '../../requests/review/changePassScore';
-import { testsName } from '../../Tasks/TaskIndex';
 
-export default function ReviewComponent({ version, selectedTests }) {
+export default function ReviewComponent({ version, selectedTests, testsAmount }) {
   const { app } = useFirebase();
   const [saved, setSaved] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -37,7 +36,7 @@ export default function ReviewComponent({ version, selectedTests }) {
         userId: version.student.uid,
         task: version.task,
         trialIndex: version.id,
-        pass: indexToBooleanArray(selectedTests, version.task),
+        pass: indexToBooleanArray(selectedTests, testsAmount),
       });
       if (!passedChanged) setErrorText('שגיאה בתיקון ציון הטסטים');
     }
@@ -48,7 +47,6 @@ export default function ReviewComponent({ version, selectedTests }) {
       date: new Date(),
       hasOpened: false,
     };
-    console.log(reviewData);
     const hadSaved = await addReview({
       app,
       userId: version.student.uid,
@@ -56,7 +54,6 @@ export default function ReviewComponent({ version, selectedTests }) {
       trialIndex: version.id,
       reviewData,
     });
-    console.log({ hadSaved });
     if (!hadSaved) setErrorText('שגיאה בשליחת המשוב לחניך');
 
     setSaved(hadSaved);
@@ -144,9 +141,9 @@ function haveTestsChanged(selectedTests, pass, isRunningTest) {
   return false;
 }
 
-function indexToBooleanArray(indexArray, taskIndex) {
+function indexToBooleanArray(indexArray, testsAmount) {
   const booleanArray = [];
-  for (let i = 0; i < testsName(taskIndex).length; i++) {
+  for (let i = 0; i < testsAmount; i++) {
     if (indexArray.includes(i)) booleanArray[i] = true;
     else booleanArray[i] = false;
   }

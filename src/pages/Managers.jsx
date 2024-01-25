@@ -43,7 +43,7 @@ function Managers() {
 
   return (
     <>
-      <NavBar isShowTask={false} />
+      <NavBar  />
       {currentUser && instructorsData ? (
         <>
           {unauthorized ? (

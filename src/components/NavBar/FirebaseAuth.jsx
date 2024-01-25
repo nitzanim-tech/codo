@@ -8,8 +8,12 @@ import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { useFirebase } from '../../util/FirebaseProvider';
 
-const FirebaseAuth = ({ auth,app, currentUser, setCurrentUser }) => {
+const FirebaseAuth = () => {
+  const { app, auth, userData } = useFirebase();
+  // const [userData, setCurrentUser] = useState(null);
+
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
 
@@ -17,7 +21,7 @@ const FirebaseAuth = ({ auth,app, currentUser, setCurrentUser }) => {
     try {
       await signOut(auth);
       console.log('Signed out');
-      setCurrentUser(null);
+      // setCurrentUser(null);
     } catch (error) {
       console.log(error.message);
     }
@@ -26,10 +30,10 @@ const FirebaseAuth = ({ auth,app, currentUser, setCurrentUser }) => {
   return (
     <>
       <div>
-        {currentUser ? (
+        {userData ? (
           <Dropdown dir="rtl">
             <DropdownTrigger>
-              <User name={currentUser.displayName} style={{ cursor: 'pointer' }} />
+              <User name={`${userData.name} ${userData.lastName}`} style={{ cursor: 'pointer' }} />
             </DropdownTrigger>
             <DropdownMenu variant="faded" aria-label="Dropdown menu logout" onAction={(key) => console.log(key)}>
               <DropdownItem key="logout" onClick={() => handleSignOut()} startContent={<LogoutRoundedIcon />}>

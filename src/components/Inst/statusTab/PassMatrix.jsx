@@ -2,28 +2,29 @@ import React from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Card } from '@nextui-org/react';
 import tasks from '../../../Tasks/TasksList.json';
 
-export default function PassMatrix({ studentsRawData }) {
-  const reversedTaskList = [...tasks].reverse();
-  const maxSubmissions = tasks.length;
+export default function PassMatrix({ studentsRawData, tasksList }) {
+  const calculateGrade = (scores, passedTests) => {
+    const passedTestsNumeric = passedTests.map(Number);
+    return passedTestsNumeric.reduce((sum, value, index) => sum + value * scores[index], 0);
+  };
+
   const taskData = studentsRawData.map((student) => {
-    const passRatios = Array.from({ length: maxSubmissions }, (_, index) => {
-      if (student.submissions && index < student.submissions.length) {
-        const submission = student.submissions[index];
-        if (submission && submission.trials) {
-          const maxGradeTrial = submission.trials.reduce((max, trial) => {
-            const passed = Array.isArray(trial.pass) ? trial.pass.filter(Boolean).length : 0;
-            return Math.max(max, passed);
-          }, 0);
-          const total = submission.trials[0].pass.length;
-          return parseFloat(maxGradeTrial) / parseFloat(total);
-        }
+    const maxGrades = [...tasks].reverse().map((task) => {
+      const taskId = task.key;
+      const submission = student && student.submissions ? student.submissions[taskId] : null;
+      if (submission && submission.trials) {
+        const maxGradeTrial = submission.trials.reduce((max, trial) => {
+          const grade = calculateGrade(tasksList[taskId].scores, trial.pass) / tasksList[taskId].scoreSum;
+          return Math.max(max, grade);
+        }, 0);
+        return maxGradeTrial;
       }
       return -1;
     });
     return {
       uid: student.uid,
       name: student.name + ' ' + student.lastName,
-      passRatios,
+      maxGrades,
     };
   });
 
@@ -48,18 +49,18 @@ export default function PassMatrix({ studentsRawData }) {
         justifyContent: 'center',
       }}
     >
-      <p style={{ margin: 0, fontSize:'12px' }}>{label}</p>
+      <p style={{ margin: 0, fontSize: '12px' }}>{label}</p>
     </Card>
   );
 
   return (
-    <div style={{ padding: '10px', width: '70%', direction: 'ltr' }}>
+    <div style={{ padding: '10px', width: '80%', direction: 'ltr' }}>
       <Table aria-label="Task Matrix">
         <TableHeader>
-          {reversedTaskList.map((task) => (
-            <TableColumn key={task.key}>
+          {[...tasks].reverse().map((task) => (
+            <TableColumn key={task.key} width="1px" style={{ textAlign: 'center' }}>
               <Tooltip showArrow={true} content={task.name}>
-                <p>{task.key}</p>
+                <p>*</p>
               </Tooltip>
             </TableColumn>
           ))}
@@ -69,10 +70,10 @@ export default function PassMatrix({ studentsRawData }) {
         <TableBody>
           {taskData.map((student) => (
             <TableRow key={student.uid}>
-              {student.passRatios.reverse().map((ratio, index) => (
-                <TableCell key={index} width={'80px'}>
-                  <div style={{ backgroundColor: getColor(ratio), height: '100%', width: '100%' }}>
-                    <p style={{ color: getColor(ratio) }}>{ratio.toFixed(2)}</p>
+              {student.maxGrades.map((grade, index) => (
+                <TableCell key={index} width={'10px'}>
+                  <div style={{ backgroundColor: getColor(grade), height: '100%', width: '100%' }}>
+                    <p style={{ color: getColor(grade), fontSize: '12px' }}>{grade > 0 && grade.toFixed(2)}</p>
                   </div>
                 </TableCell>
               ))}
@@ -81,6 +82,7 @@ export default function PassMatrix({ studentsRawData }) {
           ))}
         </TableBody>
       </Table>
+
       <div
         dir="ltr"
         style={{
