@@ -5,16 +5,12 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 
-import { getTaskExplanation } from '../../Tasks/TaskIndex';
+import { DefaultExplanation } from './DefaultExplanation';
+import { getTaskExplanation } from '../../Tasks/TaskComponents';
 
-export default function TestsList({ testsOutputs, task }) {
+export default function TestsList({ testsOutputs, taskObject }) {
   const [selectedValue, setSelectedValue] = useState(testsOutputs[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [explanationTask, setExplanationTask] = useState(getTaskExplanation(task));
-
-  useEffect(() => {
-    setExplanationTask(getTaskExplanation(task));
-  }, [task]);
 
   const handleSelect = (value) => {
     const selectedObject = testsOutputs.find((obj) => obj.name === value);
@@ -51,7 +47,7 @@ export default function TestsList({ testsOutputs, task }) {
         </Listbox>
       </ListboxWrapper>
 
-      <Modal isOpen={isOpen} onClose={onClose} dir="rtl" hideCloseButton size='3xl'> 
+      <Modal isOpen={isOpen} onClose={onClose} dir="rtl" hideCloseButton size="3xl">
         <ModalContent>
           {(onClose) => (
             <>
@@ -64,8 +60,11 @@ export default function TestsList({ testsOutputs, task }) {
                 {selectedValue.name}
               </ModalHeader>
 
-              <ModalBody>{explanationTask.generateExplanation(selectedValue)}</ModalBody>
-
+              <ModalBody>
+                {taskObject.code
+                  ? DefaultExplanation(selectedValue)
+                  : getTaskExplanation({ task: taskObject.id, selectedValue })}
+              </ModalBody>
               <ModalFooter>
                 <button onClick={onClose}>סגור</button>
               </ModalFooter>
@@ -76,6 +75,8 @@ export default function TestsList({ testsOutputs, task }) {
     </>
   );
 }
+
+
 
 const ListboxWrapper = ({ children }) => (
   <div

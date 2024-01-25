@@ -4,11 +4,11 @@ import { Grid } from '@mui/material';
 import InstTasksList from './InstTasksList';
 import { DashboardCard } from '../DashboardCard';
 import ExcelButton from './ExcelButton';
-import { testsName } from '../../../Tasks/TaskIndex';
 
-export default function TaskTab({ studentsRawData }) {
+const firstTaskIndex = '7e9e4f50c46c';
+export default function TaskTab({ tasksList, studentsRawData }) {
   const [formattedData, setFormattedData] = useState([]);
-  const [selectedTask, setSelectedTask] = useState(0);
+  const [selectedTask, setSelectedTask] = useState(localStorage.getItem('lastSelectedTask') || firstTaskIndex);
 
   useEffect(() => {
     setFormattedData(formatStudentTestsData(studentsRawData, selectedTask));
@@ -18,14 +18,17 @@ export default function TaskTab({ studentsRawData }) {
     <>
       <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
         <Grid item style={{ width: '70%' }}>
-          <SubmitsTable data={formattedData} />
+          <SubmitsTable data={formattedData} task={tasksList[selectedTask]} />
         </Grid>
         <ExcelButton data={studentsRawData} />
-
         <Grid item style={{ width: '20%' }}>
           <InstTasksList selectedTask={selectedTask} setSelectedTask={setSelectedTask} />
+
           <DashboardCard ratio={countStudents(formattedData)} text={'הגישו:'} />
-          <DashboardCard ratio={calculateAverage(formattedData)} text={'ממוצע טסטים:'} />
+          <DashboardCard
+            ratio={calculateAverage({ data: formattedData, task: tasksList[selectedTask] })}
+            text={'ממוצע טסטים:'}
+          />
         </Grid>
       </Grid>
     </>
@@ -77,10 +80,10 @@ const countStudents = (data) => {
   return `${studentsWithVersions}/${totalStudents}`;
 };
 
-const calculateAverage = (data) => {
+const calculateAverage = ({ data, task }) => {
   let total = 0;
   let count = 0;
-  let denominator = data.length ? testsName(data[0].task).length : 0;
+  let denominator = data.length ? task.scoreSum : 0;
   if (Array.isArray(data)) {
     data.forEach((student) => {
       if (Array.isArray(student.versions) && student.versions.length > 0) {
@@ -89,7 +92,6 @@ const calculateAverage = (data) => {
           const currentNumerator = current.tests.filter(Boolean).length;
           return highestNumerator > currentNumerator ? highest : current;
         });
-        console.log(student);
         const numerator = highestNumeratorVersion.tests.filter(Boolean).length;
         total += numerator;
         count++;

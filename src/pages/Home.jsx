@@ -19,7 +19,7 @@ const { userData, isUserLoading } = useFirebase();
 
   return (
     <>
-      <NavBar isShowTask={false} />
+      <NavBar />
       {isUserLoading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',margin:'30px' }}>
           <CircularProgress />
