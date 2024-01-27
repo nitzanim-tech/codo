@@ -1,10 +1,16 @@
 export default function formatDate(dateString) {
+  // format: dd.mm.yyyy | hh:mm 
+  // timeZone: 'Asia/Jerusalem'
   const dateObj = new Date(dateString);
-  return `${dateObj.getUTCHours().toString().padStart(2, '0')}:${dateObj
-    .getUTCMinutes()
-    .toString()
-    .padStart(2, '0')} | ${dateObj.getUTCDate().toString().padStart(2, '0')}.${(dateObj.getUTCMonth() + 1)
-    .toString()
-    .padStart(2, '0')}.${dateObj.getUTCFullYear()}`;
-}
+  const options = {
+    hour: '2-digit',
+    minute: '2-digit',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  };
 
+  let formattedDate = dateObj.toLocaleString('en-GB', { timeZone: 'Asia/Jerusalem', ...options });
+  formattedDate = formattedDate.replace(/, /g, ' | ').replace(/\//g, '.');
+  return formattedDate;
+}
