@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Editor from '@monaco-editor/react';
-import { Card } from '@nextui-org/react';
+import { Card, Textarea } from '@nextui-org/react';
 import { CircularProgress } from '@nextui-org/react';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
@@ -45,8 +45,7 @@ export default function ReadReview() {
               }}
             >
               <b>כללי:</b>
-              <br />
-              {version.review.general}
+              <Textarea isReadOnly disableAnimation variant="bordered" defaultValue={version.review.general} />
             </p>
             <div style={{ marginTop: '30px' }}>
               {comments.map((editor, index) => (
@@ -94,7 +93,6 @@ export default function ReadReview() {
   );
 }
 
-
 function convertCommentsToObject(comments, code) {
   const keys = comments ? Object.keys(comments) : [];
   const result = [];
@@ -118,7 +116,9 @@ function convertCommentsToObject(comments, code) {
   const remainingCode = keys.length != 0 ? code.split('\n').slice(end).join('\n') : code;
   const remainingLines = remainingCode.split('\n').length;
   const height = `${LINE_HEGITH * (end + remainingLines - end + 2)}px`;
-  result.push({ start: end + 1, end: end + remainingLines, comment: '', code: remainingCode, height });
+  const start = keys.length != 0 ? end + 1 : 1;
+
+  result.push({ start, end: end + remainingLines, comment: '', code: remainingCode, height });
 
   return result;
 }

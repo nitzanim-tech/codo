@@ -4,7 +4,6 @@ import ReactDiffViewer from 'react-diff-viewer-continued';
 import { highlight, languages } from 'prismjs';
 import { compareTwoStrings } from 'string-similarity';
 import DonutChart from '../Inst/Chart';
-const EMPTY_HUNKS = [];
 
 const DiffMethod = {
   CHARS: 'diffChars',
@@ -56,6 +55,7 @@ function TextCompare({ oldText, newText }) {
 const DefaultExplanation = (selectedValue) => {
   return (
     <>
+      {selectedValue.input.trim() != '' && <p>עבור הקלט: {selectedValue.input}</p>}
       <TextCompare oldText={selectedValue.output} newText={selectedValue.ans} />
     </>
   );
