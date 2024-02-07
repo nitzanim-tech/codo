@@ -1,4 +1,14 @@
 {
+  "ספר הקורס": {
+    "חלק א'": {
+      "type": "pdf",
+      "link": "https://1drv.ms/b/s!AhbjJ-PvNB7DgTFSlvc-rykNmiRT?e=0evYeS"
+    },
+    "חלק ב'": {
+      "type": "pdf",
+      "link": "https://1drv.ms/b/s!AhbjJ-PvNB7DgTCaLiCBd3Tqdgrr?e=hwt5s3"
+    }
+  },
   "חזרה": {
     "הכנה 01 - שלום עולם": {
       "type": "task",
