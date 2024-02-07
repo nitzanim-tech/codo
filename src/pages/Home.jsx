@@ -14,14 +14,14 @@ import { useFirebase } from '../util/FirebaseProvider';
 import { CircularProgress } from '@nextui-org/react';
 
 function Home() {
-const { userData, isUserLoading } = useFirebase();  
+  const { userData, isUserLoading } = useFirebase();  
   const allKeys = Object.keys(filesLinks).map((category) => category.toString());
 
   return (
     <>
       <NavBar />
       {isUserLoading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',margin:'30px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '30px' }}>
           <CircularProgress />
         </div>
       ) : userData ? (
@@ -34,7 +34,7 @@ const { userData, isUserLoading } = useFirebase();
                     file.type === 'task' ? (
                       <TaskCard
                         key={fileName}
-                        index={file.index}
+                        taskId={file.index}
                         text={fileName}
                         studentData={userData.submissions ? userData.submissions[file.index] : null}
                       />
