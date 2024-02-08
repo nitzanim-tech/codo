@@ -72,6 +72,7 @@ export default function SubmitsTable({ data, task }) {
             const versionsWithGrades = student.versions.map((version) => ({
               ...version,
               grade: calculateGrade(task.scores, version.tests),
+              task: student.task,
             }));
             const selectedVersion = getSelectedVersion(versionsWithGrades) || { date: '', tests: '', grade: 0 };
 
@@ -87,7 +88,11 @@ export default function SubmitsTable({ data, task }) {
                 </TableCell>
                 <TableCell>
                   {student.versions.length > 1 && (
-                    <VersionsButton versions={versionsWithGrades} scoreSum={task.scoreSum} />
+                    <VersionsButton
+                      versions={versionsWithGrades}
+                      scoreSum={task.scoreSum}
+                      student={{ name: student.name, uid: student.uid }}
+                    />
                   )}
                 </TableCell>
                 <TableCell>
@@ -111,23 +116,34 @@ export default function SubmitsTable({ data, task }) {
   );
 }
 
+const calculateScore = (version) => version.tests.filter(Boolean).length;
+const getVersionsWithReview = (versions) => versions.filter((version) => version?.review);
+const getHighestScoreVersion = (versions) => {
+  const bestTestScore = Math.max(...versions.map(calculateScore));
+  return versions.filter((version) => calculateScore(version) === bestTestScore);
+};
+const getLatestVersion = (versions) => {
+  const latestDate = Math.max(...versions.map((version) => new Date(version.date).getTime()));
+  return versions.find((version) => new Date(version.date).getTime() === latestDate);
+};
+
 const getSelectedVersion = (versions) => {
-  if (versions.length === 0) {
-    return { date: '', tests: [] };
+  if (versions.length === 0) return { date: '', tests: [] };
+
+  const versionsWithReview = getVersionsWithReview(versions);
+  if (versionsWithReview.length > 0) {
+    const highestScoreReviewVersion = getHighestScoreVersion(versionsWithReview);
+    if (highestScoreReviewVersion.length === 1) {
+      return highestScoreReviewVersion[0]; // unique best score
+    }
+    return getLatestVersion(highestScoreReviewVersion);
   }
-  const versionWithReview = versions.find((version) => version?.review);
-  if (versionWithReview) {
-    return versionWithReview; // there is a review
-  }
-  const bestTestScore = Math.max(...versions.map((version) => version.tests.filter(Boolean).length));
-  const versionsWithBestTestScore = versions.filter(
-    (version) => version.tests.filter(Boolean).length === bestTestScore,
-  );
+
+  const versionsWithBestTestScore = getHighestScoreVersion(versions);
   if (versionsWithBestTestScore.length === 1) {
     return versionsWithBestTestScore[0]; // unique best score
   }
-  const latestDate = Math.max(...versionsWithBestTestScore.map((version) => new Date(version.date).getTime()));
-  return versionsWithBestTestScore.find((version) => new Date(version.date).getTime() === latestDate);
+  return getLatestVersion(versionsWithBestTestScore);
 };
 
 const maxTestInVersion = (versions) => {
