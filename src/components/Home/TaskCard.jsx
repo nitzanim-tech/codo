@@ -59,7 +59,7 @@ function TaskCard({ text, taskId, studentData }) {
                 <DropdownTrigger>
                   <Button disabled={submitsWithReview.length === 0} onClick={() => {}}>
                     {submitsWithReview.length > 1 ? (
-                      <Badge content={submitsWithReview.length} color="primary" hidden={submitsWithReview.length > 1}>
+                      <Badge variant="flat" size="sm" content={submitsWithReview.length} color="primary">
                         <GradingIcon />
                       </Badge>
                     ) : (

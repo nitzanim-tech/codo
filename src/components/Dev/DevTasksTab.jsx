@@ -7,6 +7,7 @@ const DevTasksTab = () => {
   const { app } = useFirebase();
   const [tasks, setTasks] = useState([]);
   const DEVELOPERS = { kTqDi3pSI5NkUW21FbJF6sxDm3D3: 'dev A', ChckIIGujWbg2FFZeRzDHbcIMrk2: 'בינקי ביל' };
+  
   useEffect(() => {
     const fetchData = async () => {
       const allTasks = await getAllTasks({ app });
@@ -37,7 +38,7 @@ const DevTasksTab = () => {
               <TableRow key={task.uid}>
                 <TableCell>{task.uid}</TableCell>
                 <TableCell>{task.name}</TableCell>
-                <TableCell>{task.code ? 'default' : 'costume'}</TableCell>
+                <TableCell>{task.code ? 'default' : 'custom'}</TableCell>
 
                 <TableCell>{task.tests.length}</TableCell>
                 <TableCell>
