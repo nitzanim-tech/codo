@@ -12,39 +12,34 @@ import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import { useFirebase } from '../util/FirebaseProvider';
 
 function Managers() {
-  const { app, auth } = useFirebase();
+  const { app, auth, userData } = useFirebase();
   const [groups, setGroups] = useState(null);
   const [instructorsData, setInstructorsData] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
   const [unauthorized, setUnauthorized] = useState(true);
   const autocompleteRef = useRef();
 
-  onAuthStateChanged(auth, async (user) => {
-    try {
-      if (!currentUser) {
-        const [groupsFromDB, current] = await Promise.all([getGroups(app), getCurrentUser({ app, id: user.uid })]);
-        setGroups(groupsFromDB);
-        setCurrentUser(current);
+  useEffect(() => {
+    if (userData) {
+      const shouldBeUnauthorized = !userData.email.includes('@nitzanim.tech');
+      if (unauthorized !== shouldBeUnauthorized) {
+        setUnauthorized(shouldBeUnauthorized);
       }
-
-      user.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
-    } catch {
-      setCurrentUser({ email: '' });
     }
-  });
+  }, [userData]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getInsts({ app });
-      setInstructorsData(data);
+      const [instFromDb, groupsFromDb] = await Promise.all([getInsts({ app }), getGroups(app)]);
+      setGroups(groupsFromDb);
+      setInstructorsData(instFromDb);
     };
     if (!unauthorized) fetchData();
   }, [unauthorized]);
 
   return (
     <>
-      <NavBar  />
-      {currentUser && instructorsData ? (
+      <NavBar />
+      {instructorsData ? (
         <>
           {unauthorized ? (
             <h1>הכניסה למנהלים בלבד</h1>
@@ -121,11 +116,11 @@ function Managers() {
                                 permission: newPermission,
                               });
                               if (haveAdded) {
-                                student.permissions.push(newPermission);
-                                // const updatedInstructorsData = instructorsData.map((s) =>
-                                //   s.id === student.id ? { ...s, permissions: [...s.permissions, newPermission] } : s,
-                                // );
-                                // setInstructorsData(updatedInstructorsData);
+                                const updatedPermissions = [...student.permissions, newPermission];
+                                const updatedInstructorsData = instructorsData.map((inst) =>
+                                  inst.id === student.id ? { ...inst, permissions: updatedPermissions } : inst,
+                                );
+                                setInstructorsData(updatedInstructorsData);
                               }
                             }
                           }}
