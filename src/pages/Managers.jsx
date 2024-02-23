@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
-import getInsts from '../requests/manager/getInsts';
-import getCurrentUser from '../requests/getCurrentUser';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import getGroups from '../requests/getGroups';
-import { onAuthStateChanged } from 'firebase/auth';
 import { Table, TableHeader, TableRow, TableCell, TableBody, TableColumn } from '@nextui-org/react';
 import { CircularProgress, Chip, Button } from '@nextui-org/react';
 
@@ -27,14 +25,19 @@ function Managers() {
     }
   }, [userData]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const [instFromDb, groupsFromDb] = await Promise.all([getInsts({ app }), getGroups(app)]);
-      setGroups(groupsFromDb);
-      setInstructorsData(instFromDb);
-    };
-    if (!unauthorized) fetchData();
-  }, [unauthorized]);
+useEffect(() => {
+  const fetchData = async () => {
+    const functions = getFunctions(app);
+    const getInstsFunction = httpsCallable(functions, 'getInsts');
+    const insts = await getInstsFunction({ app });
+    console.log(insts);
+    const groupsFromDb = await getGroups(app);
+    setGroups(groupsFromDb);
+    setInstructorsData(insts);
+  };
+  if (!unauthorized) fetchData();
+}, [unauthorized]);
+
 
   return (
     <>
