@@ -1,0 +1,168 @@
+{
+  "ספר הקורס": {
+    "חלק א'": {
+      "type": "pdf",
+      "link": "https://1drv.ms/b/s!AhbjJ-PvNB7DgTFSlvc-rykNmiRT?e=0evYeS"
+    },
+    "חלק ב'": {
+      "type": "pdf",
+      "link": "https://1drv.ms/b/s!AhbjJ-PvNB7DgTCaLiCBd3Tqdgrr?e=hwt5s3"
+    }
+  },
+  "חזרה": {
+    "הכנה 01 - שלום עולם": {
+      "type": "task",
+      "index": "7e9e4f50c46c"
+    },
+    "הכנה 02 - אליס והמעלית": {
+      "type": "task",
+      "index": "c3194b8af385"
+    },
+    "ברוכים הבאים לניצנים": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7Dd513ZLFuzAOiqow?e=ETi23c"
+    },
+    "נספח התקנות": {
+      "type": "pdf",
+      "link": "https://1drv.ms/b/s!AhbjJ-PvNB7Ddi1doErWmMGb7tw?e=njl3z4"
+    }
+  },
+  "תנאים": {
+    "תנאים": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DdYy6kaWesn4kS1Y?e=8h9CGJ"
+    },
+    "תנאים - אי שווין המשולש": {
+      "type": "task",
+      "index": "df3ef7216ca5"
+    }
+  },
+  "while": {
+    "לולאת while": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DcRTNz3jvDHPjqgo?e=1gTYIl"
+    }
+  },
+  "סיכום מבואות": {
+    "תרגול מונחה סיכום מבואות": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgQCOI6bp8HlcNo4S?e=UkYYWD"
+    },
+    "תרגול מונחה 1 - השערת קולאץ": {
+      "type": "task",
+      "index": "bed010d87c10"
+    },
+    "תרגול מונחה 2 - יאללה למחזורית": {
+      "type": "task",
+      "index": "c0e095edfd28"
+    }
+  },
+  "רשימות": {
+    "רשימות בסיסי": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgQVSSLFKJHdwBqCI?e=ryWRod"
+    },
+
+    "wordle": {
+      "type": "task",
+      "index": "0e4bf0beeacd"
+    }
+  },
+  "לולאת for": {
+    "לולאת for": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgQaxgLr4T5VKNyi5?e=YUiKO7"
+    },
+    "חימום": {
+      "type": "task",
+      "index": "29b6d7990c43"
+    },
+    "מספר משוכלל": {
+      "type": "task",
+      "index": "kgr3s5k5p394"
+    },
+    "שבוע בום": {
+      "type": "task",
+      "index": "9e9b9d609909"
+    },
+    "אתגר - עיתונאי נולד": {
+      "type": "task",
+      "index": "40458c1a53ee"
+    }
+  },
+  "לולאות מקוננות": {
+    "לולאות מקוננות": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgQiE4fs-J1byOYp3?e=TbJgea"
+    },
+    "לוח הכפל": {
+      "type": "task",
+      "index": "79c9fb0d3074"
+    },
+    "wordle 2": {
+      "type": "task",
+      "index": "b6565fbea41a"
+    },
+
+    "מסמך - שפע יששכר": {
+      "type": "pdf",
+      "link": "https://1drv.ms/w/s!AhbjJ-PvNB7DgQmv_m-btHNsm6CA?e=LjKjS5"
+    },
+    "שפע יששכר": {
+      "type": "task",
+      "index": "7cfa6c3a94ba"
+    }
+  },
+  "תרגול מונחה תנאים ולולאות": {
+    "תרגול מונחה הכנה לבוחן ": {
+      "type": "task",
+      "index": "991be3a0d2c7",
+      "hideTests": true
+    }
+  },
+  "בוחן תנאים ולולאות": {
+    "בוחן 1": {
+      "type": "task",
+      "index": "ca8e2ed044c0",
+      "hideTests": true
+    }
+  },
+  "פונקציות": {
+    "פונקציות בסיסי": {
+      "type": "ppt",
+      "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgR325EPWilOJO0r5?e=xRyUtS"
+    },
+    "חימום": {
+      "type": "task",
+      "index": "c38805768973"
+    },
+    "מה יש במקרר?": {
+      "type": "task",
+      "index": "0cfe28ed6295"
+    },
+    "רשימת המחלקים": {
+      "type": "task",
+      "index": "4ee3e30cef3f"
+    }
+  },
+  "חלוקה לפונקציות": {
+    "חלוקה לפונקציות": { "type": "ppt", "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgTtjnYUZYho_fVIE?e=QGNAco" },
+    "חיבור אינדקסים": { "type": "task", "index": "6f26aba3707b" },
+    "ההוסטל של מריה": { "type": "task", "index": "194001cc3994" }
+  },
+  "פרוייקט": {
+    "הוראות וקוד": { "type": "zip", "link": "https://1drv.ms/u/s!AhbjJ-PvNB7DgTkAq3lpcDPulCNV?e=ojaeDl" },
+    "הכספומט, חלק א": { "type": "task", "index": "8a6e4b0ca8d1" },
+    "הכספומט, חלק ב": { "type": "task", "index": "d2c1ab39772b" },
+    "הכספומט, בונוס": { "type": "task", "index": "fe57a574555a" }
+  },
+
+  "רשימות דו מימדיות": {
+    "מטריצות": { "type": "ppt", "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgTqEXSPavMJNi8DL?e=8QoMxE" },
+    "סכום מטריצה": { "type": "task", "index": "ab218594504d" },
+    "יש ציונים": { "type": "task", "index": "0f2aebe37107" }
+  },
+  "הכנה לבוחן 2": {
+    "ריבוע הקסם": { "type": "task", "index": "3ca6798dca47" }
+  }
+}
