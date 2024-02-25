@@ -146,16 +146,19 @@
     }
   },
   "חלוקה לפונקציות": {
+    "חלוקה לפונקציות": { "type": "ppt", "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgTtjnYUZYho_fVIE?e=QGNAco" },
     "חיבור אינדקסים": { "type": "task", "index": "6f26aba3707b" },
     "ההוסטל של מריה": { "type": "task", "index": "194001cc3994" }
   },
   "פרוייקט": {
+    "הוראות וקוד": { "type": "zip", "link": "https://1drv.ms/u/s!AhbjJ-PvNB7DgTkAq3lpcDPulCNV?e=ojaeDl" },
     "הכספומט, חלק א": { "type": "task", "index": "8a6e4b0ca8d1" },
     "הכספומט, חלק ב": { "type": "task", "index": "d2c1ab39772b" },
     "הכספומט, בונוס": { "type": "task", "index": "fe57a574555a" }
   },
 
   "רשימות דו מימדיות": {
+    "מטריצות": { "type": "ppt", "link": "https://1drv.ms/p/s!AhbjJ-PvNB7DgTqEXSPavMJNi8DL?e=8QoMxE" },
     "סכום מטריצה": { "type": "task", "index": "ab218594504d" },
     "יש ציונים": { "type": "task", "index": "0f2aebe37107" }
   },
