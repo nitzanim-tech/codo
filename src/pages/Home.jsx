@@ -54,14 +54,7 @@ function Home() {
                         studentData={userData.submissions ? userData.submissions[file.index] : null}
                       />
                     ) : (
-                      <Card key={file.name} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
-                        <Button radius="full" variant="faded" onClick={() => window.open(file.link)}>
-                          {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
-                          {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
-                          {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
-                        </Button>
-                        {file.name}
-                      </Card>
+                      <FileCard file={file} />
                     ),
                   )}
                 </AccordionItem>
@@ -81,3 +74,16 @@ function Home() {
 }
 
 export default Home;
+
+const FileCard = ({file}) => {
+  return (
+    <Card key={file.name} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
+      <Button radius="full" variant="faded" onClick={() => window.open(file.link)}>
+        {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
+        {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
+        {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
+      </Button>
+      {file.name}
+    </Card>
+  );
+};
