@@ -12,9 +12,10 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import filesLinks from '../util/filesLinks.json';
 import { useFirebase } from '../util/FirebaseProvider';
 import { CircularProgress } from '@nextui-org/react';
+import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 
 function Home() {
-  const { userData, isUserLoading } = useFirebase();  
+  const { userData, isUserLoading } = useFirebase();
   const allKeys = Object.keys(filesLinks).map((category) => category.toString());
 
   return (
@@ -43,6 +44,7 @@ function Home() {
                         <Button radius="full" variant="faded" onClick={() => window.open(file.link)}>
                           {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
                           {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
+                          {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
                         </Button>
                         {fileName}
                       </Card>
