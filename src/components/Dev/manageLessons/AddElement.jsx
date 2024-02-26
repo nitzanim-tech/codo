@@ -1,12 +1,50 @@
 import { useState, useEffect } from 'react';
-import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from '@nextui-org/react';
-import { Select, SelectItem, ModalFooter } from '@nextui-org/react';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from '@nextui-org/react';
+import { Select, SelectItem, Button, Input } from '@nextui-org/react';
 import AddIcon from '@mui/icons-material/Add';
+import SlideshowIcon from '@mui/icons-material/Slideshow';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
+import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
+import addElement from '../../../requests/lessons/addElement';
+import { useFirebase } from '../../../util/FirebaseProvider';
 
-function AddElement() {
+function AddElement({ tasksList, lesson }) {
+  const { app } = useFirebase();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [choosenFormat, setChoosenFormat] = useState();
+  const [choosenTask, setChoosenTask] = useState();
   const [massage, setMassage] = useState('');
+  const [linkInput, setLinkInput] = useState('');
+  const [elementName, setElementName] = useState('');
+
+  const SelectFormat = () => {
+    const formatOptions = [
+      { format: 'ppt', color: '#FAE233', Icon: SlideshowIcon },
+      { format: 'pdf', color: '#BF1E2E', Icon: PictureAsPdfIcon },
+      { format: 'zip', color: '#386641', Icon: FolderZipRoundedIcon },
+      { format: 'task', color: '#005395', Icon: BorderColorRoundedIcon },
+    ];
+
+    return (
+      <Select label="פורמט" variant="bordered" onChange={(e) => setChoosenFormat(e.target.value)}>
+        {formatOptions.map(({ format, color, Icon }) => (
+          <SelectItem key={format} startContent={<Icon style={{ color }} />}>
+            {format}
+          </SelectItem>
+        ))}
+      </Select>
+    );
+  };
+
+  const clearAll = () => {
+    setChoosenFormat();
+    setChoosenTask('');
+    setMassage('');
+    setLinkInput('');
+    setElementName('');
+  };
+
   return (
     <>
       <Button radius="full" variant="faded" onPress={onOpen}>
@@ -16,42 +54,65 @@ function AddElement() {
         </span>
       </Button>
 
-      <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        placement="top-center"
-        size="xl"
-        onClose={() => {
-          setMassage('');
-        }}
-      >
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center" size="xl" onClose={clearAll}>
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">ערוך פרטי חניך</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">הוסף אלמנט</ModalHeader>
               <ModalBody>
-                <Select
-                  label="פורמט"
-                  variant="bordered"
-                  onChange={(e) => {
-                    setChoosenFormat(e.target.value);
-                  }}
-                >
-                  <SelectItem key={'ppt'}>ppt</SelectItem>
-                  <SelectItem key={'pdf'}>pdf</SelectItem>
-                  <SelectItem key={'zip'}>zip</SelectItem>
-                </Select>
+                <SelectFormat />
+                {['ppt', 'pdf', 'zip'].includes(choosenFormat) && (
+                  <Input
+                    placeholder="לינק"
+                    variant="bordered"
+                    value={linkInput}
+                    onChange={(e) => setLinkInput(e.target.value)}
+                  />
+                )}
+                {choosenFormat == 'task' && (
+                  <Select
+                    label="משימה"
+                    variant="bordered"
+                    onChange={(e) => {
+                      const taskId = e.target.value;
+                      setChoosenTask(taskId);
+                      setElementName(tasksList.find((taskObj) => Object.keys(taskObj)[0] === taskId)[taskId]);
+                    }}
+                  >
+                    {tasksList.map((taskObj) => {
+                      const taskKey = Object.keys(taskObj)[0];
+                      const taskName = taskObj[taskKey];
+                      return <SelectItem key={taskKey}>{taskName}</SelectItem>;
+                    })}
+                  </Select>
+                )}
+                {(linkInput || choosenTask) && (
+                  <Input
+                    placeholder="שם"
+                    variant="bordered"
+                    value={elementName}
+                    onChange={(e) => setElementName(e.target.value)}
+                  />
+                )}
               </ModalBody>
               <ModalFooter>
                 <Button
+                  isDisabled={!choosenFormat || (!linkInput && !choosenTask)}
                   variant="ghost"
                   radius="full"
-                  color="danger"
                   onClick={() => {
-                    console.log('hi');
+                    let elementData = { name: elementName, type: choosenFormat };
+                    if (choosenFormat == 'task') {
+                      elementData['index'] = choosenTask;
+                    } else {
+                      elementData['link'] = linkInput;
+                    }
+
+                    const updated = addElement({ app, lessonId: lesson, elementData });
+                    updated ? setMassage('עודכן בהצלחה') : setMassage('שגיאה');
                   }}
                 >
-                  !כן, למחוק
+                  שמור
                 </Button>
                 <p>{massage}</p>
               </ModalFooter>
