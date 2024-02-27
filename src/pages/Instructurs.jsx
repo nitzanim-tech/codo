@@ -5,7 +5,7 @@ import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
 import getStudentData from '../requests/getStudents';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
-import ManageTasks from '../components/Inst/manageTab/ManageTasks';
+import ManageLessonsInst from '../components/Inst/manageTab/ManageLessonsInst';
 import { CircularProgress } from '@nextui-org/react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import PassMatrix from '../components/Inst/statusTab/PassMatrix';
@@ -100,9 +100,11 @@ function Instructors() {
                       />
                     </CenteredDiv>
                   </Tab>
-                  {/* <Tab key="manage" title="ניהול משימות">
-            <ManageTasks isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
-          </Tab> */}
+                  <Tab key="manage" title="מפגשים">
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <ManageLessonsInst />
+                    </div>
+                  </Tab>
                   <Tab key="status" title="סטטוס">
                     <CenteredDiv>
                       <PassMatrix studentsRawData={studentsRawData} tasksList={tasksList} />

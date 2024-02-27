@@ -3,7 +3,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure
 import { Select, SelectItem, Button, Input } from '@nextui-org/react';
 import { useFirebase } from '../../../util/FirebaseProvider';
 import LowPriorityIcon from '@mui/icons-material/LowPriority';
-import { FileCard, DevTaskCard } from '../Cards';
+import { FileCard, DevTaskCard } from '../../general/Cards';
 
 function Rearrange({ elements }) {
   const { app } = useFirebase();

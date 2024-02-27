@@ -3,22 +3,11 @@ import { Accordion, AccordionItem, CircularProgress } from '@nextui-org/react';
 
 import { useFirebase } from '../../../util/FirebaseProvider';
 import getAllLessons from '../../../requests/lessons/getAllLessons';
-import AddElement from './AddElement';
-import Rearrange from './Rearrange';
 import { FileCard, DevTaskCard } from '../../general/Cards';
-import AddLesson from './AddLesson';
 
-const tasks = [
-  { '7e9e4f50c46c': 'הכנה 0 - שלום עולם' },
-  { c3194b8af385: 'הכנה 1 - מעלית' },
-  { df3ef7216ca5: 'תנאים - אי שיוון המשולש' },
-  { bed010d87c10: 'תרגול מונחה - השערת קולץ' },
-  { c0e095edfd28: '!תרגול מונחה - יאללה, למחזורית' },
-];
-function ManageLessons() {
+function ManageLessonsInst() {
   const { app } = useFirebase();
   const [lessons, setLessons] = useState(null);
-  const [tasksList, setTasksList] = useState(tasks);
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -47,23 +36,18 @@ function ManageLessons() {
                 {lessonData.elements &&
                   Object.entries(lessonData.elements).map(([element, file]) =>
                     file.type === 'task' ? (
-                      <DevTaskCard index={file.index} text={file.name} />
+                      <DevTaskCard index={file.index} text={file.name} isInst />
                     ) : (
-                      <FileCard file={file} />
+                      <FileCard file={file} isInst />
                     ),
                   )}
-                <AddElement tasksList={tasksList} lesson={lesson} />
-                <Rearrange elements={lessonData.elements} />
               </AccordionItem>
             ))}
           </Accordion>
-
-          <AddLesson />
         </div>
       )}
     </>
   );
 }
 
-export default ManageLessons;
-
+export default ManageLessonsInst;

@@ -97,7 +97,7 @@ function AddElement({ tasksList, lesson }) {
                 )}
                 {(linkInput || choosenTask) && (
                   <Input
-                    placeholder="שם"
+                    label="שם המשימה"
                     variant="bordered"
                     value={elementName}
                     onChange={(e) => setElementName(e.target.value)}
