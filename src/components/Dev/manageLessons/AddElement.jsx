@@ -47,7 +47,7 @@ function AddElement({ tasksList, lesson }) {
 
   return (
     <>
-      <Button radius="full" variant="faded" onPress={onOpen}>
+      <Button radius="full" variant="bordered" onPress={onOpen}>
         <AddIcon style={{ color: '#386641' }} />{' '}
         <span style={{ color: '#386641' }}>
           <b>הוסף </b>
@@ -100,7 +100,7 @@ function AddElement({ tasksList, lesson }) {
                   isDisabled={!choosenFormat || (!linkInput && !choosenTask)}
                   variant="ghost"
                   radius="full"
-                  onClick={() => {
+                  onClick={async () => {
                     let elementData = { name: elementName, type: choosenFormat };
                     if (choosenFormat == 'task') {
                       elementData['index'] = choosenTask;
@@ -108,7 +108,7 @@ function AddElement({ tasksList, lesson }) {
                       elementData['link'] = linkInput;
                     }
 
-                    const updated = addElement({ app, lessonId: lesson, elementData });
+                    const updated = await addElement({ app, lessonId: lesson, elementData });
                     updated ? setMassage('עודכן בהצלחה') : setMassage('שגיאה');
                   }}
                 >

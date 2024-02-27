@@ -1,18 +1,13 @@
 import { useState, useEffect } from 'react';
-
-import { Button, Grid, Card } from '@mui/material';
-import { Accordion, AccordionItem, Tooltip, Badge } from '@nextui-org/react';
-import SlideshowIcon from '@mui/icons-material/Slideshow';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
-import LowPriorityIcon from '@mui/icons-material/LowPriority';
-import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
-import { CircularProgress } from '@nextui-org/react';
-import AddIcon from '@mui/icons-material/Add';
+import { Accordion, AccordionItem, CircularProgress } from '@nextui-org/react';
 
 import { useFirebase } from '../../../util/FirebaseProvider';
 import getAllLessons from '../../../requests/lessons/getAllLessons';
 import AddElement from './AddElement';
+import Rearrange from './Rearrange';
+import { FileCard, DevTaskCard } from '../Cards';
+import AddLesson from './AddLesson';
+
 const tasks = [
   { '7e9e4f50c46c': 'הכנה 0 - שלום עולם' },
   { c3194b8af385: 'הכנה 1 - מעלית' },
@@ -47,23 +42,18 @@ function ManageLessons() {
                 key={`${lesson}`}
                 aria-label={`Accordion ${lessonData.lessonName}`}
                 title={lessonData.lessonName}
+                variant={'bordered'}
               >
                 {Object.entries(lessonData.elements).map(([element, file]) =>
                   file.type === 'task' ? <DevTaskCard index={file.index} text={file.name} /> : <FileCard file={file} />,
                 )}
                 <AddElement tasksList={tasksList} lesson={lesson} />
-                <Button><LowPriorityIcon /></Button>
-
+                <Rearrange elements={lessonData.elements} />
               </AccordionItem>
             ))}
           </Accordion>
 
-          <Button radius="full" variant="faded" onClick={() => console.log('h')}>
-            <span style={{ color: '#386641' }}>
-              <b>הוסף מפגש</b>
-            </span>
-            <AddIcon style={{ color: '#386641' }} />
-          </Button>
+          <AddLesson />
         </div>
       )}
     </>
@@ -71,28 +61,4 @@ function ManageLessons() {
 }
 
 export default ManageLessons;
-
-const FileCard = ({ file }) => {
-  return (
-    <Card key={file.name} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
-      <Button radius="full" variant="faded" onClick={() => window.open(file.link)}>
-        {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
-        {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
-        {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
-      </Button>
-      {file.name}
-    </Card>
-  );
-};
-
-const DevTaskCard = ({ index, text }) => {
-  return (
-    <Card key={index} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
-      <Button radius="full" variant="faded" onClick={() => window.open(`./submit/${index}`)}>
-        <BorderColorRoundedIcon style={{ color: '#005395' }} />
-      </Button>
-      {text}
-    </Card>
-  );
-};
 

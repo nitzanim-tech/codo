@@ -1,6 +1,6 @@
 import { Tabs, Tab, Divider, Input } from '@nextui-org/react';
 import DevTasksTab from '../components/Dev/DevTasksTab';
-import AddNewTasks from '../components/Dev/AddNewTasks';
+import AddNewTasks from '../components/Dev/addNewTask/AddNewTasks';
 import ManageLessons from '../components/Dev/manageLessons/ManageLessons';
 import MiniDrawer from '../components/Dev/TEST';
 const DevTeam = () => {

@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { Tabs, Tab, Divider, Input } from '@nextui-org/react';
 import Editor from '@monaco-editor/react';
 
-import AcordionTextEditor from '../../components/Dev/AcordionTextEditor';
-import AcordionChip from '../../components/Dev/AcordionChip';
-import AddTests from '../../components/Dev/AddTests';
-import addTask from '../../requests/tasks/addTask';
-import { useFirebase } from '../../util/FirebaseProvider';
+import AcordionTextEditor from './AcordionTextEditor';
+import AcordionChip from './AcordionChip';
+import AddTests from './AddTests';
+import addTask from '../../../requests/tasks/addTask';
+import { useFirebase } from '../../../util/FirebaseProvider';
 
 const AddNewTasks = () => {
   const { app, userData } = useFirebase();
