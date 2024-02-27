@@ -1,15 +1,15 @@
-import { getDatabase, ref, set } from 'firebase/database';
+import { getDatabase, ref, get, set } from 'firebase/database';
 
 const addLesson = async ({ app, lessonName }) => {
   try {
     const db = getDatabase(app);
-    const lessonsRef = ref(db, 'lessons'); 
+    const lessonsRef = ref(db, 'lessons');
 
     const snapshot = await get(lessonsRef);
     const currentLessons = snapshot.val() || {};
     const newLessonKey = Object.keys(currentLessons).length;
 
-    await set(ref(db, `lessons/${newLessonKey}`), { name: lessonName });
+    await set(ref(db, `lessons/${newLessonKey}`), { lessonName });
     console.log('Lesson added successfully');
     return true;
   } catch (error) {

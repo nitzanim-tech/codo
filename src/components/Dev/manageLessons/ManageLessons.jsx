@@ -44,9 +44,14 @@ function ManageLessons() {
                 title={lessonData.lessonName}
                 variant={'bordered'}
               >
-                {Object.entries(lessonData.elements).map(([element, file]) =>
-                  file.type === 'task' ? <DevTaskCard index={file.index} text={file.name} /> : <FileCard file={file} />,
-                )}
+                {lessonData.elements &&
+                  Object.entries(lessonData.elements).map(([element, file]) =>
+                    file.type === 'task' ? (
+                      <DevTaskCard index={file.index} text={file.name} />
+                    ) : (
+                      <FileCard file={file} />
+                    ),
+                  )}
                 <AddElement tasksList={tasksList} lesson={lesson} />
                 <Rearrange elements={lessonData.elements} />
               </AccordionItem>

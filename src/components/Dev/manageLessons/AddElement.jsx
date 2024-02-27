@@ -8,13 +8,15 @@ import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import addElement from '../../../requests/lessons/addElement';
 import { useFirebase } from '../../../util/FirebaseProvider';
+import { SuccessMessage, ErrorMessage } from '../../general/Messages';
 
 function AddElement({ tasksList, lesson }) {
   const { app } = useFirebase();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [choosenFormat, setChoosenFormat] = useState();
   const [choosenTask, setChoosenTask] = useState();
-  const [massage, setMassage] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [showSent, setShowSent] = useState(false);
   const [linkInput, setLinkInput] = useState('');
   const [elementName, setElementName] = useState('');
 
@@ -27,7 +29,12 @@ function AddElement({ tasksList, lesson }) {
     ];
 
     return (
-      <Select label="פורמט" variant="bordered" onChange={(e) => setChoosenFormat(e.target.value)}>
+      <Select
+        label="פורמט"
+        variant="bordered"
+        onChange={(e) => setChoosenFormat(e.target.value)}
+        selectedKeys={[choosenFormat]}
+      >
         {formatOptions.map(({ format, color, Icon }) => (
           <SelectItem key={format} startContent={<Icon style={{ color }} />}>
             {format}
@@ -38,9 +45,10 @@ function AddElement({ tasksList, lesson }) {
   };
 
   const clearAll = () => {
+    setShowError(false);
+    setShowSent(false);
     setChoosenFormat();
     setChoosenTask('');
-    setMassage('');
     setLinkInput('');
     setElementName('');
   };
@@ -61,6 +69,7 @@ function AddElement({ tasksList, lesson }) {
               <ModalHeader className="flex flex-col gap-1">הוסף אלמנט</ModalHeader>
               <ModalBody>
                 <SelectFormat />
+
                 {['ppt', 'pdf', 'zip'].includes(choosenFormat) && (
                   <Input
                     placeholder="לינק"
@@ -109,12 +118,13 @@ function AddElement({ tasksList, lesson }) {
                     }
 
                     const updated = await addElement({ app, lessonId: lesson, elementData });
-                    updated ? setMassage('עודכן בהצלחה') : setMassage('שגיאה');
+                    updated ? setShowSent(true) : setShowError(true);
                   }}
                 >
                   שמור
                 </Button>
-                <p>{massage}</p>
+                {showError && <ErrorMessage />}
+                {showSent && <SuccessMessage text={'האלמנט נוסף בהצלחה'} />}
               </ModalFooter>
             </>
           )}

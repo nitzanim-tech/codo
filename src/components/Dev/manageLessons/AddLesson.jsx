@@ -4,15 +4,17 @@ import { Select, SelectItem, Button, Input } from '@nextui-org/react';
 import AddIcon from '@mui/icons-material/Add';
 import { useFirebase } from '../../../util/FirebaseProvider';
 import addLesson from '../../../requests/lessons/addLesson';
-
+import { SuccessMessage, ErrorMessage } from '../../general/Messages';
 function AddLesson() {
   const { app } = useFirebase();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [massage, setMassage] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [showSent, setShowSent] = useState(false);
   const [lessonName, setLessonName] = useState('');
 
   const clearAll = () => {
-    setMassage('');
+    setShowError(false);
+    setShowSent(false);
     setLessonName('');
   };
 
@@ -45,13 +47,13 @@ function AddLesson() {
                   radius="full"
                   onClick={async () => {
                     const updated = await addLesson({ app, lessonName });
-                    console.log(updated);
-                    updated ? setMassage('עודכן בהצלחה') : setMassage('שגיאה');
+                    updated ? setShowSent(true) : setShowError(true);
                   }}
                 >
                   שמור
                 </Button>
-                <p>{massage}</p>
+                {showError && <ErrorMessage />}
+                {showSent && <SuccessMessage text={'המפגש נוסף בהצלחה'} />}
               </ModalFooter>
             </>
           )}
