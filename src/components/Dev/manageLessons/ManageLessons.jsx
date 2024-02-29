@@ -37,25 +37,29 @@ function ManageLessons() {
       ) : (
         <div style={{ width: '50%' }}>
           <Accordion dir="rtl" isCompact selectionMode={'multiple'}>
-            {Object.entries(lessons).map(([lesson, lessonData]) => (
-              <AccordionItem
-                key={`${lesson}`}
-                aria-label={`Accordion ${lessonData.lessonName}`}
-                title={lessonData.lessonName}
-                variant={'bordered'}
-              >
-                {lessonData.elements &&
-                  Object.entries(lessonData.elements).map(([element, file]) =>
-                    file.type === 'task' ? (
-                      <DevTaskCard index={file.index} text={file.name} />
-                    ) : (
-                      <FileCard file={file} />
-                    ),
-                  )}
-                <AddElement tasksList={tasksList} lesson={lesson} />
-                <Rearrange elements={lessonData.elements} />
-              </AccordionItem>
-            ))}
+            {Object.entries(lessons).map(([lessonId, lessonData]) => {
+              const lastElementId = lessonData.lastElementId || null;
+
+              return (
+                <AccordionItem
+                  key={lessonId}
+                  aria-label={`Accordion ${lessonData.lessonName}`}
+                  title={lessonData.lessonName}
+                  variant={'bordered'}
+                >
+                  {lessonData.elements &&
+                    Object.entries(lessonData.elements).map(([elementId, file]) =>
+                      file.type === 'task' ? (
+                        <DevTaskCard key={elementId} index={file.index} text={file.name} />
+                      ) : (
+                        <FileCard key={elementId} file={file} />
+                      ),
+                    )}
+                  <AddElement tasksList={tasksList} lesson={lessonId} lastElementId={lastElementId} />
+                  <Rearrange elements={lessonData.elements} />
+                </AccordionItem>
+              );
+            })}
           </Accordion>
 
           <AddLesson />
@@ -66,4 +70,3 @@ function ManageLessons() {
 }
 
 export default ManageLessons;
-

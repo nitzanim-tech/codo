@@ -12,7 +12,7 @@ import WebAssetRoundedIcon from '@mui/icons-material/WebAssetRounded';
 import WebAssetOffRoundedIcon from '@mui/icons-material/WebAssetOffRounded';
 import UnpublishedRoundedIcon from '@mui/icons-material/UnpublishedRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-
+import { Tooltip } from '@nextui-org/react';
 import { useState } from 'react';
 
 const FileCard = ({ file, isInst }) => {
@@ -24,7 +24,7 @@ const FileCard = ({ file, isInst }) => {
             {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
             {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
             {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
-          </Button>{' '}
+          </Button>
           {file.name}
         </div>
         {isInst && <InstFileButtons />}
@@ -73,24 +73,35 @@ const InstTaskButtons = () => {
   return (
     <div style={{ display: 'flex' }}>
       <Divider orientation="vertical" variant="middle" flexItem />
+      <Tooltip content="הצג תרגיל">
+        <IconButton onClick={toggleVisibility}>
+          {isVisible ? <VisibilityRoundedIcon style={{ color: '#005395' }} /> : <VisibilityOffRoundedIcon />}
+        </IconButton>
+      </Tooltip>
 
-      <IconButton onClick={toggleVisibility}>
-        {isVisible ? <VisibilityRoundedIcon style={{ color: '#005395' }} /> : <VisibilityOffRoundedIcon />}
-      </IconButton>
-      <IconButton onClick={toggleShowTests}>
-        {showTest ? <CheckCircleRoundedIcon style={{ color: '#005395' }} /> : <UnpublishedRoundedIcon />}
-      </IconButton>
-      <IconButton onClick={toggleShowReview}>
-        {showReview ? <WebAssetRoundedIcon style={{ color: '#005395' }} /> : <WebAssetOffRoundedIcon />}
-      </IconButton>
+      <Tooltip content="הצג טסטים">
+        <IconButton onClick={toggleShowTests}>
+          {showTest ? <CheckCircleRoundedIcon style={{ color: '#005395' }} /> : <UnpublishedRoundedIcon />}
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip content="הצג משוב">
+        <IconButton onClick={toggleShowReview}>
+          {showReview ? <WebAssetRoundedIcon style={{ color: '#005395' }} /> : <WebAssetOffRoundedIcon />}
+        </IconButton>
+      </Tooltip>
+
       <Divider orientation="vertical" variant="middle" flexItem />
 
-      <IconButton onClick={toggleChallenge}>
-        {challenge ? <StarRateRoundedIcon style={{ color: '#005395' }} /> : <StarOutlineRoundedIcon />}
-      </IconButton>
+      <Tooltip content="אתגר">
+        <IconButton onClick={toggleChallenge}>
+          {challenge ? <StarRateRoundedIcon style={{ color: '#005395' }} /> : <StarOutlineRoundedIcon />}
+        </IconButton>
+      </Tooltip>
     </div>
   );
 };
+
 
 const InstFileButtons = () => {
   const [isVisible, setIsVisible] = useState(true);

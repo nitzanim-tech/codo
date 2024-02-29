@@ -10,7 +10,7 @@ import addElement from '../../../requests/lessons/addElement';
 import { useFirebase } from '../../../util/FirebaseProvider';
 import { SuccessMessage, ErrorMessage } from '../../general/Messages';
 
-function AddElement({ tasksList, lesson }) {
+function AddElement({ tasksList, lesson, lastElementId }) {
   const { app } = useFirebase();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [choosenFormat, setChoosenFormat] = useState();
@@ -116,8 +116,8 @@ function AddElement({ tasksList, lesson }) {
                     } else {
                       elementData['link'] = linkInput;
                     }
-
-                    const updated = await addElement({ app, lessonId: lesson, elementData });
+                    console.log(lastElementId)
+                    const updated = await addElement({ app, lessonId: lesson, elementData, lastElementId });
                     updated ? setShowSent(true) : setShowError(true);
                   }}
                 >

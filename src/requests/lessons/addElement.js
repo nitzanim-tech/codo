@@ -1,16 +1,22 @@
-import { getDatabase, ref, set, get } from 'firebase/database';
+import { getDatabase, ref, set } from 'firebase/database';
+import { v4 as uuidv4 } from 'uuid';
 
-const addElement = async ({ app, lessonId, elementData }) => {
+const addElement = async ({ app, lessonId, elementData, lastElementId }) => {
   try {
     const db = getDatabase(app);
-    const elementsRef = ref(db, `lessons/${lessonId}/elements`);
+  
+    const splittedId = uuidv4().split('-');
+    const newElementId = splittedId[splittedId.length - 1]; 
 
-    const snapshot = await get(elementsRef);
-    const currentElements = snapshot.val() || {};
+    if (lastElementId) {
+      await set(ref(db, `lessons/${lessonId}/elements/${lastElementId}/next`), newElementId);
+    }
 
-    const newElementKey = Object.keys(currentElements).length;
+    await set(ref(db, `lessons/${lessonId}/elements/${newElementId}`), {
+      ...elementData,
+      next: null,
+    });
 
-    await set(ref(db, `lessons/${lessonId}/elements/${newElementKey}`), elementData);
     console.log('Element added successfully');
     return true;
   } catch (error) {
