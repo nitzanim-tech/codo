@@ -12,6 +12,7 @@ import PassMatrix from '../components/Inst/statusTab/PassMatrix';
 import { useFirebase } from '../util/FirebaseProvider';
 import styled from 'styled-components';
 import getTasksData from '../requests/tasks/getTasksData';
+import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettingProvider';
 
 function Instructors() {
   const { app, userData } = useFirebase();
@@ -102,7 +103,9 @@ function Instructors() {
                   </Tab>
                   <Tab key="manage" title="מפגשים">
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
+                      <ChangeSettingProvider>
                         <ManageLessonsInst />
+                      </ChangeSettingProvider>
                     </div>
                   </Tab>
                   <Tab key="status" title="סטטוס">

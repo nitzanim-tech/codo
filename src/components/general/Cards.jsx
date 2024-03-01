@@ -4,16 +4,7 @@ import SlideshowIcon from '@mui/icons-material/Slideshow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
-import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
-import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
-import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
-import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
-import WebAssetRoundedIcon from '@mui/icons-material/WebAssetRounded';
-import WebAssetOffRoundedIcon from '@mui/icons-material/WebAssetOffRounded';
-import UnpublishedRoundedIcon from '@mui/icons-material/UnpublishedRounded';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import { Tooltip } from '@nextui-org/react';
-import { useState } from 'react';
+import { InstTaskButtons, InstFileButtons } from './InstCardsButtons';
 
 const FileCard = ({ file, isInst }) => {
   return (
@@ -43,7 +34,7 @@ const DevTaskCard = ({ index, text, isInst, setting }) => {
           </Button>
           {text}
         </div>
-        {isInst && <InstTaskButtons setting={setting} />}
+        {isInst && <InstTaskButtons setting={setting} index={index} />}
       </div>
     </Card>
   );
@@ -51,72 +42,3 @@ const DevTaskCard = ({ index, text, isInst, setting }) => {
 
 export { FileCard, DevTaskCard };
 
-const InstTaskButtons = ({ setting }) => {
-  console.log(setting);
-  const [isVisible, setIsVisible] = useState(setting?.isVisible || false);
-  const [showTest, setShowTest] = useState(setting?.showTest || false);
-  const [showReview, setShowReview] = useState(setting?.showReview || false);
-  const [challenge, setChallenge] = useState(setting?.isChallenge || false);
-
-  const toggleVisibility = () => {
-    setIsVisible(!isVisible);
-  };
-  const toggleShowTests = () => {
-    setShowTest(!showTest);
-  };
-  const toggleChallenge = () => {
-    setChallenge(!challenge);
-  };
-  const toggleShowReview = () => {
-    setShowReview(!showReview);
-  };
-
-  return (
-    <div style={{ display: 'flex' }}>
-      <Divider orientation="vertical" variant="middle" flexItem />
-      <Tooltip content="הצג תרגיל">
-        <IconButton onClick={toggleVisibility}>
-          {isVisible ? <VisibilityRoundedIcon style={{ color: '#005395' }} /> : <VisibilityOffRoundedIcon />}
-        </IconButton>
-      </Tooltip>
-
-      <Tooltip content="הצג טסטים">
-        <IconButton onClick={toggleShowTests}>
-          {showTest ? <CheckCircleRoundedIcon style={{ color: '#005395' }} /> : <UnpublishedRoundedIcon />}
-        </IconButton>
-      </Tooltip>
-
-      <Tooltip content="הצג משוב">
-        <IconButton onClick={toggleShowReview}>
-          {showReview ? <WebAssetRoundedIcon style={{ color: '#005395' }} /> : <WebAssetOffRoundedIcon />}
-        </IconButton>
-      </Tooltip>
-
-      <Divider orientation="vertical" variant="middle" flexItem />
-
-      <Tooltip content="אתגר">
-        <IconButton onClick={toggleChallenge}>
-          {challenge ? <StarRateRoundedIcon style={{ color: '#005395' }} /> : <StarOutlineRoundedIcon />}
-        </IconButton>
-      </Tooltip>
-    </div>
-  );
-};
-
-
-const InstFileButtons = () => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  const toggleVisibility = () => {
-    setIsVisible(!isVisible);
-  };
-
-  return (
-    <div style={{ display: 'flex' }}>
-      <Divider orientation="vertical" variant="middle" flexItem />
-      <IconButton onClick={toggleVisibility}>
-        {isVisible ? <VisibilityRoundedIcon style={{ color: '#005395' }} /> : <VisibilityOffRoundedIcon />}
-      </IconButton>
-    </div>
-  );
-};
