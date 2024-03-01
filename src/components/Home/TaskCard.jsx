@@ -1,4 +1,4 @@
-import { Button, Card } from '@mui/material';
+import { Button, Card, IconButton } from '@mui/material';
 import { Tooltip, Badge, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import GradingIcon from '@mui/icons-material/Grading';
@@ -6,8 +6,10 @@ import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlin
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 import formatDate from '../../util/formatDate';
-function TaskCard({ text, taskId, studentData }) {
+import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
+function TaskCard({ text, taskId, studentData, isChallenge }) {
+  console.log(isChallenge);
   const findReviews = (trials) => {
     return trials
       .filter((trial) => trial.review)
@@ -16,7 +18,7 @@ function TaskCard({ text, taskId, studentData }) {
         submitDate: trial.date,
         code: trial.code,
         selectedTests: trial.pass.reduce((acc, val, index) => (val === true ? [...acc, index] : acc), []),
-        task:taskId,
+        task: taskId,
       }));
   };
 
@@ -53,6 +55,11 @@ function TaskCard({ text, taskId, studentData }) {
                 <QuestionAnswerIcon />
               </Button>
             </Tooltip> */}
+            {isChallenge && (
+              <Tooltip content="אתגר">
+                <StarRateRoundedIcon style={{ color: '#005395' }} />
+              </Tooltip>
+            )}
 
             <Dropdown aria-label="Versions menu">
               <Tooltip content="למשוב">

@@ -19,8 +19,9 @@ function Home() {
 
   useEffect(() => {
     const fetchLessons = async () => {
-      const allLessons = await getAllLessons(app);
-      setLessons(allLessons);
+      const allLessons = await getAllLessons({ app });
+      const clearedLessons = clearUnvisable(allLessons);
+      setLessons(clearedLessons);
     };
 
     fetchLessons();
@@ -45,13 +46,14 @@ function Home() {
                   aria-label={`Accordion ${lessonData.lessonName}`}
                   title={lessonData.lessonName}
                 >
-                  {Object.entries(lessonData.elements).map(([element, file]) =>
+                  {Object.entries(lessonData.elements).map(([elementId, file]) =>
                     file.type === 'task' ? (
                       <TaskCard
                         key={file.name}
                         taskId={file.index}
                         text={file.name}
                         studentData={userData.submissions ? userData.submissions[file.index] : null}
+                        isChallenge={file.setting?.isChallage || null}
                       />
                     ) : (
                       <FileCard file={file} />
@@ -75,7 +77,7 @@ function Home() {
 
 export default Home;
 
-const FileCard = ({file}) => {
+const FileCard = ({ file }) => {
   return (
     <Card key={file.name} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
       <Button radius="full" variant="faded" onClick={() => window.open(file.link)}>
@@ -86,4 +88,27 @@ const FileCard = ({file}) => {
       {file.name}
     </Card>
   );
+};
+
+const clearUnvisable = (lessons) => {
+  const lessonsArray = Object.values(lessons);
+
+  const filteredLessons = lessonsArray.filter((lesson) => {
+    const visibleElements = Object.values(lesson.elements).filter((element) => element.setting?.isVisable);
+    return visibleElements.length > 0;
+  });
+
+  return filteredLessons.map((lesson) => {
+    const visibleElements = Object.entries(lesson.elements).reduce((acc, [elementId, element]) => {
+      if (element.setting?.isVisable) {
+        acc[elementId] = element;
+      }
+      return acc;
+    }, {});
+
+    return {
+      ...lesson,
+      elements: visibleElements,
+    };
+  });
 };

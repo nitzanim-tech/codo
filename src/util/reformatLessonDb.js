@@ -1,4 +1,4 @@
-export function reformatDb(linkedList) {
+export function reformatLessons({ linkedList, groupData }) {
   const orderedFormat = {};
   let currentLessonId = linkedList['firstLesson'];
 
@@ -8,6 +8,7 @@ export function reformatDb(linkedList) {
 
     let currentElementId = lessonData.firstElement;
     let lastElementId;
+
     while (currentElementId) {
       const elementData = lessonData.elements[currentElementId];
       elements[currentElementId] = {
@@ -15,10 +16,12 @@ export function reformatDb(linkedList) {
         type: elementData.type,
         link: elementData.link,
       };
+      if (groupData[currentElementId]) {
+        elements[currentElementId]['setting'] = groupData[currentElementId];
+      }
       lastElementId = currentElementId;
       currentElementId = elementData.next;
     }
-
     orderedFormat[currentLessonId] = {
       lessonName: lessonData.lessonName,
       elements: elements,

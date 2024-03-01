@@ -22,7 +22,7 @@ function ManageLessons() {
 
   useEffect(() => {
     const fetchLessons = async () => {
-      const allLessons = await getAllLessons(app);
+      const allLessons = await getAllLessons({ app });
       setLessons(allLessons);
     };
     fetchLessons();
