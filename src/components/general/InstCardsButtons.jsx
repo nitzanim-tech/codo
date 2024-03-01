@@ -31,7 +31,7 @@ export const InstTaskButtons = ({ setting, index }) => {
       setShowTest(false);
       setShowReview(false);
       setChallenge(false);
-      changes = { ...changes, showTest: false, showReview: false, challenge: false };
+      changes = { ...changes, showTest: false, showReview: false, isChallenge: false };
     }
     updateSettingChange(index, changes);
     setIsVisible(!isVisible);
@@ -44,7 +44,7 @@ export const InstTaskButtons = ({ setting, index }) => {
   };
 
   const toggleChallenge = () => {
-    const changes = { challenge: !challenge };
+    const changes = { isChallenge: !challenge };
     updateSettingChange(index, changes);
     setChallenge(!challenge);
   };
@@ -87,10 +87,20 @@ export const InstTaskButtons = ({ setting, index }) => {
   );
 };
 
-export const InstFileButtons = () => {
-  const [isVisible, setIsVisible] = useState(true);
+export const InstFileButtons = ({ setting, index }) => {
+  const [isVisible, setIsVisible] = useState(setting?.isVisible || false);
+  const { setSettingChange } = useContext(SettingContext);
+
+  const updateSettingChange = (id, change) => {
+    setSettingChange((prevSettingChange) => ({
+      ...prevSettingChange,
+      [id]: { ...prevSettingChange[id], ...change },
+    }));
+  };
 
   const toggleVisibility = () => {
+    let changes = { isVisible: !isVisible };
+    updateSettingChange(index, changes);
     setIsVisible(!isVisible);
   };
 

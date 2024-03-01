@@ -48,13 +48,14 @@ function Home() {
                       aria-label={`Accordion ${lessonData.lessonName}`}
                       title={lessonData.lessonName}
                     >
+                      {console.log(userData.submissions)}
                       {Object.entries(lessonData.elements).map(([elementId, element]) =>
                         element.type === 'task' ? (
                           <TaskCard
-                            taskId={element.index}
+                            taskId={elementId}
                             text={element.name}
-                            studentData={userData.submissions ? userData.submissions[element.index] : null}
-                            isChallenge={element.setting?.isChallage || null}
+                            studentData={userData.submissions ? userData.submissions[elementId] : null}
+                            isChallenge={element.setting?.isChallenge || null}
                           />
                         ) : (
                           <FileCard file={element} />

@@ -6,6 +6,7 @@ import getAllLessons from '../../../requests/lessons/getAllLessons';
 import { FileCard, DevTaskCard } from '../../general/Cards';
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import { SettingContext } from './ChangeSettingProvider';
+import updateElementSetting from '../../../requests/groups/updateElementSetting';
 
 function ManageLessonsInst() {
   const { app } = useFirebase();
@@ -33,7 +34,9 @@ function ManageLessonsInst() {
             variant="bordered"
             style={{ margin: '20px' }}
             isDisabled={!settingChange}
-            onClick={() => console.log(settingChange)}
+            onClick={() =>
+              updateElementSetting({ app, groupId: 'wwO8Vu', changes: settingChange, originalSetting: lessons })
+            }
           >
             <SaveRoundedIcon style={{ color: '#005395' }} />
             <span style={{ color: '#005395' }}>
@@ -59,7 +62,7 @@ function ManageLessonsInst() {
                         setting={element?.setting}
                       />
                     ) : (
-                      <FileCard file={element} isInst />
+                      <FileCard file={element} isInst index={`${lesson}-${elementId}`} setting={element?.setting} />
                     ),
                   )}
               </AccordionItem>
