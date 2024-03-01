@@ -1,5 +1,5 @@
 import { getDatabase, ref, get, set } from 'firebase/database';
-
+// TO FIX!
 const addLesson = async ({ app, lessonName }) => {
   try {
     const db = getDatabase(app);

@@ -37,36 +37,40 @@ function Home() {
           <CircularProgress />
         </div>
       ) : userData ? (
-        <Grid container spacing={1} columns={3} rows={1}>
-          <Grid item style={{ width: '50%', margin: '30px' }}>
-            <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
-              {Object.entries(lessons).map(([lesson, lessonData]) => (
-                <AccordionItem
-                  key={`${lesson}`}
-                  aria-label={`Accordion ${lessonData.lessonName}`}
-                  title={lessonData.lessonName}
-                >
-                  {Object.entries(lessonData.elements).map(([elementId, element]) =>
-                    element.type === 'task' ? (
-                      <TaskCard
-                        taskId={element.index}
-                        text={element.name}
-                        studentData={userData.submissions ? userData.submissions[element.index] : null}
-                        isChallenge={element.setting?.isChallage || null}
-                      />
-                    ) : (
-                      <FileCard file={element} />
-                    ),
-                  )}
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </Grid>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
+            <Grid container spacing={1} columns={3} rows={1}>
+              <Grid item style={{ width: '60%', margin: '2%' }}>
+                <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
+                  {Object.entries(lessons).map(([lessonId, lessonData]) => (
+                    <AccordionItem
+                      key={`${lessonId}`}
+                      aria-label={`Accordion ${lessonData.lessonName}`}
+                      title={lessonData.lessonName}
+                    >
+                      {Object.entries(lessonData.elements).map(([elementId, element]) =>
+                        element.type === 'task' ? (
+                          <TaskCard
+                            taskId={element.index}
+                            text={element.name}
+                            studentData={userData.submissions ? userData.submissions[element.index] : null}
+                            isChallenge={element.setting?.isChallage || null}
+                          />
+                        ) : (
+                          <FileCard file={element} />
+                        ),
+                      )}
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </Grid>
 
-          <Grid item style={{ width: '24%' }}>
-            <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
-          </Grid>
-        </Grid>
+              <Grid item style={{ width: '30%' }}>
+                <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
+              </Grid>
+            </Grid>
+          </div>
+        </div>
       ) : (
         <h1>אנא התחברו</h1>
       )}

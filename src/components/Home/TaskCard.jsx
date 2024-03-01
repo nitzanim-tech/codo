@@ -31,7 +31,7 @@ function TaskCard({ text, taskId, studentData, isChallenge }) {
     <>
       <Card dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={{ width: '40%' }}>
+          <div>
             <Button radius="full" variant="faded" onClick={() => onTaskButtonClick(taskId)}>
               <BorderColorRoundedIcon style={{ color: '#005395' }} />
             </Button>
