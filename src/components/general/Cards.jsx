@@ -25,19 +25,20 @@ const FileCard = ({ file, isInst }) => {
 };
 
 const DevTaskCard = ({ index, text, isInst, setting }) => {
-  return (
-    <Card key={index} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <Button radius="full" variant="faded" onClick={() => window.open(`./submit/${index}`)}>
-            <BorderColorRoundedIcon style={{ color: '#005395' }} />
-          </Button>
-          {text}
-        </div>
-        {isInst && <InstTaskButtons setting={setting} index={index} />}
-      </div>
-    </Card>
-  );
+   const taskId = index.split('-')[1];
+   return (
+     <Card key={index} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
+       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+         <div>
+           <Button radius="full" variant="faded" onClick={() => window.open(`./submit/${taskId}`)}>
+             <BorderColorRoundedIcon style={{ color: '#005395' }} />
+           </Button>
+           {text}
+         </div>
+         {isInst && <InstTaskButtons setting={setting} index={index} />}
+       </div>
+     </Card>
+   );
 };
 
 export { FileCard, DevTaskCard };

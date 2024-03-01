@@ -52,7 +52,12 @@ function ManageLessonsInst() {
                 {lessonData.elements &&
                   Object.entries(lessonData.elements).map(([elementId, element]) =>
                     element.type === 'task' ? (
-                      <DevTaskCard index={elementId} text={element.name} isInst setting={element?.setting} />
+                      <DevTaskCard
+                        index={`${lesson}-${elementId}`}
+                        text={element.name}
+                        isInst
+                        setting={element?.setting}
+                      />
                     ) : (
                       <FileCard file={element} isInst />
                     ),
