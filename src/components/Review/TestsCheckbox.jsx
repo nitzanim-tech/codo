@@ -1,9 +1,21 @@
-import React from 'react';
-import { Card, Divider } from '@nextui-org/react';
-import { CheckboxGroup, Checkbox, ScrollShadow } from '@nextui-org/react';
+import React, { useState } from 'react';
+import { Card, Button } from '@nextui-org/react';
+import { CheckboxGroup, Checkbox, useDisclosure } from '@nextui-org/react';
 import styled from 'styled-components';
+import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
+import ModalExplanation from '../TestsList/ModalExplanation';
 
-function TestsCheckbox({ task, selectedTests, setSelectedTests, viewOnly }) {
+function TestsCheckbox({ task, selectedTests, setSelectedTests, viewOnly, testsOutputs }) {
+  
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedModalTest, setSelectedModalTest] = useState();
+  
+  const handleSelect = (value) => {
+    const selectedObject = testsOutputs.find((obj) => obj.name === value);
+    setSelectedModalTest(selectedObject);
+    onOpen();
+  };
+
   return (
     <div style={{ padding: '5%' }}>
       <Card>
@@ -32,6 +44,11 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, viewOnly }) {
                           {`${test.score} נק'`}
                         </td>
                       )}
+                      <td>
+                        <Button radius="full" size="sm" isIconOnly variant="faded" onClick={() => {}}>
+                          <ChatRoundedIcon style={{ color: '#005395', fontSize: 'medium' }} />
+                        </Button>
+                      </td>
                     </tr>
                   </React.Fragment>
                 ))}
@@ -41,6 +58,7 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, viewOnly }) {
         </StyledCheckboxDiv>
         {/* </ScrollShadow> */}
       </Card>
+      <ModalExplanation selectedValue={selectedModalTest} taskObject={task} isOpen={isOpen} onClose={onClose} />
     </div>
   );
 }
