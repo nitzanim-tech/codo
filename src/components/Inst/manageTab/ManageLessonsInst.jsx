@@ -9,45 +9,45 @@ function ManageLessonsInst() {
   const { app } = useFirebase();
   const [lessons, setLessons] = useState(null);
 
-  useEffect(() => {
-    const fetchLessons = async () => {
-      const allLessons = await getAllLessons({app});
-      setLessons(allLessons);
-    };
-    fetchLessons();
-  }, []);
+    useEffect(() => {
+      const fetchLessons = async () => {
+        const allLessons = await getAllLessons({ app });
+        setLessons(allLessons);
+      };
+      fetchLessons();
+    }, []);
 
-  return (
-    <>
-      {!lessons ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '30px' }}>
-          <CircularProgress />
-        </div>
-      ) : (
-        <div style={{ width: '50%' }}>
-          <Accordion dir="rtl" isCompact selectionMode={'multiple'}>
-            {Object.entries(lessons).map(([lesson, lessonData]) => (
-              <AccordionItem
-                key={`${lesson}`}
-                aria-label={`Accordion ${lessonData.lessonName}`}
-                title={lessonData.lessonName}
-                variant={'bordered'}
-              >
-                {lessonData.elements &&
-                  Object.entries(lessonData.elements).map(([element, file]) =>
-                    file.type === 'task' ? (
-                      <DevTaskCard index={file.index} text={file.name} isInst />
-                    ) : (
-                      <FileCard file={file} isInst />
-                    ),
-                  )}
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      )}
-    </>
-  );
+    return (
+      <>
+        {!lessons ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '30px' }}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <div style={{ width: '50%' }}>
+            <Accordion dir="rtl" isCompact selectionMode={'multiple'}>
+              {Object.entries(lessons).map(([lesson, lessonData]) => (
+                <AccordionItem
+                  key={`${lesson}`}
+                  aria-label={`Accordion ${lessonData.lessonName}`}
+                  title={lessonData.lessonName}
+                  variant={'bordered'}
+                >
+                  {lessonData.elements &&
+                    Object.entries(lessonData.elements).map(([elementId, element]) =>
+                      element.type === 'task' ? (
+                        <DevTaskCard index={element.index} text={element.name} isInst setting={element?.setting} />
+                      ) : (
+                        <FileCard file={element} isInst />
+                      ),
+                    )}
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        )}
+      </>
+    );
 }
 
 export default ManageLessonsInst;

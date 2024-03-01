@@ -9,9 +9,9 @@ const getAllLessons = async ({ app, group = 'abc' }) => {
       name: 'נווה חמציצים',
       id: 'wwO8Vu',
       elements: {
-        '6f08bfceb68f': { isVisable: true },
-        bc63b88c686a: { isVisable: true, showTest: true, showReview: false, isChallage: true },
-        '769abb0264bf': { isVisable: true, showTest: true, showReview: false, isChallage: false },
+        '6f08bfceb68f': { isVisible: true },
+        bc63b88c686a: { isVisible: true, showTest: true, showReview: false, isChallage: true },
+        '769abb0264bf': { isVisible: true, showTest: true, showReview: false, isChallage: false },
       },
     };
     const snapshot = await get(lessonsRef);

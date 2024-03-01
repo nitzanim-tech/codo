@@ -33,7 +33,7 @@ const FileCard = ({ file, isInst }) => {
   );
 };
 
-const DevTaskCard = ({ index, text, isInst }) => {
+const DevTaskCard = ({ index, text, isInst, setting }) => {
   return (
     <Card key={index} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -43,7 +43,7 @@ const DevTaskCard = ({ index, text, isInst }) => {
           </Button>
           {text}
         </div>
-        {isInst && <InstTaskButtons />}
+        {isInst && <InstTaskButtons setting={setting} />}
       </div>
     </Card>
   );
@@ -51,11 +51,12 @@ const DevTaskCard = ({ index, text, isInst }) => {
 
 export { FileCard, DevTaskCard };
 
-const InstTaskButtons = () => {
-  const [isVisible, setIsVisible] = useState(true);
-  const [showTest, setShowTest] = useState(true);
-  const [showReview, setShowReview] = useState(false);
-  const [challenge, setChallenge] = useState(false);
+const InstTaskButtons = ({ setting }) => {
+  console.log(setting);
+  const [isVisible, setIsVisible] = useState(setting?.isVisible || false);
+  const [showTest, setShowTest] = useState(setting?.showTest || false);
+  const [showReview, setShowReview] = useState(setting?.showReview || false);
+  const [challenge, setChallenge] = useState(setting?.isChallenge || false);
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);

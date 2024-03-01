@@ -38,7 +38,7 @@ function Home() {
         </div>
       ) : userData ? (
         <Grid container spacing={1} columns={3} rows={1}>
-          <Grid item style={{ width: '70%', margin: '30px' }}>
+          <Grid item style={{ width: '50%', margin: '30px' }}>
             <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
               {Object.entries(lessons).map(([lesson, lessonData]) => (
                 <AccordionItem
@@ -46,17 +46,16 @@ function Home() {
                   aria-label={`Accordion ${lessonData.lessonName}`}
                   title={lessonData.lessonName}
                 >
-                  {Object.entries(lessonData.elements).map(([elementId, file]) =>
-                    file.type === 'task' ? (
+                  {Object.entries(lessonData.elements).map(([elementId, element]) =>
+                    element.type === 'task' ? (
                       <TaskCard
-                        key={file.name}
-                        taskId={file.index}
-                        text={file.name}
-                        studentData={userData.submissions ? userData.submissions[file.index] : null}
-                        isChallenge={file.setting?.isChallage || null}
+                        taskId={element.index}
+                        text={element.name}
+                        studentData={userData.submissions ? userData.submissions[element.index] : null}
+                        isChallenge={element.setting?.isChallage || null}
                       />
                     ) : (
-                      <FileCard file={file} />
+                      <FileCard file={element} />
                     ),
                   )}
                 </AccordionItem>
@@ -94,13 +93,13 @@ const clearUnvisable = (lessons) => {
   const lessonsArray = Object.values(lessons);
 
   const filteredLessons = lessonsArray.filter((lesson) => {
-    const visibleElements = Object.values(lesson.elements).filter((element) => element.setting?.isVisable);
+    const visibleElements = Object.values(lesson.elements).filter((element) => element.setting?.isVisible);
     return visibleElements.length > 0;
   });
 
   return filteredLessons.map((lesson) => {
     const visibleElements = Object.entries(lesson.elements).reduce((acc, [elementId, element]) => {
-      if (element.setting?.isVisable) {
+      if (element.setting?.isVisible) {
         acc[elementId] = element;
       }
       return acc;

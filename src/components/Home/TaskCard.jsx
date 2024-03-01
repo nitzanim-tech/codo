@@ -1,4 +1,4 @@
-import { Button, Card, IconButton } from '@mui/material';
+import { Button, Card, Divider } from '@mui/material';
 import { Tooltip, Badge, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import GradingIcon from '@mui/icons-material/Grading';
@@ -9,7 +9,6 @@ import formatDate from '../../util/formatDate';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
 function TaskCard({ text, taskId, studentData, isChallenge }) {
-  console.log(isChallenge);
   const findReviews = (trials) => {
     return trials
       .filter((trial) => trial.review)
@@ -37,6 +36,15 @@ function TaskCard({ text, taskId, studentData, isChallenge }) {
               <BorderColorRoundedIcon style={{ color: '#005395' }} />
             </Button>
             {text}
+          </div>
+          <div style={{ width: '40%', textAlign: 'left' }}>
+            {isChallenge && (
+              <Tooltip content="אתגר">
+                <StarRateRoundedIcon style={{ color: '#005395' }} />
+              </Tooltip>
+            )}
+            {/* <Divider orientation="vertical" variant="middle" flexItem /> */}
+
             {studentData ? (
               <Tooltip content="בוצע">
                 <CheckCircleOutlineRoundedIcon
@@ -46,18 +54,6 @@ function TaskCard({ text, taskId, studentData, isChallenge }) {
             ) : (
               <Tooltip content="טרם בוצע">
                 <RadioButtonUncheckedRoundedIcon sx={{ marginRight: '15px', color: 'grey' }} />
-              </Tooltip>
-            )}
-          </div>
-          <div style={{ width: '40%', textAlign: 'left' }}>
-            {/* <Tooltip content="לפורום">
-              <Button disabled>
-                <QuestionAnswerIcon />
-              </Button>
-            </Tooltip> */}
-            {isChallenge && (
-              <Tooltip content="אתגר">
-                <StarRateRoundedIcon style={{ color: '#005395' }} />
               </Tooltip>
             )}
 
