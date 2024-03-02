@@ -44,7 +44,7 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, viewOnly, testsO
                         </td>
                       )}
                       <td>
-                        {testsOutputs && (
+                        {testsOutputs && index < testsOutputs.length && (
                           <Button
                             isDisabled={!testsOutputs}
                             radius="full"
