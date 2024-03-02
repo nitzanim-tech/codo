@@ -6,10 +6,9 @@ import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import ModalExplanation from '../TestsList/ModalExplanation';
 
 function TestsCheckbox({ task, selectedTests, setSelectedTests, viewOnly, testsOutputs }) {
-  
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedModalTest, setSelectedModalTest] = useState();
-  
+
   const handleSelect = (value) => {
     const selectedObject = testsOutputs.find((obj) => obj.name === value);
     setSelectedModalTest(selectedObject);
@@ -45,9 +44,18 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, viewOnly, testsO
                         </td>
                       )}
                       <td>
-                        <Button radius="full" size="sm" isIconOnly variant="faded" onClick={() => {}}>
-                          <ChatRoundedIcon style={{ color: '#005395', fontSize: 'medium' }} />
-                        </Button>
+                        {testsOutputs && (
+                          <Button
+                            isDisabled={!testsOutputs}
+                            radius="full"
+                            size="sm"
+                            isIconOnly
+                            variant="faded"
+                            onClick={() => handleSelect(test.name)}
+                          >
+                            <ChatRoundedIcon style={{ color: '#005395', fontSize: 'medium' }} />
+                          </Button>
+                        )}
                       </td>
                     </tr>
                   </React.Fragment>

@@ -7,10 +7,9 @@ import { PyodideProvider } from '../IDE/PyodideProvider';
 import SendReviewButton from './SendReviewButton';
 import RunTestButtonReview from './RunTestButtonReview';
 
-export default function ReviewComponent({ version, selectedTests, testsAmount }) {
+export default function ReviewComponent({ version, selectedTests, testsAmount, setTestsOutputs }) {
   const [errorText, setErrorText] = useState('');
   const [generalReview, setGeneralReview] = useState(version.review ? version.review.general : '');
-  const [testsOutputs, setTestsOutputs] = useState();
   const comments = useRef(version.review ? version.review.comments : {});
 
   const handlePreviewClick = () => {
@@ -19,11 +18,6 @@ export default function ReviewComponent({ version, selectedTests, testsAmount })
     localStorage.setItem('checkedSubmit', JSON.stringify(checkedSubmit));
     window.open('/readReview', '_blank');
   };
-
-  useEffect(() => {
-    console.log(testsOutputs);
-  }, [testsOutputs]);
-
   return (
     <div style={{ marginTop: '25px ' }}>
       <ReviewEditor version={version} comments={comments} />

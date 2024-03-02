@@ -40,7 +40,7 @@ function Home() {
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
             <Grid container spacing={1} columns={3} rows={1}>
-              <Grid item style={{ width: '60%', margin: '2%' }}>
+              <Grid item style={{ width: '55%', margin: '2%' }}>
                 <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
                   {Object.entries(lessons).map(([lessonId, lessonData]) => (
                     <AccordionItem
@@ -48,7 +48,6 @@ function Home() {
                       aria-label={`Accordion ${lessonData.lessonName}`}
                       title={lessonData.lessonName}
                     >
-                      {console.log(userData.submissions)}
                       {Object.entries(lessonData.elements).map(([elementId, element]) =>
                         element.type === 'task' ? (
                           <TaskCard
@@ -66,7 +65,7 @@ function Home() {
                 </Accordion>
               </Grid>
 
-              <Grid item style={{ width: '30%' }}>
+              <Grid item style={{ width: '35%' }}>
                 <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
               </Grid>
             </Grid>

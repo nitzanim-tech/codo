@@ -50,7 +50,7 @@ function ManageLessons() {
                   {lessonData.elements &&
                     Object.entries(lessonData.elements).map(([elementId, file]) =>
                       file.type === 'task' ? (
-                        <DevTaskCard key={elementId} index={file.index} text={file.name} />
+                        <DevTaskCard key={elementId} index={`${lessonId}-${file.index}`} text={file.name} />
                       ) : (
                         <FileCard key={elementId} file={file} />
                       ),

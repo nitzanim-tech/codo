@@ -58,19 +58,19 @@ function TaskCard({ text, taskId, studentData, isChallenge }) {
             )}
 
             <Dropdown aria-label="Versions menu">
-              <Tooltip content="למשוב">
-                <DropdownTrigger>
-                  <Button disabled={submitsWithReview.length === 0} onClick={() => {}}>
-                    {submitsWithReview.length > 1 ? (
-                      <Badge variant="flat" size="sm" content={submitsWithReview.length} color="primary">
-                        <GradingIcon />
-                      </Badge>
-                    ) : (
+              {/* <Tooltip content="למשוב"> */}
+              <DropdownTrigger>
+                <Button disabled={submitsWithReview.length === 0} onClick={() => {}}>
+                  {submitsWithReview.length > 1 ? (
+                    <Badge variant="flat" size="sm" content={submitsWithReview.length} color="primary">
                       <GradingIcon />
-                    )}
-                  </Button>
-                </DropdownTrigger>
-              </Tooltip>
+                    </Badge>
+                  ) : (
+                    <GradingIcon />
+                  )}
+                </Button>
+              </DropdownTrigger>
+              {/* </Tooltip> */}
 
               <DropdownMenu>
                 {submitsWithReview.map((submit, index) => (
