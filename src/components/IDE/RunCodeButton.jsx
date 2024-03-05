@@ -33,7 +33,7 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
         },
       });
 
-    pyodide.runPython(`
+      pyodide.runPython(`
     import customPrint
     def print(*args, sep=" "):
         prompt = sep.join(str(arg) for arg in args)
@@ -51,6 +51,12 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
       sys.stdout = io.StringIO()
     `);
 
+      const asyncInputCode = modifyInputCalls(code);
+
+      // const asyncCode = `async def pythonCodeWrapper():\n${asyncInputCode
+      //   .split('\n')
+      //   .map((line) => `  ${line}`)
+      //   .join('\n')}\n  pass\nawait pythonCodeWrapper()`;
       const asyncCode = `async def pythonCodeWrapper():\n${code
         .split('\n')
         .map((line) => {
@@ -60,8 +66,10 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
           return '  ' + line;
         })
         .join('\n')}\n  pass\nawait pythonCodeWrapper()`;
+
+      console.log(asyncCode);
       await pyodide.runPythonAsync(asyncCode);
-        const result = pyodide.runPython('sys.stdout.getvalue()');
+      const result = pyodide.runPython('sys.stdout.getvalue()');
 
       setOutput((output) => output + result);
     } catch (error) {
@@ -85,3 +93,44 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
 
 export default RunCodeButton;
 
+function modifyInputCalls(code) {
+  const lines = code.split('\n');
+  const modifiedLines = [];
+  const inputCallers = new Set();
+
+  function extractFunctionName(line) {
+    return line.split('(')[0].split(' ')[1];
+  }
+
+  function findCallerFunction(index) {
+    for (let j = index - 1; j >= 0; j--) {
+      const prevLine = lines[j];
+      if (prevLine.startsWith('def ')) {
+        const functionName = extractFunctionName(prevLine);
+        inputCallers.add(functionName);
+        break;
+      }
+    }
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.includes('input(')) {
+      modifiedLines.push(line.replace('input(', 'await input('));
+      findCallerFunction(i);
+    } else {
+      modifiedLines.push(line);
+    }
+  }
+
+  for (const caller of inputCallers) {
+    for (let i = 0; i < modifiedLines.length; i++) {
+      if (modifiedLines[i].includes(`${caller}(`)) {
+        modifiedLines[i] = modifiedLines[i].replace(`${caller}(`, `await ${caller}(`);
+      }
+    }
+  }
+
+  const modifiedCode = modifiedLines.join('\n');
+  return modifiedCode;
+}
