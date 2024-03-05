@@ -4,6 +4,8 @@ import ReactDiffViewer from 'react-diff-viewer-continued';
 import { highlight, languages } from 'prismjs';
 import { compareTwoStrings } from 'string-similarity';
 import DonutChart from '../Inst/Chart';
+import { ScrollShadow, Button, Tooltip } from '@nextui-org/react';
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 
 const DiffMethod = {
   CHARS: 'diffChars',
@@ -35,27 +37,42 @@ function TextCompare({ oldText, newText }) {
       </div>
 
       <div style={{ direction: 'ltr' }}>
-        <ReactDiffViewer
-          leftTitle={'הפלט שלך'}
-          rightTitle={'פלט הפתרון'}
-          oldValue={oldText}
-          newValue={newText}
-          splitView={true}
-          compareMethod={DiffMethod.CHARS}
-          hideLineNumbers={false}
-          renderContent={highlightSyntax}
-          hideGutters={true}
-          expandAllChunks={true}
-        />
+        <ScrollShadow className="h-[400px]" size={5}>
+          <ReactDiffViewer
+            leftTitle={'הפלט שלך'}
+            rightTitle={'פלט הפתרון'}
+            oldValue={oldText}
+            newValue={newText}
+            splitView={true}
+            compareMethod={DiffMethod.CHARS}
+            hideLineNumbers={false}
+            renderContent={highlightSyntax}
+            hideGutters={true}
+            expandAllChunks={true}
+          />
+        </ScrollShadow>
       </div>
     </>
   );
 }
 
 const DefaultExplanation = (selectedValue) => {
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText(selectedValue.input);
+  };
+
   return (
     <>
-      {selectedValue.input.trim() != '' && <p>עבור הקלט: {selectedValue.input}</p>}
+      {selectedValue.input.trim() !== '' && (
+        <>
+          <Tooltip content="העתק">
+            <Button radius="full" isIconOnly variant="faded" onClick={handleCopyClick}>
+              <ContentCopyRoundedIcon />
+            </Button>
+          </Tooltip>
+          <p>עבור הקלט: {selectedValue.input}</p>
+        </>
+      )}
       <TextCompare oldText={selectedValue.output} newText={selectedValue.ans} />
     </>
   );
