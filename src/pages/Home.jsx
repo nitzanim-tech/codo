@@ -4,7 +4,7 @@ import NavBar from '../components/NavBar/NavigateBar';
 
 import './Home.css';
 import { Button, Grid, Card } from '@mui/material';
-import { Accordion, AccordionItem, Tooltip, Badge } from '@nextui-org/react';
+import { Accordion, AccordionItem, Tooltip, Badge, ScrollShadow } from '@nextui-org/react';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import TaskCard from '../components/Home/TaskCard';
@@ -41,30 +41,31 @@ function Home() {
           <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
             <Grid container spacing={1} columns={3} rows={1}>
               <Grid item style={{ width: '55%', margin: '2%' }}>
-                <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
-                  {Object.entries(lessons).map(([lessonId, lessonData]) => (
-                    <AccordionItem
-                      key={`${lessonId}`}
-                      aria-label={`Accordion ${lessonData.lessonName}`}
-                      title={lessonData.lessonName}
-                    >
-                      {Object.entries(lessonData.elements).map(([elementId, element]) =>
-                        element.type === 'task' ? (
-                          <TaskCard
-                            taskId={elementId}
-                            text={element.name}
-                            studentData={userData.submissions ? userData.submissions[elementId] : null}
-                            isChallenge={element.setting?.isChallenge || null}
-                          />
-                        ) : (
-                          <FileCard file={element} />
-                        ),
-                      )}
-                    </AccordionItem>
-                  ))}
-                </Accordion>
+                <ScrollShadow className="h-[550px]" size={5} >
+                  <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
+                    {Object.entries(lessons).map(([lessonId, lessonData]) => (
+                      <AccordionItem
+                        key={`${lessonId}`}
+                        aria-label={`Accordion ${lessonData.lessonName}`}
+                        title={lessonData.lessonName}
+                      >
+                        {Object.entries(lessonData.elements).map(([elementId, element]) =>
+                          element.type === 'task' ? (
+                            <TaskCard
+                              taskId={elementId}
+                              text={element.name}
+                              studentData={userData.submissions ? userData.submissions[elementId] : null}
+                              isChallenge={element.setting?.isChallenge || null}
+                            />
+                          ) : (
+                            <FileCard file={element} />
+                          ),
+                        )}
+                      </AccordionItem>
+                    ))}
+                  </Accordion>{' '}
+                </ScrollShadow>
               </Grid>
-
               <Grid item style={{ width: '35%' }}>
                 <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
               </Grid>
