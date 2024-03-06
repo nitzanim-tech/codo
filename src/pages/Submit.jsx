@@ -19,12 +19,14 @@ function Submit() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const taskFromDb = await getTaskById({ app, taskId: index, groupId: userData.group.id });
-      taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
-      setTaskData(taskFromDb);
-      const testNames = taskFromDb.tests.map((test) => test.name);
-      const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
-      setTestsOutputs(newEmptyTests);
+      if (userData) {
+        const taskFromDb = await getTaskById({ app, taskId: index, groupId: userData?.group.id });
+        taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
+        setTaskData(taskFromDb);
+        const testNames = taskFromDb.tests.map((test) => test.name);
+        const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
+        setTestsOutputs(newEmptyTests);
+      }
     };
 
     fetchData();

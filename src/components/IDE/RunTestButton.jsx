@@ -36,7 +36,7 @@ async function runTest({ code, tests }) {
   let testsOutputs = [];
   for (const test of tests) {
     const codeToRun = code + '\n' + (test.runningCode || '');
-    if (test.input){
+    if (test.input|| test.runningCode){
       const output = await runPython({ code: codeToRun, input: test.input.replace(/\n/g, '\\n') });
       testsOutputs.push({ input: test.input, output });
     }

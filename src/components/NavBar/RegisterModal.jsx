@@ -40,7 +40,7 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
         lastName: lastName,
         email: result.user.email,
         region: choosenRegion,
-        group: group,
+        group: group.id,
       };
       registerUserInDB({ user, uid: result.user.uid, app });
       setOpen(false);
