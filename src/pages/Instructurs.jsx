@@ -41,19 +41,20 @@ function Instructors() {
     const fetchData = async () => {
       let data = await getStudentsByGroup({ app: app, groupId: selectedGroup.id });
       data = data.filter((student) => !student.email.includes('@nitzanim.tech'));
+      data = getStudentGroups(userData.permissions, data);
       setStudentsRawData(data);
       setIsLoading(false);
     };
-    console.log(selectedGroup);
     selectedGroup && fetchData();
   }, [selectedGroup]);
 
   const handleChangeGroup = async (groupId) => {
     if (groupId != selectedGroup.id) {
-      const data = await getStudentsByGroup({ app, groupId });
-      const group = userData.permissions.find((group) => group && group.id === groupId);
+      const students = await getStudentsByGroup({ app, groupId });
+      const studentsWithGroup = getStudentGroups(userData.permissions, students);
+      const group = userData.permissions?.find((group) => group && group.id === groupId);
       setSelectedGroup(group || { id: groupId });
-      setStudentsRawData(data);
+      setStudentsRawData(studentsWithGroup);
     }
   };
 
@@ -93,11 +94,7 @@ function Instructors() {
                   </Tab>
                   <Tab key="students" title="חניכים" aria-label="Students tab">
                     <CenteredDiv>
-                      <StudentsTable
-                        isLoading={isLoading}
-                        studentsRawData={studentTableFormattedData(studentsRawData)}
-                        app={app}
-                      />
+                      <StudentsTable isLoading={isLoading} students={formatStudentTable(studentsRawData)} app={app} />
                     </CenteredDiv>
                   </Tab>
                   <Tab key="manage" title="מפגשים">
@@ -135,20 +132,27 @@ const CenteredDiv = styled.div`
   direction: ltr;
 `;
 
-const studentTableFormattedData = (data) => {
+const getStudentGroups = (permissions, students) => {
+  return students.map((student) => {
+    const group = permissions.find((permission) => permission && permission.id === student.group);
+    return { ...student, group: group || { id: student.group } };
+  });
+};
+
+
+const formatStudentTable = (data) => {
   if (data) {
-    return data.map((item, index) => {
+    return data.map((item) => {
       const { submissions, ...rest } = item;
       let subLength = 0;
       if (submissions) {
         if (Array.isArray(submissions)) subLength = submissions.length;
         else subLength = Object.keys(submissions).length;
       }
-
       return {
         ...rest,
-        id: index,
         uid: item.uid,
+        group:item.group.name,
         subLength,
       };
     });

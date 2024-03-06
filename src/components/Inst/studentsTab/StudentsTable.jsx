@@ -4,7 +4,7 @@ import { getKeyValue, Spinner } from '@nextui-org/react';
 import EditStudentButton from './EditStudentButton';
 import getGroups from '../../../requests/getGroups';
 
-export default function StudentsTable({ app, isLoading, studentsRawData }) {
+export default function StudentsTable({ app, isLoading, students }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
   const [groups, setGroups] = useState(null);
   
@@ -32,8 +32,8 @@ export default function StudentsTable({ app, isLoading, studentsRawData }) {
   };
 
   const sortedData =
-    studentsRawData &&
-    studentsRawData.sort((a, b) => {
+    students &&
+    students.sort((a, b) => {
       let first = a[sortDescriptor.column];
       let second = b[sortDescriptor.column];
       let cmp = (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1;

@@ -6,7 +6,6 @@ const getStudentsByGroup = async ({ app, groupId }) => {
   try {
     let filteredUsersRef = usersRef;
     if (groupId && groupId !== 'all') {
-      console.log({ group: groupId });
       filteredUsersRef = query(usersRef, orderByChild('group'), equalTo(groupId));
     }
     const snapshot = await get(filteredUsersRef);
