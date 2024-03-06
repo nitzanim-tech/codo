@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
 import { Tabs, Tab, Button } from '@nextui-org/react';
 import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
-import getStudentData from '../requests/getStudents';
+import getStudentsByGroup from '../requests/getStudents';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageLessonsInst from '../components/Inst/manageTab/ManageLessonsInst';
@@ -18,16 +18,9 @@ function Instructors() {
   const { app, userData } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
-  const [selectedGroup, setSelectedGroup] = useState(userData ? userData.group : []);
+  const [selectedGroup, setSelectedGroup] = useState(userData ? userData.group : null);
   const [unauthorized, setUnauthorized] = useState(true);
   const [tasksList, setTasksList] = useState(null);
-
-  useEffect(() => {
-    if (userData) {
-      setSelectedGroup(userData.group);
-      userData.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
-    }
-  }, [userData]);
 
   useEffect(() => {
     const fetchTasksData = async () => {
@@ -38,20 +31,28 @@ function Instructors() {
   }, []);
 
   useEffect(() => {
+    if (userData) {
+      setSelectedGroup(userData.group);
+      userData.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
+    }
+  }, [userData]);
+
+  useEffect(() => {
     const fetchData = async () => {
-      let data = await getStudentData({ app: app, groups: selectedGroup });
+      let data = await getStudentsByGroup({ app: app, groupId: selectedGroup.id });
       data = data.filter((student) => !student.email.includes('@nitzanim.tech'));
       setStudentsRawData(data);
       setIsLoading(false);
     };
-
-    if (selectedGroup.length > 0) fetchData();
+    console.log(selectedGroup);
+    selectedGroup && fetchData();
   }, [selectedGroup]);
 
-  const handleChangeGroup = async (newGroup) => {
-    if (newGroup != selectedGroup) {
-      const data = await getStudentData({ group: newGroup });
-      setSelectedGroup(newGroup);
+  const handleChangeGroup = async (groupId) => {
+    if (groupId != selectedGroup.id) {
+      const data = await getStudentsByGroup({ app, groupId });
+      const group = userData.permissions.find((group) => group && group.id === groupId);
+      setSelectedGroup(group || { id: groupId });
       setStudentsRawData(data);
     }
   };
@@ -74,14 +75,12 @@ function Instructors() {
                       style={{ marginLeft: '20px' }}
                       isDisabled={userData.permissions.length === 1}
                     >
-                      <b>{selectedGroup}</b>
+                      <b>{selectedGroup.name}</b>
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu onAction={(key) => handleChangeGroup(key)}>
                     {userData.permissions.map((group) => (
-                      <DropdownItem group="new" key={group}>
-                        {group}
-                      </DropdownItem>
+                      <DropdownItem key={group.id}>{group.name}</DropdownItem>
                     ))}
                   </DropdownMenu>
                 </Dropdown>

@@ -9,7 +9,9 @@ const getGroupsList = async ({ app }) => {
     const groups = snapshot.val();
 
     if (groups) {
-      return Object.entries(groups).map(([id, group]) => ({ id, name: group.name }));
+      const groupsList = Object.entries(groups).map(([id, group]) => ({ id, name: group.name }));
+      groupsList.push({ id: 'all', name: 'all' });
+      return groupsList;
     } else {
       console.error('No groups found');
       return [];
