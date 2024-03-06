@@ -100,7 +100,7 @@ function Instructors() {
                   <Tab key="manage" title="מפגשים">
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                       <ChangeSettingProvider>
-                        <ManageLessonsInst />
+                        <ManageLessonsInst group={selectedGroup} />
                       </ChangeSettingProvider>
                     </div>
                   </Tab>

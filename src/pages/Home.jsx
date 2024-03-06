@@ -19,7 +19,7 @@ function Home() {
 
   useEffect(() => {
     const fetchLessons = async () => {
-      const allLessons = await getAllLessons({ app, group: userData.group.id });
+      const allLessons = await getAllLessons({ app, groupId: userData.group.id });
       const clearedLessons = clearUnvisable(allLessons);
       setLessons(clearedLessons);
     };
