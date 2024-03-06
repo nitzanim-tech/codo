@@ -41,7 +41,7 @@ function Home() {
           <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
             <Grid container spacing={1} columns={3} rows={1}>
               <Grid item style={{ width: '55%', margin: '2%' }}>
-                <ScrollShadow className="h-[550px]" size={5} >
+                <ScrollShadow className="h-[550px]" size={5}>
                   <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
                     {Object.entries(lessons).map(([lessonId, lessonData]) => (
                       <AccordionItem
@@ -56,6 +56,7 @@ function Home() {
                               text={element.name}
                               studentData={userData.submissions ? userData.submissions[elementId] : null}
                               isChallenge={element.setting?.isChallenge || null}
+                              showReview={element.setting?.showReview || null}
                             />
                           ) : (
                             <FileCard file={element} />

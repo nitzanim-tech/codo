@@ -19,7 +19,7 @@ function Submit() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const taskFromDb = await getTaskById({ app, taskId: index });
+      const taskFromDb = await getTaskById({ app, taskId: index, groupId: userData.group.id });
       taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
       setTaskData(taskFromDb);
       const testNames = taskFromDb.tests.map((test) => test.name);
@@ -28,7 +28,7 @@ function Submit() {
     };
 
     fetchData();
-  }, [index]);
+  }, [index, userData]);
 
   return (
     <>
@@ -37,9 +37,7 @@ function Submit() {
         {taskData && testsOutputs && (
           <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
             <Grid item style={{ width: '20%' }}>
-              {((userData ? isReviewExist(userData.submissions, taskData.id) : false) || !taskData?.isTest) && (
-                <TestsList testsOutputs={testsOutputs} taskObject={taskData} />
-              )}
+              {taskData?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskData} />}
             </Grid>
 
             <Grid item style={{ width: '50%' }}>
@@ -47,9 +45,7 @@ function Submit() {
             </Grid>
 
             <Grid item style={{ width: '30%' }}>
-              {((userData ? isReviewExist(userData.submissions, taskData.id) : false) || !taskData?.isTest) && (
-                <Instructions taskObject={taskData} />
-              )}
+              {taskData?.setting?.showTest && <Instructions taskObject={taskData} />}
             </Grid>
           </Grid>
         )}
@@ -60,8 +56,8 @@ function Submit() {
 
 export default Submit;
 
-const isReviewExist = (submissions, taskId) => {
-  if (!submissions || !submissions[taskId]) return false;
-  for (const trial of submissions[taskId].trials) if (trial.review) return true;
-  return false;
-};
+// const isReviewExist = (submissions, taskId) => {
+//   if (!submissions || !submissions[taskId]) return false;
+//   for (const trial of submissions[taskId].trials) if (trial.review) return true;
+//   return false;
+// };

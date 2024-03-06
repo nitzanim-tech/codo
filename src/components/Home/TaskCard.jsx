@@ -8,7 +8,7 @@ import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUnch
 import formatDate from '../../util/formatDate';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
-function TaskCard({ text, taskId, studentData, isChallenge }) {
+function TaskCard({ text, taskId, studentData, isChallenge, showReview }) {
   const findReviews = (trials) => {
     return trials
       .filter((trial) => trial.review)
@@ -60,7 +60,7 @@ function TaskCard({ text, taskId, studentData, isChallenge }) {
             <Dropdown aria-label="Versions menu">
               {/* <Tooltip content="למשוב"> */}
               <DropdownTrigger>
-                <Button disabled={submitsWithReview.length === 0} onClick={() => {}}>
+                <Button disabled={!showReview || submitsWithReview.length === 0} onClick={() => {}}>
                   {submitsWithReview.length > 1 ? (
                     <Badge variant="flat" size="sm" content={submitsWithReview.length} color="primary">
                       <GradingIcon />
