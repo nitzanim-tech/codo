@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
 import getInsts from '../requests/manager/getInsts';
-import getCurrentUser from '../requests/getCurrentUser';
+// import getCurrentUser from '../requests/getCurrentUser';
 import getGroups from '../requests/getGroups';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Table, TableHeader, TableRow, TableCell, TableBody, TableColumn } from '@nextui-org/react';

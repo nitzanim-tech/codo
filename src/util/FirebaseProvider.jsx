@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getAnalytics } from 'firebase/analytics';
 import firebaseConfig from './firebaseConfig';
-import getCurrentUser from '../requests/getCurrentUser';
+import {getCurrentUser} from '../requests/getCurrentUser';
 
 export const FirebaseContext = createContext();
 
@@ -20,6 +20,7 @@ export const FirebaseProvider = ({ children }) => {
       if (user) {
         const current = await getCurrentUser({ app, id: user.uid });
         setUserData(current);
+        console.log(current);
       } else {
         setUserData(null);
       }

@@ -1,7 +1,7 @@
 import { getDatabase, ref, get } from 'firebase/database';
 import { reformatLessons } from '.././../util/reformatLessonDb';
 
-const getAllLessons = async ({ app, group = 'wwO8Vu' }) => {
+const getAllLessons = async ({ app, group }) => {
   try {
     const db = getDatabase(app);
 
@@ -19,13 +19,3 @@ const getAllLessons = async ({ app, group = 'wwO8Vu' }) => {
 };
 
 export default getAllLessons;
-
-// const groupData = {
-//   name: 'נווה חמציצים',
-//   id: 'wwO8Vu',
-//   elements: {
-//     '6f08bfceb68f': { isVisible: true },
-//     bc63b88c686a: { isVisible: true, showTest: true, showReview: false, isChallage: true },
-//     '769abb0264bf': { isVisible: true, showTest: true, showReview: false, isChallage: false },
-//   },
-// };

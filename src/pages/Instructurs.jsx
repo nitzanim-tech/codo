@@ -18,13 +18,13 @@ function Instructors() {
   const { app, userData } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
-  const [userGroup, setUserGroup] = useState(userData ? userData.group : []);
+  const [selectedGroup, setSelectedGroup] = useState(userData ? userData.group : []);
   const [unauthorized, setUnauthorized] = useState(true);
   const [tasksList, setTasksList] = useState(null);
 
   useEffect(() => {
     if (userData) {
-      setUserGroup(userData.group);
+      setSelectedGroup(userData.group);
       userData.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
     }
   }, [userData]);
@@ -39,19 +39,19 @@ function Instructors() {
 
   useEffect(() => {
     const fetchData = async () => {
-      let data = await getStudentData({ app: app, groups: userGroup });
+      let data = await getStudentData({ app: app, groups: selectedGroup });
       data = data.filter((student) => !student.email.includes('@nitzanim.tech'));
       setStudentsRawData(data);
       setIsLoading(false);
     };
 
-    if (userGroup.length > 0) fetchData();
-  }, [userGroup]);
+    if (selectedGroup.length > 0) fetchData();
+  }, [selectedGroup]);
 
   const handleChangeGroup = async (newGroup) => {
-    if (newGroup != userGroup) {
+    if (newGroup != selectedGroup) {
       const data = await getStudentData({ group: newGroup });
-      setUserGroup(newGroup);
+      setSelectedGroup(newGroup);
       setStudentsRawData(data);
     }
   };
@@ -74,7 +74,7 @@ function Instructors() {
                       style={{ marginLeft: '20px' }}
                       isDisabled={userData.permissions.length === 1}
                     >
-                      <b>{userGroup}</b>
+                      <b>{selectedGroup}</b>
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu onAction={(key) => handleChangeGroup(key)}>

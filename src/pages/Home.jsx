@@ -19,13 +19,13 @@ function Home() {
 
   useEffect(() => {
     const fetchLessons = async () => {
-      const allLessons = await getAllLessons({ app });
+      const allLessons = await getAllLessons({ app, group: userData.group.id });
       const clearedLessons = clearUnvisable(allLessons);
       setLessons(clearedLessons);
     };
 
-    fetchLessons();
-  }, []);
+    userData && fetchLessons();
+  }, [userData]);
 
   const allKeys = Object.keys(lessons).map((lesson) => lesson.toString());
 
