@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import { getKeyValue, Spinner } from '@nextui-org/react';
 import EditStudentButton from './EditStudentButton';
-import getGroups from '../../../requests/getGroups';
+import getGroups from '../../../requests/groups/getGroups';
 
 export default function StudentsTable({ app, isLoading, students }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
