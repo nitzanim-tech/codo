@@ -10,8 +10,10 @@ const getStudentsByGroup = async ({ app, groupId }) => {
     }
     const snapshot = await get(filteredUsersRef);
 
+
     const students = snapshot.val() || {};
     const studentArray = Object.entries(students).map(([uid, student]) => {
+      return { ...student, uid };
       return { ...student, uid };
     });
 

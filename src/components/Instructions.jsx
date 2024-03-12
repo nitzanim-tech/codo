@@ -9,12 +9,13 @@ export default function Instructions({ taskObject }) {
       <Accordion dir="rtl" variant="splitted" selectionMode="multiple" isCompact>
         <AccordionItem title="מה צריך לדעת?">
           <p style={{ marginBottom: '10px' }}>נושאים עיקריים: </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-            {taskObject.subjects && taskObject.subjects.map((subject) => (
-              <Chip key={subject} variant="faded">
-                {subject}
-              </Chip>
-            ))}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            {taskObject.subjects &&
+              taskObject.subjects.map((subject) => (
+                <Chip key={subject} variant="faded">
+                  {subject}
+                </Chip>
+              ))}
           </div>
         </AccordionItem>
 

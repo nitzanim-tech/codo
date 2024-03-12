@@ -10,8 +10,10 @@ import { CircularProgress, Chip, Button } from '@nextui-org/react';
 import addPermissionToUser from '../requests/manager/addPermission';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import { useFirebase } from '../util/FirebaseProvider';
+import { useFirebase } from '../util/FirebaseProvider';
 
 function Managers() {
+  const { app, auth, userData } = useFirebase();
   const { app, auth, userData } = useFirebase();
   const [groups, setGroups] = useState(null);
   const [instructorsData, setInstructorsData] = useState(null);
@@ -24,11 +26,21 @@ function Managers() {
       if (unauthorized !== shouldBeUnauthorized) {
         setUnauthorized(shouldBeUnauthorized);
       }
+  useEffect(() => {
+    if (userData) {
+      const shouldBeUnauthorized = !userData.email.includes('@nitzanim.tech');
+      if (unauthorized !== shouldBeUnauthorized) {
+        setUnauthorized(shouldBeUnauthorized);
+      }
     }
+  }, [userData]);
   }, [userData]);
 
   useEffect(() => {
     const fetchData = async () => {
+      const [instFromDb, groupsFromDb] = await Promise.all([getInsts({ app }), getGroups(app)]);
+      setGroups(groupsFromDb);
+      setInstructorsData(instFromDb);
       const [instFromDb, groupsFromDb] = await Promise.all([getInsts({ app }), getGroups(app)]);
       setGroups(groupsFromDb);
       setInstructorsData(instFromDb);
@@ -38,6 +50,8 @@ function Managers() {
 
   return (
     <>
+      <NavBar />
+      {instructorsData ? (
       <NavBar />
       {instructorsData ? (
         <>
@@ -115,6 +129,13 @@ function Managers() {
                                 userId: student.id,
                                 permission: newPermission,
                               });
+                              if (haveAdded) {
+                                const updatedPermissions = [...student.permissions, newPermission];
+                                const updatedInstructorsData = instructorsData.map((inst) =>
+                                  inst.id === student.id ? { ...inst, permissions: updatedPermissions } : inst,
+                                );
+                                setInstructorsData(updatedInstructorsData);
+                              }
                               if (haveAdded) {
                                 const updatedPermissions = [...student.permissions, newPermission];
                                 const updatedInstructorsData = instructorsData.map((inst) =>

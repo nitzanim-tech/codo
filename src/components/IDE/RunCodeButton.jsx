@@ -40,6 +40,12 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
         prompt = sep.join(str(arg) for arg in args)
         customPrint.print(prompt)
     `);
+    pyodide.runPython(`
+    import customPrint
+    def print(*args, sep=" "):
+        prompt = sep.join(str(arg) for arg in args)
+        customPrint.print(prompt)
+    `);
 
       pyodide.runPython(`
       import customInput
