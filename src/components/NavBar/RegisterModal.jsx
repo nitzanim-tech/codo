@@ -31,6 +31,8 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
     getGroupFromDb();
   }, []);
 
+
+  
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
