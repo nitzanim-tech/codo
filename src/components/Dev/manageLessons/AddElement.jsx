@@ -116,7 +116,6 @@ function AddElement({ tasksList, lesson, lastElementId }) {
                     } else {
                       elementData['link'] = linkInput;
                     }
-                    console.log(lastElementId)
                     const updated = await addElement({ app, lessonId: lesson, elementData, lastElementId });
                     updated ? setShowSent(true) : setShowError(true);
                   }}

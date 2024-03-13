@@ -67,7 +67,6 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
         })
         .join('\n')}\n  pass\nawait pythonCodeWrapper()`;
 
-      console.log(asyncCode);
       await pyodide.runPythonAsync(asyncCode);
       const result = pyodide.runPython('sys.stdout.getvalue()');
 

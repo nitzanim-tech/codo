@@ -36,11 +36,12 @@ async function runTest({ code, tests }) {
   let testsOutputs = [];
   for (const test of tests) {
     const codeToRun = code + '\n' + (test.runningCode || '');
-    if (test.input|| test.runningCode){
-      const output = await runPython({ code: codeToRun, input: test.input.replace(/\n/g, '\\n') });
-      testsOutputs.push({ input: test.input, output });
-    }
-    else break
+    try {
+      if (!test.isHidden) {
+        const output = await runPython({ code: codeToRun, input: test.input.replace(/\n/g, '\\n') });
+        testsOutputs.push({ input: test.input, output });
+      }
+    } catch {break}
   }
   return testsOutputs;
 }

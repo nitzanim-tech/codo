@@ -25,9 +25,7 @@ const FileCard = ({ file, isInst, setting, index }) => {
 };
 
 const DevTaskCard = ({ index, text, isInst, setting }) => {
-  {
-    console.log({ index, text, isInst, setting });
-  }
+
   const taskId = index.split('-')[1];
   return (
     <Card key={index} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
