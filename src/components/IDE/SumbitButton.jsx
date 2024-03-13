@@ -10,7 +10,7 @@ import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
 import { getTaskByIndex } from './getTaskByIndex';
 
-function SumbitButton({ code, testsOutputs, setRunTests, taskId }) {
+function SumbitButton({ code, testsOutputs, setRunTests, taskId, showTests }) {
   const { app, auth } = useFirebase();
   const [currentUser, setCurrentUser] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -71,7 +71,7 @@ function SumbitButton({ code, testsOutputs, setRunTests, taskId }) {
           <ModalHeader style={{ textAlign: 'center' }}>הגש</ModalHeader>
           <>
             <ModalBody style={{ textAlign: 'center' }}>
-              {testStatus && currentUser && <p>הקוד עבר {testStatus} טסטים</p>}
+              {testStatus && currentUser && showTests && <p>הקוד עבר {testStatus} טסטים</p>}
               {currentUser ? <p>האם ברצונך להגיש?</p> : <p>יש להרשם או להתחבר</p>}
               {succesfulySent && (
                 <p style={{ fontWeight: 'bold', color: '#005395' }}>

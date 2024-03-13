@@ -74,7 +74,7 @@ function ManageLessonsInst({ group }) {
                         index={`${lessonId}-${elementId}`}
                         text={element.name}
                         isInst
-                        setting={element?.setting}
+                        setting={element?.setting || {}}
                       />
                     ) : (
                       <FileCard file={element} index={`${lessonId}-${elementId}`} setting={element?.setting} isInst />

@@ -13,7 +13,7 @@ const tasks = [
   { c3194b8af385: 'הכנה 1 - מעלית' },
   { df3ef7216ca5: 'תנאים - אי שיוון המשולש' },
   { bed010d87c10: 'תרגול מונחה - השערת קולץ' },
-  { c0e095edfd28: '!תרגול מונחה - יאללה, למחזורית' },
+  { '0507467fcde3': 'בוחן 2 - ארבע בשורה' },
 ];
 function ManageLessons() {
   const { app } = useFirebase();
@@ -22,7 +22,7 @@ function ManageLessons() {
 
   useEffect(() => {
     const fetchLessons = async () => {
-      const allLessons = await getAllLessons({ app, groupId });
+      const allLessons = await getAllLessons({ app, groupId: '0' });
       setLessons(allLessons);
     };
     fetchLessons();
@@ -50,7 +50,7 @@ function ManageLessons() {
                   {lessonData.elements &&
                     Object.entries(lessonData.elements).map(([elementId, file]) =>
                       file.type === 'task' ? (
-                        <DevTaskCard key={elementId} index={`${lessonId}-${file.index}`} text={file.name} />
+                        <DevTaskCard key={elementId} index={`${lessonId}-${elementId}`} text={file.name} />
                       ) : (
                         <FileCard key={elementId} file={file} />
                       ),
