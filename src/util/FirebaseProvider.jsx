@@ -14,22 +14,25 @@ export const FirebaseProvider = ({ children }) => {
   const auth = getAuth(app);
   const [userData, setUserData] = useState(null);
   const [isUserLoading, setIsUserLoading] = useState(true); 
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        const shouldBeAuthorized = user.email.includes('@nitzanim.tech');
+        setIsAuthorized(shouldBeAuthorized);
         const current = await getCurrentUser({ app, id: user.uid });
         setUserData(current);
       } else {
         setUserData(null);
       }
-      setIsUserLoading(false); 
+      setIsUserLoading(false);
     });
     return () => unsubscribe();
   }, [auth]);
 
   return (
-    <FirebaseContext.Provider value={{ app, auth, userData, isUserLoading }}>
+    <FirebaseContext.Provider value={{ app, auth, userData, isUserLoading, isAuthorized }}>
       {children}
     </FirebaseContext.Provider>
   );
