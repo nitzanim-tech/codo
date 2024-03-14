@@ -16,6 +16,7 @@ import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettin
 
 function Instructors() {
   const { app, userData } = useFirebase();
+  const { app, userData } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(userData ? userData.group : null);
@@ -58,8 +59,11 @@ function Instructors() {
     }
   };
 
+
   return (
     <>
+      <NavBar />
+      {userData ? (
       <NavBar />
       {userData ? (
         <>
@@ -69,11 +73,13 @@ function Instructors() {
             <>
               <div dir="rtl">
                 <Dropdown aria-label="User Group Dropdown">
+                <Dropdown aria-label="User Group Dropdown">
                   <DropdownTrigger>
                     <Button
                       variant="bordered"
                       endContent={<ApartmentRoundedIcon />}
                       style={{ marginLeft: '20px' }}
+                      isDisabled={userData.permissions.length === 1}
                       isDisabled={userData.permissions.length === 1}
                     >
                       <b>{selectedGroup.name}</b>
@@ -87,6 +93,7 @@ function Instructors() {
                 </Dropdown>
 
                 <Tabs aria-label="Options">
+                  <Tab key="tasks" title="משימות" aria-label="Task tab">
                   <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
                       {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}{' '}

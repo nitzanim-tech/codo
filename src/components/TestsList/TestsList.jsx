@@ -9,10 +9,12 @@ import ModalExplanation from './ModalExplanation';
 export default function TestsList({ testsOutputs, taskObject }) {
   const [selectedValue, setSelectedValue] = useState(testsOutputs[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSelect = (value) => {
     const selectedObject = testsOutputs.find((obj) => obj.name === value);
     setSelectedValue(selectedObject);
+    onOpen();
     onOpen();
   };
 
