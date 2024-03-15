@@ -1,13 +1,12 @@
 import { getDatabase, ref, query, orderByChild, equalTo, get } from 'firebase/database';
 
-const getStudentData = async ({ app, groups }) => {
+const getStudentsByGroup = async ({ app, groupId }) => {
   const db = getDatabase(app);
   const usersRef = ref(db, 'users');
-
   try {
     let filteredUsersRef = usersRef;
-    if (groups && groups !== 'all') {
-      filteredUsersRef = query(usersRef, orderByChild('group'), equalTo(groups));
+    if (groupId && groupId !== 'all') {
+      filteredUsersRef = query(usersRef, orderByChild('group'), equalTo(groupId));
     }
     const snapshot = await get(filteredUsersRef);
 
@@ -23,4 +22,4 @@ const getStudentData = async ({ app, groups }) => {
   }
 };
 
-export default getStudentData;
+export default getStudentsByGroup;

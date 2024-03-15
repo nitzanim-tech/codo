@@ -1,4 +1,4 @@
-import { Button, Card } from '@mui/material';
+import { Button, Card, Divider } from '@mui/material';
 import { Tooltip, Badge, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import GradingIcon from '@mui/icons-material/Grading';
@@ -6,8 +6,9 @@ import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlin
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 import formatDate from '../../util/formatDate';
-function TaskCard({ text, taskId, studentData }) {
+import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
+function TaskCard({ text, taskId, studentData, isChallenge, showReview }) {
   const findReviews = (trials) => {
     return trials
       .filter((trial) => trial.review)
@@ -16,7 +17,7 @@ function TaskCard({ text, taskId, studentData }) {
         submitDate: trial.date,
         code: trial.code,
         selectedTests: trial.pass.reduce((acc, val, index) => (val === true ? [...acc, index] : acc), []),
-        task:taskId,
+        task: taskId,
       }));
   };
 
@@ -30,11 +31,20 @@ function TaskCard({ text, taskId, studentData }) {
     <>
       <Card dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={{ width: '40%' }}>
+          <div>
             <Button radius="full" variant="faded" onClick={() => onTaskButtonClick(taskId)}>
               <BorderColorRoundedIcon style={{ color: '#005395' }} />
             </Button>
             {text}
+          </div>
+          <div style={{ width: '40%', textAlign: 'left' }}>
+            {isChallenge && (
+              <Tooltip content="אתגר">
+                <StarRateRoundedIcon style={{ color: '#005395' }} />
+              </Tooltip>
+            )}
+            {/* <Divider orientation="vertical" variant="middle" flexItem /> */}
+
             {studentData ? (
               <Tooltip content="בוצע">
                 <CheckCircleOutlineRoundedIcon
@@ -46,28 +56,21 @@ function TaskCard({ text, taskId, studentData }) {
                 <RadioButtonUncheckedRoundedIcon sx={{ marginRight: '15px', color: 'grey' }} />
               </Tooltip>
             )}
-          </div>
-          <div style={{ width: '40%', textAlign: 'left' }}>
-            {/* <Tooltip content="לפורום">
-              <Button disabled>
-                <QuestionAnswerIcon />
-              </Button>
-            </Tooltip> */}
 
             <Dropdown aria-label="Versions menu">
-              <Tooltip content="למשוב">
-                <DropdownTrigger>
-                  <Button disabled={submitsWithReview.length === 0} onClick={() => {}}>
-                    {submitsWithReview.length > 1 ? (
-                      <Badge variant="flat" size="sm" content={submitsWithReview.length} color="primary">
-                        <GradingIcon />
-                      </Badge>
-                    ) : (
+              {/* <Tooltip content="למשוב"> */}
+              <DropdownTrigger>
+                <Button disabled={!showReview || submitsWithReview.length === 0} onClick={() => {}}>
+                  {submitsWithReview.length > 1 ? (
+                    <Badge variant="flat" size="sm" content={submitsWithReview.length} color="primary">
                       <GradingIcon />
-                    )}
-                  </Button>
-                </DropdownTrigger>
-              </Tooltip>
+                    </Badge>
+                  ) : (
+                    <GradingIcon />
+                  )}
+                </Button>
+              </DropdownTrigger>
+              {/* </Tooltip> */}
 
               <DropdownMenu>
                 {submitsWithReview.map((submit, index) => (

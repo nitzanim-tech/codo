@@ -8,22 +8,25 @@ export default function PassMatrix({ studentsRawData, tasksList }) {
     return passedTestsNumeric.reduce((sum, value, index) => sum + value * scores[index], 0);
   };
 
+  const findMaxGrade = ({ taskId, student }) => {
+    const submission = student.submissions ? student.submissions[taskId] || null : null;
+    if (submission && submission.trials) {
+      const maxGradeTrial = submission.trials.reduce((max, trial) => {
+        const grade = calculateGrade(tasksList[taskId].scores, trial.pass) / tasksList[taskId].scoreSum;
+        return Math.max(max, grade);
+      }, 0);
+      return maxGradeTrial;
+    }
+    return -1;
+  };
+
   const taskData = studentsRawData.map((student) => {
     const maxGrades = [...tasks].reverse().map((task) => {
-      const taskId = task.key;
-      const submission = student && student.submissions ? student.submissions[taskId] : null;
-      if (submission && submission.trials) {
-        const maxGradeTrial = submission.trials.reduce((max, trial) => {
-          const grade = calculateGrade(tasksList[taskId].scores, trial.pass) / tasksList[taskId].scoreSum;
-          return Math.max(max, grade);
-        }, 0);
-        return maxGradeTrial;
-      }
-      return -1;
+      return findMaxGrade({ taskId: task.key, student });
     });
     return {
       uid: student.uid,
-      name: student.name + ' ' + student.lastName,
+      name: `${student.name} ${student.lastName}`,
       maxGrades,
     };
   });
@@ -73,7 +76,7 @@ export default function PassMatrix({ studentsRawData, tasksList }) {
               {student.maxGrades.map((grade, index) => (
                 <TableCell key={index} width={'10px'}>
                   <div style={{ backgroundColor: getColor(grade), height: '100%', width: '100%' }}>
-                    <p style={{ color: getColor(grade), fontSize: '12px' }}>{grade > 0 && grade.toFixed(2)}</p>
+                    <p style={{ color: getColor(grade), fontSize: '12px' }}>{grade >= 0 && grade.toFixed(2)}</p>
                   </div>
                 </TableCell>
               ))}

@@ -40,7 +40,7 @@ const DevTasksTab = () => {
                 <TableCell>{task.name}</TableCell>
                 <TableCell>{task.code ? 'default' : 'custom'}</TableCell>
 
-                <TableCell>{task.tests.length}</TableCell>
+                <TableCell>{task.tests?.length}</TableCell>
                 <TableCell>
                   {task.subjects &&
                     task.subjects.map((subject) => (

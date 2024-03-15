@@ -10,7 +10,7 @@ import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
 import { getTaskByIndex } from './getTaskByIndex';
 
-function SumbitButton({ code, testsOutputs, setRunTests, taskId }) {
+function SumbitButton({ code, testsOutputs, setRunTests, taskId, showTests }) {
   const { app, auth } = useFirebase();
   const [currentUser, setCurrentUser] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -34,8 +34,8 @@ function SumbitButton({ code, testsOutputs, setRunTests, taskId }) {
   function countCorrectTests(tests) {
     const total = tests.length;
     const correct = tests.filter((test) => test.correct).length;
-    const taskObject = getTaskByIndex({ index: taskId });
-    if (!taskObject?.hideTests) setTestStatus(`${correct}/${total}`);
+    // const taskObject = getTaskByIndex({ index: taskId });
+    if (showTests) setTestStatus(`${correct}/${total}`);
   }
 
   const runTestBeforeSumbit = () => {

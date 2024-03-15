@@ -4,7 +4,6 @@ import PlayCircleRoundedIcon from '@mui/icons-material/PlayCircleRounded';
 import { Tooltip, Button } from '@nextui-org/react';
 import { usePyodide } from './PyodideProvider.jsx';
 import { cleanTraceback } from '../../util/cleanTraceback.js';
-import { cleanTraceback } from '../../util/cleanTraceback.js';
 
 
 function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
@@ -68,7 +67,6 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
         })
         .join('\n')}\n  pass\nawait pythonCodeWrapper()`;
 
-      console.log(asyncCode);
       await pyodide.runPythonAsync(asyncCode);
       const result = pyodide.runPython('sys.stdout.getvalue()');
 

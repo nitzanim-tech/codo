@@ -6,27 +6,27 @@ import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import GoogleIcon from '@mui/icons-material/Google';
 import { registerUserInDB } from '../../requests/registerUser';
-import getGroups from '../../requests/getGroups';
+import getGroupsByRegion from '../../requests/groups/getGroupsByRegion';
 
 const RegisterModal = ({ app, auth, open, setOpen }) => {
-  const [groups, setGroups] = useState(null);
+  const [regions, setRegions] = useState(null);
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [group, setGroup] = useState('');
+  const [choosenGroup, setChoosenGroup] = useState('');
   const [choosenRegion, setChoosenRegion] = useState('');
-  const [currentUser, setCurrentUser] = useState(null);
+  // const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-    });
-    return unsubscribe;
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged((user) => {
+  //     setCurrentUser(user);
+  //   });
+  //   return unsubscribe;
+  // }, []);
 
   useEffect(() => {
     const getGroupFromDb = async () => {
-      const groupFromDB = await getGroups(app);
-      setGroups(groupFromDB);
+      const regionsFromDB = await getGroupsByRegion(app);
+      setRegions(regionsFromDB);
     };
     getGroupFromDb();
   }, []);
@@ -40,11 +40,10 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
         lastName: lastName,
         email: result.user.email,
         region: choosenRegion,
-        group: group,
+        group: choosenGroup,
       };
       registerUserInDB({ user, uid: result.user.uid, app });
       setOpen(false);
-      console.log(result.user);
     } catch (error) {
       console.log(error.message);
     }
@@ -65,31 +64,33 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
               value={choosenRegion}
               onChange={(e) => {
                 setChoosenRegion(e.target.value);
-                setGroup('');
+                setChoosenGroup(null);
               }}
               dir="rtl"
             >
-              {groups &&
-                Object.keys(groups).map((region) => (
-                  <SelectItem key={region} value={region} dir="rtl">
-                    {region}
+              {regions &&
+                regions.map((region) => (
+                  <SelectItem key={region.id} value={region} dir="rtl">
+                    {region.name}
                   </SelectItem>
                 ))}
             </Select>
 
             <Select
               label="קבוצה"
-              value={group}
-              onChange={(e) => setGroup(e.target.value)}
+              value={choosenGroup}
+              onChange={(e) => setChoosenGroup(e.target.value)}
               dir="rtl"
               disabled={!choosenRegion}
             >
               {choosenRegion &&
-                groups[choosenRegion].map((group) => (
-                  <SelectItem key={group} value={group} dir="rtl">
-                    {group}
-                  </SelectItem>
-                ))}
+                regions
+                  .find((region) => region && region.id === choosenRegion)
+                  ?.groups.map((group) => (
+                    <SelectItem key={group.id} value={group} dir="rtl">
+                      {group.name}
+                    </SelectItem>
+                  ))}
             </Select>
 
             <Divider />
@@ -97,7 +98,7 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
             <Button
               onClick={handleGoogleSignIn}
               startContent={<GoogleIcon />}
-              isDisabled={!name || !lastName || !group}
+              isDisabled={!name || !lastName || !choosenGroup}
             >
               הרשמה באמצעות גוגל
             </Button>

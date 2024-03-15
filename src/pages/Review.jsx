@@ -14,6 +14,7 @@ function Review() {
   const [version, setVersion] = useState(null);
   const [selectedTests, setSelectedTests] = useState([]);
   const [taskData, setTaskData] = useState(null);
+    const [testsOutputs, setTestsOutputs] = useState();
 
   useEffect(() => {
     const storedVersion = localStorage.getItem('versionToCheck');
@@ -54,6 +55,7 @@ function Review() {
                     version={version}
                     selectedTests={selectedTests}
                     testsAmount={taskData.tests.length}
+                    setTestsOutputs={setTestsOutputs}
                   />
                 </Card>
               </div>
@@ -76,6 +78,7 @@ function Review() {
                 task={taskData}
                 selectedTests={selectedTests}
                 setSelectedTests={setSelectedTests}
+                testsOutputs={testsOutputs}
               />
             </Grid>
           </Grid>

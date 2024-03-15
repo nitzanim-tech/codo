@@ -4,9 +4,7 @@ import { ModalFooter, useDisclosure, Modal, ModalHeader } from '@nextui-org/reac
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
-
-import { DefaultExplanation } from './DefaultExplanation';
-import { getTaskExplanation } from '../../Tasks/TaskComponents';
+import ModalExplanation from './ModalExplanation';
 
 export default function TestsList({ testsOutputs, taskObject }) {
   const [selectedValue, setSelectedValue] = useState(testsOutputs[0]);
@@ -46,36 +44,10 @@ export default function TestsList({ testsOutputs, taskObject }) {
           ))}
         </Listbox>
       </ListboxWrapper>
-
-      <Modal isOpen={isOpen} onClose={onClose} dir="rtl" hideCloseButton size="3xl">
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader>
-                {selectedValue.correct ? (
-                  <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
-                ) : (
-                  <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
-                )}
-                {selectedValue.name}
-              </ModalHeader>
-
-              <ModalBody>
-                {taskObject.code
-                  ? DefaultExplanation(selectedValue)
-                  : getTaskExplanation({ task: taskObject.id, selectedValue })}
-              </ModalBody>
-              <ModalFooter>
-                <button onClick={onClose}>סגור</button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      <ModalExplanation selectedValue={selectedValue} taskObject={taskObject} isOpen={isOpen} onClose={onClose} />
     </>
   );
 }
-
 
 
 const ListboxWrapper = ({ children }) => (

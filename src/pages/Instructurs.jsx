@@ -2,31 +2,25 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
 import { Tabs, Tab, Button } from '@nextui-org/react';
 import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
-import getStudentData from '../requests/getStudents';
+import getStudentsByGroup from '../requests/getStudents';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
-import ManageTasks from '../components/Inst/manageTab/ManageTasks';
+import ManageLessonsInst from '../components/Inst/manageTab/ManageLessonsInst';
 import { CircularProgress } from '@nextui-org/react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import PassMatrix from '../components/Inst/statusTab/PassMatrix';
 import { useFirebase } from '../util/FirebaseProvider';
 import styled from 'styled-components';
 import getTasksData from '../requests/tasks/getTasksData';
+import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettingProvider';
 
 function Instructors() {
   const { app, userData } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
-  const [userGroup, setUserGroup] = useState(userData ? userData.group : []);
+  const [selectedGroup, setSelectedGroup] = useState(userData ? userData.group : null);
   const [unauthorized, setUnauthorized] = useState(true);
   const [tasksList, setTasksList] = useState(null);
-
-  useEffect(() => {
-    if (userData) {
-      setUserGroup(userData.group);
-      userData.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
-    }
-  }, [userData]);
 
   useEffect(() => {
     const fetchTasksData = async () => {
@@ -37,21 +31,30 @@ function Instructors() {
   }, []);
 
   useEffect(() => {
+    if (userData) {
+      setSelectedGroup(userData.group);
+      userData.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
+    }
+  }, [userData]);
+
+  useEffect(() => {
     const fetchData = async () => {
-      let data = await getStudentData({ app: app, groups: userGroup });
+      let data = await getStudentsByGroup({ app: app, groupId: selectedGroup.id });
       data = data.filter((student) => !student.email.includes('@nitzanim.tech'));
+      data = getStudentGroups(userData.permissions, data);
       setStudentsRawData(data);
       setIsLoading(false);
     };
+    selectedGroup && fetchData();
+  }, [selectedGroup]);
 
-    if (userGroup.length > 0) fetchData();
-  }, [userGroup]);
-
-  const handleChangeGroup = async (newGroup) => {
-    if (newGroup != userGroup) {
-      const data = await getStudentData({ group: newGroup });
-      setUserGroup(newGroup);
-      setStudentsRawData(data);
+  const handleChangeGroup = async (groupId) => {
+    if (groupId != selectedGroup.id) {
+      const students = await getStudentsByGroup({ app, groupId });
+      const studentsWithGroup = getStudentGroups(userData.permissions, students);
+      const group = userData.permissions?.find((group) => group && group.id === groupId);
+      setSelectedGroup(group || { id: groupId });
+      setStudentsRawData(studentsWithGroup);
     }
   };
 
@@ -73,14 +76,12 @@ function Instructors() {
                       style={{ marginLeft: '20px' }}
                       isDisabled={userData.permissions.length === 1}
                     >
-                      <b>{userGroup}</b>
+                      <b>{selectedGroup.name}</b>
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu onAction={(key) => handleChangeGroup(key)}>
                     {userData.permissions.map((group) => (
-                      <DropdownItem group="new" key={group}>
-                        {group}
-                      </DropdownItem>
+                      <DropdownItem key={group.id}>{group.name}</DropdownItem>
                     ))}
                   </DropdownMenu>
                 </Dropdown>
@@ -88,21 +89,21 @@ function Instructors() {
                 <Tabs aria-label="Options">
                   <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
-                      {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}{' '}
+                      {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}
                     </div>
                   </Tab>
                   <Tab key="students" title="חניכים" aria-label="Students tab">
                     <CenteredDiv>
-                      <StudentsTable
-                        isLoading={isLoading}
-                        studentsRawData={studentTableFormattedData(studentsRawData)}
-                        app={app}
-                      />
+                      <StudentsTable isLoading={isLoading} students={formatStudentTable(studentsRawData)} app={app} />
                     </CenteredDiv>
                   </Tab>
-                  {/* <Tab key="manage" title="ניהול משימות">
-            <ManageTasks isLoading={isLoading} studentsRawData={studentTableFormattedData(studentsRawData)} />
-          </Tab> */}
+                  <Tab key="manage" title="מפגשים">
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                      <ChangeSettingProvider>
+                        <ManageLessonsInst group={selectedGroup} />
+                      </ChangeSettingProvider>
+                    </div>
+                  </Tab>
                   <Tab key="status" title="סטטוס">
                     <CenteredDiv>
                       <PassMatrix studentsRawData={studentsRawData} tasksList={tasksList} />
@@ -131,20 +132,27 @@ const CenteredDiv = styled.div`
   direction: ltr;
 `;
 
-const studentTableFormattedData = (data) => {
+const getStudentGroups = (permissions, students) => {
+  return students.map((student) => {
+    const group = permissions.find((permission) => permission && permission.id === student.group);
+    return { ...student, group: group || { id: student.group } };
+  });
+};
+
+
+const formatStudentTable = (data) => {
   if (data) {
-    return data.map((item, index) => {
+    return data.map((item) => {
       const { submissions, ...rest } = item;
       let subLength = 0;
       if (submissions) {
         if (Array.isArray(submissions)) subLength = submissions.length;
         else subLength = Object.keys(submissions).length;
       }
-
       return {
         ...rest,
-        id: index,
         uid: item.uid,
+        group:item.group.name,
         subLength,
       };
     });
