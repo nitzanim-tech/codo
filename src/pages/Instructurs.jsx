@@ -89,7 +89,7 @@ function Instructors() {
                 <Tabs aria-label="Options">
                   <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
-                      {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}{' '}
+                      {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}
                     </div>
                   </Tab>
                   <Tab key="students" title="חניכים" aria-label="Students tab">
