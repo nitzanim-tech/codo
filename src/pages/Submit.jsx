@@ -9,11 +9,16 @@ import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import getTaskById from '../requests/tasks/getTaskById';
+import { useFirebase } from '../util/FirebaseProvider';
+import getTaskById from '../requests/tasks/getTaskById';
 import './Submit.css';
 
 function Submit() {
   const { app, userData } = useFirebase();
+  const { app, userData } = useFirebase();
   const { index } = useParams();
+  const [taskData, setTaskData] = useState(null);
+  const [testsOutputs, setTestsOutputs] = useState(null);
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState(null);
 
@@ -35,6 +40,7 @@ function Submit() {
   return (
     <>
       <NavBar />
+      <NavBar />
       <PyodideProvider>
         {taskData && testsOutputs && (
           <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
@@ -45,11 +51,15 @@ function Submit() {
             <Grid item style={{ width: '50%' }}>
               <PythonIDE testsOutputs={testsOutputs} setTestsOutputs={setTestsOutputs} taskObject={taskData} />
             </Grid>
+            <Grid item style={{ width: '50%' }}>
+              <PythonIDE testsOutputs={testsOutputs} setTestsOutputs={setTestsOutputs} taskObject={taskData} />
+            </Grid>
 
             <Grid item style={{ width: '30%' }}>
               {taskData?.setting?.showTest && <Instructions taskObject={taskData} />}
             </Grid>
           </Grid>
+        )}
         )}
       </PyodideProvider>
     </>
@@ -57,6 +67,12 @@ function Submit() {
 }
 
 export default Submit;
+
+// const isReviewExist = (submissions, taskId) => {
+//   if (!submissions || !submissions[taskId]) return false;
+//   for (const trial of submissions[taskId].trials) if (trial.review) return true;
+//   return false;
+// };
 
 // const isReviewExist = (submissions, taskId) => {
 //   if (!submissions || !submissions[taskId]) return false;

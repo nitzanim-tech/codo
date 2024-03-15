@@ -5,6 +5,7 @@ import codoLogoImg from '../../assets/img/codoLogo.png';
 
 import FirebaseAuth from './FirebaseAuth';
 import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function NavigateBar() {
   return (
@@ -16,7 +17,9 @@ export default function NavigateBar() {
         {/* <img src={logoImg} style={{ width: '180px' }} /> */}
       </NavbarBrand>
 
+
       <NavbarContent justify="end" style={{ flex: 1 }}>
+        <FirebaseAuth />
         <FirebaseAuth />
       </NavbarContent>
     </Navbar>

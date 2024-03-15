@@ -49,6 +49,7 @@ function TaskCard({ text, taskId, studentData, isChallenge, showReview }) {
               <Tooltip content="בוצע">
                 <CheckCircleOutlineRoundedIcon
                   style={{ marginRight: '15px', color: submitsWithReview.length > 0 ? '#6ED268' : 'grey' }}
+                  style={{ marginRight: '15px', color: submitsWithReview.length > 0 ? '#6ED268' : 'grey' }}
                 />
               </Tooltip>
             ) : (

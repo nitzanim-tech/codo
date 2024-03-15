@@ -8,6 +8,7 @@ import { CircularProgress, Chip, Button } from '@nextui-org/react';
 import addPermissionToUser from '../requests/manager/addPermission';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import { useFirebase } from '../util/FirebaseProvider';
+import { useFirebase } from '../util/FirebaseProvider';
 
 function Managers() {
   const { app, isAuthorized } = useFirebase();

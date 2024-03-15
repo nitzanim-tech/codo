@@ -19,6 +19,19 @@ export default function StudentsTable({ app, isLoading, students }) {
     };
     getGroupFromDb();
   }, []);
+  const [groups, setGroups] = useState(null);
+  
+  useEffect(() => {
+    const getGroupFromDb = async () => {
+      try {
+        const groupFromDB = await getGroups(app);
+        setGroups(groupFromDB);
+      } catch (error) {
+        console.error('Error fetching groups:', error);
+      }
+    };
+    getGroupFromDb();
+  }, []);
 
   const handleSortChange = (column) => {
     if (sortDescriptor.column === column) {
@@ -46,6 +59,32 @@ export default function StudentsTable({ app, isLoading, students }) {
     });
 
   return (
+    <div style={{ padding: '10px', width: '70%' }}>
+      <Table aria-label="Student table" sortDescriptor={sortDescriptor} onSortChange={handleSortChange}>
+        <TableHeader>
+          <TableColumn key="subLength">משימות שהוגשו</TableColumn>
+          <TableColumn key="group">קבוצה</TableColumn> {/*to do: add allowSorting*/}
+          <TableColumn key="email">Email</TableColumn>
+          <TableColumn key="lastName">משפחה</TableColumn>
+          <TableColumn key="name">שם</TableColumn>
+          <TableColumn key="edit">ערוך</TableColumn>
+        </TableHeader>
+        <TableBody items={sortedData || []} isLoading={isLoading} loadingContent={<Spinner label="Loading..." />}>
+          {sortedData.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell key={'subLength'}>{getKeyValue(item, 'subLength')}</TableCell>
+              <TableCell key={'group'}>{getKeyValue(item, 'group')}</TableCell>
+              <TableCell key={'email'}>{getKeyValue(item, 'email')}</TableCell>
+              <TableCell key={'lastName'}>{getKeyValue(item, 'lastName')}</TableCell>
+              <TableCell key={'name'}>{getKeyValue(item, 'name')}</TableCell>
+              <TableCell key={'edit'}>
+                {groups ? <EditStudentButton studentData={item} groups={groups} app={app} /> : <Spinner />}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
     <div style={{ padding: '10px', width: '70%' }}>
       <Table aria-label="Student table" sortDescriptor={sortDescriptor} onSortChange={handleSortChange}>
         <TableHeader>

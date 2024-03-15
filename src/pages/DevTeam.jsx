@@ -4,6 +4,25 @@ import AddNewTasks from '../components/Dev/addNewTask/AddNewTasks';
 import ManageLessons from '../components/Dev/manageLessons/ManageLessons';
 import MiniDrawer from '../components/Dev/TEST';
 const DevTeam = () => {
+  const { app, userData } = useFirebase();
+  const [name, setName] = useState('');
+  const [subjects, setSubjects] = useState([]);
+  const [description, setDescription] = useState('');
+  const [example, setExample] = useState('');
+
+  const [code, setCode] = useState('# write here');
+  const [tests, setTests] = useState([]);
+  const [processTestsCode, setProcessTestsCode] = useState('// write here');
+
+  const onSendDefaultClick = () => {
+    const newTask = { name, code, subjects, description, example, tests, writer: userData.id };
+    addTask({ app, newTask });
+  };
+  const onSendCustomClick = () => {
+    const newTask = { name, processTestsCode, subjects, description, example, tests, writer: userData.id };
+    addTask({ app, newTask });
+  };
+
   return (
     <div
       style={{
@@ -32,6 +51,21 @@ const DevTeam = () => {
 };
 
 export default DevTeam;
+
+{
+  /* <div>
+                <h2>generateExplanation (js)</h2>
+                <Editor
+                  height="315px"
+                  width="550px"
+                  theme="vs-dark"
+                  defaultLanguage="javascript"
+                  value={explanationCode}
+                  onChange={(newValue) => setExplanationCode(newValue)}
+                  options={{ minimap: { enabled: false } }}
+                />
+              </div> */
+}
 
 {
   /* <div>
