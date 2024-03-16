@@ -152,7 +152,7 @@ const formatStudentTable = (data) => {
       return {
         ...rest,
         uid: item.uid,
-        group:item.group.name,
+        // group:item.group,
         subLength,
       };
     });

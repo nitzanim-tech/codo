@@ -40,4 +40,25 @@ const getGroupsByRegion = async (app) => {
   }
 };
 
-export default getGroupsByRegion;
+const getGroupsDictionary = async (app) => {
+  try {
+    const regionsData = await getGroupsByRegion(app);
+    const dictionary = makeNameIdIndex(regionsData);
+    return dictionary;
+  } catch (error) {
+    console.error('Error getting regions dictionary:', error);
+    return {};
+  }
+};
+
+const makeNameIdIndex = (regionsFromDb) => {
+  return regionsFromDb.reduce((acc, region) => {
+    acc[region.id] = region.name;
+    region.groups.forEach((group) => {
+      acc[group.id] = group.name;
+    });
+    return acc;
+  }, {});
+};
+
+export { getGroupsByRegion,  getGroupsDictionary };

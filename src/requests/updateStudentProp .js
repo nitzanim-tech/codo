@@ -1,6 +1,7 @@
 import { getDatabase, ref, set } from 'firebase/database';
 
 const updateUserProperties = async ({ app, user }) => {
+  console.log({ user });
   const db = getDatabase(app);
   const userGroupRef = ref(db, `users/${user.id}/group`);
   const userRegionRef = ref(db, `users/${user.id}/region`);

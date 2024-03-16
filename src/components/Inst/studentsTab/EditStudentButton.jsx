@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button, useDisclosure, Input, Select, SelectItem, Tooltip } from '@nextui-org/react';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react';
 
@@ -8,15 +8,24 @@ import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 
 import { removeStudent } from '../../../requests/removeStudent';
 import { updateUserProperties } from '../../../requests/updateStudentProp ';
+import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 
 export default function EditStudentButton({ studentData, groups, app }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [name, setName] = useState(studentData.name || '');
   const [lastName, setLastName] = useState(studentData.lastName || '');
-  const [group, setGroup] = useState(studentData.group || '');
-  const [choosenRegion, setChoosenRegion] = useState(studentData.region || '');
   const [massage, setMassage] = useState('');
   const [deleteCliked, setDeleteCliked] = useState(false);
+
+  const autocompleteRef = useRef(groups[studentData.group.id]);
+
+  const findIdByName = (name) => {
+    for (const [id, groupName] of Object.entries(groups)) {
+      if (groupName === name) {
+        return id;
+      }
+    }
+  };
 
   return (
     <>
@@ -57,47 +66,21 @@ export default function EditStudentButton({ studentData, groups, app }) {
                       onChange={(e) => setLastName(e.target.value)}
                     />
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'row', direction: 'rtl', margin: '5px' }}>
-                    <Select
-                      label="מרחב"
-                      variant="bordered"
-                      defaultSelectedKeys={
-                        studentData.region && Object.keys(groups).includes(studentData.region)
-                          ? [studentData.region]
-                          : []
-                      }
-                      onChange={(e) => {
-                        setChoosenRegion(e.target.value);
-                        setGroup('');
-                      }}
-                    >
-                      {groups &&
-                        Object.keys(groups).map((region) => (
-                          <SelectItem key={region} value={region}>
-                            {region}
-                          </SelectItem>
-                        ))}
-                    </Select>
 
-                    <Select
-                      label="קבוצה"
+                  <div style={{ display: 'flex', flexDirection: 'row', direction: 'rtl', margin: '5px' }}>
+                    <Autocomplete
+                      label="קבוצה חדשה"
+                      aria-label="Select group"
                       variant="bordered"
-                      defaultSelectedKeys={
-                        studentData.group && groups[choosenRegion]?.includes(studentData.group)
-                          ? [studentData.group]
-                          : []
-                      }
-                      value={group}
-                      onChange={(e) => setGroup(e.target.value)}
-                      disabled={!choosenRegion}
+                      ref={autocompleteRef}
+                      defaultSelectedKey={autocompleteRef.current.value}
                     >
-                      {choosenRegion &&
-                        groups[choosenRegion]?.map((group) => (
-                          <SelectItem key={group} value={group} dir="rtl">
-                            {group}
-                          </SelectItem>
-                        ))}
-                    </Select>
+                      {Object.entries(groups).map(([id, name]) => (
+                        <AutocompleteItem key={id} value={id}>
+                          {name}
+                        </AutocompleteItem>
+                      ))}
+                    </Autocomplete>
                   </div>
                 </div>
               </ModalBody>
@@ -113,15 +96,14 @@ export default function EditStudentButton({ studentData, groups, app }) {
                     isIconOnly
                     variant="ghost"
                     radius="full"
-                    onPress={() => {
-                      const updated = updateUserProperties({
+                    onPress={async () => {
+                      const updated = await updateUserProperties({
                         app,
                         user: {
                           id: studentData.uid,
                           name: name,
                           lastName: lastName,
-                          region: choosenRegion,
-                          group: group,
+                          group: findIdByName(autocompleteRef.current.value),
                         },
                       });
                       updated ? setMassage('עודכן בהצלחה') : setMassage('שגיאה');

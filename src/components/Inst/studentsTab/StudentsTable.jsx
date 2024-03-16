@@ -2,22 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import { getKeyValue, Spinner } from '@nextui-org/react';
 import EditStudentButton from './EditStudentButton';
-import getGroups from '../../../requests/groups/getGroups';
+import { getGroupsDictionary } from '../../../requests/groups/getGroupsByRegion';
 
 export default function StudentsTable({ app, isLoading, students }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
-  const [groups, setGroups] = useState(null);
-  
+  const [groupsDict, setGroupsDict] = useState(null);
+
   useEffect(() => {
-    const getGroupFromDb = async () => {
+    const getGroupsFromDb = async () => {
       try {
-        const groupFromDB = await getGroups(app);
-        setGroups(groupFromDB);
+        const dict = await getGroupsDictionary(app);
+        setGroupsDict(dict);
       } catch (error) {
         console.error('Error fetching groups:', error);
       }
     };
-    getGroupFromDb();
+    getGroupsFromDb();
   }, []);
 
   const handleSortChange = (column) => {
@@ -60,12 +60,14 @@ export default function StudentsTable({ app, isLoading, students }) {
           {sortedData.map((item, index) => (
             <TableRow key={index}>
               <TableCell key={'subLength'}>{getKeyValue(item, 'subLength')}</TableCell>
-              <TableCell key={'group'}>{getKeyValue(item, 'group')}</TableCell>
+              <TableCell key={'group'}>
+                {groupsDict && groupsDict[item.group.id]}
+              </TableCell>
               <TableCell key={'email'}>{getKeyValue(item, 'email')}</TableCell>
               <TableCell key={'lastName'}>{getKeyValue(item, 'lastName')}</TableCell>
               <TableCell key={'name'}>{getKeyValue(item, 'name')}</TableCell>
               <TableCell key={'edit'}>
-                {groups ? <EditStudentButton studentData={item} groups={groups} app={app} /> : <Spinner />}
+                {groupsDict ? <EditStudentButton studentData={item} groups={groupsDict} app={app} /> : <Spinner />}
               </TableCell>
             </TableRow>
           ))}

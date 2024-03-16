@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
 import getInsts from '../requests/manager/getInsts';
-import getGroupsByRegion from '../requests/groups/getGroupsByRegion';
+import { getGroupsDictionary } from '../requests/groups/getGroupsByRegion';
 import { Table, TableHeader, TableRow, TableCell, TableBody, TableColumn } from '@nextui-org/react';
 import { CircularProgress, Chip, Button } from '@nextui-org/react';
 
@@ -11,42 +11,33 @@ import { useFirebase } from '../util/FirebaseProvider';
 
 function Managers() {
   const { app, isAuthorized } = useFirebase();
-  const [groupsIndex, setGroupIndex] = useState(null);
+  const [groupsDict, setGroupsDict] = useState(null);
   const [instructorsData, setInstructorsData] = useState(null);
   const autocompleteRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
-      const [instFromDb, regionsFromDb] = await Promise.all([getInsts({ app }), getGroupsByRegion(app)]);
-      const index = makeNameIdIndex(regionsFromDb);
-      setGroupIndex(index);
+      const [instFromDb, dict] = await Promise.all([getInsts({ app }), getGroupsDictionary(app)]);
+      setGroupsDict(dict);
       setInstructorsData(instFromDb);
     };
     if (isAuthorized) fetchData();
   }, [isAuthorized]);
 
-  const makeNameIdIndex = (regionsFromDb) => {
-    return regionsFromDb.reduce((acc, region) => {
-      acc[region.id] = region.name;
-      region.groups.forEach((group) => {
-        acc[group.id] = group.name;
-      });
-      return acc;
-    }, {});
-  };
   const findIdByName = (name) => {
-    for (const [id, groupName] of Object.entries(groupsIndex)) {
+    for (const [id, groupName] of Object.entries(groupsDict)) {
       if (groupName === name) {
         return id;
       }
     }
   };
+
   return (
     <>
       <NavBar />
       {!isAuthorized ? (
         <h1>הכניסה למנהלים בלבד</h1>
-      ) : instructorsData && groupsIndex ? (
+      ) : instructorsData && groupsDict ? (
         <>
           <Autocomplete
             label="קבוצה להוספה"
@@ -55,7 +46,7 @@ function Managers() {
             size="sm"
             ref={autocompleteRef}
           >
-            {Object.entries(groupsIndex).map(([id, name]) => (
+            {Object.entries(groupsDict).map(([id, name]) => (
               <AutocompleteItem variant="flat" key={id}>
                 {name}
               </AutocompleteItem>
@@ -82,11 +73,11 @@ function Managers() {
               {instructorsData.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>{groupsIndex[user.group]}</TableCell>
+                  <TableCell>{groupsDict[user.group]}</TableCell>
                   <TableCell>{user.is_manager ? 'Yes' : 'No'}</TableCell>
                   <TableCell>{user.lastName}</TableCell>
                   <TableCell>{user.name}</TableCell>
-                  <TableCell>{groupsIndex[user.region]}</TableCell>
+                  <TableCell>{groupsDict[user.region]}</TableCell>
                   <TableCell style={{ maxWidth: '200px' }}>
                     {user.permissions && (
                       <>
@@ -97,7 +88,7 @@ function Managers() {
                             onClose={() => console.log('h')}
                             color={permission == 'all' ? 'primary' : 'default'}
                           >
-                            {groupsIndex[permission] || permission}
+                            {groupsDict[permission] || permission}
                           </Chip>
                         ))}
                       </>
