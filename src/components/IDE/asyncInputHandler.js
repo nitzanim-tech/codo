@@ -1,7 +1,15 @@
 const addWordBefore = (line, targetWord, wordToAdd) => {
   if (line.includes(wordToAdd)) return line;
   const parts = line.split(targetWord);
-  return parts[0] + `${wordToAdd} ${targetWord}` + parts.slice(1).join(targetWord);
+  if (parts.length <= 2) return parts[0] + `${wordToAdd} ${targetWord}` + parts.slice(1).join(targetWord);
+
+  // targetWord appears more than 1 time in the line
+  for (let i = 1; i < parts.length; i++) {
+    if (!parts[i].startsWith('_') && !parts[i - 1].endsWith('_')) {
+      return parts.slice(0, i).join(targetWord) + `${wordToAdd} ${targetWord}` + parts.slice(i).join(targetWord);
+    }
+  }
+  return line;
 };
 
 function findIncludedFunction(lines, index) {
@@ -14,10 +22,17 @@ function findIncludedFunction(lines, index) {
   return null;
 }
 
+function costumIncludes(line, word) {
+  if (!line.includes(word)) return false;
+  if (![' ', '=', '+', '-'].some((prefix) => line.includes(`${prefix}${word}`)) && !line.indexOf(`${word}`) === 0)
+    return false;
+  return line.trim().includes(`${word}(`);
+}
+
 function findCallerFunction(lines, functionName) {
   const callerFunctions = [];
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].includes(functionName) && !lines[i].includes('def ')) {
+    if (costumIncludes(lines[i], functionName) && !lines[i].includes('def ')) {
       lines[i] = addWordBefore(lines[i], functionName, 'await');
       const includedFunc = findIncludedFunction(lines, i);
       includedFunc && callerFunctions.push(includedFunc);
@@ -38,6 +53,7 @@ function fixAsyncCode(lines, index) {
 }
 
 export function convertInptToAsync(pythonCode) {
+  if (!pythonCode.includes('input')) return pythonCode;
   let lines = pythonCode.split('\n');
 
   for (let i = 0; i < lines.length; i++) {
