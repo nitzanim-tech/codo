@@ -6,6 +6,8 @@ import Review from './pages/Review';
 import DevTeam from './pages/DevTeam';
 import Home from './pages/Home';
 import ReadReview from './pages/ReadReview'
+import Play from './pages/Play';
+
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
 
@@ -25,7 +27,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/inst" element={<Instructurs />} />
         <Route path="/submit/:index" element={<Submit />} />
-        <Route path="/submit" element={<Submit />} />
+        <Route path="/submit/:index/play" element={<Play />} />
         <Route path="/review" element={<Review />} />
         <Route path="/readReview" element={<ReadReview />} />
         <Route path="/dev" element={<DevTeam />} />
