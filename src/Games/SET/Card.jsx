@@ -6,7 +6,7 @@ const COLORS = {
   red: { fill: '#ff5a5f', outline: '#c81d25' },
 };
 
-function SetCard({ number, shape, color, shading }) {
+function SetCard({ number, shape, color, shading, clickedCards, setClickedCards, index }) {
   const shapes = [];
 
   for (let i = 0; i < number; i++) {
@@ -25,13 +25,25 @@ function SetCard({ number, shape, color, shading }) {
     }
   }
 
+  const setClicked = (index) => {
+    if (!clickedCards.includes(index)) {
+      setClickedCards([...clickedCards, index]);
+    } else {
+      setClickedCards(clickedCards.filter((cardIndex) => cardIndex !== index));
+    }
+  };
+
   return (
     <>
       <Card
         shadow="sm"
-        style={{ width: '125px', height: '200px' }}
+        style={{
+          width: '100px',
+          height: '150px',
+          boxShadow: clickedCards.includes(index) && `0px 0px 20px 1px ${color}`,
+        }}
         isPressable
-        onPress={() => console.log('item pressed')}
+        onPress={() => setClicked(index)}
       >
         <div style={{ justifyContent: 'center' }}>{shapes}</div>
       </Card>
@@ -78,7 +90,7 @@ const Squiggle = ({ color, shading }) => {
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         xmlnsBx="https://boxy-svg.com"
-        style={{ height: '100px', marginBottom: '-50px', marginLeft: '-5px' }}
+        style={{ height: '80px', marginBottom: '-50px', marginLeft: '-5px' }}
       >
         <defs>
           <StripedPattern color={COLORS[color].fill} />
@@ -108,7 +120,7 @@ const Diamond = ({ color, shading }) => {
         height="500"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        style={{ height: '200px', marginBottom: '-150px', marginLeft: '-190px' }}
+        style={{ height: '160Px', marginBottom: '-125px', marginLeft: '-208px', marginTop: '-10px' }}
       >
         <defs>
           <StripedPattern color={COLORS[color].fill} />
@@ -136,7 +148,7 @@ const Oval = ({ color, shading }) => {
         height="500"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        style={{ height: '200px', marginBottom: '-150px', marginLeft: '-192px' }}
+        style={{ height: '150px', marginBottom: '-112px', marginLeft: '-208px', marginTop: '-8px' }}
       >
         <defs>
           <StripedPattern color={COLORS[color].fill} />

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
-const Terminal = ({ output, onInput, waitingForInput, error }) => {
+const Terminal = ({ output, onInput, waitingForInput, error, height = '150px' }) => {
   const [input, setInput] = useState('');
   const [inputIndexes, setInputIndexes] = useState([]);
   const inputRef = useRef(null);
@@ -24,7 +24,7 @@ const Terminal = ({ output, onInput, waitingForInput, error }) => {
   };
 
   return (
-    <MainDiv id="terminal">
+    <MainDiv id="terminal" height={height}>
       <OutputDiv>
         {output
           ? output.split('\n').map((line, index) => (
@@ -73,11 +73,12 @@ const MainDiv = styled.div`
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  height: 150px;
+  height: ${(props) => props.height};
   overflow-y: scroll;
   font-family: 'DejaVuSansMono', Courier, monospace;
   width: 100%;
 `;
+
 
 const CommandDiv = styled.div`
   margin-left: 10px;
