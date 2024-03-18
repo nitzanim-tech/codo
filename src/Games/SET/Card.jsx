@@ -27,9 +27,10 @@ function SetCard({ number, shape, color, shading, clickedCards, setClickedCards,
 
   const setClicked = (index) => {
     if (!clickedCards.includes(index)) {
-      setClickedCards([...clickedCards, index]);
+      if (clickedCards.length == 3) setClickedCards([index]);
+      else setClickedCards([...clickedCards, index]);
     } else {
-      setClickedCards(clickedCards.filter((cardIndex) => cardIndex !== index));
+      // setClickedCards(clickedCards.filter((cardIndex) => cardIndex !== index));
     }
   };
 

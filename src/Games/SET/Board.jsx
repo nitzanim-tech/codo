@@ -1,29 +1,13 @@
 import React, { useState } from 'react';
 import SetCard from './Card';
 
-function Board() {
-  const [clickedCards, setClickedCards] = useState([]);
-
-  const boardOutput = `
-    {'color': 'purple', 'shape': 'oval', 'shading': 'solid', 'num': 1}
-    {'color': 'purple', 'shape': 'squiggle', 'shading': 'open', 'num': 1}
-    {'color': 'red', 'shape': 'diamond', 'shading': 'open', 'num': 1}
-    {'color': 'green', 'shape': 'diamond', 'shading': 'striped', 'num': 1}
-    {'color': 'green', 'shape': 'oval', 'shading': 'solid', 'num': 3}
-    {'color': 'red', 'shape': 'oval', 'shading': 'striped', 'num': 2}
-    {'color': 'red', 'shape': 'diamond', 'shading': 'striped', 'num': 1}
-    {'color': 'red', 'shape': 'diamond', 'shading': 'solid', 'num': 1}
-    {'color': 'red', 'shape': 'diamond', 'shading': 'open', 'num': 2}
-    {'color': 'green', 'shape': 'oval', 'shading': 'open', 'num': 1}
-    {'color': 'purple', 'shape': 'diamond', 'shading': 'striped', 'num': 2}
-    {'color': 'red', 'shape': 'oval', 'shading': 'striped', 'num': 1}
-
-  `;
-
-  const parsedOutput = boardOutput
-    .trim()
-    .split('\n')
-    .map((line) => JSON.parse(line.replace(/'/g, '"')));
+function Board({ boardText, clickedCards, setClickedCards }) {
+  const parsedOutput = boardText
+    ? boardText
+        .trim()
+        .split('\n')
+        .map((line) => JSON.parse(line.replace(/'/g, '"')))
+    : {};
 
   const renderTableCells = () => {
     const tableCells = [];
