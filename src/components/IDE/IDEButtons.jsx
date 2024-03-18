@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 import WbSunnyRoundedIcon from '@mui/icons-material/WbSunnyRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import { Switch } from '@nextui-org/react';
+import { Switch, Tooltip, Button } from '@nextui-org/react';
 import RunTestButton from './RunTestButton';
 import SumbitButton from './SumbitButton';
 import RunCodeButton from './RunCodeButton';
-
+import SportsEsportsRoundedIcon from '@mui/icons-material/SportsEsportsRounded';
 function IDEButtons({
   code,
   setOutput,
@@ -21,7 +21,6 @@ function IDEButtons({
   const [runTests, setRunTests] = useState(false);
   const handleThemeChange = (checked) => {
     setTheme(checked ? 'hc-light' : 'vs-dark');
-
   };
 
   return (
@@ -34,6 +33,15 @@ function IDEButtons({
         style={{ marginRight: '3%' }}
         onValueChange={handleThemeChange}
       ></Switch>
+
+      <ButtonWrapper>
+        <Tooltip content="משחק" placement={'bottom'}>
+          <Button radius="full" isIconOnly variant="faded" onClick={() => window.open(window.location.href + '/play')}>
+            <SportsEsportsRoundedIcon />
+          </Button>
+        </Tooltip>
+      </ButtonWrapper>
+
       <ButtonWrapper>
         <SumbitButton
           code={code}

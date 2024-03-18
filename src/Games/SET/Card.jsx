@@ -148,23 +148,20 @@ const Oval = ({ color, shading }) => {
         height="500"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        style={{ height: '150px', marginBottom: '-112px', marginLeft: '-208px', marginTop: '-8px' }}
+        style={{ height: '140px', marginBottom: '-100px', marginLeft: '-211px', marginTop: '-8px' }}
       >
         <defs>
           <StripedPattern color={COLORS[color].fill} />
         </defs>
 
-        <ellipse
+        <path
           style={{
             strokeWidth: '5px',
             stroke: COLORS[color].outline,
             fill: getFill(shading, COLORS[color].fill),
             fillRule: 'nonzero',
           }}
-          cx="213.849"
-          cy="108.915"
-          rx="115.502"
-          ry="45.036"
+          d="M 142.95 71.637 H 299.483 A 47.542 47.542 0 0 1 347.025 119.179 V 119.179 A 47.542 47.542 0 0 1 299.483 166.721 H 142.95 A 47.542 47.542 0 0 1 95.408 119.179 V 119.179 A 47.542 47.542 0 0 1 142.95 71.637 Z M 221.2165 119.179 V 119.179 H 221.2165 V 119.179 H 221.2165 Z"
         />
       </svg>
     </div>
