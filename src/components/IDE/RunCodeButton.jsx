@@ -73,11 +73,11 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
   }
 
   return (
-    <Tooltip content="הרץ" placement={'bottom'}>
-      <Button radius="full" isIconOnly variant="faded" isDisabled={!pyodide} onClick={() => handleEvaluate()}>
-        <PlayCircleRoundedIcon />
-      </Button>
-    </Tooltip>
+    // <Tooltip content="הרץ" placement={'bottom'}>
+    <Button radius="full" isIconOnly variant="faded" isDisabled={!pyodide} onClick={() => handleEvaluate()}>
+      <PlayCircleRoundedIcon />
+    </Button>
+    // </Tooltip>
   );
 }
 

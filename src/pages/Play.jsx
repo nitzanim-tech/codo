@@ -20,7 +20,7 @@ function Play() {
 
   const handleInput = (value) => {
     if (inputCallback) {
-      setLastMassage('');
+      // setLastMassage('');
       inputCallback(value);
       setInputCallback(null);
     }
@@ -31,7 +31,10 @@ function Play() {
   }, [output]);
 
   useEffect(() => {
-    handleInput(clickedCards[clickedCards.length - 1]);
+    const lastClickedCard = clickedCards[clickedCards.length - 1];
+    if (!isNaN(lastClickedCard)) {
+      handleInput(lastClickedCard);
+    }
   }, [clickedCards]);
 
   const getLastBoardFromOutput = (output) => {
@@ -41,7 +44,10 @@ function Play() {
       if (['color', 'shape', 'shading', 'striped'].some((word) => lines[i].includes(word))) {
         boardLines.push(lines[i]);
       } else if (boardLines.length != 0) {
-        if (i > 0) setLastMassage(lines[i]);
+        if (i > 0 && clickedCards.length > 2) {
+          setLastMassage(lines[i]);
+          if (lines[i].toLowerCase().includes('great')) setClickedCards([]);
+        } else setLastMassage('');
         break;
       }
     }
@@ -54,12 +60,15 @@ function Play() {
       <PyodideProvider>
         <div className="container">
           <div className="left-half" style={{ backgroundImage: `url(${woodBackground})` }}>
-            <h2>
-              <b>{lastMassage}</b>
-            </h2>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div
+              style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}
+            >
               <Board boardText={relevatOutput} clickedCards={clickedCards} setClickedCards={setClickedCards} />
             </div>
+
+            <span style={{ color: '#6B240C', fontFamily: 'Courier', fontSize: '40px' }}>
+              <b>{lastMassage}</b>
+            </span>
           </div>
           <div className="right-half" style={{ backgroundColor: '#2b2b2b' }}>
             <RunCodeButton code={code} setOutput={setOutput} setError={setError} setInputCallback={setInputCallback} />

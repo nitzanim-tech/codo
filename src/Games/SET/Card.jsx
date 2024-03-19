@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { Card } from '@nextui-org/react';
 
 const COLORS = {
@@ -6,7 +7,14 @@ const COLORS = {
   red: { fill: '#ff5a5f', outline: '#c81d25' },
 };
 
-function SetCard({ number, shape, color, shading, clickedCards, setClickedCards, index }) {
+const SetCard = React.memo(({ number, shape, color, shading, clickedCards, setClickedCards, index }) => {
+  const [paramsKey, setParamsKey] = useState('');
+
+  useEffect(() => {
+    // Update the key whenever any of the parameters change
+    setParamsKey(`${number}-${shape}-${color}-${shading}-${index}`);
+  }, [number, shape, color, shading, index]);
+
   const shapes = [];
 
   for (let i = 0; i < number; i++) {
@@ -27,7 +35,7 @@ function SetCard({ number, shape, color, shading, clickedCards, setClickedCards,
 
   const setClicked = (index) => {
     if (!clickedCards.includes(index)) {
-      if (clickedCards.length == 3) setClickedCards([index]);
+      if (clickedCards.length === 3) setClickedCards([index]);
       else setClickedCards([...clickedCards, index]);
     } else {
       // setClickedCards(clickedCards.filter((cardIndex) => cardIndex !== index));
@@ -37,11 +45,13 @@ function SetCard({ number, shape, color, shading, clickedCards, setClickedCards,
   return (
     <>
       <Card
+        key={paramsKey}
+        className="scale-in-hor-center"
         shadow="sm"
         style={{
           width: '100px',
           height: '150px',
-          boxShadow: clickedCards.includes(index) && `0px 0px 20px 1px ${color}`,
+          boxShadow: clickedCards.includes(index) && `0px 0px 20px 5px ${color}`,
         }}
         isPressable
         onPress={() => setClicked(index)}
@@ -50,7 +60,7 @@ function SetCard({ number, shape, color, shading, clickedCards, setClickedCards,
       </Card>
     </>
   );
-}
+});
 
 export default SetCard;
 
