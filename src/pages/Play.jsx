@@ -28,6 +28,10 @@ function Play() {
 
   useEffect(() => {
     setRelevatOutput(getLastBoardFromOutput(output));
+    if (!output) {
+      setClickedCards([]);
+      setLastMassage('');
+    }
   }, [output]);
 
   useEffect(() => {

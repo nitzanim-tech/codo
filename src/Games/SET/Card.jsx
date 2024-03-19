@@ -11,7 +11,6 @@ const SetCard = React.memo(({ number, shape, color, shading, clickedCards, setCl
   const [paramsKey, setParamsKey] = useState('');
 
   useEffect(() => {
-    // Update the key whenever any of the parameters change
     setParamsKey(`${number}-${shape}-${color}-${shading}-${index}`);
   }, [number, shape, color, shading, index]);
 
@@ -34,9 +33,10 @@ const SetCard = React.memo(({ number, shape, color, shading, clickedCards, setCl
   }
 
   const setClicked = (index) => {
-    if (!clickedCards.includes(index)) {
-      if (clickedCards.length === 3) setClickedCards([index]);
-      else setClickedCards([...clickedCards, index]);
+    if (clickedCards.length >= 3) {
+      setClickedCards([index]);
+    } else if (!clickedCards.includes(index)) {
+      setClickedCards([...clickedCards, index]);
     } else {
       // setClickedCards(clickedCards.filter((cardIndex) => cardIndex !== index));
     }
