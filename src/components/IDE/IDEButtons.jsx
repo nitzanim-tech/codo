@@ -33,15 +33,20 @@ function IDEButtons({
         style={{ marginRight: '3%' }}
         onValueChange={handleThemeChange}
       ></Switch>
-
-      <ButtonWrapper>
-        <Tooltip content="משחק" placement={'bottom'}>
-          <Button radius="full" isIconOnly variant="faded" onClick={() => window.open(window.location.href + '/play')}>
-            <SportsEsportsRoundedIcon />
-          </Button>
-        </Tooltip>
-      </ButtonWrapper>
-
+      {taskObject.hasGame && (
+        <ButtonWrapper>
+          <Tooltip content="משחק" placement={'bottom'}>
+            <Button
+              radius="full"
+              isIconOnly
+              variant="faded"
+              onClick={() => window.open(window.location.href + '/play')}
+            >
+              <SportsEsportsRoundedIcon />
+            </Button>
+          </Tooltip>
+        </ButtonWrapper>
+      )}
       <ButtonWrapper>
         <SumbitButton
           code={code}
