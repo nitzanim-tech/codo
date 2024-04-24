@@ -6,6 +6,7 @@ import { DashboardCard } from '../DashboardCard';
 import ExcelButton from './ExcelButton';
 
 const firstTaskIndex = '7e9e4f50c46c';
+
 export default function TaskTab({ tasksList, studentsRawData }) {
   const [formattedData, setFormattedData] = useState([]);
   const [selectedTask, setSelectedTask] = useState(localStorage.getItem('lastSelectedTask') || firstTaskIndex);
@@ -22,7 +23,7 @@ export default function TaskTab({ tasksList, studentsRawData }) {
         </Grid>
         <ExcelButton data={studentsRawData} />
         <Grid item style={{ width: '20%' }}>
-          <InstTasksList selectedTask={selectedTask} setSelectedTask={setSelectedTask} />
+          <InstTasksList tasks={tasksList} selectedTask={selectedTask} setSelectedTask={setSelectedTask} />
 
           <DashboardCard ratio={countStudents(formattedData)} text={'הגישו:'} />
           <DashboardCard

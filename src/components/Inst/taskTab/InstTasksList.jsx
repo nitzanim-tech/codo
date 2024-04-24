@@ -1,13 +1,12 @@
 import React from 'react';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
-import tasks from '../../../Tasks/TasksList.json';
-
 
 const dividers = [1, 2, 4, 5, 9, 12, 13, 14, 17, 19, 22, 24, 25];
 
-export default function InstTasksList({ selectedTask, setSelectedTask }) {
+export default function InstTasksList({ tasks, selectedTask, setSelectedTask }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
+
       <Autocomplete
         dir="rtl"
         placeholder="בחר משימה"
@@ -15,16 +14,16 @@ export default function InstTasksList({ selectedTask, setSelectedTask }) {
         defaultSelectedKey={selectedTask}
         variant="bordered"
       >
-        {tasks.map((task, index) => (
+        {Object.keys(tasks).map((taskKey) => (
           <AutocompleteItem
-            key={task.key}
+            key={taskKey}
             onClick={() => {
-              localStorage.setItem('lastSelectedTask', task.key);
-              setSelectedTask(task.key);
+              localStorage.setItem('lastSelectedTask', taskKey);
+              setSelectedTask(taskKey);
             }}
-            showDivider={dividers.includes(index)}
+            showDivider={dividers.includes(taskKey)}
           >
-            {task.name}
+            {tasks[taskKey].name}
           </AutocompleteItem>
         ))}
       </Autocomplete>
