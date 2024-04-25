@@ -70,7 +70,7 @@ function AddElement({ tasksList, lesson, lastElementId }) {
               <ModalBody>
                 <SelectFormat />
 
-                {['ppt', 'pdf', 'zip'].includes(choosenFormat) && (
+                {['ppt', 'pdf', 'zip', 'webLink'].includes(choosenFormat) && (
                   <Input
                     placeholder="לינק"
                     variant="bordered"

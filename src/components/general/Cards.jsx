@@ -4,6 +4,7 @@ import SlideshowIcon from '@mui/icons-material/Slideshow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
+import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import { InstTaskButtons, InstFileButtons } from './InstCardsButtons';
 
 const FileCard = ({ file, isInst, setting, index }) => {
@@ -15,6 +16,7 @@ const FileCard = ({ file, isInst, setting, index }) => {
             {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
             {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
             {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
+            {file.type === 'webLink' && <PublicRoundedIcon style={{ color: '#BF1E2E' }} />}
           </Button>
           {file.name}
         </div>
