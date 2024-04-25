@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
+import getAllLessons from '../../../requests/lessons/getAllLessons';
+import { useFirebase } from '../../../util/FirebaseProvider';
 
-const dividers = [1, 2, 4, 5, 9, 12, 13, 14, 17, 19, 22, 24, 25];
 
 export default function InstTasksList({ tasks, selectedTask, setSelectedTask }) {
+  const { app } = useFirebase();
+  const [lessons, setLessons] = useState();
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      const allLessons = await getAllLessons({ app });
+      setLessons(allLessons);
+    };
+    fetchLessons();
+  }, [app]);
+
+  const memoizedLessons = useMemo(() => lessons, [lessons]);
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
-
       <Autocomplete
         dir="rtl"
         placeholder="בחר משימה"
@@ -14,18 +27,26 @@ export default function InstTasksList({ tasks, selectedTask, setSelectedTask }) 
         defaultSelectedKey={selectedTask}
         variant="bordered"
       >
-        {Object.keys(tasks).map((taskKey) => (
-          <AutocompleteItem
-            key={taskKey}
-            onClick={() => {
-              localStorage.setItem('lastSelectedTask', taskKey);
-              setSelectedTask(taskKey);
-            }}
-            showDivider={dividers.includes(taskKey)}
-          >
-            {tasks[taskKey].name}
-          </AutocompleteItem>
-        ))}
+        {Object.keys(memoizedLessons || {}).map((lessonKey) =>
+          Object.keys(memoizedLessons[lessonKey].elements || {}).map((elementKey, index, array) => {
+            const element = memoizedLessons[lessonKey].elements[elementKey];
+            if (element.type === 'task') {
+              return (
+                <AutocompleteItem
+                  key={elementKey}
+                  onClick={() => {
+                    localStorage.setItem('lastSelectedTask', elementKey);
+                    setSelectedTask(elementKey);
+                  }}
+                  showDivider={index === array.length - 1}
+                >
+                  {element.name}
+                </AutocompleteItem>
+              );
+            }
+            return null;
+          }),
+        )}
       </Autocomplete>
     </div>
   );

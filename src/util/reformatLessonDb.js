@@ -16,7 +16,7 @@ export function reformatLessons({ linkedList, groupData }) {
         type: elementData.type,
         link: elementData.link,
       };
-      if (groupData[currentElementId]) {
+      if (groupData[currentElementId] || !groupData) {
         elements[currentElementId]['setting'] = groupData[currentElementId];
       }
       lastElementId = currentElementId;
@@ -30,6 +30,5 @@ export function reformatLessons({ linkedList, groupData }) {
 
     currentLessonId = lessonData.nextLesson;
   }
-
   return orderedFormat;
 }
