@@ -30,13 +30,20 @@ const tasks = {
   b6565fbea41a: WordleFor, //11
   '7cfa6c3a94ba': ShefaIssaschar, //12
   '991be3a0d2c7': BeforeFirstTest, //13
-  ca8e2ed044c0: BasicSudoku, //14
-  // ca8e2ed044c0: FirstTest, //14
+  ca8e2ed044c0: FirstTest, //14
+  ba3781a568f9: BasicSudoku,
 };
 
 export function getTaskExplanation({ task, selectedValue }) {
   if (tasks.hasOwnProperty(task)) {
     return tasks[task].getTaskExplanation(selectedValue);
+  } else {
+    throw new Error(`In getTaskExplanation: Invalid task number: ${task}`);
+  }
+}
+export function getProcessOutputs({ task, taskTests, testsOutputs  }) {
+  if (tasks.hasOwnProperty(task)) {
+    return tasks[task].processTestsOutputs({ taskTests, testsOutputs });
   } else {
     throw new Error(`In getTaskExplanation: Invalid task number: ${task}`);
   }

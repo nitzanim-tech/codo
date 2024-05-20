@@ -3,6 +3,7 @@ import { Button, Tooltip } from "@nextui-org/react";
 import RuleRoundedIcon from "@mui/icons-material/RuleRounded";
 import { usePyodide } from './PyodideProvider';
 import { cleanTracebackTest } from '../../util/cleanTraceback';
+import { getProcessOutputs } from '../../Tasks/TaskComponents';
 
 export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject }) {
   const pyodide = usePyodide();
@@ -54,13 +55,19 @@ async function handleClick() {
     const testsOutput = processTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
     setTestsOutputs(testsOutput);
   } else {
-    const codeFromDB = taskObject.processTestsCode;
-    let processOutput = new Function('parameters', codeFromDB);
-    let parameters = {
+    const testsOutput = getProcessOutputs({
+      task: taskObject.id,
       taskTests: taskObject.tests,
       testsOutputs: userTestOutputs,
-    };
-    const testsOutput = processOutput(parameters);
+    });
+    // const codeFromDB = taskObject.processTestsCode;
+    // let processOutput = new Function('parameters', codeFromDB);
+    // let parameters = {
+    //   taskTests: taskObject.tests,
+    //   testsOutputs: userTestOutputs,
+    // };
+
+    // const testsOutput = processOutput(parameters);
     setTestsOutputs(testsOutput);
   }
 }
