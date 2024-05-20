@@ -1,13 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { checkCellValidity, findEmptyCells } from './sudokoUtils';
 import './sudoku.css';
+// TO DO: ADD TEST OF 0 MISSING, CHANGE ORDER, FORCE THEM CHECK SUBGRID
 const RED = '#ff9999';
 const GREEN = '#b3ff99';
+import { ScrollShadow, Button, Tooltip } from '@nextui-org/react';
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 
 const CheckedSudokuTable = ({ board, studentAns }) => {
+  if (!Array.isArray(studentAns)) {
+    return <div>Note: The answer should be provided as a list.</div>;
+  }
+
   const emptyCells = findEmptyCells(board);
   const validCells = checkCellValidity(studentAns, emptyCells, 4);
-
   return (
     <table className="sudoku-table">
       <tbody>
@@ -51,13 +57,27 @@ const SudokuTable = ({ board }) => {
 };
 
 export function getTaskExplanation(selectedValue) {
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText(selectedValue.inputText);
+  };
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ flex: 0.3, marginLeft: '50px' }}>
-          <div className={'small'}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }} className={'small'}>
+          <div style={{ flex: 2, margin: '0 10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }} className={'small'}>
+              <p>קלט</p>
+              <Tooltip content="העתק">
+                <Button radius="full" isIconOnly variant="faded" onClick={handleCopyClick}>
+                  <ContentCopyRoundedIcon />
+                </Button>
+              </Tooltip>
+            </div>
             <SudokuTable board={selectedValue.input} />
-            <CheckedSudokuTable stud sudoku={selectedValue.input} entAns={selectedValue.output} />
+          </div>
+          <div style={{ flex: 2, margin: '0 10px' }}>
+            <p>הפלט שלך</p>
+            <CheckedSudokuTable board={selectedValue.input} studentAns={selectedValue.output} />
           </div>
         </div>
       </div>
@@ -125,7 +145,8 @@ export function processTestsOutputs({ taskTests, testsOutputs }) {
   const stringToArray = (str) => JSON.parse(str.replace('\r', '').replace(/None/g, 'null'));
 
   return testsOutputs.map((testsOutput, index) => {
-    const input = stringToArray(taskTests[index].runningCode.split('\n')[0].split('=')[1]);
+    const inputText = taskTests[index].runningCode.split('\n')[0].split('=')[1];
+    const input = stringToArray(inputText);
     let output = testsOutput.output;
     let correct;
     try {
@@ -137,6 +158,6 @@ export function processTestsOutputs({ taskTests, testsOutputs }) {
       correct = false;
     }
     const name = names[index];
-    return { name, input, output, correct };
+    return { name, input, output, correct, inputText };
   });
 }
