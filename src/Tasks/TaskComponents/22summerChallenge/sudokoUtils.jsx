@@ -54,14 +54,11 @@ function findEmptyCells(board) {
   return emptyCells;
 }
 const CheckedSudokuTable = ({ board, studentAns, size }) => {
-  if (!Array.isArray(studentAns)) {
-    return <div>הוא לא רשימה</div>;
-  }
   try {
     const emptyCells = findEmptyCells(board);
     const validCells = checkCellValidity(studentAns, emptyCells, size);
     return (
-      <table className="sudoku-table">
+      <table className="sudoku-table" dir="ltr">
         <tbody>
           {studentAns.map((row, i) => (
             <tr key={i}>
@@ -85,13 +82,19 @@ const CheckedSudokuTable = ({ board, studentAns, size }) => {
       </table>
     );
   } catch {
-    return <div> הוא לא לוח סודוקו תקין</div>;
+    return (
+      <div>
+        {studentAns}
+        <br />
+        לא לוח סודוקו תקין
+      </div>
+    );
   }
 };
 
 const SudokuTable = ({ board }) => {
   return (
-    <table className="sudoku-table">
+    <table className="sudoku-table" dir="ltr">
       <tbody>
         {board.map((row, i) => (
           <tr key={i}>

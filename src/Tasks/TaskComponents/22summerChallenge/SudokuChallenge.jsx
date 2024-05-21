@@ -7,14 +7,14 @@ export function getTaskExplanation(selectedValue) {
     <>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
         <CopyButton inputText={selectedValue.inputText} />
-        <div style={{ display: 'flex', justifyContent: 'space-between' }} className={'small'}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }} className={'big'}>
           <div style={{ flex: 2, margin: '0 10px' }}>
             <p>קלט</p>
             <SudokuTable board={selectedValue.input} />
           </div>
           <div style={{ flex: 2, margin: '0 10px' }}>
             <p>הפלט שלך</p>
-            <CheckedSudokuTable board={selectedValue.input} studentAns={selectedValue.output} size={4} />
+            <CheckedSudokuTable board={selectedValue.input} studentAns={selectedValue.output} size={9} />
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@ export function getTaskExplanation(selectedValue) {
 
 export function processTestsOutputs({ taskTests, testsOutputs }) {
   const names = taskTests.map((test) => test.name);
-  const stringToArray = (str) => JSON.parse(str.replace('\r', '').replace(/None/g, 'null'));
+  const stringToArray = (str) => JSON.parse(str.replace('\r', '').replace(/None/g, 'null').replace('\n', ''));
 
   return testsOutputs.map((testsOutput, index) => {
     const inputText = taskTests[index].runningCode.split('\n')[0].split('=')[1];
@@ -35,8 +35,7 @@ export function processTestsOutputs({ taskTests, testsOutputs }) {
     try {
       const emptyCells = findEmptyCells(input);
       output = stringToArray(output);
-
-      const validCells = checkCellValidity(output, emptyCells, 4);
+      const validCells = checkCellValidity(output, emptyCells, 9);
       correct = index == 0 ? true : validCells.every((isValid) => isValid);
     } catch {
       correct = false;
@@ -47,39 +46,6 @@ export function processTestsOutputs({ taskTests, testsOutputs }) {
 }
 
 const ans = `
-def find_immediate_value(cell, board):
-    row, col = cell
-    options = [1, 2, 3, 4]
-    check_row(board, row, options)
-    check_column(board, col, options)
-    check_subgrid(board, row, col, options)
-    if len(options) == 1:
-        return options[0]
-    else:
-        return 0
-
-
-def check_row(board, row, options):
-    for i in range(4):
-        if board[row][i] in options:
-            options.remove(board[row][i])
-
-
-def check_column(board, col, options):
-    for i in range(4):
-        if board[i][col] in options:
-            options.remove(board[i][col])
-
-
-def check_subgrid(board, row, col, options):
-    sub_row = (row // 2) * 2
-    sub_col = (col // 2) * 2
-    for i in range(2):
-        for j in range(2):
-            if board[sub_row + i][sub_col + j] in options:
-                options.remove(board[sub_row + i][sub_col + j])
-
-
 def find_empty(board):
     indexes = []
     for row in range(len(board)):
@@ -89,14 +55,55 @@ def find_empty(board):
     return indexes
 
 
+def check_vertical(cell, board, n):
+    # check if n already existed in vertical (y) axis
+    for i in range(9):
+        if board[cell[0]][i] == n:
+            return False
+    return True
+
+
+def check_horizontal(cell, board, n):
+    # check horizontal (x) axis
+    for i in range(9):
+        if board[i][cell[1]] == n:
+            return False
+    return True
+
+def check_local_grid(cell, board, n):
+    # check the local grid
+    x0 = (cell[0]//3)*3
+    y0 = (cell[1] // 3) * 3
+
+    for i in range(3):
+        for j in range(3):
+            if board[x0 + i][y0 + j] == n:
+                return False
+    return True
+
+
+def possible_nums(cell, board):
+    # check all the possible nums
+    num_ls = []
+    for i in range(1, 10):
+        if check_vertical(cell, board, i) and check_horizontal(cell, board, i) and check_local_grid(cell, board, i):
+            num_ls.append(i)
+    return num_ls
+
 def solve_sudoku(board):
     empty_cells = find_empty(board)
-    while empty_cells:
-        for cell in empty_cells:
-            value = find_immediate_value(cell, board)
-            if value:
-                board[cell[0]][cell[1]] = value
-                empty_cells.remove(cell)
-                break
-    return board
+    # base case - no empty cells
+    if len(empty_cells) == 0:
+        return board # board solved
+    cell = empty_cells[0]
+    # Try all possible numbers
+    cell_options = possible_nums(cell, board)
+    for num in cell_options:
+        # place the number in current cell
+        board[cell[0]][cell[1]] = num
+
+        if solve_sudoku(board):
+            return board
+        board[cell[0]][cell[1]] = None
+    return None
 `;
