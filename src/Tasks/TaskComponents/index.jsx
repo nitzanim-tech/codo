@@ -13,7 +13,8 @@ import * as MultiplicationTable from './5nestedLoop/MultiplicationTable';
 import * as ShefaIssaschar from './5nestedLoop/ShefaIssaschar';
 import * as BeforeFirstTest from './6FirstTest/BeforeFirstTest';
 import * as FirstTest from './6FirstTest/FirstTest';
-import * as BasicSudoku from './22summerChallenge/sudokuBasic';
+import * as BasicSudoku from './22summerChallenge/SudokuBasic'
+import * as ChallengeSudoku from './22summerChallenge/SudokuChallenge';
 
 const tasks = {
   '7e9e4f50c46c': HelloWord, //0
@@ -32,6 +33,7 @@ const tasks = {
   '991be3a0d2c7': BeforeFirstTest, //13
   ca8e2ed044c0: FirstTest, //14
   ba3781a568f9: BasicSudoku,
+  '13881ac3833c': ChallengeSudoku,
 };
 
 export function getTaskExplanation({ task, selectedValue }) {

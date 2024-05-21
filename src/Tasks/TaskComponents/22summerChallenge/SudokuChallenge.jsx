@@ -1,15 +1,12 @@
 import React from 'react';
-import { checkCellValidity, findEmptyCells, CheckedSudokuTable, SudokuTable , CopyButton} from './sudokoUtils';
+import { checkCellValidity, findEmptyCells, CheckedSudokuTable, SudokuTable, CopyButton } from './sudokoUtils';
 import './sudoku.css';
 
-
-
 export function getTaskExplanation(selectedValue) {
-
-    return (
+  return (
     <>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-        <CopyButton inputText={selectedValue.inputText}/>
+        <CopyButton inputText={selectedValue.inputText} />
         <div style={{ display: 'flex', justifyContent: 'space-between' }} className={'small'}>
           <div style={{ flex: 2, margin: '0 10px' }}>
             <p>קלט</p>
