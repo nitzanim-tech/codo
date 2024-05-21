@@ -28,31 +28,30 @@ export function getTaskExplanation(selectedValue) {
 }
 
 
-// export function processTestsOutputs(testsOutputs) {
-//   // const { taskTests, testsOutputs } = parameters;
-//   const names = taskTests.map((test) => test.name);
-//   const answers = [
-//     { paragraph: 'ok', sentences: [''] },
-//     { paragraph: 'ok', sentences: ['3', '4'] },
-//     { paragraph: 'ok', sentences: ['2'] },
-//     { paragraph: 'short', sentences: [''] },
-//     { paragraph: 'long', sentences: ['1'] },
-//   ];
-//   return testsOutputs.map((testsOutput, index) => {
-//     const inputLines = testsOutput.input.split('\n');
-//     const input = {
-//       sentence: inputLines[0],
-//     };
-//     const outputLines = testsOutput.output.split('\n');
-//     const firstOutputLine = outputLines[1];// try-catch?
-//     const output = outputLines.slice(2).join('\n');
-//     const correct =
-//       firstOutputLine.includes(answers[index].paragraph) &&
-//       answers[index].sentences.every((sentence) => output.includes(sentence));
-//     const name = names[index];
-//     return { name, input, output: outputLines.slice(1).join('\n'), correct, ans: answers[index] };
-//   });
-// }
+export function processTestsOutputs({ taskTests, testsOutputs }) {
+  const names = taskTests.map((test) => test.name);
+  const answers = [
+    { paragraph: 'ok', sentences: [''] },
+    { paragraph: 'ok', sentences: ['3', '4'] },
+    { paragraph: 'ok', sentences: ['2'] },
+    { paragraph: 'short', sentences: [''] },
+    { paragraph: 'long', sentences: ['1'] },
+  ];
+  return testsOutputs.map((testsOutput, index) => {
+    const inputLines = testsOutput.input.split('\n');
+    const input = {
+      sentence: inputLines[0],
+    };
+    const outputLines = testsOutput.output.split('\n');
+    const firstOutputLine = outputLines[1]; // try-catch?
+    const output = outputLines.slice(2).join('\n');
+    const correct =
+      firstOutputLine.includes(answers[index].paragraph) &&
+      answers[index].sentences.every((sentence) => output.includes(sentence));
+    const name = names[index];
+    return { name, input, output: outputLines.slice(1).join('\n'), correct, ans: answers[index] };
+  });
+}
 
 const ans = `
 txt = input("Enter paragraph here: ")

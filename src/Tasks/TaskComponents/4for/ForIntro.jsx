@@ -34,6 +34,22 @@ export function getTaskExplanation(selectedValue) {
   );
 }
 
+export function processTestsOutputs({ taskTests, testsOutputs }) {
+  const names = taskTests.map((test) => test.name);
+  const answers = [`5`, '0', '1', '7', '1', '2'];
+  return testsOutputs.map((testsOutput, index) => {
+    const inputLines = testsOutput.input.split('\n');
+    const input = {
+      string: inputLines[0],
+    };
+    const outputLines = testsOutput.output.split('\n');
+    const output = outputLines[outputLines.length - 2];
+    const correct = output.includes(answers[index]);
+    const name = names[index];
+    return { name, input, output, correct, ans: answers[index] };
+  });
+}
+
 
 const ans = `
 input_string = input()

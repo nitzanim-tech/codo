@@ -44,37 +44,7 @@ export function getTaskExplanation(selectedValue) {
   );
 }
 
-export function processTestsOutputs() {
-  const { taskTests, testsOutputs } = parameters;
-  const names = taskTests.map((test) => test.name);
-  function checkAns({ outputLines, answer }) {
-    const lines = outputLines.map((line) => line.replace(/[^0-9]/g, ''));
-    const lastLine = lines[lines.length - 2];
-    const nonEmptyLines = lines.filter(Boolean);
-    const sum = nonEmptyLines.slice(0, -1).reduce((acc, curr) => acc + parseInt(curr), 0);
-    return { questions: lastLine == answer.questions, sum: sum == answer.sum };
-  }
-  const answers = [
-    { questions: 51, sum: 2545 },
-    { questions: 3, sum: 55 },
-    { questions: 20, sum: 694 },
-    { questions: 35, sum: 1270 },
-    { questions: 48, sum: 2090 },
-  ];
 
-  return testsOutputs.map((testsOutput, index) => {
-    const inputLines = testsOutput.input.split('\n');
-    const input = {
-      num: parseInt(inputLines[0]),
-    };
-    const outputLines = testsOutput.output.split('\n');
-    const output = outputLines.slice(2).join(' ');
-    const reasonPass = checkAns({ outputLines, answer: answers[index] });
-    const correct = reasonPass.sum && reasonPass.questions;
-    const name = names[index];
-    return { name, input, output, correct, ans: answers[index], reasonPass: reasonPass };
-  });
-}
 
 const TableAA = ({ number }) => {
   const interrupts = [20, 21, 22, 23, 24];
@@ -134,6 +104,34 @@ const TableAA = ({ number }) => {
     </>
   );
 };
+
+export function processTestsOutputs({ taskTests, testsOutputs }) {
+  const names = taskTests.map((test) => test.name);
+  function checkAns({ outputLines, answer }) {
+    const lines = outputLines.map((line) => line.replace(/[^0-9]/g, ''));
+    const lastLine = lines[lines.length - 2];
+    const nonEmptyLines = lines.filter(Boolean);
+    const sum = nonEmptyLines.slice(0, -1).reduce((acc, curr) => acc + parseInt(curr), 0);
+    return { questions: lastLine == answer.questions, sum: sum == answer.sum };
+  }
+  const answers = [
+    { questions: 51, sum: 2545 },
+    { questions: 3, sum: 55 },
+    { questions: 20, sum: 694 },
+    { questions: 35, sum: 1270 },
+    { questions: 48, sum: 2090 },
+  ];
+  return testsOutputs.map((testsOutput, index) => {
+    const inputLines = testsOutput.input.split('\n');
+    const input = { num: parseInt(inputLines[0]) };
+    const outputLines = testsOutput.output.split('\n');
+    const output = outputLines.slice(2).join(' ');
+    const reasonPass = checkAns({ outputLines, answer: answers[index] });
+    const correct = reasonPass.sum && reasonPass.questions;
+    const name = names[index];
+    return { name, input, output, correct, ans: answers[index], reasonPass: reasonPass };
+  });
+}
 
 const ans = `
 products_num = int(input("Please enter the number of products: "))

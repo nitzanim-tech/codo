@@ -88,6 +88,118 @@ const WordleTable = ({ key, colorMap, word }) => {
     </div>
   );
 };
+export function processTestsOutputs({ taskTests, testsOutputs }) {
+  const names = taskTests.map((test) => test.name);
+  const answers = [
+    { feedback: [{ green: 'nitzanim', orange: '', gray: '' }], lastLine: 'won' },
+    {
+      feedback: [
+        { green: 'wd', orange: 'r', gray: 'ei' },
+        { green: 'world', orange: '', gray: '' },
+      ],
+      lastLine: 'won',
+    },
+    {
+      feedback: [
+        { green: 'ro', orange: '', gray: 'tilus' },
+        { green: 'pro', orange: '', gray: 'duct' },
+        { green: 'program', orange: '', gray: '' },
+      ],
+      lastLine: 'won',
+    },
+    {
+      feedback: [
+        { green: 'n', orange: '', gray: 'drive' },
+        { green: '', orange: 'nt', gray: 'clie' },
+        { green: 'py', orange: 'n', gray: 'clie' },
+      ],
+      lastLine: 'lost',
+    },
+  ];
+  function textToBlocks(input) {
+    const lines = input.split('\n');
+    const blocks = [];
+    let currentBlock = '';
+    let currentRound = '';
+    const rounds = {};
+    const trialsFeedback = [];
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (/^Round \d+:/.test(line) || /^round \d+:/.test(line)) {
+        if (currentBlock) {
+          blocks.push(currentBlock.trim());
+          rounds[currentRound] = currentBlock.trim();
+        }
+        currentBlock = line;
+        currentRound = line;
+        trialsFeedback.push({});
+      } else if (/^\d+$/.test(line)) {
+        currentBlock += '\n' + line;
+      } else {
+        currentBlock += '\n' + line;
+        const feedback = trialsFeedback[trialsFeedback.length - 1];
+        if (/^green/.test(line) || /^Green/.test(line)) {
+          feedback.green = line;
+        } else if (/^Orange/.test(line) || /^orange/.test(line)) {
+          feedback.orange = line;
+        } else if (/^Gray/.test(line) || /^gray/.test(line) || /^Grey/.test(line) || /^grey/.test(line)) {
+          feedback.gray = line;
+        }
+      }
+    }
+    if (currentBlock) {
+      blocks.push(currentBlock.trim());
+      rounds[currentRound] = currentBlock.trim();
+    }
+    return { trialsFeedback, lastLine: lines[lines.length - 2] };
+  }
+  return testsOutputs.map((testsOutput, index) => {
+    const inputLines = testsOutput.input.split('\n');
+    const input = { word: inputLines[0], trials: [inputLines[1], inputLines[2] || null, inputLines[3] || null] };
+    const output = textToBlocks(testsOutput.output);
+    function checkColor(output, color, answer) {
+      try {
+        if (output[color] === null) {
+          return false;
+        }
+        for (const letter of answer) {
+          if (!output[color].replace(new RegExp(color, 'gi'), '').includes(letter)) {
+            return false;
+          }
+        }
+        return true;
+      } catch {
+        return false;
+      }
+    }
+    const checkSingleTrial = (output, answer) => {
+      return output && answer
+        ? checkColor(output, 'green', answer.green || '') &&
+            checkColor(output, 'orange', answer.orange || '') &&
+            checkColor(output, 'gray', answer.gray || '')
+        : null;
+    };
+    const makeFullCorrect = (index) => {
+      const feedback = output?.trialsFeedback || {};
+      const answer = answers[index].feedback;
+      return {
+        0: checkSingleTrial(feedback[0], answer[0]),
+        1: checkSingleTrial(feedback[1], answer[1]),
+        2: checkSingleTrial(feedback[2], answer[2]),
+        lastLine: output.lastLine.toLowerCase().includes(answers[index].lastLine),
+      };
+    };
+    const fullCorrect = makeFullCorrect(index);
+    const checkCorrect = (fullCorrect) =>
+      fullCorrect[0] != null &&
+      Object.values(fullCorrect)
+        .filter((value) => value !== null)
+        .every((value) => value);
+    const correct = checkCorrect(fullCorrect);
+    const name = names[index];
+    return { name, input, output, correct, fullCorrect, ans: answers[index] };
+  });
+}
 
 const ans = `
 secrete_word = input('Enter secrete word: ') 

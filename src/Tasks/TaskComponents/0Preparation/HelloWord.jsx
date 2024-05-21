@@ -11,3 +11,15 @@ export function getTaskExplanation(selectedValue) {
     </>
   );
 }
+
+export function processTestsOutputs({ taskTests, testsOutputs }) {
+  const names = taskTests.map((test) => test.name);
+  const answers = ['Hello world', 'לא Sababa Egozim'];
+  return testsOutputs.map((testsOutput, index) => {
+    const input = null;
+    const output = testsOutput.output ? testsOutput.output.replace(/\n/g, '') : '';
+    const correct = index == 0 ? output.includes(answers[index]) : !output.includes('Sababa Egozim');
+    const name = names[index];
+    return { name, input, output, correct, ans: answers[index] };
+  });
+}

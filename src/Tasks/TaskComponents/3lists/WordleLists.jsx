@@ -87,6 +87,76 @@ const WordleTable = ({ colorMap, word }) => {
   );
 };
 
+export function processTestsOutputs({ taskTests, testsOutputs }) {
+  const names = taskTests.map((test) => test.name);
+
+  const answers = [
+    { lastLine: '3' },
+
+    { lastLine: '34' },
+
+    { green: 'list', lastLine: 'correct' },
+
+    { gray: 'crane' },
+
+    { orange: 'li', gray: 'cmb' },
+
+    { green: 'li', gray: 'ked' },
+
+    { green: 'li', orange: 't', gray: 'gh' },
+  ];
+
+  return testsOutputs.map((testsOutput, index) => {
+    const inputLines = testsOutput.input.split('\n');
+    const input = {
+      word: inputLines[0],
+    };
+    const outputLines = testsOutput.output.split('\n');
+    const output = {
+      lastLine: outputLines[outputLines.length - 2],
+      gray: outputLines.find((line) => line.includes('gray') || line.includes('Gray')) || null,
+      orange: outputLines.find((line) => line.includes('orange') || line.includes('Orange')) || null,
+      green: outputLines.find((line) => line.includes('green') || line.includes('Green')) || null,
+    };
+    function checkColor(output, color, answer) {
+      if (output[color] === null) {
+        return false;
+      }
+      for (const letter of answer) {
+        if (!output[color].replace(new RegExp(color, 'gi'), '').includes(letter)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    const correct = (index) => {
+      switch (index) {
+        case 0:
+        case 1:
+        case 2:
+          return output.lastLine.toLowerCase().includes(answers[index].lastLine);
+        case 3:
+          return checkColor(output, 'gray', answers[index].gray);
+        case 4:
+          return checkColor(output, 'orange', answers[index].orange) && checkColor(output, 'gray', answers[index].gray);
+        case 5:
+          return checkColor(output, 'green', answers[index].green) && checkColor(output, 'gray', answers[index].gray);
+        case 6:
+          return (
+            checkColor(output, 'green', answers[index].green) &&
+            checkColor(output, 'orange', answers[index].orange) &&
+            checkColor(output, 'gray', answers[index].gray)
+          );
+      }
+    };
+
+    const name = names[index];
+    return { name, input, output, correct: correct(index), ans: answers[index] };
+  });
+}
+
+
 const ans = `gray_list = []
 orange_list = []
 green_list =[]

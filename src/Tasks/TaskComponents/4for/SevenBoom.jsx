@@ -59,6 +59,30 @@ const BoomTable = ({ gameString }) => {
   );
 };
 
+export function processTestsOutputs({ taskTests, testsOutputs }) {
+  const names = taskTests.map((test) => test.name);
+  const answers = [
+    `B\n64\n65\n66\nB\n68\n69\nB\nB\nB`,
+    '1\n2\n3\n4\n5\n6\nB\n8\n9\n10',
+    'Error',
+    'B',
+    'B\nB\nB\nB\nB\nB\nB\nB',
+  ];
+  return testsOutputs.map((testsOutput, index) => {
+    const inputLines = testsOutput.input.split('\n');
+    const input = { fisrt: parseInt(inputLines[0]), second: parseInt(inputLines[1]) };
+    const outputLines = testsOutput.output.split('\n');
+    const output = outputLines.slice(2).join(' ');
+    const transformOutput = output.replace(/\s+/g, '').replace(/Boom|boom/g, 'B');
+    const correct =
+      index != 2
+        ? transformOutput == answers[index].replace(/\s+/g, '')
+        : transformOutput.toLowerCase().includes('error');
+    const name = names[index];
+    return { name, input, output, correct, ans: answers[index] };
+  });
+}
+
 const ans = `
 first = int(input('First number:'))
 second = int(input('Second number:'))

@@ -79,6 +79,41 @@ export function getTaskExplanation(selectedValue) {
   );
 }
 
+export function processTestsOutputs({ taskTests, testsOutputs }) {
+  const names = taskTests.map((test) => test.name);
+
+  const generateMultiTable = (size) => {
+    const multiTable = [];
+    for (let i = 1; i < +size + 1; i++) {
+      for (let j = 1; j < +size + 1; j++) {
+        multiTable.push(i * j);
+      }
+    }
+    return multiTable;
+  };
+
+  function checkAns({ outputLines, size }) {
+    if (size < 0) return outputLines.join('').toLowerCase().includes('error');
+    const multiTable = generateMultiTable(size);
+    for (let i = 0; i < Math.min(outputLines.length, multiTable.length); i++) {
+      if (!outputLines[i].includes(multiTable[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return testsOutputs.map((testsOutput, index) => {
+    const inputLines = testsOutput.input.split('\n');
+    const input = {
+      size: inputLines[0],
+    };
+    const outputLines = testsOutput.output.split('\n').slice(1);
+    const output = outputLines;
+    const correct = checkAns({ outputLines, size: input.size });
+    const name = names[index];
+    return { name, input, output, correct, ans: '' };
+  });
+}
 const ans = `
 size = int(input('Enter borad size: '))
 for i in range(1,size+1):

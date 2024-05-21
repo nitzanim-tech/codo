@@ -82,6 +82,83 @@ export function getTaskExplanation(selectedValue) {
     </>
   );
 }
+export function processTestsOutputs({ taskTests, testsOutputs }) {
+    const names = taskTests.map((test) => test.name);
+    const Salads = ['salad', 'humus', 'tehini', 'harif', 'amba', 'cabbage', 'pickles', 'chips', 'onion'];
+    const SaladsWithoutHumus = Salads.filter((item) => item !== 'humus');
+    const SaladsWithoutPickles = SaladsWithoutHumus.filter((item) => item !== 'pickles');
+    const SaladsWithoutThini = SaladsWithoutPickles.filter((item) => item !== 'tehini');
+    const isLineContains = (output, includeWords, excludeWords) => {
+      for (let line of output) {
+        let includeAll = includeWords.every((word) => line.toLowerCase().includes(word));
+        let excludeAny = excludeWords.some((word) => line.toLowerCase().includes(word));
+        if (includeAll && !excludeAny) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const isCorrect = ({ index, outputLines }) => {
+      switch (index) {
+        case 0: // printing the menu
+          return (
+            isLineContains(outputLines, ['half', '15'], []) &&
+            isLineContains(outputLines, ['mana', '25'], []) &&
+            isLineContains(outputLines, ['deal', '33'], [])
+          );
+
+        case 1: //updating the list of salads
+          return (
+            isLineContains(outputLines, Salads, []) &&
+            isLineContains(outputLines, SaladsWithoutHumus, ['humus']) &&
+            isLineContains(outputLines, SaladsWithoutPickles, ['humus', 'pickles']) &&
+            isLineContains(outputLines, SaladsWithoutThini, ['humus', 'pickles', 'tehini'])
+          );
+
+        case 2: // printing the list of selected salads
+          return isLineContains(
+            outputLines,
+            ['humus', 'pickles', 'tehini', 'salad'],
+            ['harif', 'amba', 'cabbage', 'onion'],
+          );
+
+        case 3: // printing the correct price
+          return isLineContains(outputLines, ['pay', '25'], []);
+
+        case 4: // cash in several currencies and excess
+          return isLineContains(outputLines, ['back', '8'], []);
+
+        case 5: //Cash Exact Price
+          return isLineContains(outputLines, ['back', '0'], []);
+
+        case 6: //credit
+          return isLineContains(outputLines, ['received'], []);
+
+        case 7: //some customers
+          return isLineContains(outputLines, ['pay', '25'], []) && isLineContains(outputLines, ['pay', '33'], []);
+
+        case 8: // printing all the recives
+          const lastLines = outputLines.slice(-8);
+          return (
+            isLineContains(lastLines, ['deal', '33'], []) &&
+            isLineContains(lastLines, ['mana', '25'], []) &&
+            !isLineContains(lastLines, ['half', '15'], [])
+          );
+
+        case 9: //correct profit amount
+          return isLineContains(outputLines, ['earned', '34'], []);
+      }
+    };
+    return testsOutputs.map((testsOutput, index) => {
+      const input = testsOutput.input;
+      const outputLines = testsOutput.output ? testsOutput.output.split('\n') : '';
+      const correct = index < 10 ? isCorrect({ index, outputLines }) : null;
+      const name = names[index];
+      return { name, input, output: testsOutput.output, correct, index };
+    });
+
+}
 
 const ans = `
 # preparing store

@@ -148,3 +148,23 @@ export function getTaskExplanation(selectedValue) {
     </Grid>
   );
 }
+
+
+export function processTestsOutputs({ taskTests, testsOutputs }) {
+  const isCorect = (output, ans) => {
+    if (ans == 'A או B') return output.includes('A') || output.includes('B');
+    if (ans == 'A') return output.includes('A') && !output.includes('B');
+    return output.includes('B') && !output.includes('A ');
+  };
+  const names = taskTests.map((test) => test.name);
+  const answers = ['A', 'B', 'B', 'B', 'A או B', 'A'];
+  return testsOutputs.map((testsOutput, index) => {
+    const inputLines = testsOutput.input.split('\n');
+    const input = { A: parseInt(inputLines[0]), B: parseInt(inputLines[1]), P: parseInt(inputLines[2]) };
+    const outputLines = testsOutput.output.split('\n');
+    const output = outputLines[outputLines.length - 2];
+    const correct = isCorect(output, answers[index]);
+    const name = names[index];
+    return { name, input, output, correct, ans: answers[index] };
+  });
+}
