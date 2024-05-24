@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
 import PythonIDE from '../components/IDE/PythonIDE';
 import NavBar from '../components/NavBar/NavigateBar';
 import Instructions from '../components/Instructions';
@@ -9,7 +8,9 @@ import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import getTaskById from '../requests/tasks/getTaskById';
+import addSession from "../requests/sessions/addSession"
 import './Submit.css';
+
 
 function Submit() {
   const { app, userData } = useFirebase();
@@ -32,6 +33,28 @@ function Submit() {
     fetchData();
   }, [index, userData]);
 
+  useEffect(() => {
+    if (!userData || !index) return;
+
+    const start = new Date().toISOString();
+    let end;
+
+    const handleBeforeUnload = () => {
+      end = new Date().toISOString();
+      const session = {userId: userData.id,task: index,start,end};
+      addSession({ app, session });
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      end = new Date().toISOString();
+      const session = { userId: userData.id, task: index, start, end };
+      addSession({ app, session });
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [app, userData, index]);
+
   return (
     <>
       <NavBar />
@@ -41,11 +64,9 @@ function Submit() {
             <Grid item style={{ width: '20%' }}>
               {taskData?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskData} />}
             </Grid>
-
             <Grid item style={{ width: '50%' }}>
               <PythonIDE testsOutputs={testsOutputs} setTestsOutputs={setTestsOutputs} taskObject={taskData} />
             </Grid>
-
             <Grid item style={{ width: '30%' }}>
               {taskData?.setting?.showTest && <Instructions taskObject={taskData} />}
             </Grid>

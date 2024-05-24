@@ -60,6 +60,7 @@ async function handleClick() {
       taskTests: taskObject.tests,
       testsOutputs: userTestOutputs,
     });
+
     // const codeFromDB = taskObject.processTestsCode;
     // let processOutput = new Function('parameters', codeFromDB);
     // let parameters = {
