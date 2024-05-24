@@ -1,10 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
+import addSession from '../../requests/sessions/addSession';
+import { useFirebase } from '../../util/FirebaseProvider';
+import { useParams } from 'react-router-dom';
 
 export default function MonacoEditor({ code, setCode, theme }) {
   const { app, userData } = useFirebase();
-  const editorRef = useRef(null);
   const { index } = useParams();
+
+  const editorRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem('code', code);
@@ -15,7 +19,9 @@ export default function MonacoEditor({ code, setCode, theme }) {
     const handlePaste = (event) => {
       const clipboardData = event.clipboardData || window.clipboardData;
       const pastedData = clipboardData.getData('text');
-      console.log('Pasted content:', pastedData);
+      const time = new Date().toISOString();
+      const session = { pastedData, time };
+      addSession({ app, userId: userData.id, task: index, session });
     };
     const editorDomNode = editor.getDomNode();
     editorDomNode.addEventListener('paste', handlePaste);

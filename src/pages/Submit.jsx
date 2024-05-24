@@ -41,16 +41,16 @@ function Submit() {
 
     const handleBeforeUnload = () => {
       end = new Date().toISOString();
-      const session = {userId: userData.id,task: index,start,end};
-      addSession({ app, session });
+      const session = { start, end };
+      addSession({ app, userId: userData.id,task:index, session });
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
       end = new Date().toISOString();
-      const session = { userId: userData.id, task: index, start, end };
-      addSession({ app, session });
+      const session = { start, end };
+      addSession({ app, userId: userData.id, task: index, session });
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [app, userData, index]);
