@@ -3,6 +3,8 @@ import DevTasksTab from '../components/Dev/DevTasksTab';
 import AddNewTasks from '../components/Dev/addNewTask/AddNewTasks';
 import ManageLessons from '../components/Dev/manageLessons/ManageLessons';
 import MiniDrawer from '../components/Dev/TEST';
+import App from '../components/Dev/userTrack/UserTrack';
+
 const DevTeam = () => {
   return (
     <div
@@ -22,6 +24,9 @@ const DevTeam = () => {
         </Tab>
         <Tab key="lessons" title="מפגשים">
           <ManageLessons />
+        </Tab>
+        <Tab key="track" title="מעקב">
+          <App />
         </Tab>
         <Tab key="AA" title="TEST">
           <MiniDrawer />
