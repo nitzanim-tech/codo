@@ -21,7 +21,7 @@ const SessionTimeline = ({ events }) => (
       return (
         <TimelineItem key={index}>
           <TimelineOppositeContent>
-            <Typography color="textSecondary">{formatDate(event.time.toISOString())}</Typography>
+            <Typography color="textSecondary">{formatDate(event.time.toISOString(), true)}</Typography>
           </TimelineOppositeContent>
           <TimelineSeparator>
             <TimelineDot />
@@ -99,6 +99,8 @@ const TimelineComponent = ({ data }) => {
 
 const App = () => {
   const userId = 'kTqDi3pSI5NkUW21FbJF6sxDm3D3';
+  //   const userId = 'Lf6WIKK9xQVzLJZ1MoOIDMp27FI2';
+
   const [sessions, setSessions] = useState();
   const { app } = useFirebase();
 
@@ -107,7 +109,6 @@ const App = () => {
       try {
         const sessionFromDb = await getSession({ app, userId });
         setSessions(sessionFromDb);
-        console.log(sessionFromDb);
       } catch (error) {
         console.error('Error fetching sessions:', error);
       }

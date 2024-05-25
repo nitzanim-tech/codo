@@ -1,8 +1,9 @@
-export default function formatDate(dateString) {
+export default function formatDate(dateString, showSeconds = false) {
   // format: dd.mm.yyyy | hh:mm 
   // timeZone: 'Asia/Jerusalem'
   const dateObj = new Date(dateString);
   const options = {
+    second: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
     day: '2-digit',
