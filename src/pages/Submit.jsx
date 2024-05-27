@@ -8,9 +8,8 @@ import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import getTaskById from '../requests/tasks/getTaskById';
-import addSession from "../requests/sessions/addSession"
+import SessionTracker from '../components/general/SessionTracker';
 import './Submit.css';
-
 
 function Submit() {
   const { app, userData } = useFirebase();
@@ -33,28 +32,6 @@ function Submit() {
     fetchData();
   }, [index, userData]);
 
-  useEffect(() => {
-    if (!userData || !index) return;
-
-    const start = new Date().toISOString();
-    let end;
-
-    const handleBeforeUnload = () => {
-      end = new Date().toISOString();
-      const session = { start, end };
-      addSession({ app, userId: userData.id,task:index, session });
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      end = new Date().toISOString();
-      const session = { start, end };
-      addSession({ app, userId: userData.id, task: index, session });
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [app, userData, index]);
-
   return (
     <>
       <NavBar />
@@ -73,14 +50,10 @@ function Submit() {
           </Grid>
         )}
       </PyodideProvider>
+      <SessionTracker type={'start'} />
+      <SessionTracker type={'end'} />
     </>
   );
 }
 
 export default Submit;
-
-// const isReviewExist = (submissions, taskId) => {
-//   if (!submissions || !submissions[taskId]) return false;
-//   for (const trial of submissions[taskId].trials) if (trial.review) return true;
-//   return false;
-// };

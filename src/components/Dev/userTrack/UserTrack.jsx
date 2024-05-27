@@ -85,6 +85,7 @@ const TimelineComponent = ({ data }) => {
     });
 
     events.sort((a, b) => a.time - b.time);
+    console.log(events);
     sessions.push(events);
   });
 
@@ -98,10 +99,8 @@ const TimelineComponent = ({ data }) => {
 };
 
 const App = () => {
-  const userId = 'kTqDi3pSI5NkUW21FbJF6sxDm3D3';
-    // const userId = 'HOaHEr3Ww4cIFN5A4OEOd7khnpH3';
-
   const [sessions, setSessions] = useState();
+  const [userId, setUserId] = useState('kTqDi3pSI5NkUW21FbJF6sxDm3D3');
   const { app } = useFirebase();
 
   useEffect(() => {
@@ -116,12 +115,18 @@ const App = () => {
     fetchData();
   }, [app, userId]);
 
+  const handleInputChange = (e) => {
+    setUserId(e.target.value);
+  };
+
   return (
     <div style={{ padding: 20 }}>
-      <p>User {userId}</p>
+      <p>User</p>
+      <input type="text" value={userId} onChange={handleInputChange} placeholder="Enter User ID" />
       <TimelineComponent data={sessions} />
     </div>
   );
 };
 
 export default App;
+ 
