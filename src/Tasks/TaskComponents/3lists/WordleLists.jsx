@@ -92,17 +92,11 @@ export function processTestsOutputs({ taskTests, testsOutputs }) {
 
   const answers = [
     { lastLine: '3' },
-
     { lastLine: '34' },
-
     { green: 'list', lastLine: 'correct' },
-
     { gray: 'crane' },
-
     { orange: 'li', gray: 'cmb' },
-
     { green: 'li', gray: 'ked' },
-
     { green: 'li', orange: 't', gray: 'gh' },
   ];
 

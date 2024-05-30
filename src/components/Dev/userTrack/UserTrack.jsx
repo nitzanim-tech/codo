@@ -70,10 +70,15 @@ const TimelineComponent = ({ data }) => {
 
     Object.keys(sessionData).forEach((sessionId) => {
       const session = sessionData[sessionId];
-
-      if (session.start && session.end) {
+      console.log({ session });
+      if (session.start) {
         events.push({ type: 'task-start', taskId, time: new Date(session.start) });
+      }
+      if (session.end) {
         events.push({ type: 'task-end', taskId, time: new Date(session.end) });
+      }
+      if (session.copy && session.time) {
+        events.push({ type: 'copy', taskId, time: new Date(session.time) });
       }
 
       if (session.pass && session.time) {
@@ -85,7 +90,6 @@ const TimelineComponent = ({ data }) => {
     });
 
     events.sort((a, b) => a.time - b.time);
-    console.log(events);
     sessions.push(events);
   });
 

@@ -93,7 +93,8 @@ const calculateAverage = ({ data, task }) => {
           const currentNumerator = current.tests.filter(Boolean).length;
           return highestNumerator > currentNumerator ? highest : current;
         });
-        const numerator = highestNumeratorVersion.tests.filter(Boolean).length;
+        console.log({ highestNumeratorVersion, task, student });
+        const numerator = highestNumeratorVersion.tests?.filter(Boolean).length;
         total += numerator;
         count++;
       }

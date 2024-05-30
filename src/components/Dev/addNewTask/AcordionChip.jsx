@@ -18,6 +18,10 @@ const AcordionChip = ({ title, chipsList, setChipsList }) => {
     }
   }
 
+  function handleChipClose(chip) {
+    setChipsList(chipsList.filter((item) => item !== chip));
+  }
+
   return (
     <div>
       <Grid container spacing={1} columns={2} rows={1}>
@@ -39,7 +43,9 @@ const AcordionChip = ({ title, chipsList, setChipsList }) => {
           <Accordion dir="rtl" variant="splitted" selectionMode="multiple" selectedKeys={'1'} isCompact>
             <AccordionItem title={title} key="1">
               {chipsList.map((chip) => (
-                <Chip key={chip}>{chip} </Chip>
+                <Chip key={chip} onClose={() => handleChipClose(chip)}>
+                  {chip}
+                </Chip>
               ))}
             </AccordionItem>
           </Accordion>

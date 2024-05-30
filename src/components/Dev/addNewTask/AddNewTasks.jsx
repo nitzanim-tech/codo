@@ -31,6 +31,7 @@ const AddNewTasks = () => {
   return (
     <>
       <Input label="שם" variant="bordered" className="max-w-xs" onChange={(e) => setName(e.target.value)} />
+      <p>{name}</p>
       <AcordionChip chipsList={subjects} setChipsList={setSubjects} title={'מה צריך לדעת'} />
       <AcordionTextEditor setText={setDescription} title={'תיאור המשימה'} />
       <AcordionTextEditor setText={setExample} title={'דוגמה'} />
