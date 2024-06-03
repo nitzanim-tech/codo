@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Tabs, Tab, Divider, Input, Button } from '@nextui-org/react';
+import { Tabs, Tab, Divider, Input, Button, Slider } from '@nextui-org/react';
 import Editor from '@monaco-editor/react';
 
 import { AcordionTextEditor, AcordionPreview } from './AcordionTextEditor';
@@ -8,14 +8,16 @@ import AddTests from './AddTests';
 import addTask from '../../../requests/tasks/addTask';
 import { useFirebase } from '../../../util/FirebaseProvider';
 import { RadioGroup, Radio } from '@nextui-org/react';
-
+import ChecklistRtlRoundedIcon from '@mui/icons-material/ChecklistRtlRounded';
+import TerminalRoundedIcon from '@mui/icons-material/TerminalRounded';
+import EmojiSymbolsRoundedIcon from '@mui/icons-material/EmojiSymbolsRounded';
 /// TODO: add headers
 
 const AddNewTasks = () => {
   const { app, userData } = useFirebase();
   const dist = '20';
 
-  const [currentEdit, setCurretEdit] = useState('subjects');
+  const [currentEdit, setCurretEdit] = useState('name');
 
   const [name, setName] = useState();
   const [subjects, setSubjects] = useState([]);
@@ -37,6 +39,7 @@ const AddNewTasks = () => {
 
   return (
     <>
+      <Header title={'הסבר'} icon={EmojiSymbolsRoundedIcon} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', direction: 'rtl' }}>
         {/* PREVIEW */}
         <div style={{ width: '60%' }}>
@@ -72,7 +75,9 @@ const AddNewTasks = () => {
         {/* EDIT */}
         <div>
           {currentEdit === 'name' && (
-            <Input label="שם" variant="bordered" value={name} onChange={(e) => setName(e.target.value)} />
+            <div style={{ width: '70%' }}>
+              <Input label="שם" variant="bordered" value={name} onChange={(e) => setName(e.target.value)} />
+            </div>
           )}
           {currentEdit === 'subjects' && <EditSubjectsChips setChipsList={setSubjects} ChipsList={subjects} />}
           {currentEdit === 'description' && (
@@ -93,30 +98,81 @@ const AddNewTasks = () => {
           )}
         </div>
       </div>
+      <Divider style={{ marginTop: '20px', margin: '10px 0 20px 0' }} />
 
-      <Divider style={{ marginTop: '20px' }} />
-      <div style={{ marginTop: '20px' }}>
-        <h2>טסטים</h2>
-        <AddTests testsList={tests} setTestList={setTests} />
-        <Divider style={{ marginTop: '20px' }} /> 
-        <h2> (python) קוד פתרון</h2>
+      <Header title={'קוד פתרון'} icon={TerminalRoundedIcon} />
+      <ListboxWrapper width="70%">
         <Editor
           height="315px"
-          width='50%'
           theme="vs-dark"
           defaultLanguage="python"
           value={code}
           onChange={(newValue) => setCode(newValue)}
           options={{ minimap: { enabled: false } }}
         />
-        <RadioGroup label="Select your favorite city" orientation="horizontal">
-          <Radio value="buenos-aires">Buenos Aires</Radio>
-          <Radio value="sydney">Sydney</Radio>
+      </ListboxWrapper>
+      <Header title={'טסטים'} icon={ChecklistRtlRoundedIcon} />
+      <AddTests testsList={tests} setTestList={setTests} />
+      <Divider style={{ marginTop: '20px' }} />
+      <div style={{ direction: 'rtl', width: '20%' }}>
+        <RadioGroup label="סוג משימה" orientation="horizontal">
+          <Radio value="default" defaultChecked>
+            ברירת מחדל
+          </Radio>
+          <Radio value="custom"> מותאם אישית </Radio>
         </RadioGroup>
-        <Button onClick={onSendCustomClick}>שלח</Button>
       </div>
+      <div style={{ width: '30%' }}>
+        <Slider
+          step={1}
+          minValue={1}
+          maxValue={5}
+          marks={[
+            {
+              value: 1,
+              label: 'חימום',
+            },
+            {
+              value: 2,
+              label: 'קל',
+            },
+            {
+              value: 3,
+              label: 'סביר',
+            },
+            {
+              value: 4,
+              label: 'קשה',
+            },
+            {
+              value: 5,
+              label: 'אתגר',
+            },
+          ]}
+          defaultValue={3}
+        />
+      </div>
+      <Button onClick={onSendCustomClick}>שלח</Button>
     </>
   );
 };
 
 export default AddNewTasks;
+
+const ListboxWrapper = ({ children, width = '260px' }) => (
+  <div
+    className={`w-full border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100`}
+    style={{ width }}
+  >
+    {children}
+  </div>
+);
+
+const Header = ({ title, icon: Icon }) => {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', color: '#008AD1', margin: '10px 10px 10px 0' }}>
+      <h2 style={{ fontSize: '24px', margin: 0 }}>{title}</h2>
+      <Icon style={{ marginLeft: '10px' }} />
+    </div>
+  );
+};
