@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useFirebase } from '../../../util/FirebaseProvider';
 import addLesson from '../../../requests/lessons/addLesson';
 import { SuccessMessage, ErrorMessage } from '../../general/Messages';
+
 function AddLesson() {
   const { app } = useFirebase();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

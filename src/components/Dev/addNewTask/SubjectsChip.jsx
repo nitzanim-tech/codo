@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { AccordionItem, Accordion, Chip, Button, Input } from '@nextui-org/react';
-import AddIcon from '@mui/icons-material/Add';
 import 'suneditor/dist/css/suneditor.min.css';
 
 const SubjectsChip = ({ chipsList, setChipsList, isSelected, setCurretEditing }) => {
@@ -29,43 +28,23 @@ const SubjectsChip = ({ chipsList, setChipsList, isSelected, setCurretEditing })
 };
 
 const EditSubjectsChips = ({ ChipsList, setChipsList }) => {
-  const [inputText, setInputText] = useState('');
-  function handleAddClick() {
-    setChipsList((prevChipsList) => [...prevChipsList, inputText]);
-    setInputText('');
-  }
-
-  function handleKeyPress(event) {
-    if (event.key === 'Enter') {
-      handleAddClick();
-    }
-  }
   const handleChipClick = (e) => {
     const chipElement = e.currentTarget;
     if (chipElement) {
       const chipText = chipElement.textContent;
       setChipsList((prevSubjects) => {
-        if (!prevSubjects.includes(chipText)) {
+        if (prevSubjects.includes(chipText)) {
+          return prevSubjects.filter((subject) => subject !== chipText);
+        } else {
           return [...prevSubjects, chipText];
         }
-        return prevSubjects;
       });
     }
   };
 
   return (
     <div>
-      <Input
-        variant="outlined"
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
-        onKeyPress={handleKeyPress}
-        style={{ marginBottom: '10px' }}
-      />
-      <Button variant="contained" color="primary" onClick={handleAddClick} style={{ marginBottom: '10px' }}>
-        <AddIcon />
-      </Button>
-      <table style={{direction:'rtl'}}>
+      <table style={{ direction: 'rtl' }}>
         <tbody>
           {Object.keys(SUBJECTS).map((header) => (
             <tr key={header}>
@@ -73,8 +52,7 @@ const EditSubjectsChips = ({ ChipsList, setChipsList }) => {
               <td>
                 {SUBJECTS[header].map((subject) => (
                   <Chip
-                    color={ChipsList.includes(subject) ? 'primary' : 'default'} // Set color based on presence in list
-                    onClose={() => setChipsList((prevChipsList) => prevChipsList.filter((chip) => chip !== subject))}
+                    color={ChipsList.includes(subject) ? 'primary' : 'default'}
                     onClick={handleChipClick}
                     style={{ margin: '5px', cursor: 'pointer' }}
                   >
@@ -93,13 +71,21 @@ const EditSubjectsChips = ({ ChipsList, setChipsList }) => {
 export { EditSubjectsChips, SubjectsChip as SubjectstChip };
 
 const SUBJECTS = {
-  פתיחה: ['משתנים', 'סוגי נתונים', 'אופרטורים חשבוניים', 'אופרטורים לוגיים', 'השמה', 'קלט', 'הדפסה'],
+  פתיחה: ['משתנים', 'סוגי נתונים', 'קאסטינג', 'אופרטורים חשבוניים', 'אופרטורים לוגיים', 'קלט', 'הדפסה'],
   תנאים: ['תנאים', 'elif', 'else', 'תנאים מקוננים'],
-  לולאות: ['לולאות while', 'לולאות for', 'range'],
+  לולאות: ['לולאות while', 'לולאות for', 'range', 'counter', 'לולאות מקוננות'],
   מחרוזות: ['מחרוזות', 'split', 'join', 'replace', 'שימוש בספריות'],
-  פונקציות: ['הגדרת פונקציות', 'קריאה לפונקציות', 'ארגומנטים', 'החזרת ערכים מפונקציות'],
+  פונקציות: [
+    'הגדרת פונקציות',
+    'קריאה לפונקציות',
+    'ארגומנטים',
+    'החזרת ערכים מפונקציות',
+    'חלוקה לפונקציות',
+    'שימוש בmain',
+  ],
   רשימות: ['רשימות', 'חיתוך רשימות (slicing)', 'לולאות על רשימות', 'רשימת דו מימד'],
   'מבני נתונים': ['מילונים', 'keys / values', 'סטים', 'פעולות על סטים'],
   'קוד נקי': ['קבועים'],
-  מיומניות: ['פתרון בעיות', 'חשיבה ביקורתית', 'יצירתיות', 'ניהול זמן', 'למידה עצמאית', 'מקרי קצה'],
+  מיומניות: ['פתרון בעיות', 'אלגוריתמיקה', 'תיקון קוד', 'יצירתיות', 'ניהול זמן', 'למידה עצמית', 'מקרי קצה'],
+  אתגר: ['אתגר', 'רקורסיה'],
 };

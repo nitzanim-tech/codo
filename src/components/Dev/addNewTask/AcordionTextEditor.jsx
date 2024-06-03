@@ -40,7 +40,7 @@ const AcordionTextEditor = ({ text, setText, htmlContent, setHtmlContent }) => {
 const AcordionPreview = ({ type, htmlContent, isSelected, setCurretEditing }) => {
   const title = type == 'description' ? 'תיאור המשימה' : 'דוגמה';
   return (
-    <Accordion dir="rtl" selectionMode="multiple" selectedKeys={'1'} isCompact>
+    <Accordion dir="rtl" variant="splitted" selectionMode="multiple" selectedKeys={'1'} isCompact>
       <AccordionItem
         title={title}
         key="1"
