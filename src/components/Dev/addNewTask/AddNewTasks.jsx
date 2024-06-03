@@ -11,6 +11,8 @@ import { RadioGroup, Radio } from '@nextui-org/react';
 import ChecklistRtlRoundedIcon from '@mui/icons-material/ChecklistRtlRounded';
 import TerminalRoundedIcon from '@mui/icons-material/TerminalRounded';
 import EmojiSymbolsRoundedIcon from '@mui/icons-material/EmojiSymbolsRounded';
+import HikingRoundedIcon from '@mui/icons-material/HikingRounded';
+
 /// TODO: add headers
 
 const AddNewTasks = () => {
@@ -40,9 +42,9 @@ const AddNewTasks = () => {
   return (
     <>
       <Header title={'הסבר'} icon={EmojiSymbolsRoundedIcon} />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', direction: 'rtl' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '40px', direction: 'rtl' }}>
         {/* PREVIEW */}
-        <div style={{ width: '60%' }}>
+        <div>
           <div onClick={() => setCurretEdit('name')} style={{ marginBottom: `${dist}px` }}>
             <p style={{ color: currentEdit === 'name' ? ' #008AD1' : null }}>{name || 'שם המשימה'}</p>
           </div>
@@ -98,22 +100,23 @@ const AddNewTasks = () => {
           )}
         </div>
       </div>
-      <Divider style={{ marginTop: '20px', margin: '10px 0 20px 0' }} />
 
       <Header title={'קוד פתרון'} icon={TerminalRoundedIcon} />
-      <ListboxWrapper width="70%">
-        <Editor
-          height="315px"
-          theme="vs-dark"
-          defaultLanguage="python"
-          value={code}
-          onChange={(newValue) => setCode(newValue)}
-          options={{ minimap: { enabled: false } }}
-        />
-      </ListboxWrapper>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <ListboxWrapper width="70%">
+          <Editor
+            height="315px"
+            theme="vs-dark"
+            defaultLanguage="python"
+            value={code}
+            onChange={(newValue) => setCode(newValue)}
+            options={{ minimap: { enabled: false } }}
+          />
+        </ListboxWrapper>
+      </div>
       <Header title={'טסטים'} icon={ChecklistRtlRoundedIcon} />
       <AddTests testsList={tests} setTestList={setTests} />
-      <Divider style={{ marginTop: '20px' }} />
+
       <div style={{ direction: 'rtl', width: '20%' }}>
         <RadioGroup label="סוג משימה" orientation="horizontal">
           <Radio value="default" defaultChecked>
@@ -122,6 +125,40 @@ const AddNewTasks = () => {
           <Radio value="custom"> מותאם אישית </Radio>
         </RadioGroup>
       </div>
+      <Header title={'רמת קושי'} icon={HikingRoundedIcon} />
+
+      <DifficultSlider />
+      <Button onClick={onSendCustomClick}>שלח</Button>
+    </>
+  );
+};
+
+export default AddNewTasks;
+
+const ListboxWrapper = ({ children, width = '260px' }) => (
+  <div
+    className={`w-full border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100`}
+    style={{ width }}
+  >
+    {children}
+  </div>
+);
+
+const Header = ({ title, icon: Icon }) => {
+  return (
+    <>
+      <Divider style={{ marginTop: '20px' }} />
+      <div style={{ display: 'flex', alignItems: 'center', color: '#008AD1', margin: '10px 10px 10px 0' }}>
+        <h2 style={{ fontSize: '24px', margin: 0 }}>{title}</h2>
+        <Icon style={{ marginLeft: '10px' }} />
+      </div>
+    </>
+  );
+};
+
+const DifficultSlider = () => {
+  return (
+    <div style={{ justifyContent: 'center' }}>
       <div style={{ width: '30%' }}>
         <Slider
           step={1}
@@ -152,27 +189,6 @@ const AddNewTasks = () => {
           defaultValue={3}
         />
       </div>
-      <Button onClick={onSendCustomClick}>שלח</Button>
-    </>
-  );
-};
-
-export default AddNewTasks;
-
-const ListboxWrapper = ({ children, width = '260px' }) => (
-  <div
-    className={`w-full border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100`}
-    style={{ width }}
-  >
-    {children}
-  </div>
-);
-
-const Header = ({ title, icon: Icon }) => {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', color: '#008AD1', margin: '10px 10px 10px 0' }}>
-      <h2 style={{ fontSize: '24px', margin: 0 }}>{title}</h2>
-      <Icon style={{ marginLeft: '10px' }} />
     </div>
   );
 };

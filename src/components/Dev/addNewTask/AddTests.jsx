@@ -5,6 +5,8 @@ import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded';
 import AddIcon from '@mui/icons-material/Add';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
+import RunTestButton from '../../IDE/RunTestButton';
+import { PyodideProvider } from '../../IDE/PyodideProvider';
 
 const AddTests = ({ testsList, setTestList }) => {
   const [name, setName] = useState('');
@@ -12,6 +14,9 @@ const AddTests = ({ testsList, setTestList }) => {
   const [input, setInput] = useState('');
   const [isHidden, setIsHidden] = useState(false);
   const [runningCode, setRunningCode] = useState('');
+
+  const [output, setOutput] = useState();
+  const [runTests, setRunTests] = useState(false);
 
   const loadTest = (index) => {
     const test = testsList[index];
@@ -34,6 +39,7 @@ const AddTests = ({ testsList, setTestList }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
       <StyledDiv>
+        <p>{output?.output||'hhhh'}</p>
         <Card fullWidth>
           <div style={{ padding: '15px', direction: 'rtl' }}>
             <div
@@ -81,15 +87,22 @@ const AddTests = ({ testsList, setTestList }) => {
               טסט מוסתר
             </Checkbox>
 
-            <Button
-              radius="full"
-              isIconOnly
-              variant="faded"
-              onClick={handleAddTestClick}
-              onChange={(e) => e.target.value}
-            >
-              <AddIcon />
-            </Button>
+            <Checkbox isSelected={isHidden} onValueChange={setIsHidden}>
+              הוסף כותרת
+            </Checkbox>
+            <div style={{ justifyContent: 'center' }}>
+              <PyodideProvider>
+                <RunTestButton
+                  code={`print('hi')`}
+                  setTestsOutputs={setOutput}
+                  runTests={runTests}
+                  taskObject={{ code: `print('hi')`, tests: [{ input, runningCode }] }}
+                />
+              </PyodideProvider>
+              <Button radius="full" isIconOnly variant="faded" onClick={handleAddTestClick}>
+                <AddIcon />
+              </Button>
+            </div>
           </div>
         </Card>
       </StyledDiv>

@@ -54,7 +54,7 @@ const EditSubjectsChips = ({ ChipsList, setChipsList }) => {
                   <Chip
                     color={ChipsList.includes(subject) ? 'primary' : 'default'}
                     onClick={handleChipClick}
-                    style={{ margin: '5px', cursor: 'pointer' }}
+                    style={{ margin: '2.5px', cursor: 'pointer' }}
                   >
                     {subject}
                   </Chip>
