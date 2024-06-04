@@ -12,7 +12,7 @@ import ChecklistRtlRoundedIcon from '@mui/icons-material/ChecklistRtlRounded';
 import TerminalRoundedIcon from '@mui/icons-material/TerminalRounded';
 import EmojiSymbolsRoundedIcon from '@mui/icons-material/EmojiSymbolsRounded';
 import HikingRoundedIcon from '@mui/icons-material/HikingRounded';
-
+import HdrStrongRoundedIcon from '@mui/icons-material/HdrStrongRounded';
 /// TODO: add headers
 
 const AddNewTasks = () => {
@@ -117,17 +117,23 @@ const AddNewTasks = () => {
       <Header title={'טסטים'} icon={ChecklistRtlRoundedIcon} />
       <AddTests testsList={tests} setTestList={setTests} />
 
-      <div style={{ direction: 'rtl', width: '20%' }}>
-        <RadioGroup label="סוג משימה" orientation="horizontal">
-          <Radio value="default" defaultChecked>
-            ברירת מחדל
-          </Radio>
-          <Radio value="custom"> מותאם אישית </Radio>
-        </RadioGroup>
-      </div>
-      <Header title={'רמת קושי'} icon={HikingRoundedIcon} />
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ width: '50%' }}>
+          <Header title={'סוג משימה'} icon={HdrStrongRoundedIcon} />
+          <div style={{ direction: 'rtl', width: '50%' }}>
+            <RadioGroup orientation="horizontal" defaultValue="default">
+              <Radio value="default">ברירת מחדל</Radio>
+              <Radio value="custom"> מותאם אישית </Radio>
+            </RadioGroup>
+          </div>
+        </div>
 
-      <DifficultSlider />
+        <div style={{ width: '50%' }}>
+          <Header title={'רמת קושי'} icon={HikingRoundedIcon} />
+          <DifficultSlider />
+        </div>
+      </div>
+
       <Button onClick={onSendCustomClick}>שלח</Button>
     </>
   );
@@ -159,36 +165,34 @@ const Header = ({ title, icon: Icon }) => {
 const DifficultSlider = () => {
   return (
     <div style={{ justifyContent: 'center' }}>
-      <div style={{ width: '30%' }}>
-        <Slider
-          step={1}
-          minValue={1}
-          maxValue={5}
-          marks={[
-            {
-              value: 1,
-              label: 'חימום',
-            },
-            {
-              value: 2,
-              label: 'קל',
-            },
-            {
-              value: 3,
-              label: 'סביר',
-            },
-            {
-              value: 4,
-              label: 'קשה',
-            },
-            {
-              value: 5,
-              label: 'אתגר',
-            },
-          ]}
-          defaultValue={3}
-        />
-      </div>
+      <Slider
+        step={1}
+        minValue={1}
+        maxValue={5}
+        marks={[
+          {
+            value: 1,
+            label: 'חימום',
+          },
+          {
+            value: 2,
+            label: 'קל',
+          },
+          {
+            value: 3,
+            label: 'סביר',
+          },
+          {
+            value: 4,
+            label: 'קשה',
+          },
+          {
+            value: 5,
+            label: 'אתגר',
+          },
+        ]}
+        defaultValue={3}
+      />
     </div>
   );
 };

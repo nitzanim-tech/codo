@@ -7,6 +7,7 @@ import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
 import RunTestButton from '../../IDE/RunTestButton';
 import { PyodideProvider } from '../../IDE/PyodideProvider';
+import DraggableList from './DraggableList';
 
 const AddTests = ({ testsList, setTestList }) => {
   const [name, setName] = useState('');
@@ -39,7 +40,7 @@ const AddTests = ({ testsList, setTestList }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
       <StyledDiv>
-        <p>{output?.output||'hhhh'}</p>
+        <p>{output ? output[0].output : null}</p>
         <Card fullWidth>
           <div style={{ padding: '15px', direction: 'rtl' }}>
             <div
@@ -108,11 +109,13 @@ const AddTests = ({ testsList, setTestList }) => {
       </StyledDiv>
       <div>
         <ListboxWrapper>
-          <Listbox aria-label="Actions" onAction={loadTest}>
+          <DraggableList items={testsList} setItems={setTestList} onClick={loadTest} />
+
+          {/* <Listbox aria-label="Actions" onAction={loadTest}>
             {testsList.map((test, index) => (
               <ListboxItem key={index}>{test.name}</ListboxItem>
             ))}
-          </Listbox>
+          </Listbox> */}
         </ListboxWrapper>
       </div>
     </div>
