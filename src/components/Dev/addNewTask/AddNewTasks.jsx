@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, Tab, Divider, Input, Button, Slider } from '@nextui-org/react';
 import Editor from '@monaco-editor/react';
 
@@ -13,34 +13,63 @@ import TerminalRoundedIcon from '@mui/icons-material/TerminalRounded';
 import EmojiSymbolsRoundedIcon from '@mui/icons-material/EmojiSymbolsRounded';
 import HikingRoundedIcon from '@mui/icons-material/HikingRounded';
 import HdrStrongRoundedIcon from '@mui/icons-material/HdrStrongRounded';
-/// TODO: add headers
 
 const AddNewTasks = () => {
   const { app, userData } = useFirebase();
   const dist = '20';
 
   const [currentEdit, setCurretEdit] = useState('name');
-
-  const [name, setName] = useState();
-  const [subjects, setSubjects] = useState([]);
-  const [description, setDescription] = useState('');
-  const [example, setExample] = useState('');
   const [htmlEditing, setHtmlEditing] = useState('');
 
-  const [code, setCode] = useState('# write here');
-  const [tests, setTests] = useState([]);
+  const [name, setName] = useState(localStorage.getItem('name') || '');
+  const [subjects, setSubjects] = useState(JSON.parse(localStorage.getItem('subjects')) || []);
+  const [description, setDescription] = useState(localStorage.getItem('description') || '');
+  const [example, setExample] = useState(localStorage.getItem('example') || '');
+  const [code, setCode] = useState(localStorage.getItem('newTaskCode') || '# write here');
+  const [tests, setTests] = useState(JSON.parse(localStorage.getItem('tests')) || []);
 
-  const onSendDefaultClick = () => {
-    const newTask = { name, code, subjects, description, example, tests, writer: userData.id };
-    addTask({ app, newTask });
-  };
-  const onSendCustomClick = () => {
-    const newTask = { name, subjects, description, example, tests, writer: userData.id };
+  useEffect(() => {
+    localStorage.setItem('name', name);
+  }, [name]);
+
+  useEffect(() => {
+    localStorage.setItem('subjects', JSON.stringify(subjects));
+  }, [subjects]);
+
+  useEffect(() => {
+    localStorage.setItem('description', description);
+  }, [description]);
+
+  useEffect(() => {
+    localStorage.setItem('example', example);
+  }, [example]);
+
+  useEffect(() => {
+    localStorage.setItem('newTaskCode', code);
+  }, [code]);
+
+  useEffect(() => {
+    localStorage.setItem('tests', JSON.stringify(tests));
+  }, [tests]);
+
+  const saveTask = () => {
+    const lastUpdate = new Date().toISOString();
+    const writer = userData.id;
+    const isDefault = false;
+    const level = 5
+    const newTask = { name, subjects, description, example, code, tests, writer, lastUpdate };
     addTask({ app, newTask });
   };
 
   return (
-    <>
+    <div
+      style={{
+        margin: '30px',
+        justifyContent: 'center',
+        padding: '40px',
+        backgroundColor: 'rgba(255,255,255, 0.8)',
+      }}
+    >
       <Header title={'הסבר'} icon={EmojiSymbolsRoundedIcon} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '40px', direction: 'rtl' }}>
         {/* PREVIEW */}
@@ -115,7 +144,7 @@ const AddNewTasks = () => {
         </ListboxWrapper>
       </div>
       <Header title={'טסטים'} icon={ChecklistRtlRoundedIcon} />
-      <AddTests testsList={tests} setTestList={setTests} />
+      <AddTests testsList={tests} setTestList={setTests} code={code} />
 
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ width: '50%' }}>
@@ -128,14 +157,16 @@ const AddNewTasks = () => {
           </div>
         </div>
 
-        <div style={{ width: '50%' }}>
+        <div style={{ width: '50%', marginBottom: '40px' }}>
           <Header title={'רמת קושי'} icon={HikingRoundedIcon} />
           <DifficultSlider />
         </div>
       </div>
 
-      <Button onClick={onSendCustomClick}>שלח</Button>
-    </>
+      <Button onClick={saveTask} variant="bordered" radius="full">
+        שמור
+      </Button>
+    </div>
   );
 };
 

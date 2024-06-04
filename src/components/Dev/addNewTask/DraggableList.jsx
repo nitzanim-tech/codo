@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Listbox, ListboxItem } from '@nextui-org/listbox';
 
-function DraggableList({ items, setItems, onClick }) {
+function DraggableList({ items, setItems, onAction }) {
   const [dragOverIndex, setDragOverIndex] = useState(null);
 
   const handleDragStart = (e, index) => {
@@ -32,7 +32,7 @@ function DraggableList({ items, setItems, onClick }) {
   };
 
   return (
-    <Listbox aria-label="Draggable List" onClick={onClick}>
+    <Listbox aria-label="Draggable List" onAction={onAction}>
       {items.map((item, index) => (
         <ListboxItem
           key={item.id}

@@ -9,15 +9,17 @@ import RunTestButton from '../../IDE/RunTestButton';
 import { PyodideProvider } from '../../IDE/PyodideProvider';
 import DraggableList from './DraggableList';
 
-const AddTests = ({ testsList, setTestList }) => {
-  const [name, setName] = useState('');
+const AddTests = ({ testsList, setTestList, code }) => {
+  const [name, setName] = useState();
   const [score, setScore] = useState(1);
   const [input, setInput] = useState('');
   const [isHidden, setIsHidden] = useState(false);
   const [runningCode, setRunningCode] = useState('');
+  const [hasHeader, setHasHeader] = useState(false);
 
   const [output, setOutput] = useState();
   const [runTests, setRunTests] = useState(false);
+  const [nameError, setNameError] = useState(false);
 
   const loadTest = (index) => {
     const test = testsList[index];
@@ -33,21 +35,36 @@ const AddTests = ({ testsList, setTestList }) => {
   };
 
   const handleAddTestClick = () => {
-    const newTest = { name, input, score, isHidden, runningCode, index: testsList.length };
-    setTestList([...testsList, newTest]);
+    if (!name || testsList.some((test) => test.name === name)) {
+      setNameError(true);
+    } else {
+      setNameError(false);
+      const newTest = { name, input, score, isHidden, runningCode, index: testsList.length };
+      setName('');
+      setTestList([...testsList, newTest]);
+    }
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+      <div style={{ width: '20%', marginRight: '15px' }}>
+        <Textarea isReadOnly label="פלט" variant="bordered" value={output ? output[0].output : null} />
+      </div>
+
       <StyledDiv>
-        <p>{output ? output[0].output : null}</p>
         <Card fullWidth>
           <div style={{ padding: '15px', direction: 'rtl' }}>
             <div
               style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}
             >
               <div style={{ flex: '0 0 78%' }}>
-                <Input label="שם" variant="bordered" value={name} onChange={(e) => setName(e.target.value)} />
+                <Input
+                  label="שם"
+                  variant="bordered"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  isInvalid={nameError}
+                />
               </div>
               <div style={{ flex: '0 0 20%' }}>
                 <Input
@@ -70,7 +87,6 @@ const AddTests = ({ testsList, setTestList }) => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
-
             <div style={{ direction: 'ltr', margin: '10px 0 10px 0' }}>
               <ListboxWrapper width="100%">
                 <p>(python) קוד הרצה</p>
@@ -83,21 +99,20 @@ const AddTests = ({ testsList, setTestList }) => {
                 />
               </ListboxWrapper>
             </div>
-
             <Checkbox isSelected={isHidden} onValueChange={setIsHidden}>
               טסט מוסתר
             </Checkbox>
 
-            <Checkbox isSelected={isHidden} onValueChange={setIsHidden}>
+            <Checkbox isSelected={hasHeader} onValueChange={setHasHeader}>
               הוסף כותרת
             </Checkbox>
             <div style={{ justifyContent: 'center' }}>
               <PyodideProvider>
                 <RunTestButton
-                  code={`print('hi')`}
+                  code={code}
                   setTestsOutputs={setOutput}
                   runTests={runTests}
-                  taskObject={{ code: `print('hi')`, tests: [{ input, runningCode }] }}
+                  taskObject={{ code, tests: [{ input, runningCode }] }}
                 />
               </PyodideProvider>
               <Button radius="full" isIconOnly variant="faded" onClick={handleAddTestClick}>
@@ -109,13 +124,7 @@ const AddTests = ({ testsList, setTestList }) => {
       </StyledDiv>
       <div>
         <ListboxWrapper>
-          <DraggableList items={testsList} setItems={setTestList} onClick={loadTest} />
-
-          {/* <Listbox aria-label="Actions" onAction={loadTest}>
-            {testsList.map((test, index) => (
-              <ListboxItem key={index}>{test.name}</ListboxItem>
-            ))}
-          </Listbox> */}
+          <DraggableList items={testsList} setItems={setTestList} onAction={loadTest} />
         </ListboxWrapper>
       </div>
     </div>

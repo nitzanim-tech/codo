@@ -4,7 +4,6 @@ import AddNewTasks from '../components/Dev/addNewTask/AddNewTasks';
 import ManageLessons from '../components/Dev/manageLessons/ManageLessons';
 import MiniDrawer from '../components/Dev/TEST';
 import App from '../components/Dev/userTrack/UserTrack';
-import { TaskProvider } from '../components/Dev/addNewTask/TaskProvider';
 
 const DevTeam = () => {
   return (
@@ -18,9 +17,7 @@ const DevTeam = () => {
     >
       <Tabs radius="full" aria-label="Tabs radius" style={{ marginTop: '20px' }}>
         <Tab key="table" title="משימות">
-          <TaskProvider>
-            <DevTasksTab />
-          </TaskProvider>
+          <DevTasksTab />
         </Tab>
         <Tab key="add" title="משימה חדשה">
           <AddNewTasks />

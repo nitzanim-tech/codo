@@ -4,6 +4,7 @@ import Instructurs from './pages/Instructurs';
 import Submit from './pages/Submit';
 import Review from './pages/Review';
 import DevTeam from './pages/DevTeam';
+import AddNewTasks from './components/Dev/addNewTask/AddNewTasks';
 import Home from './pages/Home';
 import ReadReview from './pages/ReadReview'
 import Play from './pages/Play';
@@ -31,6 +32,7 @@ function App() {
         <Route path="/review" element={<Review />} />
         <Route path="/readReview" element={<ReadReview />} />
         <Route path="/dev" element={<DevTeam />} />
+        <Route path="/dev/newTask" element={<AddNewTasks />} />
         <Route path="/manager" element={<Managers />} />
       </Routes>
     </BrowserRouter>
