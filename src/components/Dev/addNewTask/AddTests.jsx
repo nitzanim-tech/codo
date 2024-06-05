@@ -19,8 +19,9 @@ const AddTests = ({ testsList, setTestList, code }) => {
   const [isHidden, setIsHidden] = useState(false);
   const [runningCode, setRunningCode] = useState('');
   const [hasHeader, setHasHeader] = useState(false);
+  const [header, setHeader] = useState('');
 
-  const [output, setOutput] = useState();
+  const [output, setOutput] = useState('');
   const [nameError, setNameError] = useState(false);
   const [showEditButton, setShowEditButton] = useState(false);
   const [selectedTestIndex, setSelectedTestIndex] = useState(null);
@@ -36,6 +37,8 @@ const AddTests = ({ testsList, setTestList, code }) => {
       setRunningCode(test.runningCode);
       setSelectedTestIndex(index);
       setShowEditButton(true);
+      setHeader(test.header);
+      setHasHeader(Boolean(test.header));
     } else {
       console.log(`Test at index ${index} not found`);
     }
@@ -43,7 +46,7 @@ const AddTests = ({ testsList, setTestList, code }) => {
 
   const editTest = () => {
     if (selectedTestIndex !== null) {
-      const updatedTest = { name, input, score, isHidden, runningCode, index: selectedTestIndex };
+      const updatedTest = { name, input, score, isHidden, runningCode, index: selectedTestIndex, header };
       const updatedTestsList = [...testsList];
       updatedTestsList[selectedTestIndex] = updatedTest;
       setTestList(updatedTestsList);
@@ -63,6 +66,8 @@ const AddTests = ({ testsList, setTestList, code }) => {
       setInput('');
       setIsHidden(false);
       setRunningCode('');
+      setHeader('');
+      setHasHeader(false);
     }
   };
 
@@ -72,8 +77,9 @@ const AddTests = ({ testsList, setTestList, code }) => {
     } else {
       setNameError(false);
       setShowEditButton(false);
-      const newTest = { name, input, score, isHidden, runningCode, index: testsList.length };
+      const newTest = { name, input, score, isHidden, runningCode, index: testsList.length, header };
       setName('');
+      setHeader('');
       setTestList([...testsList, newTest]);
     }
   };
@@ -139,7 +145,9 @@ const AddTests = ({ testsList, setTestList, code }) => {
             <Checkbox isSelected={hasHeader} onValueChange={setHasHeader}>
               הוסף כותרת
             </Checkbox>
-
+            {hasHeader && (
+              <Input label="כותרת" variant="bordered" value={header} onChange={(e) => setHeader(e.target.value)} />
+            )}
             <div style={{ justifyContent: 'center', margin: '25px 0 5px 0' }}>
               <PyodideProvider>
                 <RunTestButton

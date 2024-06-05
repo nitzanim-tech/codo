@@ -79,10 +79,10 @@ const AddNewTasks = () => {
   };
 
   const clearTask = () => {
-    setName();
+    setName('');
     setSubjects([]);
-    setDescription();
-    setExample();
+    setDescription('');
+    setExample('');
     setCode('# write here');
     setTests([]);
     setSaved(true);
@@ -102,7 +102,11 @@ const AddNewTasks = () => {
       <Header title={'הסבר'} icon={EmojiSymbolsRoundedIcon} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '40px', direction: 'rtl' }}>
         {/* PREVIEW */}
-        <div>
+        <div
+          style={{
+            overflow: 'hidden',
+          }}
+        >
           <div onClick={() => setCurretEdit('name')} style={{ marginBottom: `${dist}px` }}>
             <p style={{ fontSize: '20px', color: currentEdit === 'name' ? ' #008AD1' : null }}>{name || 'שם המשימה'}</p>
           </div>
@@ -133,7 +137,11 @@ const AddNewTasks = () => {
         </div>
 
         {/* EDIT */}
-        <div>
+        <div
+          style={{
+            overflow: 'hidden',
+          }}
+        >
           {currentEdit === 'name' && (
             <div style={{ width: '70%' }}>
               <Input label="שם" variant="bordered" value={name} onChange={(e) => setName(e.target.value)} />

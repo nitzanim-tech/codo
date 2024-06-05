@@ -2,7 +2,6 @@ import { getDatabase, ref, set } from 'firebase/database';
 import { v4 as uuidv4 } from 'uuid';
 
 const addTask = async ({ app, newTask, index }) => {
-  console.log({ app, newTask, index });
   if (!newTask.writer) {
     console.error('Error: newTask object must have a writer property');
     return false;
