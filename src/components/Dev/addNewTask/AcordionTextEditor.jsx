@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { AccordionItem, Accordion } from '@nextui-org/react';
-import SunEditor, { buttonList } from 'suneditor-react';
-import { Grid } from '@mui/material';
+import SunEditor from 'suneditor-react';
 
 import 'suneditor/dist/css/suneditor.min.css';
 
 const AcordionTextEditor = ({ text, setText, htmlContent, setHtmlContent }) => {
   useEffect(() => {
     setHtmlContent(text);
-  }, [text]);
+  }, [text, htmlContent]);
 
   const buttonList = [
     ['undo', 'redo'],
@@ -27,7 +26,7 @@ const AcordionTextEditor = ({ text, setText, htmlContent, setHtmlContent }) => {
 
   return (
     <SunEditor
-      defaultValue={htmlContent}
+      defaultValue={text}
       setDefaultStyle="font-family: ariel; font-size: 20px;"
       onChange={handleChange}
       setOptions={{

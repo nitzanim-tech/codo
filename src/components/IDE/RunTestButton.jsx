@@ -23,12 +23,12 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
       pyodide.runPython(`sys.stdin = io.StringIO("${input}")`);
       pyodide.runPython('sys.stdout = io.StringIO()');
       pyodide.runPython(`from builtins import print`);
-      pyodide.runPython(`def input(prompt=None) {
+      pyodide.runPython(`def input(prompt=None):
     import builtins
     if prompt:
         print(prompt)
     return builtins.input()
-  }`);
+  `);
       pyodide.runPython(code);
       let output = pyodide.runPython('sys.stdout.getvalue()');
       return output;

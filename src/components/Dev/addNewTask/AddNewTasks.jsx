@@ -29,6 +29,7 @@ const AddNewTasks = () => {
   const [code, setCode] = useState(localStorage.getItem('newTaskCode') || '# write here');
   const [tests, setTests] = useState(JSON.parse(localStorage.getItem('tests')) || []);
   const [level, setLevel] = useState(1);
+  const [taskType, setTaskType] = useState('default');
 
   useEffect(() => {
     localStorage.setItem('name', name);
@@ -57,8 +58,8 @@ const AddNewTasks = () => {
   const saveTask = async () => {
     const lastUpdate = new Date().toISOString();
     const writer = userData.id;
-    const isDefault = false;
-    const newTask = { name, subjects, description, example, code, tests, writer,level, lastUpdate };
+    const isDefault = taskType == 'default';
+    const newTask = { name, subjects, description, example, code, tests, writer, level, lastUpdate, isDefault };
     const success = await addTask({ app, newTask });
     if (success) {
       setName();
@@ -68,6 +69,8 @@ const AddNewTasks = () => {
       setCode('# write here');
       setTests([]);
       setSaved(true);
+      setLevel(1);
+      setTaskType('default');
     }
   };
 
@@ -153,6 +156,7 @@ const AddNewTasks = () => {
           />
         </ListboxWrapper>
       </div>
+
       <Header title={'טסטים'} icon={ChecklistRtlRoundedIcon} />
       <AddTests testsList={tests} setTestList={setTests} code={code} />
 
@@ -160,7 +164,7 @@ const AddNewTasks = () => {
         <div style={{ width: '50%' }}>
           <Header title={'סוג משימה'} icon={HdrStrongRoundedIcon} />
           <div style={{ direction: 'rtl', width: '50%' }}>
-            <RadioGroup orientation="horizontal" defaultValue="default">
+            <RadioGroup orientation="horizontal" value={taskType} onValueChange={setTaskType}>
               <Radio value="default">ברירת מחדל</Radio>
               <Radio value="custom"> מותאם אישית </Radio>
             </RadioGroup>
@@ -169,13 +173,14 @@ const AddNewTasks = () => {
 
         <div style={{ width: '50%', marginBottom: '40px' }}>
           <Header title={'רמת קושי'} icon={HikingRoundedIcon} />
-          <DifficultSlider level={level} setLevel={setLevel}/>
+          <DifficultSlider level={level} setLevel={setLevel} />
         </div>
       </div>
 
       <Button onClick={saveTask} variant="bordered" radius="full">
         שמור
       </Button>
+
       {saved && <p>נשמר בהצלחה</p>}
     </div>
   );
@@ -196,7 +201,7 @@ const Header = ({ title, icon: Icon }) => {
   return (
     <>
       <Divider style={{ marginTop: '20px' }} />
-      <div style={{ display: 'flex', alignItems: 'center', color: '#008AD1', margin: '10px 10px 10px 0' }}>
+      <div style={{ display: 'flex', alignItems: 'center', color: '#008AD1', margin: '10px 10px 10px 30px' }}>
         <h2 style={{ fontSize: '24px', margin: 0 }}>{title}</h2>
         <Icon style={{ marginLeft: '10px' }} />
       </div>
@@ -206,36 +211,23 @@ const Header = ({ title, icon: Icon }) => {
 
 const DifficultSlider = ({ level, setLevel }) => {
   return (
-    <div style={{ justifyContent: 'center', width:'60%' }}>
-      <Slider
-        step={1}
-        minValue={1}
-        maxValue={5}
-        marks={[
-          {
-            value: 1,
-            label: 'חימום',
-          },
-          {
-            value: 2,
-            label: 'קל',
-          },
-          {
-            value: 3,
-            label: 'סביר',
-          },
-          {
-            value: 4,
-            label: 'קשה',
-          },
-          {
-            value: 5,
-            label: 'אתגר',
-          },
-        ]}
-        value={level}
-        onChange={setLevel}
-      />
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: '50%' }}>
+        <Slider
+          step={1}
+          minValue={1}
+          maxValue={5}
+          marks={[
+            { value: 1, label: 'חימום' },
+            { value: 2, label: 'קל' },
+            { value: 3, label: 'סביר' },
+            { value: 4, label: 'קשה' },
+            { value: 5, label: 'אתגר' },
+          ]}
+          value={level}
+          onChange={setLevel}
+        />
+      </div>
     </div>
   );
 };
