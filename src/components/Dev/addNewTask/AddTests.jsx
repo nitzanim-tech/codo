@@ -37,7 +37,7 @@ const AddTests = ({ testsList, setTestList, code }) => {
       setRunningCode(test.runningCode);
       setSelectedTestIndex(index);
       setShowEditButton(true);
-      setHeader(test.header);
+      setHeader(test.header || '');
       setHasHeader(Boolean(test.header));
     } else {
       console.log(`Test at index ${index} not found`);
@@ -46,7 +46,8 @@ const AddTests = ({ testsList, setTestList, code }) => {
 
   const editTest = () => {
     if (selectedTestIndex !== null) {
-      const updatedTest = { name, input, score, isHidden, runningCode, index: selectedTestIndex, header };
+      const updatedTest = { name, input, score, isHidden, runningCode, index: selectedTestIndex };
+      hasHeader ? (updatedTest['header'] = header) : null;
       const updatedTestsList = [...testsList];
       updatedTestsList[selectedTestIndex] = updatedTest;
       setTestList(updatedTestsList);
@@ -77,7 +78,7 @@ const AddTests = ({ testsList, setTestList, code }) => {
     } else {
       setNameError(false);
       setShowEditButton(false);
-      const newTest = { name, input, score, isHidden, runningCode, index: testsList.length, header };
+      const newTest = { name, input, score, isHidden, runningCode, index: testsList.length, header: header || null };
       setName('');
       setHeader('');
       setTestList([...testsList, newTest]);

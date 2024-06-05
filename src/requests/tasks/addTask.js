@@ -6,7 +6,7 @@ const addTask = async ({ app, newTask, index }) => {
     console.error('Error: newTask object must have a writer property');
     return false;
   }
-
+  console.log({newTask});
   const db = getDatabase(app);
   const splittedTaskId = uuidv4().split('-');
   const taskId = index ? index : splittedTaskId[splittedTaskId.length - 1];

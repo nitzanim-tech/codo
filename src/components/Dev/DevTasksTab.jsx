@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useFirebase } from '../../util/FirebaseProvider';
 import getAllTasks from '../../requests/tasks/getAllTasks';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip } from '@nextui-org/react';
-
+import formatDate from '../../util/formatDate';
 const DevTasksTab = () => {
   const { app } = useFirebase();
   const [tasks, setTasks] = useState([]);
@@ -40,8 +40,8 @@ const DevTasksTab = () => {
         <TableHeader>
           <TableColumn>id</TableColumn>
           <TableColumn>name</TableColumn>
-          <TableColumn>type</TableColumn>
-          <TableColumn>tests</TableColumn>
+          <TableColumn>lastUpdate</TableColumn>
+          <TableColumn>level</TableColumn>
           <TableColumn>subjects</TableColumn>
           <TableColumn>writer</TableColumn>
         </TableHeader>
@@ -52,8 +52,8 @@ const DevTasksTab = () => {
               <TableRow key={task.uid} onClick={() => onTaskClick(task)}>
                 <TableCell>{task.uid}</TableCell>
                 <TableCell>{task.name}</TableCell>
-                <TableCell>{task.code ? 'default' : 'custom'}</TableCell>
-                <TableCell>{task.tests?.length}</TableCell>
+                <TableCell>{task.lastUpdate ? formatDate(task.lastUpdate) : '?'}</TableCell>
+                <TableCell>{task.level || '?'}</TableCell>
                 <TableCell>
                   {task.subjects &&
                     task.subjects.map((subject) => (
