@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Tabs, Tab, Divider, Input, Button, Slider } from '@nextui-org/react';
 import Editor from '@monaco-editor/react';
+import { useParams } from 'react-router-dom';
 
 import { AcordionTextEditor, AcordionPreview } from './AcordionTextEditor';
 import { EditSubjectsChips, SubjectstChip } from './SubjectsChip';
@@ -13,9 +14,13 @@ import TerminalRoundedIcon from '@mui/icons-material/TerminalRounded';
 import EmojiSymbolsRoundedIcon from '@mui/icons-material/EmojiSymbolsRounded';
 import HikingRoundedIcon from '@mui/icons-material/HikingRounded';
 import HdrStrongRoundedIcon from '@mui/icons-material/HdrStrongRounded';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 
 const AddNewTasks = () => {
   const { app, userData } = useFirebase();
+  const { index } = useParams();
+
   const dist = '20';
 
   const [currentEdit, setCurretEdit] = useState('name');
@@ -28,8 +33,8 @@ const AddNewTasks = () => {
   const [example, setExample] = useState(localStorage.getItem('example') || '');
   const [code, setCode] = useState(localStorage.getItem('newTaskCode') || '# write here');
   const [tests, setTests] = useState(JSON.parse(localStorage.getItem('tests')) || []);
-  const [level, setLevel] = useState(1);
-  const [taskType, setTaskType] = useState('default');
+  const [level, setLevel] = useState(localStorage.getItem('level') || 1);
+  const [taskType, setTaskType] = useState(localStorage.getItem('taskType') || 'default');
 
   useEffect(() => {
     localStorage.setItem('name', name);
@@ -55,23 +60,34 @@ const AddNewTasks = () => {
     localStorage.setItem('tests', JSON.stringify(tests));
   }, [tests]);
 
+  useEffect(() => {
+    localStorage.setItem('level', level);
+  }, [level]);
+
+  useEffect(() => {
+    localStorage.setItem('taskType', taskType);
+  }, [taskType]);
+
   const saveTask = async () => {
     const lastUpdate = new Date().toISOString();
     const writer = userData.id;
-    const isDefault = taskType == 'default';
+    const isDefault = taskType === 'default';
     const newTask = { name, subjects, description, example, code, tests, writer, level, lastUpdate, isDefault };
-    const success = await addTask({ app, newTask });
-    if (success) {
-      setName();
-      setSubjects([]);
-      setDescription();
-      setExample();
-      setCode('# write here');
-      setTests([]);
-      setSaved(true);
-      setLevel(1);
-      setTaskType('default');
-    }
+
+    const success = await addTask({ app, newTask, index });
+    if (success) clearTask();
+  };
+
+  const clearTask = () => {
+    setName();
+    setSubjects([]);
+    setDescription();
+    setExample();
+    setCode('# write here');
+    setTests([]);
+    setSaved(true);
+    setLevel(1);
+    setTaskType('default');
   };
 
   return (
@@ -177,8 +193,17 @@ const AddNewTasks = () => {
         </div>
       </div>
 
-      <Button onClick={saveTask} variant="bordered" radius="full">
+      <Button
+        onClick={saveTask}
+        variant="bordered"
+        radius="full"
+        endContent={<SaveRoundedIcon />}
+        style={{ marginRight: '20px' }}
+      >
         שמור
+      </Button>
+      <Button onClick={clearTask} variant="bordered" radius="full" endContent={<ClearRoundedIcon />}>
+        נקה הכל
       </Button>
 
       {saved && <p>נשמר בהצלחה</p>}
@@ -231,3 +256,4 @@ const DifficultSlider = ({ level, setLevel }) => {
     </div>
   );
 };
+

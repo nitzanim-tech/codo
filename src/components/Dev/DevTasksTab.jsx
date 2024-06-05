@@ -7,7 +7,7 @@ const DevTasksTab = () => {
   const { app } = useFirebase();
   const [tasks, setTasks] = useState([]);
   const DEVELOPERS = { kTqDi3pSI5NkUW21FbJF6sxDm3D3: 'dev A', ChckIIGujWbg2FFZeRzDHbcIMrk2: 'בינקי ביל' };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const allTasks = await getAllTasks({ app });
@@ -19,6 +19,20 @@ const DevTasksTab = () => {
     };
     fetchData();
   }, []);
+
+  const onTaskClick = (task) => {
+    localStorage.setItem('taskId', task.id);
+    localStorage.setItem('name', task.name);
+    localStorage.setItem('subjects', JSON.stringify(task.subjects));
+    localStorage.setItem('description', task.description);
+    localStorage.setItem('example', task.example);
+    localStorage.setItem('newTaskCode', task.code);
+    localStorage.setItem('tests', JSON.stringify(task.tests));
+    localStorage.setItem('level', task.level || 1);
+    localStorage.setItem('taskType', task.taskType || 'default');
+
+    window.location.href = `./dev/editTask/${task.id}`;
+  };
 
   return (
     <>
@@ -35,11 +49,10 @@ const DevTasksTab = () => {
         <TableBody>
           {tasks &&
             tasks.map((task) => (
-              <TableRow key={task.uid}>
+              <TableRow key={task.uid} onClick={() => onTaskClick(task)}>
                 <TableCell>{task.uid}</TableCell>
                 <TableCell>{task.name}</TableCell>
                 <TableCell>{task.code ? 'default' : 'custom'}</TableCell>
-
                 <TableCell>{task.tests?.length}</TableCell>
                 <TableCell>
                   {task.subjects &&

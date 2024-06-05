@@ -33,6 +33,8 @@ function App() {
         <Route path="/readReview" element={<ReadReview />} />
         <Route path="/dev" element={<DevTeam />} />
         <Route path="/dev/newTask" element={<AddNewTasks />} />
+        <Route path="/dev/editTask/:id" element={<AddNewTasks />} />
+
         <Route path="/manager" element={<Managers />} />
       </Routes>
     </BrowserRouter>
