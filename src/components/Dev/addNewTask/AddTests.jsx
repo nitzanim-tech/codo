@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button, Checkbox } from '@nextui-org/react';
 import { Listbox, ListboxItem, Input, Textarea, Card } from '@nextui-org/react';
-import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded';
 import AddIcon from '@mui/icons-material/Add';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
@@ -9,8 +8,12 @@ import RunTestButton from '../../IDE/RunTestButton';
 import { PyodideProvider } from '../../IDE/PyodideProvider';
 import DraggableList from './DraggableList';
 
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+
 const AddTests = ({ testsList, setTestList, code }) => {
-  const [name, setName] = useState();
+  const [name, setName] = useState('');
   const [score, setScore] = useState(1);
   const [input, setInput] = useState('');
   const [isHidden, setIsHidden] = useState(false);
@@ -18,10 +21,12 @@ const AddTests = ({ testsList, setTestList, code }) => {
   const [hasHeader, setHasHeader] = useState(false);
 
   const [output, setOutput] = useState();
-  const [runTests, setRunTests] = useState(false);
   const [nameError, setNameError] = useState(false);
+  const [showEditButton, setShowEditButton] = useState(false);
+  const [selectedTestIndex, setSelectedTestIndex] = useState(null);
 
-  const loadTest = (index) => {
+  const loadTest = (reactIndex) => {
+    const index = reactIndex.split('.')[1];
     const test = testsList[index];
     if (test) {
       setName(test.name);
@@ -29,8 +34,35 @@ const AddTests = ({ testsList, setTestList, code }) => {
       setInput(test.input);
       setIsHidden(test.isHidden);
       setRunningCode(test.runningCode);
+      setSelectedTestIndex(index);
+      setShowEditButton(true);
     } else {
       console.log(`Test at index ${index} not found`);
+    }
+  };
+
+  const editTest = () => {
+    if (selectedTestIndex !== null) {
+      const updatedTest = { name, input, score, isHidden, runningCode, index: selectedTestIndex };
+      const updatedTestsList = [...testsList];
+      updatedTestsList[selectedTestIndex] = updatedTest;
+      setTestList(updatedTestsList);
+      setShowEditButton(false);
+      setSelectedTestIndex(null);
+    }
+  };
+
+  const deleteTest = () => {
+    if (selectedTestIndex !== null) {
+      const updatedTestsList = testsList.filter((_, index) => index !== parseInt(selectedTestIndex));
+      setTestList(updatedTestsList);
+      setShowEditButton(false);
+      setSelectedTestIndex(null);
+      setName('');
+      setScore(1);
+      setInput('');
+      setIsHidden(false);
+      setRunningCode('');
     }
   };
 
@@ -39,6 +71,7 @@ const AddTests = ({ testsList, setTestList, code }) => {
       setNameError(true);
     } else {
       setNameError(false);
+      setShowEditButton(false);
       const newTest = { name, input, score, isHidden, runningCode, index: testsList.length };
       setName('');
       setTestList([...testsList, newTest]);
@@ -106,18 +139,34 @@ const AddTests = ({ testsList, setTestList, code }) => {
             <Checkbox isSelected={hasHeader} onValueChange={setHasHeader}>
               הוסף כותרת
             </Checkbox>
-            <div style={{ justifyContent: 'center' }}>
+
+            <div style={{ justifyContent: 'center', margin: '25px 0 5px 0' }}>
               <PyodideProvider>
                 <RunTestButton
                   code={code}
                   setTestsOutputs={setOutput}
-                  runTests={runTests}
+                  runTests={false}
                   taskObject={{ code, tests: [{ input, runningCode }] }}
+                  buttonElement={
+                    <Button color="primary" variant="light" radius="full" isIconOnly>
+                      <PlayArrowRoundedIcon />
+                    </Button>
+                  }
                 />
               </PyodideProvider>
-              <Button radius="full" isIconOnly variant="faded" onClick={handleAddTestClick}>
+              <Button color="primary" variant="light" radius="full" isIconOnly onClick={handleAddTestClick}>
                 <AddIcon />
               </Button>
+              {showEditButton && (
+                <>
+                  <Button color="primary" variant="light" radius="full" isIconOnly onClick={editTest}>
+                    <EditRoundedIcon />
+                  </Button>
+                  <Button color="primary" variant="light" radius="full" isIconOnly onClick={deleteTest}>
+                    <DeleteRoundedIcon />
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </Card>

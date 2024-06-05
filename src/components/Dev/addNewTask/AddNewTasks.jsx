@@ -20,6 +20,7 @@ const AddNewTasks = () => {
 
   const [currentEdit, setCurretEdit] = useState('name');
   const [htmlEditing, setHtmlEditing] = useState('');
+  const [saved, setSaved] = useState(false);
 
   const [name, setName] = useState(localStorage.getItem('name') || '');
   const [subjects, setSubjects] = useState(JSON.parse(localStorage.getItem('subjects')) || []);
@@ -27,6 +28,7 @@ const AddNewTasks = () => {
   const [example, setExample] = useState(localStorage.getItem('example') || '');
   const [code, setCode] = useState(localStorage.getItem('newTaskCode') || '# write here');
   const [tests, setTests] = useState(JSON.parse(localStorage.getItem('tests')) || []);
+  const [level, setLevel] = useState(1);
 
   useEffect(() => {
     localStorage.setItem('name', name);
@@ -52,13 +54,21 @@ const AddNewTasks = () => {
     localStorage.setItem('tests', JSON.stringify(tests));
   }, [tests]);
 
-  const saveTask = () => {
+  const saveTask = async () => {
     const lastUpdate = new Date().toISOString();
     const writer = userData.id;
     const isDefault = false;
-    const level = 5
-    const newTask = { name, subjects, description, example, code, tests, writer, lastUpdate };
-    addTask({ app, newTask });
+    const newTask = { name, subjects, description, example, code, tests, writer,level, lastUpdate };
+    const success = await addTask({ app, newTask });
+    if (success) {
+      setName();
+      setSubjects([]);
+      setDescription();
+      setExample();
+      setCode('# write here');
+      setTests([]);
+      setSaved(true);
+    }
   };
 
   return (
@@ -75,7 +85,7 @@ const AddNewTasks = () => {
         {/* PREVIEW */}
         <div>
           <div onClick={() => setCurretEdit('name')} style={{ marginBottom: `${dist}px` }}>
-            <p style={{ color: currentEdit === 'name' ? ' #008AD1' : null }}>{name || 'שם המשימה'}</p>
+            <p style={{ fontSize: '20px', color: currentEdit === 'name' ? ' #008AD1' : null }}>{name || 'שם המשימה'}</p>
           </div>
           <div onClick={() => setCurretEdit('subjects')} style={{ marginBottom: `${dist}px` }}>
             <SubjectstChip
@@ -159,13 +169,14 @@ const AddNewTasks = () => {
 
         <div style={{ width: '50%', marginBottom: '40px' }}>
           <Header title={'רמת קושי'} icon={HikingRoundedIcon} />
-          <DifficultSlider />
+          <DifficultSlider level={level} setLevel={setLevel}/>
         </div>
       </div>
 
       <Button onClick={saveTask} variant="bordered" radius="full">
         שמור
       </Button>
+      {saved && <p>נשמר בהצלחה</p>}
     </div>
   );
 };
@@ -193,9 +204,9 @@ const Header = ({ title, icon: Icon }) => {
   );
 };
 
-const DifficultSlider = () => {
+const DifficultSlider = ({ level, setLevel }) => {
   return (
-    <div style={{ justifyContent: 'center' }}>
+    <div style={{ justifyContent: 'center', width:'60%' }}>
       <Slider
         step={1}
         minValue={1}
@@ -222,7 +233,8 @@ const DifficultSlider = () => {
             label: 'אתגר',
           },
         ]}
-        defaultValue={3}
+        value={level}
+        onChange={setLevel}
       />
     </div>
   );
