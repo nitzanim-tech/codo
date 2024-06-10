@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Chip, Divider } from '@nextui-org/react';
 import { Accordion, AccordionItem } from '@nextui-org/react';
+import SessionTracker from '../components/general/SessionTracker';
 
 export default function Instructions({ taskObject }) {
-
   return (
     <div style={{ width: '100%', textAlign: 'right', direction: 'rtl' }}>
       <Accordion dir="rtl" variant="splitted" selectionMode="multiple" isCompact>
@@ -28,6 +28,7 @@ export default function Instructions({ taskObject }) {
           </div>
         </AccordionItem>
       </Accordion>
+      <SessionTracker type={'copy'} />
     </div>
   );
 }

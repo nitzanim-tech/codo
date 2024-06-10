@@ -5,13 +5,15 @@ import NavBar from '../components/NavBar/NavigateBar';
 import './Home.css';
 import { Button, Grid, Card } from '@mui/material';
 import { Accordion, AccordionItem, Tooltip, Badge, ScrollShadow } from '@nextui-org/react';
-import SlideshowIcon from '@mui/icons-material/Slideshow';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import TaskCard from '../components/Home/TaskCard';
 import { useFirebase } from '../util/FirebaseProvider';
 import { CircularProgress } from '@nextui-org/react';
-import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import getAllLessons from '../requests/lessons/getAllLessons';
+
+import SlideshowIcon from '@mui/icons-material/Slideshow';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
+import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 
 function Home() {
   const { app, userData, isUserLoading } = useFirebase();
@@ -89,6 +91,7 @@ const FileCard = ({ file }) => {
         {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
         {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
         {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
+        {file.type === 'webLink' && <PublicRoundedIcon style={{ color: '#BF1E2E' }} />}
       </Button>
       {file.name}
     </Card>

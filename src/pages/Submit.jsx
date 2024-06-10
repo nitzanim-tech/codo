@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
 import PythonIDE from '../components/IDE/PythonIDE';
 import NavBar from '../components/NavBar/NavigateBar';
 import Instructions from '../components/Instructions';
@@ -9,6 +8,7 @@ import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import getTaskById from '../requests/tasks/getTaskById';
+import SessionTracker from '../components/general/SessionTracker';
 import './Submit.css';
 
 function Submit() {
@@ -41,25 +41,19 @@ function Submit() {
             <Grid item style={{ width: '20%' }}>
               {taskData?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskData} />}
             </Grid>
-
             <Grid item style={{ width: '50%' }}>
               <PythonIDE testsOutputs={testsOutputs} setTestsOutputs={setTestsOutputs} taskObject={taskData} />
             </Grid>
-
             <Grid item style={{ width: '30%' }}>
               {taskData?.setting?.showTest && <Instructions taskObject={taskData} />}
             </Grid>
           </Grid>
         )}
       </PyodideProvider>
+      <SessionTracker type={'start'} />
+      <SessionTracker type={'end'} />
     </>
   );
 }
 
 export default Submit;
-
-// const isReviewExist = (submissions, taskId) => {
-//   if (!submissions || !submissions[taskId]) return false;
-//   for (const trial of submissions[taskId].trials) if (trial.review) return true;
-//   return false;
-// };

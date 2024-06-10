@@ -3,6 +3,8 @@ import DevTasksTab from '../components/Dev/DevTasksTab';
 import AddNewTasks from '../components/Dev/addNewTask/AddNewTasks';
 import ManageLessons from '../components/Dev/manageLessons/ManageLessons';
 import MiniDrawer from '../components/Dev/TEST';
+import App from '../components/Dev/userTrack/UserTrack';
+
 const DevTeam = () => {
   return (
     <div
@@ -17,15 +19,18 @@ const DevTeam = () => {
         <Tab key="table" title="משימות">
           <DevTasksTab />
         </Tab>
-        <Tab key="add" title="חדש">
+        <Tab key="add" title="משימה חדשה">
           <AddNewTasks />
         </Tab>
         <Tab key="lessons" title="מפגשים">
           <ManageLessons />
         </Tab>
-        <Tab key="AA" title="TEST">
-          <MiniDrawer />
+        <Tab key="track" title="מעקב">
+          <App />
         </Tab>
+        {/* <Tab key="AA" title="TEST">
+          <MiniDrawer />
+        </Tab> */}
       </Tabs>
     </div>
   );

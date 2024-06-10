@@ -1,15 +1,15 @@
 import { getDatabase, ref, set } from 'firebase/database';
 import { v4 as uuidv4 } from 'uuid';
 
-const addTask = async ({ app, newTask }) => {
+const addTask = async ({ app, newTask, index }) => {
   if (!newTask.writer) {
     console.error('Error: newTask object must have a writer property');
     return false;
   }
-
+  console.log({newTask});
   const db = getDatabase(app);
   const splittedTaskId = uuidv4().split('-');
-  const taskId = splittedTaskId[splittedTaskId.length - 1];
+  const taskId = index ? index : splittedTaskId[splittedTaskId.length - 1];
   const userSubmitsRef = ref(db, `tasks/${taskId}`);
 
   try {
