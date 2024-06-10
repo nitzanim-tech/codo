@@ -25,3 +25,4 @@ dist-ssr
 firebaseConfig.js
 todo.txt
 .firebase/*
+functions/.env

@@ -9,6 +9,7 @@ import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import getTaskById from '../requests/tasks/getTaskById';
+import RubberDuck from '../components/RubberDuck/Rubberduck';
 import './Submit.css';
 
 function Submit() {
@@ -40,6 +41,7 @@ function Submit() {
           <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
             <Grid item style={{ width: '20%' }}>
               {taskData?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskData} />}
+              <RubberDuck />
             </Grid>
 
             <Grid item style={{ width: '50%' }}>
