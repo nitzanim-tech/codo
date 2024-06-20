@@ -39,12 +39,12 @@ function Submit() {
       <PyodideProvider>
         {taskData && testsOutputs && (
           <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
-            <Grid item style={{ width: '20%' }}>
+            <Grid item style={{ width: '25%' }}>
               {taskData?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskData} />}
               <RubberDuck />
             </Grid>
 
-            <Grid item style={{ width: '50%' }}>
+            <Grid item style={{ width: '45%' }}>
               <PythonIDE testsOutputs={testsOutputs} setTestsOutputs={setTestsOutputs} taskObject={taskData} />
             </Grid>
 

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import duckImg from '../../assets/img/duck/rubber-duck.png';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from '@nextui-org/react';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react';
 import { useDisclosure, Input } from '@nextui-org/react';
 
 const RubberDuck = () => {
@@ -52,9 +52,19 @@ const RubberDuck = () => {
 
   return (
     <>
-      <Button ref={buttonRef} color="primary" variant="light" radius="full" onPress={onOpen}>
-        <img src={duckImg} alt="duck" style={{ width: '20%' }} />
-      </Button>
+      <img
+        src={duckImg}
+        alt="duck"
+        ref={buttonRef}
+        onClick={onOpen}
+        style={{
+          width: '70px',
+          position: 'absolute',
+          bottom: '50px',
+          left: '50px',
+          cursor: 'pointer',
+        }}
+      />
       <div>
         <Modal
           isOpen={isOpen}
@@ -62,8 +72,8 @@ const RubberDuck = () => {
           style={{
             position: 'absolute',
             top: `${buttonPosition.top - 250}px`,
-            left: `${buttonPosition.left-20}px`,
-            width: '400px',
+            left: `${buttonPosition.left - 20}px`,
+            width: '300px',
           }}
         >
           <ModalContent>
