@@ -41,7 +41,7 @@ function Submit() {
           <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
             <Grid item style={{ width: '25%' }}>
               {taskData?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskData} />}
-              <RubberDuck />
+              <RubberDuck task={taskData}/>
             </Grid>
 
             <Grid item style={{ width: '45%' }}>

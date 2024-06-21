@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import duckImg from '../../assets/img/duck/rubber-duck.png';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/react';
 import { useDisclosure, Input } from '@nextui-org/react';
+import getCoduckResp from '../../requests/coduck/getCoduckResp';
 
-const RubberDuck = () => {
+const RubberDuck = ({task}) => {
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
   const [chatHistory, setChatHistory] = useState([
@@ -27,7 +29,7 @@ const RubberDuck = () => {
     }
   }, [chatHistory]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (newMessage.trim() !== '') {
       const userMessage = {
         writer: 'user',
@@ -38,15 +40,21 @@ const RubberDuck = () => {
       setNewMessage('');
       setLoading(true);
 
-      setTimeout(() => {
+      try {
+        const code = localStorage.getItem('code');
+        const response = await getCoduckResp({ chatHistory, code, task });
+
         const duckMessage = {
           writer: 'duck',
-          message: newMessage,
+          message: response,
           time: new Date().toLocaleString(),
         };
         setChatHistory((prevHistory) => [...prevHistory, duckMessage]);
+      } catch (error) {
+        console.error('Error calling Firebase function:', error);
+      } finally {
         setLoading(false);
-      }, 2000);
+      }
     }
   };
 
@@ -72,8 +80,8 @@ const RubberDuck = () => {
           style={{
             position: 'absolute',
             top: `${buttonPosition.top - 250}px`,
-            left: `${buttonPosition.left - 20}px`,
-            width: '300px',
+            left: `${buttonPosition.left - 10}px`,
+            width: '400px',
           }}
         >
           <ModalContent>
