@@ -6,6 +6,7 @@ import { CircularProgress } from '@nextui-org/react';
 import { useFirebase } from '../util/FirebaseProvider';
 import ChooseGroups from '../components/Manager/ChooseGroups';
 import GeneralDataGraph from '../components/Manager/GeneralDataGraph';
+import WeeklySubmissions from '../components/Manager/WeeklySubmissions';
 
 function Manager() {
   const { app, isAuthorized, userData } = useFirebase();
@@ -64,7 +65,12 @@ function Manager() {
             fetchStudents={fetchStudents}
           />
           <p>HELLO WORD!</p>
-          {students && <GeneralDataGraph students={students} />}
+          {students && (
+            <>
+              <GeneralDataGraph students={students} />
+              <WeeklySubmissions students={students} />
+            </>
+          )}
         </>
       ) : (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
