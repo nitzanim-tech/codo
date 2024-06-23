@@ -1,14 +1,14 @@
 import firebaseConfig from '../../util/firebaseConfig';
 
-const getCoduckResp = async ({ chatHistory, code, task }) => {
+const getCoduckResp = async ({ chatHistory, code, prompt }) => {
   try {
     const apiUrl = firebaseConfig.apiUrl;
-    const response = await fetch(`${apiUrl}/getCoduckResp`, {
+    const response = await fetch(`${apiUrl}/getCoduckRes`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ chatMessages: chatHistory, code, task }),
+      body: JSON.stringify({ chatMessages: chatHistory, code, prompt }),
     });
 
     if (!response.ok) {
@@ -16,8 +16,6 @@ const getCoduckResp = async ({ chatHistory, code, task }) => {
     }
 
     const responseData = await response.json();
-    console.log(responseData);
-
     const content = responseData[0]?.message?.content;
     console.log(content);
     return content;

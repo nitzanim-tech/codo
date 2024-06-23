@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import duckImg from '../../assets/img/duck/rubber-duck.png';
-import { useDisclosure } from '@nextui-org/react';
+import { useDisclosure, Textarea } from '@nextui-org/react';
 import getCoduckResp from '../../requests/coduck/getCoduckResp';
 import Chat from './Chat';
 
@@ -9,10 +9,17 @@ const RubberDuck = ({ task }) => {
   const [chatHistory, setChatHistory] = useState([
     { writer: 'duck', message: 'שלום כאן Coduck. יאללה, נחשוב ביחד?', time: new Date().toLocaleString() },
   ]);
+  const initialPromt = `
+      You are Coduck, a debugging assistant duck.
+      Your role is to help the user (a student) identify problems in their code or task.
+      You must not solve the task for them but instead guide them to understand what the issue might be and how they can approach fixing it.
+      Here is the task they need help with: ${JSON.stringify(task)}
+    `;
+
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const buttonRef = useRef(null);
-
+  const [prompt, serPrompt] = useState(initialPromt);
   const handleSendMessage = async () => {
     if (newMessage.trim() !== '') {
       const userMessage = {
@@ -26,7 +33,8 @@ const RubberDuck = ({ task }) => {
 
       try {
         const code = localStorage.getItem('code');
-        const response = await getCoduckResp({ chatHistory, code, task });
+
+        const response = await getCoduckResp({ chatHistory, code, prompt });
 
         const duckMessage = {
           writer: 'duck',
@@ -57,6 +65,8 @@ const RubberDuck = ({ task }) => {
           cursor: 'pointer',
         }}
       />
+      <Textarea variant={'bordered'} value={prompt} onValueChange={serPrompt} />
+
       <Chat
         isOpen={isOpen}
         onClose={onClose}

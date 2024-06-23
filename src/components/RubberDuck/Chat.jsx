@@ -28,7 +28,7 @@ const Chat = ({ isOpen, onClose, chatHistory, newMessage, setNewMessage, handleS
       }}
     >
       <div className="flex flex-col gap-1">
-        <div className="modal-header">דיבאגומי</div>
+        <div className="modal-header">Coduck</div>
         <div style={{ maxHeight: '320px', overflowY: 'auto', padding: '5px' }}>
           {chatHistory.map((chat, index) => (
             <div
