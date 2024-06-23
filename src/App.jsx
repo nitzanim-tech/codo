@@ -8,12 +8,13 @@ import AddNewTasks from './components/Dev/addNewTask/AddNewTasks';
 import Home from './pages/Home';
 import ReadReview from './pages/ReadReview'
 import Play from './pages/Play';
+import Admin from './pages/Admin';
+import Manager from './pages/Manager';
 
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
 
 import './App.css';
-import Managers from './pages/Managers';
 
 ReactGA.initialize(firebaseConfig.measurementId);
 
@@ -35,7 +36,8 @@ function App() {
         <Route path="/dev/newTask" element={<AddNewTasks />} />
         <Route path="/dev/editTask/:index" element={<AddNewTasks />} />
 
-        <Route path="/manager" element={<Managers />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/manager" element={<Manager />} />
       </Routes>
     </BrowserRouter>
   );

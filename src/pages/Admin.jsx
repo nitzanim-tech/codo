@@ -9,7 +9,7 @@ import addPermissionToUser from '../requests/manager/addPermission';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import { useFirebase } from '../util/FirebaseProvider';
 
-function Managers() {
+function Admin() {
   const { app, isAuthorized } = useFirebase();
   const [groupsIndex, setGroupIndex] = useState(null);
   const [instructorsData, setInstructorsData] = useState(null);
@@ -144,4 +144,4 @@ function Managers() {
   );
 }
 
-export default Managers;
+export default Admin;
