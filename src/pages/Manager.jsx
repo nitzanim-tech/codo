@@ -8,6 +8,8 @@ import ChooseGroups from '../components/Manager/ChooseGroups';
 import GeneralDataGraph from '../components/Manager/GeneralDataGraph';
 import WeeklySubmissions from '../components/Manager/WeeklySubmissions';
 import { Grid, Paper, Box } from '@mui/material';
+import StudentPerformanceTable from '../components/Manager/StudentPerformanceTable';
+import './Manager.css';
 
 const Cell = ({ children }) => (
   <Paper variant="outlined" sx={{ height: '100%', width: '100%' }}>
@@ -17,8 +19,11 @@ const Cell = ({ children }) => (
   </Paper>
 );
 
-const Manager = () => { 
- const { app, isAuthorized, userData } = useFirebase();
+const outstandingCriteria = (student) => student.averageGrade >= 90 && student.submissionsCount > 25;
+const strugglingCriteria = (student) => student.averageGrade <= 50 && student.submissionsCount < 10;
+
+const Manager = () => {
+  const { app, isAuthorized, userData } = useFirebase();
   const [groupsIndex, setGroupIndex] = useState(null);
   const [regions, setRegions] = useState([]);
   const [choosenRegion, setChoosenRegion] = useState(null);
@@ -100,26 +105,22 @@ const Manager = () => {
                   </Cell>
                 </Grid>
               </Grid>
-              <Grid container spacing={1} sx={{ height: '20%' }}>
+              <Grid container spacing={1} sx={{ height: '15%' }}>
                 <Grid item xs={12}>
                   <Cell>5x1 Cell</Cell>
                 </Grid>
               </Grid>
+
               <Grid container spacing={1} sx={{ height: '60%' }}>
-                <Grid item xs={4}>
-                  <Cell>3x5 Cell</Cell>
-                </Grid>
-                <Grid item xs={4}>
-                  <Cell>3x5 Cell</Cell>
-                </Grid>
-                <Grid item xs={4}>
-                  <Cell>3x5 Cell</Cell>
-                </Grid>
-                <Grid item xs={4}>
-                  <Cell>3x5 Cell</Cell>
-                </Grid>
-                <Grid item xs={4}>
-                  <Cell>3x5 Cell</Cell>
+                <Grid item xs={12}>
+                  <Cell>
+                    {students && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <StudentPerformanceTable students={students} criteria={outstandingCriteria} title="מצטיינים" />
+                        <StudentPerformanceTable students={students} criteria={strugglingCriteria} title="מתקשים " />
+                      </div>
+                    )}
+                  </Cell>
                 </Grid>
               </Grid>
             </Grid>
@@ -132,54 +133,6 @@ const Manager = () => {
       )}
     </>
   );
-}
+};
 
 export default Manager;
-// function Manager() {
-
-
-//   return (
-//     <>
-//       <NavBar />
-//       {!isAuthorized ? (
-//         <h1>הכניסה למנהלים בלבד</h1>
-//       ) : regions && groupsIndex ? (
-//         <>
-//           <Grid container spacing={3} sx={{ flexGrow: 1 }}>
-//             <Grid xs={6} xsOffset={3} md={2} mdOffset={0}>
-//               <ChooseGroups
-//                 regions={regions}
-//                 choosenRegion={choosenRegion}
-//                 setChoosenRegion={setChoosenRegion}
-//                 choosenGroups={choosenGroups}
-//                 setChoosenGroups={setChoosenGroups}
-//                 fetchStudents={fetchStudents}
-//               />
-//             </Grid>
-//             {students && (
-//               <>
-//                 {' '}
-//                 <Grid xs={4} xsOffset={4} md={2} mdOffset={0}>
-//                   {' '}
-//                   <GeneralDataGraph students={students} />
-//                 </Grid>
-//                 <Grid xs md={6} mdOffset={2}>
-//                   {' '}
-//                   <WeeklySubmissions students={students} />
-//                 </Grid>
-//               </>
-//             )}
-//           </Grid>
-//         </>
-//       ) : (
-//         <div style={{ display: 'flex', justifyContent: 'center' }}>
-//           <CircularProgress />
-//         </div>
-//       )}
-//     </>
-//   );
-// }
-
-// export default Manager;
-
-

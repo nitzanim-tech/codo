@@ -15,7 +15,7 @@ const ChooseGroups = ({ regions, choosenRegion, setChoosenRegion, choosenGroups,
         onSelectionChange={(keys) => {
           setChoosenGroups(Array.from(keys));
         }}
-        dir="rtl"
+        // dir="rtl"
         disabled={!choosenRegion}
         scrollShadowProps={{
           isEnabled: false,
@@ -31,7 +31,7 @@ const ChooseGroups = ({ regions, choosenRegion, setChoosenRegion, choosenGroups,
             ))}
       </Select>
       <Select
-        label="מרחב"
+        label=" מרחב"
         variant="bordered"
         selectedKeys={choosenRegion ? new Set([choosenRegion]) : new Set()}
         onSelectionChange={(keys) => {
@@ -42,7 +42,7 @@ const ChooseGroups = ({ regions, choosenRegion, setChoosenRegion, choosenGroups,
         scrollShadowProps={{
           isEnabled: false,
         }}
-        dir="rtl"
+        // dir="rtl"
       >
         {regions &&
           regions.map((region) => (

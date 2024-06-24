@@ -11,33 +11,45 @@ const GeneralDataGraph = ({ students }) => {
 
   return (
     <>
-        <p>מספר חניכים: {students.length}</p>
-        <p>מספר הגשות: {paramters.submissions}</p>
-        <p>מספר משובים: {paramters.reviews}</p>
-
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Histogram title="בוחן 1" data={histogramDataA} barColor="#8884d8" />
-          <Histogram title="בוחן 2" data={histogramDataB} barColor="#82ca9d" />
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', width: '50%' }}>
+        <CustomNumber text={'משובים'} number={paramters.reviews} />
+        <CustomNumber text={'הגשות'} number={paramters.submissions} />
+        <CustomNumber text={'חניכים'} number={students.length} />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Histogram title="בוחן 2" data={histogramDataB} barColor="#82ca9d" />
+           <Histogram title="בוחן 1" data={histogramDataA} barColor="#8884d8" />
+   </div>
     </>
   );
 };
 
 export default GeneralDataGraph;
 
+const CustomNumber = ({ text, number }) => {
+  return (
+    <div>
+      <h1>{number}</h1>
+      <p>{text}</p>
+    </div>
+  );
+};
+
 const groupAnalysys = (students) => {
   let submissions = 0;
   let reviews = 0;
 
   students.forEach((student) => {
-    Object.values(student.submissions).forEach((submission) => {
-      submissions++;
-      submission.trials.forEach((trial) => {
-        if (trial.review) {
-          reviews++;
-        }
+    if (student.submissions && Object.keys(student.submissions).length > 0) {
+      Object.values(student.submissions).forEach((submission) => {
+        submissions++;
+        submission.trials.forEach((trial) => {
+          if (trial.review) {
+            reviews++;
+          }
+        });
       });
-    });
+    }
   });
 
   return { submissions, reviews };
