@@ -11,7 +11,6 @@ const GeneralDataGraph = ({ students }) => {
 
   return (
     <>
-      <Card >
         <p>מספר חניכים: {students.length}</p>
         <p>מספר הגשות: {paramters.submissions}</p>
         <p>מספר משובים: {paramters.reviews}</p>
@@ -20,7 +19,6 @@ const GeneralDataGraph = ({ students }) => {
           <Histogram title="בוחן 1" data={histogramDataA} barColor="#8884d8" />
           <Histogram title="בוחן 2" data={histogramDataB} barColor="#82ca9d" />
         </div>
-      </Card>
     </>
   );
 };
