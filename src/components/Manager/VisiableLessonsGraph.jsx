@@ -5,7 +5,7 @@ import CustomStepper from './CustomStepper';
 const VisiableLessonsGraph = ({ lessons }) => {
   const lessonVisibilityStats = Object.keys(lessons).map((lessonId) => {
     const lesson = lessons[lessonId];
-    const elements = lesson.elements || {}; // Ensure elements is an object
+    const elements = lesson.elements || {}; 
     const visibleElements = Object.values(elements).filter((element) => {
       return element.setting && element.setting.isVisible;
     }).length;
@@ -25,7 +25,7 @@ const VisiableLessonsGraph = ({ lessons }) => {
   return (
     <div>
       <div style={{ marginBottom: '10px' }}>
-        <h2>מפגשים פתוחים</h2>
+        <h2 style={{fontSize:'16px'}}>מפגשים פתוחים</h2>
       </div>
       <CustomStepper lessonVisibilityStats={lessonVisibilityStats} stepsPerPage={stepsPerPage} />
     </div>

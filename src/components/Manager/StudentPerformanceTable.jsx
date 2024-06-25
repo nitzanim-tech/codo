@@ -8,7 +8,7 @@ const StudentPerformanceTable = ({ students, title }) => {
 
   return (
     <div dir="rtl" style={{ height: '400px', overflowY: 'scroll' }}>
-      <h2 style={{ fontSize: '20px', margin: '5px' }}>{title}</h2>
+      <h2 style={{ fontSize: '16px', margin: '5px' }}>{title}</h2>
       <TableContainer>
         <Table>
           <TableHead>

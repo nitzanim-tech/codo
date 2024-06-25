@@ -34,9 +34,18 @@
 .horizontal-line {
   position: absolute;
   width: calc(100% - 60px); /* Adjust based on your design */
-  height: 2px; /* Thickness of the line */
+  height: 20px; /* Thickness of the line */
   background-color: #ccc;
   top: 50%; /* Position the line vertically */
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.navigation-button {
+  flex-shrink: 0; /* Prevents button from shrinking */
+  visibility: hidden; /* Initially hide the buttons */
+}
+
+.navigation-button.visible {
+  visibility: visible; /* Show the buttons when necessary */
 }

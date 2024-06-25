@@ -88,7 +88,7 @@ const fetchStudents = async () => {
                   </Cell>
                 </Grid>
               </Grid>
-              <Grid container spacing={1} sx={{ height: '50%' }}>
+              <Grid container spacing={1} sx={{ height: '40%' }}>
                 <Grid item xs={12}>
                   <Cell>
                     <WeeklySubmissions students={students} />

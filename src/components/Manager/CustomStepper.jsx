@@ -7,7 +7,7 @@ import { Button } from '@nextui-org/react';
 const CustomStepper = ({ lessonVisibilityStats, stepsPerPage }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const totalSteps = Math.ceil(lessonVisibilityStats.length / stepsPerPage);
-  const stepDistance = 30; 
+  const stepDistance = 25;
 
   const start = currentPage * stepsPerPage;
   const end = start + stepsPerPage;
@@ -31,14 +31,13 @@ const CustomStepper = ({ lessonVisibilityStats, stepsPerPage }) => {
           isIconOnly
           onClick={handlePrev}
           disabled={currentPage === 0}
-          className="navigation-button prev-button"
+          className={`navigation-button prev-button ${currentPage !== 0 ? 'visible' : ''}`}
         >
           <NavigateNextRoundedIcon />
         </Button>
         {displayedLessons.map((lesson, index) => {
-          let backgroundColor = 'white'; 
+          let backgroundColor = 'white';
           const percentVisible = parseFloat(lesson.percentVisible);
-
           if (percentVisible > 80) {
             backgroundColor = '#82ca9d';
           } else if (percentVisible >= 50) {
@@ -47,10 +46,13 @@ const CustomStepper = ({ lessonVisibilityStats, stepsPerPage }) => {
             backgroundColor = '#ccc';
           }
 
+          const actualIndex = start + index; // Calculate the actual index
 
           return (
-            <div key={index} className="lesson-circle" style={{ marginRight: `${stepDistance}px` }}>
-              <div className="lesson-circle-content" style={{ backgroundColor }}></div>
+            <div key={actualIndex} className="lesson-circle" style={{ marginRight: `${stepDistance}px` }}>
+              <div className="lesson-circle-content" style={{ backgroundColor}}>
+                {actualIndex}
+              </div>
               <div className="lesson-text">
                 <div className="lesson-name">{lesson.lessonName}</div>
               </div>
@@ -58,7 +60,6 @@ const CustomStepper = ({ lessonVisibilityStats, stepsPerPage }) => {
             </div>
           );
         })}
-        {currentPage < totalSteps - 1 && <div className="arrow"></div>}
         <Button
           color="primary"
           variant="light"
@@ -66,7 +67,7 @@ const CustomStepper = ({ lessonVisibilityStats, stepsPerPage }) => {
           isIconOnly
           onClick={handleNext}
           disabled={currentPage === totalSteps - 1}
-          className="navigation-button next-button"
+          className={`navigation-button next-button ${currentPage !== totalSteps - 1 ? 'visible' : ''}`}
         >
           <NavigateBeforeRoundedIcon />
         </Button>
@@ -76,5 +77,3 @@ const CustomStepper = ({ lessonVisibilityStats, stepsPerPage }) => {
 };
 
 export default CustomStepper;
-
-
