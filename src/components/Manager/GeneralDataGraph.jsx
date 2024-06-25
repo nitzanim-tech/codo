@@ -1,9 +1,8 @@
 import React from 'react';
-import { Card } from '@nextui-org/react';
 import Histogram from './Histogram';
 
 const GeneralDataGraph = ({ students }) => {
-  const paramters = groupAnalysys(students);
+  const parameters = groupAnalysys(students);
   const gradesVector = calculateGrades(students);
 
   const histogramDataA = createHistogramData(gradesVector.gradeA);
@@ -11,19 +10,20 @@ const GeneralDataGraph = ({ students }) => {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between', width: '50%' }}>
-        <CustomNumber text={'משובים'} number={paramters.reviews} />
-        <CustomNumber text={'הגשות'} number={paramters.submissions} />
-        <CustomNumber text={'חניכים'} number={students.length} />
+      <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '50%', textAlign: 'center' }}>
+          <CustomNumber text={'משובים'} number={parameters.reviews} />
+          <CustomNumber text={'הגשות'} number={parameters.submissions} />
+          <CustomNumber text={'חניכים'} number={students.length} />
+        </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Histogram title="בוחן 2" data={histogramDataB} barColor="#82ca9d" />
-           <Histogram title="בוחן 1" data={histogramDataA} barColor="#8884d8" />
-   </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '50%', textAlign: 'center' }}>
+          <Histogram title="בוחן 2" data={histogramDataB} barColor="#82ca9d" noSubmit={gradesVector.noSubmitB} />
+          <Histogram title="בוחן 1" data={histogramDataA} barColor="#8884d8" noSubmit={gradesVector.noSubmitA} />
+        </div>
     </>
   );
 };
-
 export default GeneralDataGraph;
 
 const CustomNumber = ({ text, number }) => {
@@ -66,7 +66,7 @@ const calculateGrades = (students) => {
   const calculateGrade = (submissions, taskId, points) => {
     let maxGrade = 0;
 
-    if (submissions[taskId]) {
+    if (submissions && submissions[taskId]) {
       submissions[taskId].trials.forEach((trial) => {
         const grade = trial.pass.reduce((acc, pass, index) => acc + (pass ? points[index] : 0), 0);
         if (grade > maxGrade) {
@@ -78,10 +78,22 @@ const calculateGrades = (students) => {
     return maxGrade;
   };
 
-  const gradeA = students.map((student) => calculateGrade(student.submissions, firstTestId, pointsA));
-  const gradeB = students.map((student) => calculateGrade(student.submissions, secondTestId, pointsB));
+  let noSubmitA = 0;
+  let noSubmitB = 0;
 
-  return { gradeA, gradeB };
+  const gradeA = students.map((student) => {
+    const grade = calculateGrade(student.submissions, firstTestId, pointsA);
+    if (grade === 0) noSubmitA++;
+    return grade;
+  });
+
+  const gradeB = students.map((student) => {
+    const grade = calculateGrade(student.submissions, secondTestId, pointsB);
+    if (grade === 0) noSubmitB++;
+    return grade;
+  });
+
+  return { gradeA, gradeB, noSubmitA, noSubmitB };
 };
 
 const createHistogramData = (grades, binSize = 10, numBins = 12) => {

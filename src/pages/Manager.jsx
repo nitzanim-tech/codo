@@ -19,8 +19,10 @@ const Cell = ({ children }) => (
   </Paper>
 );
 
-const outstandingCriteria = (student) => student.averageGrade >= 90 && student.submissionsCount > 25;
-const strugglingCriteria = (student) => student.averageGrade <= 50 && student.submissionsCount < 10;
+const outstandingCriteria = (student) => student.averageGrade >= 90;
+//&& student.submissionsCount > 25;
+const strugglingCriteria = (student) => student.averageGrade <= 50;
+//&& student.submissionsCount < 10;
 
 const Manager = () => {
   const { app, isAuthorized, userData } = useFirebase();
@@ -115,9 +117,21 @@ const Manager = () => {
                 <Grid item xs={12}>
                   <Cell>
                     {students && (
-                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <StudentPerformanceTable students={students} criteria={outstandingCriteria} title="מצטיינים" />
-                        <StudentPerformanceTable students={students} criteria={strugglingCriteria} title="מתקשים " />
+                      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '85%' }}>
+                          <StudentPerformanceTable
+                            students={students}
+                            criteria={strugglingCriteria}
+                            title="מתקשים "
+                            color="#b30000"
+                          />
+                          <StudentPerformanceTable
+                            students={students}
+                            criteria={outstandingCriteria}
+                            title="מצטיינים"
+                            color="#82ca9d"
+                          />
+                        </div>
                       </div>
                     )}
                   </Cell>

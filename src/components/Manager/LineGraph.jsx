@@ -3,7 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 const LineGraph = ({ title, data }) => {
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={200}>
       <LineChart data={data}>
         {/* <CartesianGrid strokeDasharray="3 3" /> */}
         <XAxis dataKey="week" tick={{ fontSize: 10 }} />

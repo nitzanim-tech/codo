@@ -2,22 +2,28 @@ import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import '../../pages/Manager.css';
 
-const StudentPerformanceTable = ({ students, criteria, title }) => {
+const StudentPerformanceTable = ({ students, criteria, title , color}) => {
   const grades = calculateGrades(students);
   const categorizedStudents = calculateAverageGrade(grades).filter(criteria);
-  console.log(categorizedStudents);
+
   return (
-    <div dir='rtl'>
-      <h2>{title}</h2>
+    <div dir="rtl">
+      <h2 style={{ color: color, fontSize: '20px' , margin:'5px'}}>{title}</h2>
       <TableContainer>
-        <Table >
+        <Table>
           <TableHead>
             <TableRow>
-              <TableCell className="custom-cell">שם</TableCell>
-              <TableCell className="custom-cell" align="right">
-                ציון ממוצע
+              <TableCell class="custom-cell">שם</TableCell>
+              <TableCell class="custom-cell" align="right">
+                בוחן 1
               </TableCell>
-              <TableCell className="custom-cell" align="right">
+              <TableCell class="custom-cell" align="right">
+                בוחן 2
+              </TableCell>
+              {/* <TableCell class="custom-cell" align="right">
+                ציון ממוצע
+              </TableCell> */}
+              <TableCell class="custom-cell" align="right">
                 הגשות
               </TableCell>
             </TableRow>
@@ -25,11 +31,17 @@ const StudentPerformanceTable = ({ students, criteria, title }) => {
           <TableBody>
             {categorizedStudents.map((student) => (
               <TableRow key={student.name}>
-                <TableCell className="custom-cell">{student.name}</TableCell>
-                <TableCell className="custom-cell" align="right">
-                  {student.averageGrade}
+                <TableCell class="custom-cell">{student.name}</TableCell>
+                <TableCell class="custom-cell" align="right">
+                  {student.gradeA}
                 </TableCell>
-                <TableCell className="custom-cell" align="right">
+                <TableCell class="custom-cell" align="right">
+                  {student.gradeB}
+                </TableCell>
+                {/* <TableCell class="custom-cell" align="right">
+                  {student.averageGrade}
+                </TableCell> */}
+                <TableCell class="custom-cell" align="right">
                   {student.submissionsCount}
                 </TableCell>
               </TableRow>
@@ -76,11 +88,13 @@ const calculateGrades = (students) => {
 };
 
 const calculateAverageGrade = (grades) => {
-  return grades.map(({ name, gradeA, gradeB, submissions }) => {
-    const averageGrade = (gradeA + gradeB) / 2;
-    const submissionsCount = submissions
-      ? Object.values(submissions).reduce((sum, submission) => sum + submission.trials.length, 0)
-      : 0;
-    return { name, averageGrade, submissionsCount };
-  });
+  return grades
+    .map(({ name, gradeA, gradeB, submissions }) => {
+      const averageGrade = (gradeA + gradeB) / 2;
+      const submissionsCount = submissions
+        ? Object.values(submissions).reduce((sum, submission) => sum + submission.trials.length, 0)
+        : 0;
+      return { name, gradeA, gradeB, averageGrade, submissionsCount };
+    })
+    .sort((a, b) => b.averageGrade - a.averageGrade);
 };
