@@ -42,8 +42,11 @@ const CustomStepper = ({ lessonVisibilityStats, stepsPerPage }) => {
           if (percentVisible > 80) {
             backgroundColor = '#82ca9d';
           } else if (percentVisible >= 50) {
-            backgroundColor = 'yellow';
+            backgroundColor = '#FFE6A7';
+          } else {
+            backgroundColor = '#ccc';
           }
+
 
           return (
             <div key={index} className="lesson-circle" style={{ marginRight: `${stepDistance}px` }}>

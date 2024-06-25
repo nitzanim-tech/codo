@@ -113,7 +113,7 @@ const fetchStudents = async () => {
                   </Cell>
                 </Grid>
               </Grid>
-              <Grid container spacing={1} sx={{ height: '15%' }}>
+              <Grid container spacing={1} sx={{ height: '20%' }}>
                 <Grid item xs={12}>
                   <Cell>{lessons && <VisiableLessonsGraph lessons={lessons} />}</Cell>
                 </Grid>
@@ -124,20 +124,9 @@ const fetchStudents = async () => {
                   <Cell>
                     {students && (
                       <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '85%' }}>
-                          <StudentPerformanceTable
-                            students={students}
-                            criteria={strugglingCriteria}
-                            title="מתקשים "
-                            color="#b30000"
-                          />
-                          <StudentPerformanceTable
-                            students={students}
-                            criteria={outstandingCriteria}
-                            title="מצטיינים"
-                            color="#82ca9d"
-                          />
-                        </div>
+                        {/* <div style={{ display: 'flex', justifyContent: 'space-between', width: '85%' }}> */}
+                          <StudentPerformanceTable students={students} title="חניכים " />
+                        {/* </div> */}
                       </div>
                     )}
                   </Cell>

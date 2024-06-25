@@ -1,14 +1,14 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import '../../pages/Manager.css';
 
-const StudentPerformanceTable = ({ students, criteria, title , color}) => {
+const StudentPerformanceTable = ({ students, title }) => {
   const grades = calculateGrades(students);
-  const categorizedStudents = calculateAverageGrade(grades).filter(criteria);
+  const categorizedStudents = calculateAverageGrade(grades);
 
   return (
-    <div dir="rtl">
-      <h2 style={{ color: color, fontSize: '20px' , margin:'5px'}}>{title}</h2>
+    <div dir="rtl" style={{ height: '400px', overflowY: 'scroll' }}>
+      <h2 style={{ fontSize: '20px', margin: '5px' }}>{title}</h2>
       <TableContainer>
         <Table>
           <TableHead>
@@ -20,9 +20,9 @@ const StudentPerformanceTable = ({ students, criteria, title , color}) => {
               <TableCell class="custom-cell" align="right">
                 בוחן 2
               </TableCell>
-              {/* <TableCell class="custom-cell" align="right">
-                ציון ממוצע
-              </TableCell> */}
+              <TableCell class="custom-cell" align="right">
+                ממוצע
+              </TableCell>
               <TableCell class="custom-cell" align="right">
                 הגשות
               </TableCell>
@@ -38,9 +38,15 @@ const StudentPerformanceTable = ({ students, criteria, title , color}) => {
                 <TableCell class="custom-cell" align="right">
                   {student.gradeB}
                 </TableCell>
-                {/* <TableCell class="custom-cell" align="right">
-                  {student.averageGrade}
-                </TableCell> */}
+                <TableCell class="custom-cell" align="right">
+                  <div
+                    style={{
+                      color: student.averageGrade > 80 ? '#82ca9d' : student.averageGrade < 50 ? '#b30000' : 'inherit',
+                    }}
+                  >
+                    {student.averageGrade}
+                  </div>
+                </TableCell>
                 <TableCell class="custom-cell" align="right">
                   {student.submissionsCount}
                 </TableCell>
