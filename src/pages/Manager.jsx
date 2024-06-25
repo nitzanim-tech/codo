@@ -11,7 +11,7 @@ import { Grid, Paper, Box } from '@mui/material';
 import StudentPerformanceTable from '../components/Manager/StudentPerformanceTable';
 import getAllLessons from '../requests/lessons/getAllLessons';
 import VisiableLessonsGraph from '../components/Manager/VisiableLessonsGraph';
-
+import TaskGraph from '../components/Manager/TaskGraph';
 import './Manager.css';
 
 const Cell = ({ children }) => (
@@ -21,11 +21,6 @@ const Cell = ({ children }) => (
     </Box>
   </Paper>
 );
-
-const outstandingCriteria = (student) => student.averageGrade >= 90;
-//&& student.submissionsCount > 25;
-const strugglingCriteria = (student) => student.averageGrade <= 50;
-//&& student.submissionsCount < 10;
 
 const Manager = () => {
   const { app, isAuthorized, userData } = useFirebase();
@@ -55,21 +50,21 @@ const Manager = () => {
     }, {});
   };
 
-const fetchStudents = async () => {
-  if (choosenGroups.length > 0) {
-    let data = [];
-    let allLessons = {}; 
-    for (const groupId of choosenGroups) {
-      let groupData = await getStudentsByGroup({ app, groupId });
-      let groupLessons = await getAllLessons({ app, groupId });
-      allLessons = { ...allLessons, ...groupLessons };
-      groupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
-      data = data.concat(groupData);
+  const fetchStudents = async () => {
+    if (choosenGroups.length > 0) {
+      let data = [];
+      let allLessons = {};
+      for (const groupId of choosenGroups) {
+        let groupData = await getStudentsByGroup({ app, groupId });
+        let groupLessons = await getAllLessons({ app, groupId });
+        allLessons = { ...allLessons, ...groupLessons };
+        groupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
+        data = data.concat(groupData);
+      }
+      setLessons(allLessons);
+      setStudents(data);
     }
-    setLessons(allLessons); 
-    setStudents(data);
-  }
-};
+  };
 
   return (
     <>
@@ -99,7 +94,7 @@ const fetchStudents = async () => {
 
             {/* Right column */}
             <Grid item xs={6}>
-              <Grid container spacing={1} sx={{ height: '15%' }}>
+              <Grid container spacing={1} sx={{ height: '12%', marginBottom: '15px' }}>
                 <Grid item xs={12}>
                   <Cell>
                     <ChooseGroups
@@ -113,19 +108,23 @@ const fetchStudents = async () => {
                   </Cell>
                 </Grid>
               </Grid>
-              <Grid container spacing={1} sx={{ height: '20%' }}>
+              <Grid container spacing={1} sx={{ height: '20%', marginBottom: '10px' }}>
                 <Grid item xs={12}>
                   <Cell>{lessons && <VisiableLessonsGraph lessons={lessons} />}</Cell>
                 </Grid>
               </Grid>
 
               <Grid container spacing={1} sx={{ height: '60%' }}>
-                <Grid item xs={12}>
+                <Grid item xs={5}>
+                  <Cell>{/* <TaskGraph students={students} /> */}</Cell>
+                </Grid>
+
+                <Grid item xs={7}>
                   <Cell>
                     {students && (
                       <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                         {/* <div style={{ display: 'flex', justifyContent: 'space-between', width: '85%' }}> */}
-                          <StudentPerformanceTable students={students} title="חניכים " />
+                        <StudentPerformanceTable students={students} title="חניכים " />
                         {/* </div> */}
                       </div>
                     )}

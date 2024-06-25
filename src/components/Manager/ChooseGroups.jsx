@@ -3,7 +3,7 @@ import { Select, SelectItem, Button } from '@nextui-org/react';
 
 const ChooseGroups = ({ regions, choosenRegion, setChoosenRegion, choosenGroups, setChoosenGroups, fetchStudents }) => {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', width:'75%' }}>
       <Button color="primary" variant="light" radius="full" onClick={fetchStudents}>
         יאללה סע
       </Button>

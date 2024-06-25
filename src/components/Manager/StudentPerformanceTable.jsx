@@ -7,54 +7,57 @@ const StudentPerformanceTable = ({ students, title }) => {
   const categorizedStudents = calculateAverageGrade(grades);
 
   return (
-    <div dir="rtl" style={{ height: '400px', overflowY: 'scroll' }}>
-      <h2 style={{ fontSize: '16px', margin: '5px' }}>{title}</h2>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell class="custom-cell">שם</TableCell>
-              <TableCell class="custom-cell" align="right">
-                בוחן 1
-              </TableCell>
-              <TableCell class="custom-cell" align="right">
-                בוחן 2
-              </TableCell>
-              <TableCell class="custom-cell" align="right">
-                ממוצע
-              </TableCell>
-              <TableCell class="custom-cell" align="right">
-                הגשות
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {categorizedStudents.map((student) => (
-              <TableRow key={student.name}>
-                <TableCell class="custom-cell">{student.name}</TableCell>
+    <div style={{ height: '400px', overflowY: 'auto' }}>
+      <div dir="rtl">
+        <h2 style={{ fontSize: '16px', margin: '5px' }}>{title}</h2>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell class="custom-cell">שם</TableCell>
                 <TableCell class="custom-cell" align="right">
-                  {student.gradeA}
+                  בוחן 1
                 </TableCell>
                 <TableCell class="custom-cell" align="right">
-                  {student.gradeB}
+                  בוחן 2
                 </TableCell>
                 <TableCell class="custom-cell" align="right">
-                  <div
-                    style={{
-                      color: student.averageGrade > 80 ? '#82ca9d' : student.averageGrade < 50 ? '#b30000' : 'inherit',
-                    }}
-                  >
-                    {student.averageGrade}
-                  </div>
+                  ממוצע
                 </TableCell>
                 <TableCell class="custom-cell" align="right">
-                  {student.submissionsCount}
+                  הגשות
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {categorizedStudents.map((student) => (
+                <TableRow key={student.name}>
+                  <TableCell class="custom-cell">{student.name}</TableCell>
+                  <TableCell class="custom-cell" align="right">
+                    {student.gradeA}
+                  </TableCell>
+                  <TableCell class="custom-cell" align="right">
+                    {student.gradeB}
+                  </TableCell>
+                  <TableCell class="custom-cell" align="right">
+                    <div
+                      style={{
+                        color:
+                          student.averageGrade > 80 ? '#82ca9d' : student.averageGrade < 50 ? '#b30000' : 'inherit',
+                      }}
+                    >
+                      {student.averageGrade}
+                    </div>
+                  </TableCell>
+                  <TableCell class="custom-cell" align="right">
+                    {student.submissionsCount}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     </div>
   );
 };
