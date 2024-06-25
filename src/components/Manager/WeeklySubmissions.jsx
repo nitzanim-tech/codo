@@ -1,11 +1,10 @@
 import React from 'react';
-import { Card } from '@nextui-org/react';
 import LineGraph from './LineGraph';
 
 const WeeklySubmissions = ({ students }) => {
   const weeklyData = calculateWeeklyData(students);
 
-  return <LineGraph title="Weekly Submissions and Reviews" data={weeklyData} />;
+  return <LineGraph title="הגשות ומשובים - שבועי" data={weeklyData} />;
 };
 
 const calculateWeeklyData = (students) => {
@@ -20,7 +19,8 @@ const calculateWeeklyData = (students) => {
     return weekStart;
   };
 
-  students.forEach((student) => {
+students.forEach((student) => {
+  if (student.submissions) {
     Object.values(student.submissions).forEach((submission) => {
       const submissionDate = new Date(submission.trials[0].date);
       const weekStart = getWeekStart(submissionDate).toISOString().split('T')[0]; // Format as YYYY-MM-DD
@@ -32,7 +32,8 @@ const calculateWeeklyData = (students) => {
       weeks[weekStart].submissions += 1;
       weeks[weekStart].reviews += submission.trials.filter((trial) => trial.review).length;
     });
-  });
+  }
+});
 
   const sortedWeeks = Object.keys(weeks)
     .map((week) => ({

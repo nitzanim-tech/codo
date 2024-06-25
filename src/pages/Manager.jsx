@@ -9,6 +9,9 @@ import GeneralDataGraph from '../components/Manager/GeneralDataGraph';
 import WeeklySubmissions from '../components/Manager/WeeklySubmissions';
 import { Grid, Paper, Box } from '@mui/material';
 import StudentPerformanceTable from '../components/Manager/StudentPerformanceTable';
+import getAllLessons from '../requests/lessons/getAllLessons';
+import VisiableLessonsGraph from '../components/Manager/VisiableLessonsGraph';
+
 import './Manager.css';
 
 const Cell = ({ children }) => (
@@ -31,7 +34,7 @@ const Manager = () => {
   const [choosenRegion, setChoosenRegion] = useState(null);
   const [choosenGroups, setChoosenGroups] = useState([]);
   const [students, setStudents] = useState([]);
-
+  const [lessons, setLessons] = useState();
   useEffect(() => {
     const fetchData = async () => {
       const [regionsFromDb] = await Promise.all([getGroupsByRegion(app)]);
@@ -52,18 +55,21 @@ const Manager = () => {
     }, {});
   };
 
-  const fetchStudents = async () => {
-    if (choosenGroups.length > 0) {
-      let data = [];
-      console.log({ choosenGroups });
-      for (const groupId of choosenGroups) {
-        let groupData = await getStudentsByGroup({ app, groupId });
-        groupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
-        data = data.concat(groupData);
-      }
-      setStudents(data);
+const fetchStudents = async () => {
+  if (choosenGroups.length > 0) {
+    let data = [];
+    let allLessons = {}; 
+    for (const groupId of choosenGroups) {
+      let groupData = await getStudentsByGroup({ app, groupId });
+      let groupLessons = await getAllLessons({ app, groupId });
+      allLessons = { ...allLessons, ...groupLessons };
+      groupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
+      data = data.concat(groupData);
     }
-  };
+    setLessons(allLessons); 
+    setStudents(data);
+  }
+};
 
   return (
     <>
@@ -109,7 +115,7 @@ const Manager = () => {
               </Grid>
               <Grid container spacing={1} sx={{ height: '15%' }}>
                 <Grid item xs={12}>
-                  <Cell>5x1 Cell</Cell>
+                  <Cell>{lessons && <VisiableLessonsGraph lessons={lessons} />}</Cell>
                 </Grid>
               </Grid>
 
