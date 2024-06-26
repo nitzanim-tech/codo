@@ -16,9 +16,8 @@ const getCoduckResp = async ({ chatHistory, code, prompt }) => {
     }
 
     const responseData = await response.json();
-    const content = responseData[0]?.message?.content;
-    console.log(content);
-    return content;
+
+    return responseData;
   } catch (error) {
     console.error('Error getting data:', error);
     return [];

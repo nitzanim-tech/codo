@@ -1,22 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
 import duckImg from '../../assets/img/duck/rubber-duck.png';
-import { useDisclosure, Textarea } from '@nextui-org/react';
+import { useDisclosure } from '@nextui-org/react';
 import getCoduckResp from '../../requests/coduck/getCoduckResp';
 import Chat from './Chat';
 
 const RubberDuck = ({ task }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [chatHistory, setChatHistory] = useState([
-  ]);
-
+  const [chatHistory, setChatHistory] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [lastSentCode, setLastSentCode] = useState('');
   const buttonRef = useRef(null);
+
   const handleSendMessage = async () => {
     if (newMessage.trim() !== '') {
       const userMessage = {
-        writer: 'user',
-        message: newMessage,
+        role: 'user',
+        hebMessage: newMessage,
+        enMessage: '',
         time: new Date().toLocaleString(),
       };
       const currChatHistory = [...chatHistory, userMessage];
@@ -26,15 +27,35 @@ const RubberDuck = ({ task }) => {
 
       try {
         const code = localStorage.getItem('code');
-
         const response = await getCoduckResp({ chatHistory: currChatHistory, code, task });
+        console.log(response);
+
+        const updatedChatHistory = currChatHistory.map((msg, index) => {
+          if (msg.role === 'user' && index === currChatHistory.length - 1) {
+            msg.enMessage = response.userEnMessage;
+          }
+          return msg;
+        });
 
         const duckMessage = {
-          writer: 'duck',
-          message: response,
+          role: 'assistant',
+          hebMessage: response.hebMessage,
+          enMessage: response.enMessage,
           time: new Date().toLocaleString(),
         };
-        setChatHistory((prevHistory) => [...prevHistory, duckMessage]);
+
+        if (code !== lastSentCode) {
+          const codeChangeMessage = {
+            role: 'system',
+            hebMessage: '',
+            enMessage: `At that point the user code is ${code}`,
+            time: new Date().toLocaleString(),
+          };
+          setChatHistory([...updatedChatHistory, codeChangeMessage]);
+          setLastSentCode(code);
+        } else {
+          setChatHistory([...updatedChatHistory, duckMessage]);
+        }
       } catch (error) {
         console.error('Error calling Firebase function:', error);
       } finally {
