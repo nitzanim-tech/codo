@@ -26,7 +26,14 @@ const RubberDuck = ({ task }) => {
       setLoading(true);
 
       try {
-        const code = localStorage.getItem('code');
+        var code = localStorage.getItem('code');
+        if (code == lastSentCode) {
+            code = null;
+        } else {
+            userMessage.code = code;
+            setLastSentCode(code);
+        }
+
         const response = await getCoduckResp({ chatHistory: currChatHistory, code, task });
         console.log(response);
 
@@ -44,18 +51,7 @@ const RubberDuck = ({ task }) => {
           time: new Date().toLocaleString(),
         };
 
-        if (code !== lastSentCode) {
-          const codeChangeMessage = {
-            role: 'system',
-            hebMessage: '',
-            enMessage: `At that point the user code is ${code}`,
-            time: new Date().toLocaleString(),
-          };
-          setChatHistory([...updatedChatHistory, codeChangeMessage]);
-          setLastSentCode(code);
-        } else {
-          setChatHistory([...updatedChatHistory, duckMessage]);
-        }
+        setChatHistory([...updatedChatHistory, duckMessage]);
       } catch (error) {
         console.error('Error calling Firebase function:', error);
       } finally {
