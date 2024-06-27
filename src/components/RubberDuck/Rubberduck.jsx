@@ -1,11 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import getCoduckResp from '../../requests/coduck/getCoduckResp';
+import getTaskTranslationResp from '../../requests/coduck/getTaskTranslationResp';
 import Chat from './Chat';
 
 const RubberDuck = ({ task, chatHistory, setChatHistory }) => {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [lastSentCode, setLastSentCode] = useState('');
+  const [taskInEnglish, setTaskInEnglish] = useState('');
+
+  useEffect(() => {
+    getTaskTranslationResp({ task: task.description }).then((data) => {
+      setTaskInEnglish(data.task.task);
+    });
+  }, [task]);
 
   const handleSendMessage = async () => {
     if (newMessage.trim() !== '') {
@@ -29,7 +37,8 @@ const RubberDuck = ({ task, chatHistory, setChatHistory }) => {
           setLastSentCode(code);
         }
 
-        const response = await getCoduckResp({ chatHistory: currChatHistory, code, task });
+
+        const response = await getCoduckResp({ chatHistory: currChatHistory, code, task: taskInEnglish });
 
         const updatedChatHistory = currChatHistory.map((msg, index) => {
           if (msg.role === 'user' && index === currChatHistory.length - 1) {
