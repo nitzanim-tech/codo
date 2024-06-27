@@ -1,14 +1,14 @@
 import firebaseConfig from '../../util/firebaseConfig';
 
-const getCoduckResp = async ({ chatHistory, code, prompt, task }) => {
+const getTaskTranslationResp = async ({ task }) => {
   try {
     const apiUrl = firebaseConfig.apiUrl;
-    const response = await fetch(`${apiUrl}/getCoduckRes`, {
+    const response = await fetch(`${apiUrl}/getTaskTranslation`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ chatMessages: chatHistory, code, prompt, task }),
+      body: JSON.stringify({ task }),
     });
 
     if (!response.ok) {
@@ -24,4 +24,4 @@ const getCoduckResp = async ({ chatHistory, code, prompt, task }) => {
   }
 };
 
-export default getCoduckResp;
+export default getTaskTranslationResp;
