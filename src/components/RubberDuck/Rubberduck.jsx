@@ -40,6 +40,11 @@ const RubberDuck = ({ task, chatHistory, setChatHistory }) => {
 
 
         const response = await getCoduckResp({ chatHistory: currChatHistory, code, task: taskInEnglish });
+        console.log(response);
+
+        if (response.lines !== null) {
+            console.log('Highlight lines', response.lines);
+        }
 
         const updatedChatHistory = currChatHistory.map((msg, index) => {
           if (msg.role === 'user' && index === currChatHistory.length - 1) {
