@@ -2,36 +2,34 @@ import React, { useEffect, useRef } from 'react';
 import { Input } from '@nextui-org/react';
 import styled from 'styled-components';
 
-const Chat = ({ isOpen, onClose, chatHistory, newMessage, setNewMessage, handleSendMessage, loading }) => {
+const Chat = ({ chatHistory, newMessage, setNewMessage, handleSendMessage, loading }) => {
   const chatEndRef = useRef(null);
 
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
+    console.log({ chatHistory });
   }, [chatHistory, loading]);
-
-  if (!isOpen) return null;
 
   return (
     <ChatContainer>
-      <div className="flex flex-col gap-1">
-        <ChatHeader>Coduck</ChatHeader>
-        <ChatMessages>
-          {chatHistory.map(
-            (chat, index) =>
-              (chat.role === 'user' || chat.role === 'assistant') && (
-                <ChatMessage key={index} isUser={chat.role === 'user'}>
-                  <MessageBubble isUser={chat.role === 'user'} isDuck={chat.role === 'assistant'}>
-                    <div style={{ fontSize: '0.9em' }}>{chat.hebMessage}</div>
-                  </MessageBubble>
-                  <MessageTime>{chat.time}</MessageTime>
-                </ChatMessage>
-              ),
-          )}
-          {loading && <LoadingMessage>מקליד...</LoadingMessage>}
-          <div ref={chatEndRef}></div>
-        </ChatMessages>
+      <ChatMessages>
+        {chatHistory.map(
+          (chat, index) =>
+            (chat.role === 'user' || chat.role === 'assistant') && (
+              <ChatMessage key={index} isUser={chat.role === 'user'}>
+                <MessageBubble isUser={chat.role === 'user'} isDuck={chat.role === 'assistant'}>
+                  <div style={{ fontSize: '0.9em' }}>{chat.hebMessage}</div>
+                </MessageBubble>
+                <MessageTime>{chat.time}</MessageTime>
+              </ChatMessage>
+            ),
+        )}
+        {loading && <LoadingMessage>מקליד...</LoadingMessage>}
+        <div ref={chatEndRef}></div>
+      </ChatMessages>
+      <InputContainer>
         <Input
           dir="rtl"
           placeholder="הודעה"
@@ -42,8 +40,7 @@ const Chat = ({ isOpen, onClose, chatHistory, newMessage, setNewMessage, handleS
           }}
           fullWidth
         />
-      </div>
-      <CloseButton onClick={onClose}>סגור</CloseButton>
+      </InputContainer>
     </ChatContainer>
   );
 };
@@ -51,26 +48,20 @@ const Chat = ({ isOpen, onClose, chatHistory, newMessage, setNewMessage, handleS
 export default Chat;
 
 const ChatContainer = styled.div`
-  position: fixed;
-  bottom: 100px;
-  left: 50px;
-  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 500px;
   background-color: white;
   border: 1px solid gray;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
   padding: 10px;
 `;
 
-const ChatHeader = styled.div`
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
 const ChatMessages = styled.div`
-  max-height: 320px;
+  flex-grow: 1;
+  max-height: 420px;
   overflow-y: auto;
   padding: 5px;
 `;
@@ -110,6 +101,6 @@ const LoadingMessage = styled.div`
   color: #4a99ee;
 `;
 
-const CloseButton = styled.button`
-  margin-top: 10px;
+const InputContainer = styled.div`
+  padding-top: 10px;
 `;

@@ -18,3 +18,8 @@ div[data-overlay-container="true"] {
   font-weight: normal;
   font-display: swap; 
 }
+
+body {
+  font-family: 'Varela Round', sans-serif;
+  font-size: 14px;
+}

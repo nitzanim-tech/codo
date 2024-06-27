@@ -39,7 +39,7 @@ function IDEButtons({
             <Button
               radius="full"
               isIconOnly
-              variant="faded"
+              variant="ghost"
               onClick={() => window.open(window.location.href + '/play')}
             >
               <SportsEsportsRoundedIcon />
