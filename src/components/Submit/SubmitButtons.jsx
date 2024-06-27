@@ -1,0 +1,65 @@
+import React, { useEffect, useState } from 'react';
+import { Button } from '@nextui-org/react';
+import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
+import duckIcon from '../../assets/svg/rubber-duck.svg';
+import ChecklistRtlRoundedIcon from '@mui/icons-material/ChecklistRtlRounded';
+import RubberDuck from '../RubberDuck/Rubberduck';
+import Instructions from '../Instructions';
+import TestsList from '../TestsList/TestsList';
+import { Tabs, Tab } from '@nextui-org/react';
+
+export default function SubmitButtons({ testsOutputs, taskObject }) {
+  return (
+    <>
+      <Tabs
+        aria-label="Options"
+        // color="primary"
+        classNames={{
+          // tabList: 'gap-6 w-full relative rounded-none p-0 border-b border-divider bg-[#7AD3F6]',
+          // cursor: 'w-full bg-[#103C6F]',
+          // tab: 'max-w-fit px-0 h-10 bg-[#F9FEFF]',
+          tab: 'max-w-fit px-0 h-10',
+
+          tabContent: 'group-data-[selected=true]:text-[#103C6F]',
+        }}
+      >
+        <Tab
+          key="coduck"
+          // style={{ text: 'white' }}
+          title={
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+              <span style={{ margin: '10px' }}>coduck</span>
+              <img src={duckIcon} alt="DuckIcon" style={{ width: '30px', height: '30px' , color:'green'}} />
+            </div>
+          }
+        >
+          <RubberDuck task={taskObject} />
+        </Tab>
+
+        <Tab
+          key="tests"
+          title={
+            <>
+              <span style={{ margin: '10px' }}>טסטים</span>
+              <ChecklistRtlRoundedIcon />
+            </>
+          }
+        >
+          {taskObject?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskObject} />}
+        </Tab>
+
+        <Tab
+          key="instructions"
+          title={
+            <>
+              <span style={{ margin: '10px' }}>הוראות</span>
+              <QuestionMarkRoundedIcon />
+            </>
+          }
+        >
+          {taskObject?.setting?.showTest && <Instructions taskObject={taskObject} />}{' '}
+        </Tab>
+      </Tabs>
+    </>
+  );
+}

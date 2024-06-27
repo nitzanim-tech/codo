@@ -10,6 +10,7 @@ import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import getTaskById from '../requests/tasks/getTaskById';
 import RubberDuck from '../components/RubberDuck/Rubberduck';
+import SubmitButtons from '../components/Submit/SubmitButtons';
 import './Submit.css';
 
 function Submit() {
@@ -39,17 +40,12 @@ function Submit() {
       <PyodideProvider>
         {taskData && testsOutputs && (
           <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
-            <Grid item style={{ width: '25%' }}>
-              {taskData?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskData} />}
-              <RubberDuck task={taskData}/>
-            </Grid>
-
-            <Grid item style={{ width: '45%' }}>
+            <Grid item style={{ width: '60%' }}>
               <PythonIDE testsOutputs={testsOutputs} setTestsOutputs={setTestsOutputs} taskObject={taskData} />
             </Grid>
 
-            <Grid item style={{ width: '30%' }}>
-              {taskData?.setting?.showTest && <Instructions taskObject={taskData} />}
+            <Grid item style={{ width: '40%' }}>
+              <SubmitButtons testsOutputs={testsOutputs} taskObject={taskData} />
             </Grid>
           </Grid>
         )}
