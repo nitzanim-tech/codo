@@ -15,6 +15,7 @@ function Submit() {
   const { index } = useParams();
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState(null);
+  const [highlightedLines, setHighlightedLines] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,11 +39,20 @@ function Submit() {
         {taskData && testsOutputs && (
           <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
             <Grid item style={{ width: '60%' }}>
-              <PythonIDE testsOutputs={testsOutputs} setTestsOutputs={setTestsOutputs} taskObject={taskData} />
+              <PythonIDE
+                testsOutputs={testsOutputs}
+                setTestsOutputs={setTestsOutputs}
+                taskObject={taskData}
+                highlightedLines={highlightedLines}
+              />
             </Grid>
 
             <Grid item style={{ width: '40%' }}>
-              <SubmitButtons testsOutputs={testsOutputs} taskObject={taskData} />
+              <SubmitButtons
+                testsOutputs={testsOutputs}
+                taskObject={taskData}
+                setHighlightedLines={setHighlightedLines}
+              />
             </Grid>
           </Grid>
         )}

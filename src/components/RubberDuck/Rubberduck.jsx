@@ -3,7 +3,7 @@ import getCoduckResp from '../../requests/coduck/getCoduckResp';
 import getTaskTranslationResp from '../../requests/coduck/getTaskTranslationResp';
 import Chat from './Chat';
 
-const RubberDuck = ({ task, chatHistory, setChatHistory }) => {
+const RubberDuck = ({ task, chatHistory, setChatHistory, setHighlightedLines }) => {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [lastSentCode, setLastSentCode] = useState('');
@@ -37,7 +37,6 @@ const RubberDuck = ({ task, chatHistory, setChatHistory }) => {
           userMessage.code = code;
           setLastSentCode(code);
         }
-
 
         const response = await getCoduckResp({ chatHistory: currChatHistory, code, task: taskInEnglish });
         console.log(response);
