@@ -3,13 +3,10 @@ import { useParams } from 'react-router-dom';
 
 import PythonIDE from '../components/IDE/PythonIDE';
 import NavBar from '../components/NavBar/NavigateBar';
-import Instructions from '../components/Instructions';
-import TestsList from '../components/TestsList/TestsList';
 import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import getTaskById from '../requests/tasks/getTaskById';
-import RubberDuck from '../components/RubberDuck/Rubberduck';
 import SubmitButtons from '../components/Submit/SubmitButtons';
 import './Submit.css';
 

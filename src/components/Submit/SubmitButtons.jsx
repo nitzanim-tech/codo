@@ -9,6 +9,8 @@ import TestsList from '../TestsList/TestsList';
 import { Tabs, Tab } from '@nextui-org/react';
 
 export default function SubmitButtons({ testsOutputs, taskObject }) {
+    const [chatHistory, setChatHistory] = useState([]);
+
   return (
     <>
       <Tabs
@@ -29,11 +31,11 @@ export default function SubmitButtons({ testsOutputs, taskObject }) {
           title={
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
               <span style={{ margin: '10px' }}>coduck</span>
-              <img src={duckIcon} alt="DuckIcon" style={{ width: '30px', height: '30px' , color:'green'}} />
+              <img src={duckIcon} alt="DuckIcon" style={{ width: '30px', height: '30px', color: 'green' }} />
             </div>
           }
         >
-          <RubberDuck task={taskObject} />
+          <RubberDuck task={taskObject} chatHistory={chatHistory} setChatHistory={setChatHistory} />
         </Tab>
 
         <Tab
