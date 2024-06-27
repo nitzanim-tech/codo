@@ -1,6 +1,69 @@
 import React, { useEffect, useRef } from 'react';
 import { Input } from '@nextui-org/react';
 import styled from 'styled-components';
+import Editor from '@monaco-editor/react';
+import ReviewEditor from '../Review/ReviewEditor';
+
+const FormattedDuckMessage = ({ message }) => {
+  const parts = message.split('```');
+  return (
+    <div>
+      {parts.map((part, index) => (
+        <React.Fragment key={index}>
+          {index % 2 === 0 ? (
+            <span>{part.replace(/\n/g, '\n')}</span>
+          ) : (
+            // <Editor
+            //   height={'100px'}
+            //   defaultLanguage="python"
+            //   value={part}
+            //   options={{
+            //     glyphMargin: false,
+            //     scrollBeyondLastLine: false,
+            //     readOnly: true,
+            //     overviewRulerLanes: 0,
+            //     hideCursorInOverviewRuler: true,
+            //     overviewRulerBorder: false,
+            //     renderLineHighlight: 'none',
+            //     minimap: { enabled: false },
+            //     scrollbar: {
+            //       vertical: 'hidden',
+            //       horizontal: 'hidden',
+            //       handleMouseWheel: false,
+            //       verticalScrollbarSize: 0,
+            //     },
+            //   }}
+            // />
+
+            <span
+              style={{
+                fontFamily: 'DejaVuSansMono, Courier, monospace',
+                color: 'white',
+                direction: 'ltr',
+                textAlign: 'left',
+                display: 'block',
+                whiteSpace: 'pre-wrap',
+                backgroundColor: 'black',
+              }}
+            >
+
+              {part.split('\n').map(
+                (line, idx) =>
+                  line !== 'python' && (
+                    <React.Fragment key={idx}>
+                      {'\t'}
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ),
+              )}
+            </span>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+};
 
 const Chat = ({ chatHistory, newMessage, setNewMessage, handleSendMessage, loading }) => {
   const chatEndRef = useRef(null);
@@ -12,20 +75,28 @@ const Chat = ({ chatHistory, newMessage, setNewMessage, handleSendMessage, loadi
     console.log({ chatHistory });
   }, [chatHistory, loading]);
 
+  const renderMessage = (chat, index) => {
+    if (chat.role === 'user' || chat.role === 'assistant') {
+      return (
+        <ChatMessage key={index} isUser={chat.role === 'user'}>
+          <MessageBubble isUser={chat.role === 'user'} isDuck={chat.role === 'assistant'}>
+            {chat.hebMessage.includes('```') ? (
+              <FormattedDuckMessage message={chat.hebMessage} />
+            ) : (
+              <div style={{ fontSize: '0.9em' }}>{chat.hebMessage}</div>
+            )}
+          </MessageBubble>
+          <MessageTime>{chat.time}</MessageTime>
+        </ChatMessage>
+      );
+    }
+    return null;
+  };
+
   return (
     <ChatContainer>
       <ChatMessages>
-        {chatHistory.map(
-          (chat, index) =>
-            (chat.role === 'user' || chat.role === 'assistant') && (
-              <ChatMessage key={index} isUser={chat.role === 'user'}>
-                <MessageBubble isUser={chat.role === 'user'} isDuck={chat.role === 'assistant'}>
-                  <div style={{ fontSize: '0.9em' }}>{chat.hebMessage}</div>
-                </MessageBubble>
-                <MessageTime>{chat.time}</MessageTime>
-              </ChatMessage>
-            ),
-        )}
+        {chatHistory.map((chat, index) => renderMessage(chat, index))}
         {loading && <LoadingMessage>מקליד...</LoadingMessage>}
         <div ref={chatEndRef}></div>
       </ChatMessages>
@@ -46,6 +117,16 @@ const Chat = ({ chatHistory, newMessage, setNewMessage, handleSendMessage, loadi
 };
 
 export default Chat;
+
+const StyledEditor = styled(Editor)`
+  .myContentClass {
+    background: lightyellow;
+  }
+  .myGlyphMarginClass::before {
+    content: '!';
+    color: red;
+  }
+`;
 
 const ChatContainer = styled.div`
   display: flex;
@@ -71,6 +152,7 @@ const ChatMessage = styled.div`
   flex-direction: column;
   align-items: ${(props) => (props.isUser ? 'flex-end' : 'flex-start')};
   margin-bottom: 10px;
+  text-align: start;
 `;
 
 const MessageBubble = styled.div`

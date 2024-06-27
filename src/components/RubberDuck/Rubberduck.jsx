@@ -2,8 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import getCoduckResp from '../../requests/coduck/getCoduckResp';
 import Chat from './Chat';
 
-const RubberDuck = ({ task }) => {
-  const [chatHistory, setChatHistory] = useState([]);
+const RubberDuck = ({ task, chatHistory, setChatHistory }) => {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [lastSentCode, setLastSentCode] = useState('');
@@ -24,14 +23,13 @@ const RubberDuck = ({ task }) => {
       try {
         var code = localStorage.getItem('code');
         if (code == lastSentCode) {
-            code = null;
+          code = null;
         } else {
-            userMessage.code = code;
-            setLastSentCode(code);
+          userMessage.code = code;
+          setLastSentCode(code);
         }
 
         const response = await getCoduckResp({ chatHistory: currChatHistory, code, task });
-        console.log(response);
 
         const updatedChatHistory = currChatHistory.map((msg, index) => {
           if (msg.role === 'user' && index === currChatHistory.length - 1) {
