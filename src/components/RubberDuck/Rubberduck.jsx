@@ -31,6 +31,7 @@ const RubberDuck = ({ task }) => {
 
       try {
         var code = localStorage.getItem('code');
+        code = localStorage.getItem('code').split('\n').map((x, i) => `${i + 1} ${x}`).join('\n');
         if (code == lastSentCode) {
             code = null;
         } else {
