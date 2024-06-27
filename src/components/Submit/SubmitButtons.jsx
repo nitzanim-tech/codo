@@ -8,8 +8,8 @@ import Instructions from '../Instructions';
 import TestsList from '../TestsList/TestsList';
 import { Tabs, Tab } from '@nextui-org/react';
 
-export default function SubmitButtons({ testsOutputs, taskObject }) {
-    const [chatHistory, setChatHistory] = useState([]);
+export default function SubmitButtons({ testsOutputs, taskObject, setHighlightedLines }) {
+  const [chatHistory, setChatHistory] = useState([]);
 
   return (
     <>
@@ -35,7 +35,12 @@ export default function SubmitButtons({ testsOutputs, taskObject }) {
             </div>
           }
         >
-          <RubberDuck task={taskObject} chatHistory={chatHistory} setChatHistory={setChatHistory} />
+          <RubberDuck
+            task={taskObject}
+            chatHistory={chatHistory}
+            setChatHistory={setChatHistory}
+            setHighlightedLines={setHighlightedLines}
+          />
         </Tab>
 
         <Tab
