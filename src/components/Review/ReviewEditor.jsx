@@ -4,8 +4,8 @@ import styled from 'styled-components';
 const LINE_HEGITH = 20;
 const theme = 'vs-light';
 
-export default function ReviewEditor({ version, comments }) {
-
+export default function ReviewEditor({ version, comments = {} }) {
+  console.log(version.code);
   const handleEditorDidMount = (editor, monaco) => {
     updateDecorations(editor, monaco);
 
@@ -31,20 +31,20 @@ export default function ReviewEditor({ version, comments }) {
       },
     });
   };
-const updateDecorations = (editor, monaco) => {
-  if (comments.current) {
-    const decorations = Object.entries(comments.current).map(([line, comment]) => ({
-      range: new monaco.Range(parseInt(line), 1, parseInt(line), 1),
-      options: {
-        isWholeLine: true,
-        className: 'myContentClass',
-        glyphMarginClassName: 'myGlyphMarginClass',
-        hoverMessage: { value: comment },
-      },
-    }));
-    editor.deltaDecorations([], decorations);
-  }
-};
+  const updateDecorations = (editor, monaco) => {
+    if (comments.current) {
+      const decorations = Object.entries(comments.current).map(([line, comment]) => ({
+        range: new monaco.Range(parseInt(line), 1, parseInt(line), 1),
+        options: {
+          isWholeLine: true,
+          className: 'myContentClass',
+          glyphMarginClassName: 'myGlyphMarginClass',
+          hoverMessage: { value: comment },
+        },
+      }));
+      editor.deltaDecorations([], decorations);
+    }
+  };
 
   return (
     <StyledEditor
