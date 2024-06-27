@@ -1,11 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
 
 export default function MonacoEditor({ code, setCode, theme, highlightedLines }) {
+  console.log(highlightedLines);
+
+  const editorRef = useRef(null);
+  const monacoRef = useRef(null);
+
   useEffect(() => {
     localStorage.setItem('code', code);
   }, [code]);
+
+  useEffect(() => {
+    if (editorRef.current && monacoRef.current) {
+      updateDecorations(editorRef.current, monacoRef.current);
+    }
+  }, [highlightedLines]);
 
   const updateDecorations = (editor, monaco) => {
     if (highlightedLines) {
@@ -13,7 +24,7 @@ export default function MonacoEditor({ code, setCode, theme, highlightedLines })
         range: new monaco.Range(line, 1, line, editor.getModel().getLineMaxColumn(line)),
         options: {
           isWholeLine: true,
-          className: `highlightedLine ${theme === 'vs-dark' ? 'darkTheme' : 'lightTheme'}`,
+          className: 'highlightedLine',
         },
       }));
       editor.deltaDecorations([], decorations);
@@ -21,6 +32,8 @@ export default function MonacoEditor({ code, setCode, theme, highlightedLines })
   };
 
   const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
+    monacoRef.current = monaco;
     updateDecorations(editor, monaco);
   };
 
@@ -40,13 +53,5 @@ export default function MonacoEditor({ code, setCode, theme, highlightedLines })
 const StyledEditor = styled(Editor)`
   .highlightedLine {
     background: dimgray;
-  }
-
-  .lightTheme .highlightedLine {
-    background: lightgray;
-  }
-
-  .darkTheme .highlightedLine {
-    background: darkgray;
   }
 `;
