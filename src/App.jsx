@@ -10,7 +10,7 @@ import ReadReview from './pages/ReadReview'
 import Play from './pages/Play';
 import Admin from './pages/Admin';
 import Manager from './pages/Manager';
-
+import Dashboard from './pages/Dashboard';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
 
@@ -37,6 +37,8 @@ function App() {
         <Route path="/dev/editTask/:index" element={<AddNewTasks />} />
 
         <Route path="/admin" element={<Admin />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+
         <Route path="/manager" element={<Manager />} />
       </Routes>
     </BrowserRouter>
