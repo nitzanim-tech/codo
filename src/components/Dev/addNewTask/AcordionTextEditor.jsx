@@ -1,19 +1,20 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { AccordionItem, Accordion } from '@nextui-org/react';
-import SunEditor, { buttonList } from 'suneditor-react';
-import { Grid } from '@mui/material';
+import SunEditor from 'suneditor-react';
 
 import 'suneditor/dist/css/suneditor.min.css';
 
-const AcordionTextEditor = ({ title, setText }) => {
-  const [htmlContent, setHtmlContent] = useState('');
+const AcordionTextEditor = ({ text, setText, htmlContent, setHtmlContent }) => {
+  useEffect(() => {
+    setHtmlContent(text);
+  }, [text, htmlContent]);
+
   const buttonList = [
     ['undo', 'redo'],
     ['font', 'fontSize', 'formatBlock'],
     ['fontColor', 'hiliteColor'],
 
     ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
-    // ['outdent', 'indent'],
     ['align', 'horizontalRule'],
     ['codeView'],
   ];
@@ -24,30 +25,33 @@ const AcordionTextEditor = ({ title, setText }) => {
   }
 
   return (
-    <div>
-      <Grid container spacing={1} columns={2} rows={1}>
-        <Grid item style={{ width: '45%' }}>
-          <SunEditor
-            setDefaultStyle="font-family: ariel; font-size: 20px;"
-            onChange={handleChange}
-            setOptions={{
-              buttonList: buttonList,
-            }}
-          />
-        </Grid>
-        <Grid item style={{ width: '30%' }}>
-          <Accordion dir="rtl" variant="splitted" selectionMode="multiple" selectedKeys={'1'} isCompact>
-            <AccordionItem title={title} key="1">
-              <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
-            </AccordionItem>
-          </Accordion>
-        </Grid>
-      </Grid>
-    </div>
+    <SunEditor
+      defaultValue={text}
+      setDefaultStyle="font-family: ariel; font-size: 20px;"
+      onChange={handleChange}
+      setOptions={{
+        buttonList: buttonList,
+      }}
+    />
   );
 };
 
-export default AcordionTextEditor;
+const AcordionPreview = ({ type, htmlContent, isSelected, setCurretEditing }) => {
+  const title = type == 'description' ? 'תיאור המשימה' : 'דוגמה';
+  return (
+    <Accordion dir="rtl" variant="splitted" selectionMode="multiple" selectedKeys={'1'} isCompact>
+      <AccordionItem
+        title={title}
+        key="1"
+        style={{ background: isSelected ? ' #008AD1' : null }}
+        onClick={() => setCurretEditing(type)}
+      >
+        <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+      </AccordionItem>
+    </Accordion>
+  );
+};
+export { AcordionTextEditor, AcordionPreview };
 
 // const buttonList = [
 //   ['undo', 'redo'],

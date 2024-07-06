@@ -68,6 +68,7 @@ export default function SubmitsTable({ data, task }) {
         </TableHeader>
 
         <TableBody>
+          {console.log(task)}
           {sortedData.map((student, index) => {
             const versionsWithGrades = student.versions.map((version) => ({
               ...version,

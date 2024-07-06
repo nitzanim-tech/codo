@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
 import PythonIDE from '../components/IDE/PythonIDE';
 import NavBar from '../components/NavBar/NavigateBar';
 import { Grid } from '@mui/material';
@@ -8,6 +7,7 @@ import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import getTaskById from '../requests/tasks/getTaskById';
 import SubmitButtons from '../components/Submit/SubmitButtons';
+import SessionTracker from '../components/general/SessionTracker';
 import './Submit.css';
 
 function Submit() {
@@ -46,7 +46,6 @@ function Submit() {
                 highlightedLines={highlightedLines}
               />
             </Grid>
-
             <Grid item style={{ width: '40%' }}>
               <SubmitButtons
                 testsOutputs={testsOutputs}
@@ -57,14 +56,10 @@ function Submit() {
           </Grid>
         )}
       </PyodideProvider>
+      <SessionTracker type={'start'} />
+      <SessionTracker type={'end'} />
     </>
   );
 }
 
 export default Submit;
-
-// const isReviewExist = (submissions, taskId) => {
-//   if (!submissions || !submissions[taskId]) return false;
-//   for (const trial of submissions[taskId].trials) if (trial.review) return true;
-//   return false;
-// };
