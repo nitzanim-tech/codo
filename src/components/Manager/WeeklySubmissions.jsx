@@ -19,21 +19,21 @@ const calculateWeeklyData = (students) => {
     return weekStart;
   };
 
-students.forEach((student) => {
-  if (student.submissions) {
-    Object.values(student.submissions).forEach((submission) => {
-      const submissionDate = new Date(submission.trials[0].date);
-      const weekStart = getWeekStart(submissionDate).toISOString().split('T')[0]; // Format as YYYY-MM-DD
+  students.forEach((student) => {
+    if (student.submissions) {
+      Object.values(student.submissions).forEach((submission) => {
+        const submissionDate = new Date(submission.trials[0].date);
+        const weekStart = getWeekStart(submissionDate).toISOString().split('T')[0]; // Format as YYYY-MM-DD
 
-      if (!weeks[weekStart]) {
-        weeks[weekStart] = { submissions: 0, reviews: 0 };
-      }
+        if (!weeks[weekStart]) {
+          weeks[weekStart] = { submissions: 0, reviews: 0 };
+        }
 
-      weeks[weekStart].submissions += 1;
-      weeks[weekStart].reviews += submission.trials.filter((trial) => trial.review).length;
-    });
-  }
-});
+        weeks[weekStart].submissions += 1;
+        weeks[weekStart].reviews += submission.trials.filter((trial) => trial.review).length;
+      });
+    }
+  });
 
   const sortedWeeks = Object.keys(weeks)
     .map((week) => ({
