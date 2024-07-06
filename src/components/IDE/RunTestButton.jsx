@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Tooltip } from '@nextui-org/react';
 import RuleRoundedIcon from '@mui/icons-material/RuleRounded';
 import { usePyodide } from './PyodideProvider';
@@ -7,12 +7,13 @@ import { getProcessOutputs } from '../../Tasks/TaskComponents';
 import addSession from '../../requests/sessions/addSession';
 import { useFirebase } from '../../util/FirebaseProvider';
 import { useParams } from 'react-router-dom';
+import levenshteinDistance from '../../util/levenshteinDistance';
 
 export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject, buttonElement }) {
   const pyodide = usePyodide();
   const { app, userData } = useFirebase();
   const { index } = useParams();
-
+  const [lastCode, setLastCode] = useState(code);
   useEffect(() => {
     if (runTests) handleClick();
   }, [runTests]);
@@ -71,7 +72,9 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
       setTestsOutputs(testsOutput);
       const pass = testsOutput.map((output) => output.correct);
       const time = new Date().toISOString();
-      const session = { pass, time };
+      const editDist = levenshteinDistance(code, lastCode);
+      const session = { pass, time, editDist };
+      setLastCode(code);
       addSession({ app, userId: userData.id, task: index, session });
     }
   }

@@ -3,10 +3,10 @@ import { Button } from '@nextui-org/react';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import duckIcon from '../../assets/svg/rubber-duck.svg';
 import ChecklistRtlRoundedIcon from '@mui/icons-material/ChecklistRtlRounded';
-import RubberDuck from '../RubberDuck/Rubberduck';
 import Instructions from '../Instructions';
 import TestsList from '../TestsList/TestsList';
 import { Tabs, Tab } from '@nextui-org/react';
+import Coduck from '../Coduck/Coduck';
 
 export default function SubmitButtons({ testsOutputs, taskObject, setHighlightedLines }) {
   const [chatHistory, setChatHistory] = useState([]);
@@ -15,17 +15,13 @@ export default function SubmitButtons({ testsOutputs, taskObject, setHighlighted
     <>
       <Tabs
         aria-label="Options"
-        // color="primary"
         classNames={{
-          // tabList: 'gap-6 w-full relative rounded-none p-0 border-b border-divider bg-[#7AD3F6]',
-          // cursor: 'w-full bg-[#103C6F]',
-          // tab: 'max-w-fit px-0 h-10 bg-[#F9FEFF]',
           tab: 'max-w-fit px-0 h-10',
-
           tabContent: 'group-data-[selected=true]:text-[#103C6F]',
         }}
       >
-        <Tab
+        {/* CODUCK: */}
+        {/* <Tab
           key="coduck"
           // style={{ text: 'white' }}
           title={
@@ -35,13 +31,13 @@ export default function SubmitButtons({ testsOutputs, taskObject, setHighlighted
             </div>
           }
         >
-          <RubberDuck
+          <Coduck
             task={taskObject}
             chatHistory={chatHistory}
             setChatHistory={setChatHistory}
             setHighlightedLines={setHighlightedLines}
           />
-        </Tab>
+        </Tab> */}
 
         <Tab
           key="tests"

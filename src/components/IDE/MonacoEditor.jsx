@@ -3,7 +3,6 @@ import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
 
 export default function MonacoEditor({ code, setCode, theme, highlightedLines }) {
-  console.log(highlightedLines);
 
   const editorRef = useRef(null);
   const monacoRef = useRef(null);

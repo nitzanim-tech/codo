@@ -8,7 +8,6 @@ import sumbitCode from '../../requests/sumbitCode';
 import { ModalBody, ModalFooter } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
-import { getTaskByIndex } from './getTaskByIndex';
 
 function SumbitButton({ code, testsOutputs, setRunTests, taskId, showTests }) {
   const { app, auth } = useFirebase();
