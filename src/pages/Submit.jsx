@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import PythonIDE from '../components/IDE/PythonIDE';
 import NavBar from '../components/NavBar/NavigateBar';
@@ -9,6 +9,7 @@ import getTaskById from '../requests/tasks/getTaskById';
 import SubmitButtons from '../components/Submit/SubmitButtons';
 import SessionTracker from '../components/general/SessionTracker';
 import './Submit.css';
+import addSession from '../requests/sessions/addSession';
 
 function Submit() {
   const { app, userData } = useFirebase();
@@ -16,6 +17,39 @@ function Submit() {
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState(null);
   const [highlightedLines, setHighlightedLines] = useState([]);
+  const [noActivitySent, setNoActivitySent] = useState(false);
+
+  const handleUserActivity = useCallback(() => {
+    clearTimeout(window.userActivityTimer);
+    if (noActivitySent) {
+      const session = { type: 'userActive', time: new Date().toISOString() };
+      addSession({ app, userId: userData.id, task: index, session });
+      setNoActivitySent(false);
+    }
+    window.userActivityTimer = setTimeout(
+      () => {
+        const session = { type: 'noActivity', time: new Date().toISOString() };
+        addSession({ app, userId: userData.id, task: index, session });
+        setNoActivitySent(true);
+      },
+      10 * 60 * 1000, // 10 minutes
+    );
+  }, [app, index, userData, noActivitySent]);
+
+  useEffect(() => {
+    const activityHandler = () => {
+      handleUserActivity();
+    };
+
+    window.addEventListener('mousemove', activityHandler);
+    window.addEventListener('keypress', activityHandler);
+
+    return () => {
+      clearTimeout(window.userActivityTimer);
+      window.removeEventListener('mousemove', activityHandler);
+      window.removeEventListener('keypress', activityHandler);
+    };
+  }, [handleUserActivity]);
 
   useEffect(() => {
     const fetchData = async () => {
