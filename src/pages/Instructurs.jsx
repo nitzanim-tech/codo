@@ -15,7 +15,7 @@ import getTasksData from '../requests/tasks/getTasksData';
 import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettingProvider';
 
 function Instructors() {
-  const { app, userData } = useFirebase();
+  const { app, userData, auth } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(userData ? userData.group : null);
@@ -94,7 +94,12 @@ function Instructors() {
                   </Tab>
                   <Tab key="students" title="חניכים" aria-label="Students tab">
                     <CenteredDiv>
-                      <StudentsTable isLoading={isLoading} students={formatStudentTable(studentsRawData)} app={app} />
+                      <StudentsTable
+                        isLoading={isLoading}
+                        students={formatStudentTable(studentsRawData)}
+                        app={app}
+                        auth={auth}
+                      />
                     </CenteredDiv>
                   </Tab>
                   <Tab key="manage" title="מפגשים">

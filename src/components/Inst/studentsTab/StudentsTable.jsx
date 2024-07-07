@@ -4,14 +4,14 @@ import { getKeyValue, Spinner } from '@nextui-org/react';
 import EditStudentButton from './EditStudentButton';
 import getGroups from '../../../requests/groups/getGroups';
 
-export default function StudentsTable({ app, isLoading, students }) {
+export default function StudentsTable({ app, auth, isLoading, students }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
   const [groups, setGroups] = useState(null);
-  
+
   useEffect(() => {
     const getGroupFromDb = async () => {
       try {
-        const groupFromDB = await getGroups(app);
+        const groupFromDB = await getGroups(app, auth);
         setGroups(groupFromDB);
       } catch (error) {
         console.error('Error fetching groups:', error);
