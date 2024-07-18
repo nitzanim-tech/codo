@@ -27,3 +27,4 @@ todo.txt
 .firebase/*
 ./firebase/*
 functions/.env
+src/util/permissions.js

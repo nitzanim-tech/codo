@@ -13,6 +13,7 @@ import { useFirebase } from '../util/FirebaseProvider';
 import styled from 'styled-components';
 import getTasksData from '../requests/tasks/getTasksData';
 import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettingProvider';
+import isAuthorized from '../util/permissions';
 
 function Instructors() {
   const { app, userData, auth } = useFirebase();
@@ -33,7 +34,8 @@ function Instructors() {
   useEffect(() => {
     if (userData) {
       setSelectedGroup(userData.group);
-      userData.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
+      console.log(isAuthorized(userData.email));
+      isAuthorized(userData.email) ? setUnauthorized(false) : setUnauthorized(true);
     }
   }, [userData]);
 
