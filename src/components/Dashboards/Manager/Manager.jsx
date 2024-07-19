@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from '../components/NavBar/NavigateBar';
-import getGroupsByRegion from '../requests/groups/getGroupsByRegion';
-import getStudentsByGroup from '../requests/getStudents';
+import NavBar from '../../NavBar/NavigateBar';
+import getGroupsByRegion from '../../../requests/groups/getGroupsByRegion';
+import getStudentsByGroup from '../../../requests/getStudents';
 import { CircularProgress } from '@nextui-org/react';
-import { useFirebase } from '../util/FirebaseProvider';
-import ChooseGroups from '../components/Manager/ChooseGroups';
-import GeneralDataGraph from '../components/Manager/GeneralDataGraph';
-import WeeklySubmissions from '../components/Manager/WeeklySubmissions';
+import { useFirebase } from '../../../util/FirebaseProvider';
+import ChooseGroups from './ChooseGroups';
+import GeneralDataGraph from './GeneralDataGraph';
+import WeeklySubmissions from './WeeklySubmissions';
 import { Grid, Paper, Box } from '@mui/material';
-import StudentPerformanceTable from '../components/Manager/StudentPerformanceTable';
-import getAllLessons from '../requests/lessons/getAllLessons';
-import VisiableLessonsGraph from '../components/Manager/VisiableLessonsGraph';
-import TaskGraph from '../components/Manager/TaskGraph';
+import StudentPerformanceTable from './StudentPerformanceTable';
+import getAllLessons from '../../../requests/lessons/getAllLessons';
+import VisiableLessonsGraph from './VisiableLessonsGraph';
+import TaskGraph from './TaskGraph';
 import './Manager.css';
 
 const Cell = ({ children }) => (

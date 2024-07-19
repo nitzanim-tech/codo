@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../pages/Manager.css';
+import './Manager.css';
 import CustomStepper from './CustomStepper';
 
 const VisiableLessonsGraph = ({ lessons }) => {

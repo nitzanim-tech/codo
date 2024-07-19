@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import '../../pages/Manager.css';
+import './Manager.css';
 
 const StudentPerformanceTable = ({ students, title }) => {
   const grades = calculateGrades(students);
