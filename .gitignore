@@ -28,3 +28,4 @@ todo.txt
 ./firebase/*
 functions/.env
 src/util/permissions.js
+src/components/Dashboards/CodoData.json
