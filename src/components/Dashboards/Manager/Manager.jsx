@@ -12,6 +12,8 @@ import StudentPerformanceTable from './StudentPerformanceTable';
 import getAllLessons from '../../../requests/lessons/getAllLessons';
 import VisiableLessonsGraph from './VisiableLessonsGraph';
 import TaskGraph from './TaskGraph';
+import SubmitByMainsubject from '../Status/SubmitByMainsubject';
+import codoData from "../CodoData.json"
 import './Manager.css';
 
 const Cell = ({ children }) => (
@@ -30,6 +32,9 @@ const Manager = () => {
   const [choosenGroups, setChoosenGroups] = useState([]);
   const [students, setStudents] = useState([]);
   const [lessons, setLessons] = useState();
+
+  const tasks = codoData.tasks || {};
+
   useEffect(() => {
     const fetchData = async () => {
       const [regionsFromDb] = await Promise.all([getGroupsByRegion(app)]);
@@ -86,7 +91,7 @@ const Manager = () => {
               <Grid container spacing={1} sx={{ height: '40%' }}>
                 <Grid item xs={12}>
                   <Cell>
-                    <WeeklySubmissions students={students} />
+                    <SubmitByMainsubject students={students} title={'שלום'} tasks={tasks} />
                   </Cell>
                 </Grid>
               </Grid>
@@ -108,18 +113,9 @@ const Manager = () => {
                   </Cell>
                 </Grid>
               </Grid>
-              <Grid container spacing={1} sx={{ height: '20%', marginBottom: '10px' }}>
-                <Grid item xs={12}>
-                  <Cell>{lessons && <VisiableLessonsGraph lessons={lessons} />}</Cell>
-                </Grid>
-              </Grid>
 
               <Grid container spacing={1} sx={{ height: '60%' }}>
-                <Grid item xs={5}>
-                  <Cell>{/* <TaskGraph students={students} /> */}</Cell>
-                </Grid>
-
-                <Grid item xs={7}>
+                <Grid item xs={12}>
                   <Cell>
                     {students && (
                       <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>

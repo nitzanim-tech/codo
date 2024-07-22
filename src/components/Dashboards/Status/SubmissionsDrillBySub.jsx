@@ -2,7 +2,7 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import '../Manager/Manager.css';
 
-const SubmissionsDrill = ({ students, title, taskDict }) => {
+const SubmissionsBySub = ({ students, title, taskDict }) => {
   const taskSubmissions = {};
 
   students.forEach((student) => {

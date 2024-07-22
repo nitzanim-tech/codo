@@ -22,10 +22,13 @@ const StudentPerformanceTable = ({ students, title }) => {
                   בוחן 2
                 </TableCell>
                 <TableCell class="custom-cell" align="right">
-                  ממוצע
+                  ממוצע בחנים{' '}
                 </TableCell>
                 <TableCell class="custom-cell" align="right">
                   הגשות
+                </TableCell>
+                <TableCell class="custom-cell" align="right">
+                  ממוצע הגשות
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -51,6 +54,9 @@ const StudentPerformanceTable = ({ students, title }) => {
                   </TableCell>
                   <TableCell class="custom-cell" align="right">
                     {student.submissionsCount}
+                  </TableCell>
+                  <TableCell class="custom-cell" align="right">
+                    12
                   </TableCell>
                 </TableRow>
               ))}
