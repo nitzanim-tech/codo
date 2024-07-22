@@ -8,8 +8,8 @@ import { useFirebase } from '../util/FirebaseProvider';
 import getTaskById from '../requests/tasks/getTaskById';
 import SubmitButtons from '../components/Submit/SubmitButtons';
 import SessionTracker from '../components/general/SessionTracker';
-import './Submit.css';
 import addSession from '../requests/sessions/addSession';
+import './Submit.css';
 
 function Submit() {
   const { app, userData } = useFirebase();
@@ -18,6 +18,7 @@ function Submit() {
   const [testsOutputs, setTestsOutputs] = useState(null);
   const [highlightedLines, setHighlightedLines] = useState([]);
   const [noActivitySent, setNoActivitySent] = useState(false);
+  const [lastCode, setLastCode] = useState(localStorage.getItem('code') || examplecode);
 
   const handleUserActivity = useCallback(() => {
     clearTimeout(window.userActivityTimer);

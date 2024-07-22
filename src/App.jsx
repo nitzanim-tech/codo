@@ -13,7 +13,7 @@ import Manager from './pages/Manager';
 import Dashboard from './pages/Dashboard';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
-
+import Syllabus from './pages/Syllabus';
 import './App.css';
 
 ReactGA.initialize(firebaseConfig.measurementId);
@@ -40,6 +40,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/manager" element={<Manager />} />
+
+        <Route path="/syllabus" element={<Syllabus />} />
       </Routes>
     </BrowserRouter>
   );

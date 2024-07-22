@@ -6,29 +6,21 @@ import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import GoogleIcon from '@mui/icons-material/Google';
 import { registerUserInDB } from '../../requests/registerUser';
-import getGroupsByRegion from '../../requests/groups/getGroupsByRegion';
+import getAllSyllbus from '../../requests/syllabus/getAllSyllbus';
 
 const RegisterModal = ({ app, auth, open, setOpen }) => {
-  const [regions, setRegions] = useState(null);
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [choosenGroup, setChoosenGroup] = useState('');
-  const [choosenRegion, setChoosenRegion] = useState('');
-  // const [currentUser, setCurrentUser] = useState(null);
 
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((user) => {
-  //     setCurrentUser(user);
-  //   });
-  //   return unsubscribe;
-  // }, []);
+  const [syllabus, setSyllabus] = useState();
+  const [choosenSyllabusId, setChoosenSyllabus] = useState();
 
   useEffect(() => {
-    const getGroupFromDb = async () => {
-      const regionsFromDB = await getGroupsByRegion(app);
-      setRegions(regionsFromDB);
+    const getSyllabusFromDb = async () => {
+      const syllabusFromDB = await getAllSyllbus(app);
+      setSyllabus(syllabusFromDB);
     };
-    getGroupFromDb();
+    getSyllabusFromDb();
   }, []);
 
   const handleGoogleSignIn = async () => {
@@ -39,9 +31,11 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
         name: name,
         lastName: lastName,
         email: result.user.email,
-        region: choosenRegion,
-        group: choosenGroup,
+        group: syllabus[choosenSyllabusId].default_group,
       };
+
+      console.log(user);
+      console.log(syllabus[choosenSyllabusId]);
       registerUserInDB({ user, uid: result.user.uid, app });
       setOpen(false);
     } catch (error) {
@@ -58,54 +52,35 @@ const RegisterModal = ({ app, auth, open, setOpen }) => {
           <ModalBody>
             <Input label="שם" value={name} onChange={(e) => setName(e.target.value)} />
             <Input label="שם משפחה" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-
             <Select
-              label="מרחב"
-              value={choosenRegion}
-              onChange={(e) => {
-                setChoosenRegion(e.target.value);
-                setChoosenGroup(null);
-              }}
+              label="תוכנית"
+              value={choosenSyllabusId}
+              onChange={(e) => setChoosenSyllabus(e.target.value)}
               dir="rtl"
             >
-              {regions &&
-                regions.map((region) => (
-                  <SelectItem key={region.id} value={region} dir="rtl">
-                    {region.name}
-                  </SelectItem>
-                ))}
-            </Select>
-
-            <Select
-              label="קבוצה"
-              value={choosenGroup}
-              onChange={(e) => setChoosenGroup(e.target.value)}
-              dir="rtl"
-              disabled={!choosenRegion}
-            >
-              {choosenRegion &&
-                regions
-                  .find((region) => region && region.id === choosenRegion)
-                  ?.groups.map((group) => (
-                    <SelectItem key={group.id} value={group} dir="rtl">
-                      {group.name}
-                    </SelectItem>
-                  ))}
+              {syllabus &&
+                Object.entries(syllabus).map(
+                  ([id, syllabusData]) =>
+                    syllabusData.open_register && (
+                      <SelectItem key={id} value={id} dir="rtl">
+                        {syllabusData.program}
+                      </SelectItem>
+                    ),
+                )}
             </Select>
 
             <Divider />
-
             <Button
               onClick={handleGoogleSignIn}
               startContent={<GoogleIcon />}
-              isDisabled={!name || !lastName || !choosenGroup}
+              isDisabled={!name || !lastName || !choosenSyllabusId}
             >
               הרשמה באמצעות גוגל
             </Button>
           </ModalBody>
 
           <ModalFooter>
-            <button onClick={() => setOpen(false)}>סגור</button>
+            <Button onClick={() => setOpen(false)}>סגור</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

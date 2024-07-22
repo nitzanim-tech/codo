@@ -13,7 +13,7 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
   const pyodide = usePyodide();
   const { app, userData } = useFirebase();
   const { index } = useParams();
-  const [lastCode, setLastCode] = useState(code);
+
   useEffect(() => {
     if (runTests) handleClick();
   }, [runTests]);
@@ -62,7 +62,17 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
       const ansTestOutputs = await runTest({ code: taskObject.code, tests: taskObject.tests });
       const testsOutput = processTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
       setTestsOutputs(testsOutput);
-    } else {
+      const pass = testsOutput.map((output) => output.correct);
+      const time = new Date().toISOString();
+      const editDist = levenshteinDistance(code, lastCode);
+      const session = { pass, time, editDist };
+      setLastCode(code);
+      addSession({ app, userId: userData.id, task: index, session });
+    } 
+    
+    
+    
+    else {
       const testsOutput = getProcessOutputs({
         task: taskObject.id,
         taskTests: taskObject.tests,
