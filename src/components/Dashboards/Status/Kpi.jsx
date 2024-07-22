@@ -7,16 +7,16 @@ const cy = 200;
 const iR = 50;
 const oR = 100;
 const data = [
-  { name: 'A', value: 80, color: 'red' },
-  { name: 'B', value: 45, color: 'yellow' },
-  { name: 'C', value: 25, color: 'green' },
+  { name: 'A', value: 80, color: '#ffa69e' },
+  { name: 'B', value: 45, color: '#faf3dd' },
+  { name: 'C', value: 25, color: '#82ca9d' },
 ];
 
-const Kpi = ({ title = 'שלום עולם', value = 88 }) => {
+const Kpi = ({ title, value  }) => {
   return (
     <div>
       <h2>{title}</h2>
-      <PieChart width={400} height={500}>
+      <PieChart width={300} height={400}>
         <Pie
           dataKey="value"
           startAngle={180}
@@ -33,7 +33,7 @@ const Kpi = ({ title = 'שלום עולם', value = 88 }) => {
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
-        {needle(value, data, cx, cy, iR, oR, '#d0d000')}
+        {needle(value, data, cx, cy, iR, oR, '#5e6472')}
       </PieChart>
     </div>
   );

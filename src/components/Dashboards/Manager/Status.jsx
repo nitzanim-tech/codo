@@ -25,20 +25,25 @@ const Cell = ({ children }) => (
 );
 
 const Status = () => {
-  const { app, isAuthorized, userData } = useFirebase();
+  const { app, isAuthorized } = useFirebase();
   const [groupsIndex, setGroupIndex] = useState(null);
   const [regions, setRegions] = useState([]);
-  const [choosenRegion, setChoosenRegion] = useState(null);
   const [choosenGroups, setChoosenGroups] = useState(['all']);
   const [students, setStudents] = useState([]);
   const [lessons, setLessons] = useState();
+
   useEffect(() => {
     const fetchData = async () => {
-      const [regionsFromDb] = await Promise.all([getGroupsByRegion(app)]);
-      const index = makeNameIdIndex(regionsFromDb);
-      setGroupIndex(index);
-      setRegions(regionsFromDb);
+      try {
+        const regionsFromDb = await getGroupsByRegion(app);
+        const index = makeNameIdIndex(regionsFromDb);
+        setGroupIndex(index);
+        setRegions(regionsFromDb);
+      } catch (error) {
+        console.error('Error fetching regions:', error);
+      }
     };
+
     if (isAuthorized) fetchData();
   }, [isAuthorized, app]);
 
@@ -52,21 +57,29 @@ const Status = () => {
     }, {});
   };
 
-  const fetchStudents = async () => {
-    if (choosenGroups.length > 0) {
-      let data = [];
-      let allLessons = {};
-      for (const groupId of choosenGroups) {
-        let groupData = await getStudentsByGroupMock({ app, groupId });
-        let groupLessons = await getAllLessons({ app, groupId });
-        allLessons = { ...allLessons, ...groupLessons };
-        groupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
-        data = data.concat(groupData);
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        if (choosenGroups.length > 0) {
+          let data = [];
+          let allLessons = {};
+          for (const groupId of choosenGroups) {
+            const groupData = await getStudentsByGroupMock({ app, groupId });
+            const groupLessons = await getAllLessons({ app, groupId });
+            allLessons = { ...allLessons, ...groupLessons };
+            const filteredGroupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
+            data = data.concat(filteredGroupData);
+          }
+          setLessons(allLessons);
+          setStudents(data);
+        }
+      } catch (error) {
+        console.error('Error fetching students:', error);
       }
-      setLessons(allLessons);
-      setStudents(data);
-    }
-  };
+    };
+
+    if (isAuthorized) fetchStudents();
+  }, [choosenGroups, isAuthorized, app]);
 
   return (
     <>
@@ -74,66 +87,51 @@ const Status = () => {
       {!isAuthorized ? (
         <h1>הכניסה למנהלים בלבד</h1>
       ) : regions && groupsIndex ? (
-        <>
-          <Grid container spacing={1} sx={{ height: '100vh' }}>
-            {/* Left column */}
-            <Grid item xs={6}>
-              <Grid container spacing={1} sx={{ height: '50%' }}>
-                <Grid item xs={12}>
-                  <Cell></Cell>
-                </Grid>
-              </Grid>
-              <Grid container spacing={1} sx={{ height: '40%' }}>
-                <Grid item xs={12}>
-                  <Cell>
-                    <WeeklySubmissions students={students} />
-                  </Cell>
-                </Grid>
+        <Grid container spacing={1} sx={{ height: '100vh' }}>
+          {/* Left column */}
+          <Grid item xs={6}>
+            <Grid container spacing={1} sx={{ height: '50%' }}>
+              <Grid item xs={12}>
+                <Cell>
+                  {students.length > 0 && (
+                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                      <Kpi title={'שלום עולם'} value={88} />
+                      <Kpi title={'שלום עולם'} value={88} />
+                    </div>
+                  )}
+                </Cell>
               </Grid>
             </Grid>
-
-            {/* Right column */}
-            <Grid item xs={6}>
-              <Grid container spacing={1} sx={{ height: '12%', marginBottom: '15px' }}>
-                {/* <Grid item xs={12}>
-                  <Cell>
-                    <ChooseGroups
-                      regions={regions}
-                      choosenRegion={choosenRegion}
-                      setChoosenRegion={setChoosenRegion}
-                      choosenGroups={choosenGroups}
-                      setChoosenGroups={setChoosenGroups}
-                      fetchStudents={fetchStudents}
-                    />
-                  </Cell>
-                </Grid> */}
-              </Grid>
-              <Grid container spacing={1} sx={{ height: '20%', marginBottom: '10px' }}>
-                <Grid item xs={12}>
-                  <Cell>{lessons && <VisiableLessonsGraph lessons={lessons} />}</Cell>
-                </Grid>
-              </Grid>
-
-              <Grid container spacing={1} sx={{ height: '60%' }}>
-                <Grid item xs={5}>
-                  <Cell>
-                    <SubmissionsDrill students={students} />
-                  </Cell>
-                </Grid>
-
-                <Grid item xs={7}>
-                  <Cell>
-                    {students && (
-                      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                        <Kpi />
-                      </div>
-                    )}
-                  </Cell>
-                </Grid>
+            <Grid container spacing={1} sx={{ height: '40%' }}>
+              <Grid item xs={12}>
+                <Cell>
+                  <WeeklySubmissions students={students} />
+                </Cell>
               </Grid>
             </Grid>
           </Grid>
-        </>
+
+          {/* Right column */}
+          <Grid item xs={6}>
+            <Grid container spacing={1} sx={{ height: '20%', marginBottom: '10px' }}>
+              <Grid item xs={12}>
+                <Cell>{lessons && <VisiableLessonsGraph lessons={lessons} />}</Cell>
+              </Grid>
+            </Grid>
+            <Grid container spacing={1} sx={{ height: '70%' }}>
+              <Grid item xs={12}>
+                <Cell>
+                  <SubmissionsDrill
+                    students={students}
+                    title="Submissions Drill"
+                    // taskDict={taskDict}
+                    groupsIndex={groupsIndex}
+                  />
+                </Cell>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       ) : (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <CircularProgress />
