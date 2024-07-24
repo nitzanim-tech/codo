@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from '../../NavBar/NavigateBar';
-import getGroupsByRegion from '../../../requests/groups/getGroupsByRegion';
-import getStudentsByGroup from '../../../requests/getStudents';
+import { Grid, Paper, Box } from '@mui/material';
 import { CircularProgress } from '@nextui-org/react';
 import { useFirebase } from '../../../util/FirebaseProvider';
-import ChooseGroups from './ChooseGroups';
-import GeneralDataGraph from './GeneralDataGraph';
-import WeeklySubmissions from './WeeklySubmissions';
-import { Grid, Paper, Box } from '@mui/material';
-import StudentPerformanceTable from './StudentPerformanceTable';
+import NavBar from '../../NavBar/NavigateBar';
+import getGroupsByRegion from '../../../requests/groups/getGroupsByRegion';
 import getAllLessons from '../../../requests/lessons/getAllLessons';
-import VisiableLessonsGraph from './VisiableLessonsGraph';
-import SubmissionsDrill from '../Status/SubmissionsDrill';
 import getStudentsByGroupMock from '../../../requests/mockedGetStudentBG';
-import Kpi from '../Status/Kpi';
-import './Manager.css';
+
+import WeeklySubmissions from './WeeklySubmissions';
+import VisiableLessonsGraph from './VisiableLessonsGraph';
+import SubmissionsDrill from './SubmissionsDrill';
+import Kpi from './Kpi';
+import '../Dashboard.css';
 
 const Cell = ({ children }) => (
   <Paper variant="outlined" sx={{ height: '100%', width: '100%' }}>
@@ -24,7 +21,7 @@ const Cell = ({ children }) => (
   </Paper>
 );
 
-const Status = () => {
+const SubmitDashboard = () => {
   const { app, isAuthorized } = useFirebase();
   const [groupsIndex, setGroupIndex] = useState(null);
   const [regions, setRegions] = useState([]);
@@ -141,4 +138,4 @@ const Status = () => {
   );
 };
 
-export default Status;
+export default SubmitDashboard;

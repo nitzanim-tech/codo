@@ -5,7 +5,7 @@ import getAllLessons from '../../../requests/lessons/getAllLessons';
 import getAllTasks from '../../../requests/tasks/getAllTasks';
 import { useFirebase } from '../../../util/FirebaseProvider';
 
-function GradesDashboard() {
+function DevDashboard() {
   const { app, userData, isUserLoading } = useFirebase();
   const [lessons, setLessons] = useState({});
   const [totalPointsPerSubject, setTotalPointsPerSubject] = useState({});
@@ -121,4 +121,4 @@ function GradesDashboard() {
   );
 }
 
-export default GradesDashboard;
+export default DevDashboard;

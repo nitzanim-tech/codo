@@ -9,7 +9,6 @@ import Home from './pages/Home';
 import ReadReview from './pages/ReadReview'
 import Play from './pages/Play';
 import Admin from './pages/Admin';
-import Manager from './components/Dashboards/Manager/Manager';
 import Dashboard from './pages/Dashboard';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';

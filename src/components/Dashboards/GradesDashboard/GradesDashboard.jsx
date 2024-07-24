@@ -6,15 +6,15 @@ import { CircularProgress } from '@nextui-org/react';
 import { useFirebase } from '../../../util/FirebaseProvider';
 import ChooseGroups from './ChooseGroups';
 import GeneralDataGraph from './GeneralDataGraph';
-import WeeklySubmissions from './WeeklySubmissions';
+import WeeklySubmissions from '../SubmitsDashboard/WeeklySubmissions';
 import { Grid, Paper, Box } from '@mui/material';
 import StudentPerformanceTable from './StudentPerformanceTable';
 import getAllLessons from '../../../requests/lessons/getAllLessons';
-import VisiableLessonsGraph from './VisiableLessonsGraph';
+import VisiableLessonsGraph from '../SubmitsDashboard/VisiableLessonsGraph';
 import TaskGraph from './TaskGraph';
-import SubmitByMainsubject from '../Status/SubmitByMainsubject';
-import codoData from "../CodoData.json"
-import './Manager.css';
+import SubmitByMainsubject from '../SubmitsDashboard/SubmitByMainsubject';
+import codoData from '../CodoData.json';
+import '../Dashboard.css';
 
 const Cell = ({ children }) => (
   <Paper variant="outlined" sx={{ height: '100%', width: '100%' }}>
@@ -24,7 +24,7 @@ const Cell = ({ children }) => (
   </Paper>
 );
 
-const Manager = () => {
+const GradesDashboard = () => {
   const { app, isAuthorized, userData } = useFirebase();
   const [groupsIndex, setGroupIndex] = useState(null);
   const [regions, setRegions] = useState([]);
@@ -139,4 +139,4 @@ const Manager = () => {
   );
 };
 
-export default Manager;
+export default GradesDashboard;

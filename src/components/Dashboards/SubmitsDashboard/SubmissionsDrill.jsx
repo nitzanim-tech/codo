@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import '../Manager/Manager.css';
+// import '../GradesDashboard/Manager.css';
 
 const SubmissionsDrill = ({ students, title, groupsIndex }) => {
   const [selectedRegion, setSelectedRegion] = useState(null);

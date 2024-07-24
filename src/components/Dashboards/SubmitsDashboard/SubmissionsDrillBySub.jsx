@@ -1,6 +1,6 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import '../Manager/Manager.css';
+// import '../Manager/Manager.css';
 
 const SubmissionsBySub = ({ students, title, taskDict }) => {
   const taskSubmissions = {};

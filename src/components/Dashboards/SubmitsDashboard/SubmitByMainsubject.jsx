@@ -1,15 +1,8 @@
 import React from 'react';
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from 'recharts';
-import '../Manager/Manager.css';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+import { Tooltip, ResponsiveContainer, Legend } from 'recharts';
+
+// import '../GradesDashboard/Manager.css';
 
 const SubmitByMainsubject = ({ students, title, tasks }) => {
   const subjectGrades = {};

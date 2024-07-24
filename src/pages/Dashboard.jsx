@@ -1,16 +1,16 @@
-import GradesDashboard from "../components/Dashboards/StudentDeshboard/GradesDashboard";
-import Manager from "../components/Dashboards/Manager/Manager";
 import { useParams } from 'react-router-dom';
-import Status from "../components/Dashboards/Manager/Status";
+import DevDashboard from '../components/Dashboards/DevDeshboard/DevDashboard';
+import GradesDashboard from '../components/Dashboards/GradesDashboard/GradesDashboard';
+import SubmitDashboard from '../components/Dashboards/SubmitsDashboard/SubmitDashboard';
 
 function Dashboard() {
   const { type } = useParams();
 
   return (
     <>
+      {type == 'dev' && <DevDashboard />}
       {type == 'grades' && <GradesDashboard />}
-      {type == 'progress' && <Manager />}
-      {type == 'status' && <Status />}
+      {type == 'submits' && <SubmitDashboard />}
     </>
   );
 }

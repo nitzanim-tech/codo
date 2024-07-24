@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import './CustomStepper.css';
 import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
 import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
 import { Button } from '@nextui-org/react';
+import './CustomStepper.css';
 
 const CustomStepper = ({ lessonVisibilityStats, stepsPerPage }) => {
   const [currentPage, setCurrentPage] = useState(0);

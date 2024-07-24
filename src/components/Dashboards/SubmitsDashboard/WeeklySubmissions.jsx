@@ -1,5 +1,5 @@
 import React from 'react';
-import LineGraph from './LineGraph';
+import LineGraph from '../GradesDashboard/LineGraph';
 
 const WeeklySubmissions = ({ students }) => {
   const weeklyData = calculateWeeklyData(students);
