@@ -3,9 +3,9 @@ import { PieChart, Pie, Cell } from 'recharts';
 
 const RADIAN = Math.PI / 180;
 const cx = 150;
-const cy = 200;
+const cy = 100;
 const iR = 50;
-const oR = 100;
+const oR = 100;//100
 const data = [
   { name: 'A', value: 80, color: '#ffa69e' },
   { name: 'B', value: 45, color: '#faf3dd' },
@@ -15,8 +15,8 @@ const data = [
 const Kpi = ({ title, value  }) => {
   return (
     <div>
-      <h2>{title}</h2>
-      <PieChart width={300} height={400}>
+      <p>{title}</p>
+      <PieChart width={300} height={100}>
         <Pie
           dataKey="value"
           startAngle={180}
@@ -35,6 +35,7 @@ const Kpi = ({ title, value  }) => {
         </Pie>
         {needle(value, data, cx, cy, iR, oR, '#5e6472')}
       </PieChart>
+      <p style={{ fontSize: '20px' }}>{value}</p>
     </div>
   );
 };

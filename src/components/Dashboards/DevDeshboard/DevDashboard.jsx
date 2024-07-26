@@ -92,17 +92,18 @@ const DevDashboard = () => {
         <Grid container spacing={1} sx={{ height: '100vh' }}>
           {/* Left column */}
           <Grid item xs={6}>
-            <Grid container spacing={1} sx={{ height: '50%' }}>
-              <Grid item xs={12}>
-                <Cell>
-                  <ClusterPieChart />
-                </Cell>
-              </Grid>
-            </Grid>
-            <Grid container spacing={1} sx={{ height: '40%' }}>
+            <Grid container spacing={1} sx={{ height: '30%' }}>
               <Grid item xs={12}>
                 <Cell>
                   <TaskComparison students={students} tasks={allTasks || {}} choosenTasks={choosenTasks} />
+                </Cell>
+              </Grid>
+            </Grid>
+            <Grid container spacing={1} sx={{ height: '50%' }}>
+              <Grid item xs={12}>
+                <Cell>
+                  {' '}
+                  <ClusterPieChart />
                 </Cell>
               </Grid>
             </Grid>
@@ -115,7 +116,7 @@ const DevDashboard = () => {
                 <Cell>
                   <SubmissionsBySub
                     students={students}
-                    title={'שלום'}
+                    title={'ציון ממוצע למשימה'}
                     tasks={allTasks}
                     choosenTasks={choosenTasks}
                     setChoosenTasks={setChoosenTasks}

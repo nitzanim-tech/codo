@@ -11,6 +11,7 @@ import WeeklySubmissions from './WeeklySubmissions';
 import VisiableLessonsGraph from './VisiableLessonsGraph';
 import SubmissionsDrill from './SubmissionsDrill';
 import Kpi from './Kpi';
+import { submissionKpi, reviewKpi } from './utils';
 import '../Dashboard.css';
 
 const Cell = ({ children }) => (
@@ -28,6 +29,8 @@ const SubmitDashboard = () => {
   const [choosenGroups, setChoosenGroups] = useState(['all']);
   const [students, setStudents] = useState([]);
   const [lessons, setLessons] = useState();
+  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [selectedGroup, setSelectedGroup] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,10 +66,12 @@ const SubmitDashboard = () => {
           for (const groupId of choosenGroups) {
             const groupData = await getStudentsByGroupMock({ app, groupId });
             const groupLessons = await getAllLessons({ app, groupId });
+            console.log(groupLessons);
             allLessons = { ...allLessons, ...groupLessons };
             const filteredGroupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
             data = data.concat(filteredGroupData);
           }
+
           setLessons(allLessons);
           setStudents(data);
         }
@@ -77,6 +82,7 @@ const SubmitDashboard = () => {
 
     if (isAuthorized) fetchStudents();
   }, [choosenGroups, isAuthorized, app]);
+
 
   return (
     <>
@@ -92,8 +98,11 @@ const SubmitDashboard = () => {
                 <Cell>
                   {students.length > 0 && (
                     <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                      <Kpi title={'שלום עולם'} value={88} />
-                      <Kpi title={'שלום עולם'} value={88} />
+                      <Kpi title={'מישוב'} value={reviewKpi(students, lessons, selectedRegion, selectedGroup) || 0} />
+                      <Kpi
+                        title={'הגשות'}
+                        value={submissionKpi(students, lessons, selectedRegion, selectedGroup) || 0}
+                      />
                     </div>
                   )}
                 </Cell>
@@ -121,8 +130,11 @@ const SubmitDashboard = () => {
                   <SubmissionsDrill
                     students={students}
                     title="Submissions Drill"
-                    // taskDict={taskDict}
                     groupsIndex={groupsIndex}
+                    selectedRegion={selectedRegion}
+                    setSelectedRegion={setSelectedRegion}
+                    selectedGroup={selectedGroup}
+                    setSelectedGroup={setSelectedGroup}
                   />
                 </Cell>
               </Grid>

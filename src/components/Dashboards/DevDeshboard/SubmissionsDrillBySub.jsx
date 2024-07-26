@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
 const SubmissionsBySub = ({ students, title, tasks, choosenTasks, setChoosenTasks }) => {
   const handleTaskClick = (taskId) => {
@@ -37,18 +37,14 @@ const SubmissionsBySub = ({ students, title, tasks, choosenTasks, setChoosenTask
     }))
     .sort((a, b) => b.averageGrade - a.averageGrade);
 
-  const getBarColor = (taskId) => {
-    return choosenTasks.includes(taskId) ? '#ff7300' : '#82ca9d';
-  };
-
   return (
     <div style={{ width: '100%', overflowX: 'auto' }}>
       <h2 style={{ fontSize: '16px', margin: '5px' }}>{title}</h2>
-      <div style={{ width: '100%', height: '1000px', overflowY: 'scroll' }}>
+      <div style={{ width: '100%', height: '700px', overflowY: 'scroll', fontSize: '12px' }}>
         <ResponsiveContainer>
           <BarChart data={submissionData} layout="vertical" margin={{ top: 20, right: 30, left: 40, bottom: 5 }}>
             <XAxis type="number" reversed />
-            <YAxis dataKey="name" type="category" width={200} />
+            <YAxis dataKey="name" type="category" width={200} interval={0} />
             <Tooltip
               content={({ payload }) => {
                 if (!payload || !payload.length) return null;
@@ -64,13 +60,11 @@ const SubmissionsBySub = ({ students, title, tasks, choosenTasks, setChoosenTask
                 );
               }}
             />
-            <Legend />
-            <Bar
-              dataKey="averageGrade"
-              fill={({ payload }) => getBarColor(payload.taskId)}
-              barSize={20}
-              onClick={({ payload }) => handleTaskClick(payload.taskId)} // Update state without changing graph
-            />
+            <Bar dataKey="averageGrade" barSize={15} onClick={(data) => handleTaskClick(data.taskId)}>
+              {submissionData.map((entry) => (
+                <Cell key={`cell-${entry.taskId}`} fill={choosenTasks.includes(entry.taskId) ? '#ff7300' : '#82ca9d'} />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
