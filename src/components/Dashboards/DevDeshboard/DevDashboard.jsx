@@ -8,6 +8,8 @@ import getAllLessons from '../../../requests/lessons/getAllLessons';
 import getStudentsByGroupMock from '../../../requests/mockedGetStudentBG';
 import ClusterPieChart from './ClusterPieChart';
 import SubmissionsBySub from './SubmissionsDrillBySub';
+import TaskComparison from './TaskComparison';
+import getAllTasks from '../../../requests/tasks/getAllTasks';
 
 import '../Dashboard.css';
 
@@ -26,6 +28,9 @@ const DevDashboard = () => {
   const [choosenGroups, setChoosenGroups] = useState(['all']);
   const [students, setStudents] = useState([]);
   const [lessons, setLessons] = useState();
+  const [allTasks, setAllTask] = useState();
+
+  const [choosenTasks, setChoosenTasks] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,6 +70,8 @@ const DevDashboard = () => {
             const filteredGroupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
             data = data.concat(filteredGroupData);
           }
+          const tasks = await getAllTasks({ app });
+          setAllTask(tasks);
           setLessons(allLessons);
           setStudents(data);
         }
@@ -95,7 +102,7 @@ const DevDashboard = () => {
             <Grid container spacing={1} sx={{ height: '40%' }}>
               <Grid item xs={12}>
                 <Cell>
-                  <p> שלום</p>
+                  <TaskComparison students={students} tasks={allTasks || {}} choosenTasks={choosenTasks} />
                 </Cell>
               </Grid>
             </Grid>
@@ -103,17 +110,16 @@ const DevDashboard = () => {
 
           {/* Right column */}
           <Grid item xs={6}>
-            <Grid container spacing={1} sx={{ height: '20%', marginBottom: '10px' }}>
-              <Grid item xs={12}>
-                <Cell>
-                  <p> שלום</p>
-                </Cell>
-              </Grid>
-            </Grid>
             <Grid container spacing={1} sx={{ height: '70%' }}>
               <Grid item xs={12}>
                 <Cell>
-                  <SubmissionsBySub students={students} title={'שלום'} />
+                  <SubmissionsBySub
+                    students={students}
+                    title={'שלום'}
+                    tasks={allTasks}
+                    choosenTasks={choosenTasks}
+                    setChoosenTasks={setChoosenTasks}
+                  />
                 </Cell>
               </Grid>
             </Grid>

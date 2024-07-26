@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../../NavBar/NavigateBar';
 import getGroupsByRegion from '../../../requests/groups/getGroupsByRegion';
-import getStudentsByGroup from '../../../requests/getStudents';
+import getStudentsByGroupMock from '../../../requests/mockedGetStudentBG';
 import { CircularProgress } from '@nextui-org/react';
 import { useFirebase } from '../../../util/FirebaseProvider';
 import ChooseGroups from './ChooseGroups';
@@ -57,7 +57,7 @@ const GradesDashboard = () => {
       let data = [];
       let allLessons = {};
       for (const groupId of choosenGroups) {
-        let groupData = await getStudentsByGroup({ app, groupId });
+        let groupData = await getStudentsByGroupMock({ app, groupId });
         let groupLessons = await getAllLessons({ app, groupId });
         allLessons = { ...allLessons, ...groupLessons };
         groupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
