@@ -1,6 +1,5 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-// import '../Manager/Manager.css';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const SubmissionsBySub = ({ students, title, taskDict }) => {
   const taskSubmissions = {};
@@ -22,7 +21,7 @@ const SubmissionsBySub = ({ students, title, taskDict }) => {
   const submissionData = Object.values(taskSubmissions);
 
   return (
-    <div style={{ width: '100%', overflowX: 'auto', height: '400px' }}>
+    <div style={{ width: '100%', overflowX: 'auto', }}>
       <h2 style={{ fontSize: '16px', margin: '5px' }}>{title}</h2>
       <div style={{ width: '100%', height: '1000px', overflowY: 'scroll' }}>
         <ResponsiveContainer>
@@ -33,7 +32,6 @@ const SubmissionsBySub = ({ students, title, taskDict }) => {
             <Tooltip />
             <Legend />
             <Bar dataKey="submissionsCount" fill="#82ca9d" barSize={10} />
-            <Bar dataKey="reviewsCount" fill="#8884d8" barSize={5} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -41,4 +39,4 @@ const SubmissionsBySub = ({ students, title, taskDict }) => {
   );
 };
 
-export default SubmissionsDrill;
+export default SubmissionsBySub;

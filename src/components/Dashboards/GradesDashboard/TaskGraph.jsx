@@ -1,6 +1,5 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-// import './Manager.css';
 
 const TaskGraph = ({ students, title, taskDict }) => {
   const taskSubmissions = {};

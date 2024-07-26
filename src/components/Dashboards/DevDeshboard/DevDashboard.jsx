@@ -1,124 +1,131 @@
-import { useState, useEffect } from 'react';
-import NavBar from '../../NavBar/NavigateBar';
-import { Button, Grid, CircularProgress } from '@mui/material';
-import getAllLessons from '../../../requests/lessons/getAllLessons';
-import getAllTasks from '../../../requests/tasks/getAllTasks';
+import React, { useState, useEffect } from 'react';
+import { Grid, Paper, Box } from '@mui/material';
+import { CircularProgress } from '@nextui-org/react';
 import { useFirebase } from '../../../util/FirebaseProvider';
+import NavBar from '../../NavBar/NavigateBar';
+import getGroupsByRegion from '../../../requests/groups/getGroupsByRegion';
+import getAllLessons from '../../../requests/lessons/getAllLessons';
+import getStudentsByGroupMock from '../../../requests/mockedGetStudentBG';
+import ClusterPieChart from './ClusterPieChart';
+import SubmissionsBySub from './SubmissionsDrillBySub';
 
-function DevDashboard() {
-  const { app, userData, isUserLoading } = useFirebase();
-  const [lessons, setLessons] = useState({});
-  const [totalPointsPerSubject, setTotalPointsPerSubject] = useState({});
-  const [studentPointsPerSubject, setStudentPointsPerSubject] = useState({});
+import '../Dashboard.css';
+
+const Cell = ({ children }) => (
+  <Paper variant="outlined" sx={{ height: '100%', width: '100%' }}>
+    <Box p={2} textAlign="center">
+      {children}
+    </Box>
+  </Paper>
+);
+
+const DevDashboard = () => {
+  const { app, isAuthorized } = useFirebase();
+  const [groupsIndex, setGroupIndex] = useState(null);
+  const [regions, setRegions] = useState([]);
+  const [choosenGroups, setChoosenGroups] = useState(['all']);
+  const [students, setStudents] = useState([]);
+  const [lessons, setLessons] = useState();
 
   useEffect(() => {
-    const fetchLessons = async () => {
+    const fetchData = async () => {
       try {
-        const allLessons = await getAllLessons({ app, groupId: userData.group.id });
-        const allTasks = await getAllTasks({ app });
-
-        const tasksArray = Object.values(allTasks);
-
-        const tasksWithIdsAndSubjects = tasksArray.map((task) => {
-          return {
-            id: task.id,
-            subjects: task.subjects || [],
-            tests: task.tests.map((test) => test.score),
-          };
-        });
-
-        const totalPointsPerSubject = {};
-        tasksWithIdsAndSubjects.forEach((task) => {
-          const totalScoreForTask = task.tests.reduce((sum, score) => sum + score, 0);
-
-          task.subjects.forEach((subject) => {
-            if (!totalPointsPerSubject[subject]) {
-              totalPointsPerSubject[subject] = 0;
-            }
-            totalPointsPerSubject[subject] += totalScoreForTask;
-          });
-        });
-
-        const studentPointsPerSubject = {};
-        if (userData.submissions) {
-          Object.entries(userData.submissions).forEach(([taskId, submission]) => {
-            if (submission.trials) {
-              submission.trials.forEach((trial) => {
-                const task = tasksArray.find((task) => task.id === taskId);
-                if (task) {
-                  const totalScoreForTrial =
-                    trial.pass && Array.isArray(trial.pass)
-                      ? task.tests.reduce((sum, test, index) => {
-                          return sum + (trial.pass[index] ? test.score : 0);
-                        }, 0)
-                      : 0;
-
-                  if (task.subjects)
-                    task.subjects.forEach((subject) => {
-                      if (!studentPointsPerSubject[subject]) {
-                        studentPointsPerSubject[subject] = 0;
-                      }
-                      studentPointsPerSubject[subject] += totalScoreForTrial;
-                    });
-                }
-              });
-            }
-          });
-        }
-
-        setLessons(allLessons);
-        setTotalPointsPerSubject(totalPointsPerSubject);
-        setStudentPointsPerSubject(studentPointsPerSubject);
+        const regionsFromDb = await getGroupsByRegion(app);
+        const index = makeNameIdIndex(regionsFromDb);
+        setGroupIndex(index);
+        setRegions(regionsFromDb);
       } catch (error) {
-        console.error('Error fetching lessons or tasks:', error);
+        console.error('Error fetching regions:', error);
       }
     };
 
-    if (userData) {
-      fetchLessons();
-    }
-  }, [userData, app]);
+    if (isAuthorized) fetchData();
+  }, [isAuthorized, app]);
+
+  const makeNameIdIndex = (regionsFromDb) => {
+    return regionsFromDb.reduce((acc, region) => {
+      acc[region.id] = region.name;
+      region.groups.forEach((group) => {
+        acc[group.id] = group.name;
+      });
+      return acc;
+    }, {});
+  };
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        if (choosenGroups.length > 0) {
+          let data = [];
+          let allLessons = {};
+          for (const groupId of choosenGroups) {
+            const groupData = await getStudentsByGroupMock({ app, groupId });
+            const groupLessons = await getAllLessons({ app, groupId });
+            allLessons = { ...allLessons, ...groupLessons };
+            const filteredGroupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
+            data = data.concat(filteredGroupData);
+          }
+          setLessons(allLessons);
+          setStudents(data);
+        }
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      }
+    };
+
+    if (isAuthorized) fetchStudents();
+  }, [choosenGroups, isAuthorized, app]);
 
   return (
     <>
       <NavBar />
-      {isUserLoading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '30px' }}>
-          <CircularProgress />
-        </div>
-      ) : userData ? (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
-            <Grid container spacing={1} columns={3} rows={1}>
-              <Grid item style={{ width: '55%', margin: '2%' }}>
-                <h1>Dashboard</h1>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Subject</th>
-                      <th>Total Points</th>
-                      <th>Student Points</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.keys(totalPointsPerSubject).map((subject) => (
-                      <tr key={subject}>
-                        <td>{subject}</td>
-                        <td>{totalPointsPerSubject[subject]}</td>
-                        <td>{studentPointsPerSubject[subject] || 0}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+      {!isAuthorized ? (
+        <h1>הכניסה למנהלים בלבד</h1>
+      ) : regions && groupsIndex ? (
+        <Grid container spacing={1} sx={{ height: '100vh' }}>
+          {/* Left column */}
+          <Grid item xs={6}>
+            <Grid container spacing={1} sx={{ height: '50%' }}>
+              <Grid item xs={12}>
+                <Cell>
+                  <ClusterPieChart />
+                </Cell>
               </Grid>
             </Grid>
-          </div>
-        </div>
+            <Grid container spacing={1} sx={{ height: '40%' }}>
+              <Grid item xs={12}>
+                <Cell>
+                  <p> שלום</p>
+                </Cell>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          {/* Right column */}
+          <Grid item xs={6}>
+            <Grid container spacing={1} sx={{ height: '20%', marginBottom: '10px' }}>
+              <Grid item xs={12}>
+                <Cell>
+                  <p> שלום</p>
+                </Cell>
+              </Grid>
+            </Grid>
+            <Grid container spacing={1} sx={{ height: '70%' }}>
+              <Grid item xs={12}>
+                <Cell>
+                  <SubmissionsBySub students={students} title={'שלום'} />
+                </Cell>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       ) : (
-        <h1>אנא התחברו</h1>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <CircularProgress />
+        </div>
       )}
     </>
   );
-}
+};
 
 export default DevDashboard;
