@@ -66,10 +66,8 @@ export const submissionKpi = (students, lessons, selectedRegion = null, selected
   } else if (selectedRegion) {
     filteredStudents = students.filter((student) => student.region === selectedRegion);
   }
-  console.log(filteredStudents);
 
   const taskCount = getTaskCount(lessons);
-  console.log(taskCount);
   const totalSubmissions = filteredStudents.reduce((acc, student) => {
     const studentSubmissions = Object.values(student.submissions || {}).reduce((subAcc, submission) => {
       return subAcc + (submission.trials.length > 0 ? 1 : 0);

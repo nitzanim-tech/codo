@@ -16,12 +16,16 @@ export function reformatLessons({ linkedList, groupData }) {
         type: elementData.type,
         link: elementData.link,
       };
-      if (groupData[currentElementId] || !groupData) {
+
+      // Check if groupData exists and has the currentElementId
+      if (groupData && groupData[currentElementId]) {
         elements[currentElementId]['setting'] = groupData[currentElementId];
       }
+
       lastElementId = currentElementId;
       currentElementId = elementData.next;
     }
+
     orderedFormat[currentLessonId] = {
       lessonName: lessonData.lessonName,
       elements: elements,
@@ -30,5 +34,6 @@ export function reformatLessons({ linkedList, groupData }) {
 
     currentLessonId = lessonData.nextLesson;
   }
+  console.log({ orderedFormat });
   return orderedFormat;
 }

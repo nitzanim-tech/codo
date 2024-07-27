@@ -6,6 +6,7 @@ import NavBar from '../../NavBar/NavigateBar';
 import getGroupsByRegion from '../../../requests/groups/getGroupsByRegion';
 import getAllLessons from '../../../requests/lessons/getAllLessons';
 import getStudentsByGroupMock from '../../../requests/mockedGetStudentBG';
+import mockedGetGroups from '../../../requests/groups/mockedGetGroups';
 
 import WeeklySubmissions from './WeeklySubmissions';
 import VisiableLessonsGraph from './VisiableLessonsGraph';
@@ -26,7 +27,7 @@ const SubmitDashboard = () => {
   const { app, isAuthorized } = useFirebase();
   const [groupsIndex, setGroupIndex] = useState(null);
   const [regions, setRegions] = useState([]);
-  const [choosenGroups, setChoosenGroups] = useState(['all']);
+  const [allGroupsElements, setAllGroupsElements] = useState();
   const [students, setStudents] = useState([]);
   const [lessons, setLessons] = useState();
   const [selectedRegion, setSelectedRegion] = useState(null);
@@ -39,50 +40,23 @@ const SubmitDashboard = () => {
         const index = makeNameIdIndex(regionsFromDb);
         setGroupIndex(index);
         setRegions(regionsFromDb);
+
+        const usersData = await getStudentsByGroupMock({ app, groupId: null });
+        const allLessons = await getAllLessons({ app, groupId: null });
+        const allGroups = await mockedGetGroups(app);
+
+        const filteredGroupData = usersData.filter((student) => !student.email.includes('@nitzanim.tech'));
+
+        setAllGroupsElements(allGroups);
+        setLessons(allLessons);
+        setStudents(filteredGroupData);
       } catch (error) {
-        console.error('Error fetching regions:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
     if (isAuthorized) fetchData();
   }, [isAuthorized, app]);
-
-  const makeNameIdIndex = (regionsFromDb) => {
-    return regionsFromDb.reduce((acc, region) => {
-      acc[region.id] = region.name;
-      region.groups.forEach((group) => {
-        acc[group.id] = group.name;
-      });
-      return acc;
-    }, {});
-  };
-
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        if (choosenGroups.length > 0) {
-          let data = [];
-          let allLessons = {};
-          for (const groupId of choosenGroups) {
-            const groupData = await getStudentsByGroupMock({ app, groupId });
-            const groupLessons = await getAllLessons({ app, groupId });
-            console.log(groupLessons);
-            allLessons = { ...allLessons, ...groupLessons };
-            const filteredGroupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
-            data = data.concat(filteredGroupData);
-          }
-
-          setLessons(allLessons);
-          setStudents(data);
-        }
-      } catch (error) {
-        console.error('Error fetching students:', error);
-      }
-    };
-
-    if (isAuthorized) fetchStudents();
-  }, [choosenGroups, isAuthorized, app]);
-
 
   return (
     <>
@@ -125,7 +99,16 @@ const SubmitDashboard = () => {
           <Grid item xs={6}>
             <Grid container spacing={1} sx={{ height: '20%', marginBottom: '10px' }}>
               <Grid item xs={12}>
-                <Cell>{lessons && <VisiableLessonsGraph lessons={lessons} />}</Cell>
+                <Cell>
+                  {lessons && (
+                    <VisiableLessonsGraph
+                      groups={allGroupsElements}
+                      allLessons={lessons}
+                      selectedRegion={selectedRegion}
+                      selectedGroup={selectedGroup}
+                    />
+                  )}
+                </Cell>
               </Grid>
             </Grid>
             <Grid container spacing={1} sx={{ height: '70%' }}>
@@ -155,3 +138,13 @@ const SubmitDashboard = () => {
 };
 
 export default SubmitDashboard;
+
+const makeNameIdIndex = (regionsFromDb) => {
+  return regionsFromDb.reduce((acc, region) => {
+    acc[region.id] = region.name;
+    region.groups.forEach((group) => {
+      acc[group.id] = group.name;
+    });
+    return acc;
+  }, {});
+};

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { groupSubmissions, getCurrentData } from './utils';
+import {  getCurrentData } from './utils';
 
 const SubmissionsDrill = ({
   students,
@@ -44,7 +44,13 @@ const SubmissionsDrill = ({
             onClick={({ activePayload }) => handleBarClick(activePayload[0].payload)}
           >
             <XAxis type="number" reversed />
-            <YAxis dataKey={selectedGroup ? 'key' : 'label'} type="category" interval={0} fontSize={'12px'}/>
+            <YAxis
+              dataKey={selectedGroup ? 'key' : 'label'}
+              type="category"
+              interval={0}
+              fontSize={'12px'}
+              width={100}
+            />
             <Tooltip />
             <Legend />
             <Bar dataKey="submissionsCount" fill="#82ca9d" barSize={10} />

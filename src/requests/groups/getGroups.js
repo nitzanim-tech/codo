@@ -1,20 +1,11 @@
 import { getDatabase, ref, get } from 'firebase/database';
-import firebaseConfig from '../../util/firebaseConfig';
 
+import firebaseConfig from '../../util/firebaseConfig';
 // TODO: REVIEW WITH NUMBER
-const getGroups = async (app, auth) => {
+const getGroups = async (app) => {
   // try {
   //   const apiUrl = firebaseConfig.apiUrl;
-  //   const currentUser = auth.currentUser;
-
-  //   const idToken = await currentUser.getIdToken(true);
-  //   const response = await fetch(`${apiUrl}/getGroups`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${idToken}`,
-  //     },
-  //   });
+  //   const response = await fetch(`${apiUrl}/regions`);
   //   if (!response.ok) {
   //     throw new Error('Network response was not ok');
   //   }
