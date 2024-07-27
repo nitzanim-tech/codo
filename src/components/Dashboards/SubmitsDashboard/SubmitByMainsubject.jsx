@@ -2,12 +2,9 @@ import React from 'react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 import { Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
-// import '../GradesDashboard/Manager.css';
-
 const SubmitByMainsubject = ({ students, title, tasks }) => {
   const subjectGrades = {};
 
-  // Calculate total scores and maximum possible scores
   students.forEach((student) => {
     Object.entries(student.submissions || {}).forEach(([taskId, submission]) => {
       const mainSubject = tasks[taskId].mainSubject;

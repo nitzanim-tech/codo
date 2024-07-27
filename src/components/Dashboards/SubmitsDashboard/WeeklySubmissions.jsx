@@ -1,48 +1,17 @@
 import React from 'react';
 import LineGraph from '../GradesDashboard/LineGraph';
+import { calculateWeeklyData } from './utils';
 
-const WeeklySubmissions = ({ students }) => {
-  const weeklyData = calculateWeeklyData(students);
-
-  return <LineGraph title="הגשות ומשובים - שבועי" data={weeklyData} />;
-};
-
-const calculateWeeklyData = (students) => {
-  const weeks = {};
-
-  const getWeekStart = (date) => {
-    const d = new Date(date);
-    const day = d.getDay();
-    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-    const weekStart = new Date(d.setDate(diff));
-    weekStart.setHours(0, 0, 0, 0); // Reset the time part
-    return weekStart;
-  };
-
-  students.forEach((student) => {
-    if (student.submissions) {
-      Object.values(student.submissions).forEach((submission) => {
-        const submissionDate = new Date(submission.trials[0].date);
-        const weekStart = getWeekStart(submissionDate).toISOString().split('T')[0]; // Format as YYYY-MM-DD
-
-        if (!weeks[weekStart]) {
-          weeks[weekStart] = { submissions: 0, reviews: 0 };
-        }
-
-        weeks[weekStart].submissions += 1;
-        weeks[weekStart].reviews += submission.trials.filter((trial) => trial.review).length;
-      });
-    }
+const WeeklySubmissions = ({ students, selectedRegion, selectedGroup }) => {
+  const filteredStudents = students.filter((student) => {
+    return (
+      (!selectedRegion || student.region === selectedRegion) && (!selectedGroup || student.group === selectedGroup)
+    );
   });
 
-  const sortedWeeks = Object.keys(weeks)
-    .map((week) => ({
-      week,
-      ...weeks[week],
-    }))
-    .sort((a, b) => new Date(a.week) - new Date(b.week));
+  const weeklyData = calculateWeeklyData(filteredStudents);
 
-  return sortedWeeks;
+  return <LineGraph title="הגשות ומשובים - שבועי" data={weeklyData} />;
 };
 
 export default WeeklySubmissions;

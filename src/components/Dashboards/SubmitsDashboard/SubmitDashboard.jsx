@@ -111,7 +111,11 @@ const SubmitDashboard = () => {
             <Grid container spacing={1} sx={{ height: '40%' }}>
               <Grid item xs={12}>
                 <Cell>
-                  <WeeklySubmissions students={students} />
+                  <WeeklySubmissions
+                    students={students}
+                    selectedRegion={selectedRegion}
+                    selectedGroup={selectedGroup}
+                  />
                 </Cell>
               </Grid>
             </Grid>

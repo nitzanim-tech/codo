@@ -44,7 +44,7 @@ const SubmissionsDrill = ({
             onClick={({ activePayload }) => handleBarClick(activePayload[0].payload)}
           >
             <XAxis type="number" reversed />
-            <YAxis dataKey={selectedGroup ? 'key' : 'label'} type="category" />
+            <YAxis dataKey={selectedGroup ? 'key' : 'label'} type="category" interval={0} fontSize={'12px'}/>
             <Tooltip />
             <Legend />
             <Bar dataKey="submissionsCount" fill="#82ca9d" barSize={10} />
