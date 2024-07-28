@@ -25,19 +25,20 @@ const Cell = ({ children, color }) => (
 );
 
 export default function PracticeTable() {
-  const renderCellContent = (content) => {
+  const renderCellContent = (content, index) => {
     if (content) {
       return (
         <>
-          {Object.values(content)[0]}
-          <Button color="primary" variant="light" radius="full" isIconOnly onClick={() => {}}  size="sm">
+          <p>{index}</p>
+          <Button color="primary" variant="light" radius="full" isIconOnly onClick={() => {}} size="sm">
             <CloseRoundedIcon />
           </Button>
+          {Object.values(content)[0]}
         </>
       );
     }
     return (
-      <Button  variant="light" radius="full" isIconOnly onClick={() => {}} size="sm">
+      <Button variant="light" radius="full" isIconOnly onClick={() => {}} size="sm">
         <AddRoundedIcon />
       </Button>
     );
@@ -57,8 +58,7 @@ export default function PracticeTable() {
           <tr>
             {parctice.main.map((item, index) => (
               <td key={index}>
-                {index}
-                <Cell color={item ? '#005395' : '#0067BC'}>{renderCellContent(item)}</Cell>
+                <Cell color={item ? '#005395' : '#0067BC'}>{renderCellContent(item, index)}</Cell>
               </td>
             ))}
           </tr>

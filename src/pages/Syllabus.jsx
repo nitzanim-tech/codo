@@ -11,13 +11,6 @@ import PracticeTable from '../components/Syllabus/PracticeTable';
 import getAllTasks from '../requests/tasks/getAllTasks';
 import ChooseTask from '../components/Syllabus/ChooseTask';
 
-const Cell = ({ children }) => (
-  <Paper variant="outlined" sx={{ height: '100%', width: '100%' }}>
-    <Box p={2} textAlign="center">
-      {children}
-    </Box>
-  </Paper>
-);
 
 const Syllabus = () => {
   const { app, isAuthorized } = useFirebase();
@@ -44,10 +37,7 @@ const Syllabus = () => {
 
   useEffect(() => {
     const fetchUnits = async () => {
-      console.log(choosenSyllabusId);
       const syllabusUnits = await getUnitsBySyllabus({ app, syllabusId: choosenSyllabusId });
-      console.log(syllabusUnits);
-
       setUnits(syllabusUnits);
     };
     choosenSyllabusId && fetchUnits();
@@ -65,7 +55,9 @@ const Syllabus = () => {
             <Grid item xs={3}>
               <Grid container spacing={1} sx={{ height: '20%' }}>
                 <Grid item xs={10}>
-                  <Cell><ChooseTask tasks={allTasks}/></Cell>
+                  <Cell>
+                    <ChooseTask tasks={allTasks} />
+                  </Cell>
                 </Grid>
               </Grid>
             </Grid>
@@ -77,6 +69,17 @@ const Syllabus = () => {
                   <Cell>
                     {selectedUnit && (
                       <>
+                        <p>חומרים</p>
+                        <Cell size="250px">חחכיגמיכחלכ</Cell>
+                        <Cell size="250px">חחכיגמיכחלכ</Cell>
+
+                        <Divider style={{ margin: '10px' }} />
+                        <p>פרויקטים</p>
+                        <Cell size="250px">חחכיגמיכחלכ</Cell>
+                        <Cell size="250px">חחכיגמיכחלכ</Cell>
+
+                        <Divider style={{ margin: '10px' }} />
+                        <p>תרגילים</p>
                         <PracticeTable />
                       </>
                     )}
@@ -150,4 +153,13 @@ const ListboxWrapper = ({ children }) => (
   >
     {children}
   </div>
+);
+
+
+const Cell = ({ children, size = '100%' }) => (
+  <Paper variant="outlined" sx={{ height: '100%', width: size }}>
+    <Box p={2} textAlign="center">
+      {children}
+    </Box>
+  </Paper>
 );
