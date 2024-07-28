@@ -1,68 +1,69 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-// import './Manager.css';
 
 const StudentPerformanceTable = ({ students, title }) => {
   const grades = calculateGrades(students);
   const categorizedStudents = calculateAverageGrade(grades);
 
   return (
-    <div style={{ height: '400px', overflowY: 'auto' }}>
-      <div dir="rtl">
-        <h2 style={{ fontSize: '16px', margin: '5px' }}>{title}</h2>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell class="custom-cell">שם</TableCell>
-                <TableCell class="custom-cell" align="right">
-                  בוחן 1
-                </TableCell>
-                <TableCell class="custom-cell" align="right">
-                  בוחן 2
-                </TableCell>
-                <TableCell class="custom-cell" align="right">
-                  ממוצע בחנים{' '}
-                </TableCell>
-                <TableCell class="custom-cell" align="right">
-                  הגשות
-                </TableCell>
-                <TableCell class="custom-cell" align="right">
-                  ממוצע הגשות
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {categorizedStudents.map((student) => (
-                <TableRow key={student.name}>
-                  <TableCell class="custom-cell">{student.name}</TableCell>
+    <div>
+      <h2 style={{ fontSize: '16px', margin: '5px' }}>{title}</h2>
+      <div style={{ height: '500px', overflowY: 'auto' }}>
+        <div dir="rtl">
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell class="custom-cell">שם</TableCell>
                   <TableCell class="custom-cell" align="right">
-                    {student.gradeA}
+                    בוחן 1
                   </TableCell>
                   <TableCell class="custom-cell" align="right">
-                    {student.gradeB}
+                    בוחן 2
                   </TableCell>
                   <TableCell class="custom-cell" align="right">
-                    <div
-                      style={{
-                        color:
-                          student.averageGrade > 80 ? '#82ca9d' : student.averageGrade < 50 ? '#b30000' : 'inherit',
-                      }}
-                    >
-                      {student.averageGrade}
-                    </div>
+                    ממוצע בחנים{' '}
                   </TableCell>
                   <TableCell class="custom-cell" align="right">
-                    {student.submissionsCount}
+                    הגשות
                   </TableCell>
                   <TableCell class="custom-cell" align="right">
-                    12
+                    ממוצע הגשות
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {categorizedStudents.map((student) => (
+                  <TableRow key={student.name}>
+                    <TableCell class="custom-cell">{student.name}</TableCell>
+                    <TableCell class="custom-cell" align="right">
+                      {student.gradeA}
+                    </TableCell>
+                    <TableCell class="custom-cell" align="right">
+                      {student.gradeB}
+                    </TableCell>
+                    <TableCell class="custom-cell" align="right">
+                      <div
+                        style={{
+                          color:
+                            student.averageGrade > 80 ? '#82ca9d' : student.averageGrade < 50 ? '#b30000' : 'inherit',
+                        }}
+                      >
+                        {student.averageGrade}
+                      </div>
+                    </TableCell>
+                    <TableCell class="custom-cell" align="right">
+                      {student.submissionsCount}
+                    </TableCell>
+                    <TableCell class="custom-cell" align="right">
+                      12
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </div>
   );

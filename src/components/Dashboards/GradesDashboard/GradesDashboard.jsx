@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../../NavBar/NavigateBar';
-import getGroupsByRegion from '../../../requests/groups/getGroupsByRegion';
+import mockedGetGroupsByRegion from '../../../requests/groups/mockedGetGroupsByRegion';
 import getStudentsByGroupMock from '../../../requests/mockedGetStudentBG';
 import { CircularProgress } from '@nextui-org/react';
 import { useFirebase } from '../../../util/FirebaseProvider';
@@ -34,7 +34,7 @@ const GradesDashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [regionsFromDb] = await Promise.all([getGroupsByRegion(app)]);
+      const [regionsFromDb] = await Promise.all([mockedGetGroupsByRegion(app)]);
       const index = makeNameIdIndex(regionsFromDb);
       setGroupIndex(index);
       setRegions(regionsFromDb);
@@ -111,7 +111,7 @@ const GradesDashboard = () => {
                 </Grid>
               </Grid>
 
-              <Grid container spacing={1} sx={{ height: '60%' }}>
+              <Grid container spacing={1} sx={{ height: '75%' }}>
                 <Grid item xs={12}>
                   <Cell>
                     {students && (
