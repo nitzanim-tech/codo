@@ -9,7 +9,6 @@ import { Listbox, ListboxItem, Button } from '@nextui-org/react';
 // import { ModalFooter, useDisclosure, Modal, ModalHeader } from '@nextui-org/react';
 import PracticeTable from '../components/Syllabus/PracticeTable';
 import getAllTasks from '../requests/tasks/getAllTasks';
-import ChooseTask from '../components/Syllabus/ChooseTask';
 
 
 const Syllabus = () => {
@@ -28,7 +27,7 @@ const Syllabus = () => {
         id: id,
         name: `${data.program} | ${data.heb_year}`,
       }));
-      const tasksFromDB =await  getAllTasks({app});
+      const tasksFromDB = await getAllTasks({ app });
       setAllTasks(tasksFromDB);
       setSyllabus(syllabusList);
     };
@@ -52,7 +51,7 @@ const Syllabus = () => {
         <>
           <Grid container spacing={1} sx={{ height: '100vh', width: '100%' }}>
             {/* Right column */}
-            <Grid item xs={3}>
+            {/* <Grid item xs={3}>
               <Grid container spacing={1} sx={{ height: '20%' }}>
                 <Grid item xs={10}>
                   <Cell>
@@ -60,30 +59,17 @@ const Syllabus = () => {
                   </Cell>
                 </Grid>
               </Grid>
-            </Grid>
+            </Grid> */}
 
             {/* Middle column */}
-            <Grid item xs={6}>
+            <Grid item xs={9}>
               <Grid container spacing={1} sx={{ height: '20%' }}>
                 <Grid item xs={12}>
-                  <Cell>
-                    {selectedUnit && (
-                      <>
-                        <p>חומרים</p>
-                        <Cell size="250px">חחכיגמיכחלכ</Cell>
-                        <Cell size="250px">חחכיגמיכחלכ</Cell>
-
-                        <Divider style={{ margin: '10px' }} />
-                        <p>פרויקטים</p>
-                        <Cell size="250px">חחכיגמיכחלכ</Cell>
-                        <Cell size="250px">חחכיגמיכחלכ</Cell>
-
-                        <Divider style={{ margin: '10px' }} />
-                        <p>תרגילים</p>
-                        <PracticeTable />
-                      </>
-                    )}
-                  </Cell>
+                  {selectedUnit && (
+                    <>
+                      <PracticeTable tasks={allTasks} />
+                    </>
+                  )}
                 </Grid>
               </Grid>
             </Grid>
@@ -148,7 +134,7 @@ export default Syllabus;
 
 const ListboxWrapper = ({ children }) => (
   <div
-    className="w-full max-w-[260px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100"
+    className="border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100"
     style={{ background: 'white', fontSize: '140px' }}
   >
     {children}
