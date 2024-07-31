@@ -67,7 +67,7 @@ const Syllabus = () => {
                 <Grid item xs={12}>
                   {selectedUnit && (
                     <>
-                      <PracticeTable tasks={allTasks} />
+                      <PracticeTable app={app} tasks={allTasks} unit={selectedUnit} />
                     </>
                   )}
                 </Grid>

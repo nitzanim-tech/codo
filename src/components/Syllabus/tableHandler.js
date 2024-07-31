@@ -58,32 +58,39 @@ const organizeDataByIndex = (template) => {
   return organizedData;
 };
 
-const deleteItem = (practice, content) => {
-  const updatedPractice = practice
-    .map((item) => {
-      if (item.id === content.id) {
-        if (item.type === 'main') {
-          return { ...item, name: '', id: null };
-        } else {
-          return null;
-        }
-      }
-      return item;
-    })
-    .filter((item) => item !== null);
-  return updatedPractice;
+
+const movePracticeListIndexes = (practice, startIndex, change) => {
+  for (let i = startIndex; i < practice.length; i++) {
+    practice[i].index += change;
+  }
 };
 
-const moveFowardPracticeList = (practice, index) => {
-  while (index < practice.length) {
-    practice[index].index += 1;
-    index++;
+const deleteItem = (practice, content) => {
+  let index = practice.findIndex((item) => item.id === content.id);
+
+  if (index !== -1) {
+    const updatedPractice = practice
+      .map((item, i) => {
+        if (i === index) {
+          if (item.type === 'main') {
+            return { ...item, name: '', id: null };
+          } else {
+            return null;
+          }
+        }
+        return item;
+      })
+      .filter((item) => item !== null);
+
+    movePracticeListIndexes(updatedPractice, index, -1);
+    return updatedPractice;
   }
+
+  return practice;
 };
 
 const addItem = (practice, clickedCell, chosenTask) => {
   console.log({ practice, clickedCell });
-  // find main index
   let index = 0;
   let mainObjectFound = 0;
   while (mainObjectFound < clickedCell.column) {
@@ -91,20 +98,22 @@ const addItem = (practice, clickedCell, chosenTask) => {
     if (practice[index].type == 'main') mainObjectFound++;
   }
 
-  if (clickedCell.type == 'main') {
+  if (clickedCell.type == 'drill') {
+    index += clickedCell.row + 1;
+  }
+  if (clickedCell.type == 'pre') {
+    //    index += clickedCell.row + 1;
+  }
+
+  if (practice[index].type == clickedCell.type) {
     practice[index].id = chosenTask.id;
     practice[index].name = chosenTask.name;
-  } else if (clickedCell.type == 'drill') {
-    index += clickedCell.row + 1;
-    if (practice[index].type == clickedCell.type) {
-      practice[index].id = chosenTask.id;
-      practice[index].name = chosenTask.name;
-    } else {
-      const newItem = { id: chosenTask.id, name: chosenTask.name, index, ...clickedCell };
-      moveFowardPracticeList(practice, index);
-      practice.splice(index, 0, newItem);
-    }
+  } else {
+    const newItem = { id: chosenTask.id, name: chosenTask.name, index, ...clickedCell };
+    movePracticeListIndexes(practice, index, 1);
+    practice.splice(index, 0, newItem);
   }
+
   return practice;
 };
 

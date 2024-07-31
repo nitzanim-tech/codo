@@ -5,6 +5,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ChooseTask from './ChooseTask';
 import { Grid, Paper, Box } from '@mui/material';
 import { practiceTemplate, addRowIndices, organizeDataByIndex, deleteItem, addItem } from './tableHandler';
+import savePratice from '../../requests/practice/savePractice';
 
 const Cell = ({ children, color, highlight, onClick }) => (
   <Paper
@@ -121,14 +122,22 @@ const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
   );
 };
 
-const PracticeTable = ({ tasks }) => {
+const PracticeTable = ({ app, tasks, unit }) => {
   const [chosenTask, setChosenTask] = useState(null);
-  const [practice, setPractice] = useState(() => addRowIndices(practiceTemplate));
+  const [practice, setPractice] = useState(() => {
+    const savedPractice = localStorage.getItem(`practice_${unit}`);
+    return savedPractice ? addRowIndices(JSON.parse(savedPractice)) : addRowIndices(practiceTemplate);
+  });
   const [clickedCell, setClickedCell] = useState(null);
+
+  // useEffect(() => {
+  //   practice;
+  // }, []);
 
   useEffect(() => {
     if (chosenTask && clickedCell) {
       const newPractice = addItem(practice, clickedCell, chosenTask);
+      localStorage.setItem(`practice_${unit}`, JSON.stringify(newPractice));
       setPractice(newPractice);
       setChosenTask(null);
       setClickedCell(null);
@@ -142,6 +151,15 @@ const PracticeTable = ({ tasks }) => {
 
   const handleClick = (column, type, row = null) => {
     setClickedCell({ column, type, row });
+  };
+  const handleSave = async () => {
+    const success = await savePratice({ app, practice, unit });
+    if (success) {
+      console.log('saved succefuly');
+      localStorage.removeItem(`practice_${unit}`);
+    } else {
+      console.log('ERROR');
+    }
   };
 
   const organizedPractice = organizeDataByIndex(practice);
@@ -159,6 +177,9 @@ const PracticeTable = ({ tasks }) => {
         <Cell>
           <p>תרגילים</p>
           {renderTable(organizedPractice, handleDelete, handleClick, clickedCell)}
+          <Button style={{ marginTop: '30px' }} onClick={handleSave}>
+            שמור
+          </Button>
         </Cell>
       </Grid>
     </Grid>
