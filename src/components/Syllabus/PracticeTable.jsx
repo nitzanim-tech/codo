@@ -2,24 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@nextui-org/react';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { Divider, SelectItem } from '@nextui-org/react';
 import ChooseTask from './ChooseTask';
 import { Grid, Paper, Box } from '@mui/material';
-
-const DarkBlue = '#005395';
-
-const parcticeTemplete = [
-  { id: 'asda', index: 0, name: 'האם', type: 'main' },
-  { id: 'sdda', index: 1, name: 'שלום ', type: 'main' },
-  { id: 'dfgh', index: 2, name: 'שישי', type: 'drill' },
-  { id: 'daas', index: 3, name: 'עולם', type: 'pre' },
-  { id: null, index: 4, name: '', type: 'main' },
-  { id: 'qwer', index: 5, name: 'אני רוצה', type: 'main' },
-  { id: 'tyui', index: 6, name: 'תכלס', type: 'drill' },
-  { id: 'ghjk', index: 7, name: 'מתי אתם חוזרים', type: 'drill' },
-  { id: null, index: 8, name: '', type: 'main' },
-  { id: 'yuio', index: 9, name: 'לעבוד', type: 'main' },
-];
+import { practiceTemplate, addRowIndices, organizeDataByIndex, deleteItem, addItem } from './tableHandler';
 
 const Cell = ({ children, color, highlight, onClick }) => (
   <Paper
@@ -34,22 +19,21 @@ const Cell = ({ children, color, highlight, onClick }) => (
     onClick={onClick}
   >
     <Box p={2} textAlign="center">
-      <p>{children}</p>
+      {children}
     </Box>
   </Paper>
 );
 
-const renderCellContent = (content, index, handleDelete) => {
+const renderCellContent = (content, handleDelete) => {
   if (content) {
     return (
       <>
-        <p>{index}</p>
         <Button
           color="primary"
           variant="light"
           radius="full"
           isIconOnly
-          onClick={() => handleDelete(content, index)}
+          onClick={() => handleDelete(content)}
           size="sm"
         >
           <CloseRoundedIcon />
@@ -68,7 +52,6 @@ const renderCellContent = (content, index, handleDelete) => {
 const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
   const columns = Array.from({ length: 6 }, (_, i) => data[i] || { pre: [], main: null, drill: [] });
 
-  // Determine the maximum number of pre and drill items
   const maxPreLength = Math.max(...columns.map((col) => col.pre.length));
   const maxDrillLength = Math.max(...columns.map((col) => col.drill.length));
 
@@ -81,7 +64,7 @@ const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
             {columns.map((col, colIndex) => (
               <td key={colIndex}>
                 <Cell
-                  color={col.pre[rowIndex] ? '#7CAFC4' : null}
+                  color={col.pre[rowIndex] ? '#e63946' : null}
                   highlight={
                     highlightedCell &&
                     highlightedCell.column === colIndex &&
@@ -90,7 +73,7 @@ const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
                   }
                   onClick={() => handleClick(colIndex, 'pre', rowIndex)}
                 >
-                  {col.pre[rowIndex] && renderCellContent(col.pre[rowIndex], rowIndex, handleDelete)}
+                  {col.pre[rowIndex] && renderCellContent(col.pre[rowIndex], handleDelete)}
                 </Cell>
               </td>
             ))}
@@ -106,7 +89,7 @@ const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
                 highlight={highlightedCell && highlightedCell.column === colIndex && highlightedCell.type === 'main'}
                 onClick={() => handleClick(colIndex, 'main')}
               >
-                {renderCellContent(col.main, colIndex, handleDelete)}
+                {renderCellContent(col.main, handleDelete)}
               </Cell>
             </td>
           ))}
@@ -127,7 +110,7 @@ const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
                   }
                   onClick={() => handleClick(colIndex, 'drill', rowIndex)}
                 >
-                  {col.drill[rowIndex] && renderCellContent(col.drill[rowIndex], rowIndex, handleDelete)}
+                  {col.drill[rowIndex] && renderCellContent(col.drill[rowIndex], handleDelete)}
                 </Cell>
               </td>
             ))}
@@ -138,39 +121,22 @@ const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
   );
 };
 
-export default function PracticeTable({ tasks }) {
+const PracticeTable = ({ tasks }) => {
   const [chosenTask, setChosenTask] = useState(null);
-  const [practice, setPractice] = useState(parcticeTemplete);
+  const [practice, setPractice] = useState(() => addRowIndices(practiceTemplate));
   const [clickedCell, setClickedCell] = useState(null);
 
   useEffect(() => {
     if (chosenTask && clickedCell) {
-      const updatedPractice = practice.map((item, index) => {
-        if (index === clickedCell.column) {
-          if (item.type === clickedCell.type && item.row === clickedCell.row) {
-            return { ...item, id: chosenTask.id, name: chosenTask.name };
-          }
-        }
-        return item;
-      });
-      setPractice(updatedPractice);
-      setClickedCell(null); // Reset the clicked cell after updating
+      const newPractice = addItem(practice, clickedCell, chosenTask);
+      setPractice(newPractice);
+      setChosenTask(null);
+      setClickedCell(null);
     }
   }, [chosenTask, clickedCell, practice]);
 
-  const handleDelete = (content, index) => {
-    const updatedPractice = practice
-      .map((item) => {
-        if (item.id === content.id) {
-          if (item.type === 'main') {
-            return { ...item, name: '', id: null };
-          } else {
-            return null;
-          }
-        }
-        return item;
-      })
-      .filter((item) => item !== null);
+  const handleDelete = (content) => {
+    const updatedPractice = deleteItem(practice, content);
     setPractice(updatedPractice);
   };
 
@@ -183,7 +149,11 @@ export default function PracticeTable({ tasks }) {
   return (
     <Grid container spacing={1} sx={{ height: '20%' }}>
       <Grid item xs={3}>
-        <Cell size="250px">{clickedCell && <ChooseTask tasks={tasks} setChosenTask={setChosenTask} />}</Cell>
+        {clickedCell && (
+          <Cell>
+            <ChooseTask tasks={tasks} setChosenTask={setChosenTask} />
+          </Cell>
+        )}
       </Grid>
       <Grid item xs={9}>
         <Cell>
@@ -193,49 +163,6 @@ export default function PracticeTable({ tasks }) {
       </Grid>
     </Grid>
   );
-}
-
-const organizeDataByIndex = (template) => {
-  const organizedData = {};
-  let columnIndex = 0;
-
-  template.forEach((item) => {
-    if (!organizedData[columnIndex]) {
-      organizedData[columnIndex] = { pre: [], main: null, drill: [] };
-    }
-
-    if (item.type === 'pre') {
-      organizedData[columnIndex].pre.push(item);
-    } else if (item.type === 'main') {
-      organizedData[columnIndex].main = item;
-      columnIndex++;
-    } else if (item.type === 'drill') {
-      if (!organizedData[columnIndex - 1]) {
-        organizedData[columnIndex - 1] = { pre: [], main: null, drill: [] };
-      }
-      organizedData[columnIndex - 1].drill.push(item);
-    }
-  });
-
-  return organizedData;
 };
 
-const renderRow = (type, data, handleDelete, handleClick, highlightedCell) => {
-  return (
-    <tr>
-      {Object.keys(data).map((key, index) => (
-        <td key={index}>
-          <Cell
-            color={data[key][type] ? (type === 'main' ? '#005395' : 'green') : null}
-            highlight={highlightedCell && highlightedCell.column === index && highlightedCell.type === type}
-            onClick={() => handleClick(index, type)}
-          >
-            {Array.isArray(data[key][type])
-              ? data[key][type].map((item, i) => renderCellContent(item, i, handleDelete))
-              : renderCellContent(data[key][type], index, handleDelete)}
-          </Cell>
-        </td>
-      ))}
-    </tr>
-  );
-};
+export default PracticeTable;

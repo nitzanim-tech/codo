@@ -76,7 +76,7 @@ const Syllabus = () => {
             {/* Left column */}
             <Grid item>
               <Grid container spacing={1} sx={{ height: '20%' }}>
-                <Grid item xs={10}>
+                <Grid item xs={8}>
                   <Cell>
                     <p> סילבוס</p>
                     <Select
