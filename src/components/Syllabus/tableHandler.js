@@ -97,23 +97,22 @@ const addItem = (practice, clickedCell, chosenTask) => {
     index++;
     if (practice[index].type == 'main') mainObjectFound++;
   }
-
   if (clickedCell.type == 'drill') {
     index += clickedCell.row + 1;
   }
-  if (clickedCell.type == 'pre') {
-    //    index += clickedCell.row + 1;
-  }
-
-  if (practice[index].type == clickedCell.type) {
-    practice[index].id = chosenTask.id;
-    practice[index].name = chosenTask.name;
-  } else {
+  if (index >= practice.length) {
     const newItem = { id: chosenTask.id, name: chosenTask.name, index, ...clickedCell };
-    movePracticeListIndexes(practice, index, 1);
-    practice.splice(index, 0, newItem);
+    practice.push(newItem);
+  } else {
+    if (practice[index].type == clickedCell.type && index < practice.length) {
+      practice[index].id = chosenTask.id;
+      practice[index].name = chosenTask.name;
+    } else {
+      const newItem = { id: chosenTask.id, name: chosenTask.name, index, ...clickedCell };
+      movePracticeListIndexes(practice, index, 1);
+      practice.splice(index, 0, newItem);
+    }
   }
-
   return practice;
 };
 
