@@ -52,8 +52,9 @@ const Syllabus = () => {
             <Grid item xs={9}>
               <Grid container spacing={1} sx={{ height: '20%' }}>
                 <Grid item xs={12}>
-                  {selectedUnit && (
+                  {selectedUnit && units && (
                     <>
+                      <p style={{ fontSize: '24px', textAlign: 'right' }}>{units[selectedUnit]?.name}</p>
                       <PracticeTable app={app} tasks={allTasks} unit={selectedUnit} />
                     </>
                   )}
