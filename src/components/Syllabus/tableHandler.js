@@ -10,6 +10,15 @@ const practiceTemplate = [
   { id: null, index: 8, name: '', type: 'main' },
   { id: 'yuio', index: 9, name: 'לעבוד', type: 'main' },
 ];
+const defaultPractice = [
+  { id: null, index: 0, name: '', type: 'main' },
+  { id: null, index: 1, name: '', type: 'main' },
+  { id: null, index: 2, name: '', type: 'pre' },
+  { id: null, index: 3, name: '', type: 'main' },
+  { id: null, index: 4, name: '', type: 'main' },
+  { id: null, index: 5, name: '', type: 'main' },
+  { id: null, index: 6, name: '', type: 'main' },
+];
 
 const addRowIndices = (template) => {
   const updatedTemplate = [];
@@ -116,4 +125,4 @@ const addItem = (practice, clickedCell, chosenTask) => {
   return practice;
 };
 
-export { practiceTemplate, addRowIndices, organizeDataByIndex, deleteItem, addItem };
+export { defaultPractice, addRowIndices, organizeDataByIndex, deleteItem, addItem };

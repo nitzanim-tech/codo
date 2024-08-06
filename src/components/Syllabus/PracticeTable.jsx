@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@nextui-org/react';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ChooseTask from './ChooseTask';
 import { Grid, Paper, Box } from '@mui/material';
-import { addRowIndices, organizeDataByIndex, deleteItem, addItem } from './tableHandler';
+import { addRowIndices, defaultPractice, deleteItem, addItem } from './tableHandler';
 import savePractice from '../../requests/practice/savePractice';
 import getPractice from '../../requests/practice/getPractice';
-import {renderTable, renderCellContent, Cell} from './PracticeTableElements'
+import { renderTable, renderCellContent, Cell } from './PracticeTableElements';
 
 const PracticeTable = ({ app, tasks, unit }) => {
   const [chosenTask, setChosenTask] = useState(null);
@@ -18,9 +16,9 @@ const PracticeTable = ({ app, tasks, unit }) => {
     const fetchPractice = async () => {
       const savedPractice = localStorage.getItem(`practice_${unit}`);
       const practiceFromDb = await getPractice({ app, unit });
-      savedPractice
-        ? setPractice(addRowIndices(JSON.parse(savedPractice)))
-        : setPractice(addRowIndices(practiceFromDb));
+      if (savedPractice) setPractice(addRowIndices(JSON.parse(savedPractice)));
+      else if (practiceFromDb) setPractice(addRowIndices(practiceFromDb));
+      else setPractice(addRowIndices(defaultPractice));
     };
 
     fetchPractice();

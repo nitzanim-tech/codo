@@ -6,16 +6,14 @@ import getAllSyllbus from '../requests/syllabus/getAllSyllbus';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import { getUnitsBySyllabus } from '../requests/units/getUnits';
 import { Listbox, ListboxItem, Button } from '@nextui-org/react';
-// import { ModalFooter, useDisclosure, Modal, ModalHeader } from '@nextui-org/react';
 import PracticeTable from '../components/Syllabus/PracticeTable';
 import getAllTasks from '../requests/tasks/getAllTasks';
-
+import AddUnitButton from '../components/Syllabus/AddUnitButton';
 
 const Syllabus = () => {
   const { app, isAuthorized } = useFirebase();
-
   const [units, setUnits] = useState();
-  const [syllabus, setSyllabus] = useState();
+  const [syllabusList, setSyllabusList] = useState();
   const [choosenSyllabusId, setChoosenSyllabus] = useState();
   const [selectedUnit, setSelectedUnit] = useState();
   const [allTasks, setAllTasks] = useState();
@@ -29,7 +27,7 @@ const Syllabus = () => {
       }));
       const tasksFromDB = await getAllTasks({ app });
       setAllTasks(tasksFromDB);
-      setSyllabus(syllabusList);
+      setSyllabusList(syllabusList);
     };
     getSyllabusFromDb();
   }, []);
@@ -51,17 +49,6 @@ const Syllabus = () => {
         <>
           <Grid container spacing={1} sx={{ height: '100vh', width: '100%' }}>
             {/* Right column */}
-            {/* <Grid item xs={3}>
-              <Grid container spacing={1} sx={{ height: '20%' }}>
-                <Grid item xs={10}>
-                  <Cell>
-                    <ChooseTask tasks={allTasks} />
-                  </Cell>
-                </Grid>
-              </Grid>
-            </Grid> */}
-
-            {/* Middle column */}
             <Grid item xs={9}>
               <Grid container spacing={1} sx={{ height: '20%' }}>
                 <Grid item xs={12}>
@@ -76,7 +63,7 @@ const Syllabus = () => {
             {/* Left column */}
             <Grid item>
               <Grid container spacing={1} sx={{ height: '20%' }}>
-                <Grid item xs={8}>
+                <Grid item xs={10}>
                   <Cell>
                     <p> סילבוס</p>
                     <Select
@@ -85,8 +72,8 @@ const Syllabus = () => {
                       onChange={(e) => setChoosenSyllabus(e.target.value)}
                       dir="rtl"
                     >
-                      {syllabus &&
-                        Object.entries(syllabus).map(([id, syllabusData]) => (
+                      {syllabusList &&
+                        Object.entries(syllabusList).map(([id, syllabusData]) => (
                           <SelectItem key={syllabusData.id} value={syllabusData.id} dir="rtl">
                             {syllabusData.name}
                           </SelectItem>
@@ -101,18 +88,27 @@ const Syllabus = () => {
                       <ListboxWrapper>
                         <Listbox aria-label="units" onAction={setSelectedUnit}>
                           {units && Object.keys(units).length > 0 ? (
-                            Object.entries(units).map(([id, unit]) => (
-                              <ListboxItem key={id} value={unit.name} dir="rtl">
-                                {unit.name}
-                              </ListboxItem>
-                            ))
+                            Object.entries(units)
+                              .sort(([, unitA], [, unitB]) => unitA.index - unitB.index)
+                              .map(([id, unit]) => (
+                                <ListboxItem key={id} value={unit.name} dir="rtl">
+                                  {unit.name}
+                                </ListboxItem>
+                              ))
                           ) : (
                             <ListboxItem dir="rtl" isDisabled>
                               אין יחידות
                             </ListboxItem>
                           )}
                         </Listbox>
-                        <Button>יחידה חדשה</Button>
+                        {units && (
+                          <AddUnitButton
+                            app={app}
+                            syllabus={choosenSyllabusId}
+                            length={Object.keys(units).length}
+                            setUnits={setUnits}
+                          />
+                        )}
                       </ListboxWrapper>
                     </Cell>
                   </Grid>

@@ -5,7 +5,7 @@ const getPractice = async ({ app, unit }) => {
 
   try {
     const snapshot = await get(ref(db, `practice/${unit}`));
-    const practice = snapshot.val() || {};
+    const practice = snapshot.val() || null;
     return practice;
   } catch (error) {
     console.error('Error adding permission:', error);
