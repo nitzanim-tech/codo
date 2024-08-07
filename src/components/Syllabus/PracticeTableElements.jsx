@@ -97,7 +97,7 @@ const getColor = (type) => {
   }
 };
 
-const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
+const renderPracticeTable = (data, handleDelete, handleClick, highlightedCell) => {
   const organizedData = organizeDataByIndex(data);
   const columns = Array.from({ length: 6 }, (_, i) => organizedData[i] || { pre: [], main: null, drill: [] });
 
@@ -165,4 +165,36 @@ const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
   );
 };
 
-export { renderTable, CellContent, Cell };
+const renderLessonTable = (data, handleDelete, handleClick, highlightedCell) => {
+  console.log({ data });
+  return (
+    <table style={{ width: '100%', tableLayout: 'fixed' }}>
+      <tbody>
+        <tr key={0}>
+          {Object.entries(data).map((id, material) => (
+            <td key={id} style={{ width: '16.66%' }}>
+              <Cell>
+                <CellContent content={material} handleDelete={handleDelete} />
+              </Cell>
+            </td>
+          ))}
+          <td>
+            <Button
+              variant="light"
+              radius="full"
+              isIconOnly
+              onClick={() => handleClick(data.length, 'drill', maxDrillLength)}
+              size="sm"
+            >
+              <AddRoundedIcon />
+            </Button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  );
+};
+
+
+
+export { renderLessonTable, renderPracticeTable, CellContent, Cell };

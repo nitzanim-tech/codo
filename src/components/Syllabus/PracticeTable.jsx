@@ -5,7 +5,7 @@ import { Grid, Paper, Box } from '@mui/material';
 import { addRowIndices, defaultPractice, deleteItem, addItem } from './tableHandler';
 import savePractice from '../../requests/practice/savePractice';
 import getPractice from '../../requests/practice/getPractice';
-import { renderTable, Cell } from './PracticeTableElements';
+import { renderPracticeTable, Cell } from './PracticeTableElements';
 
 const PracticeTable = ({ app, tasks, unit }) => {
   const [chosenTask, setChosenTask] = useState(null);
@@ -65,7 +65,7 @@ const PracticeTable = ({ app, tasks, unit }) => {
       <Grid item xs={9}>
         <Cell>
           <p>תרגילים</p>
-          {practice && renderTable(practice, handleDelete, handleClick, clickedCell)}
+          {practice && renderPracticeTable(practice, handleDelete, handleClick, clickedCell)}
           <Button style={{ marginTop: '30px' }} onClick={handleSave}>
             שמור
           </Button>

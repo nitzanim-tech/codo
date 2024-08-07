@@ -9,6 +9,7 @@ import { Listbox, ListboxItem, Button } from '@nextui-org/react';
 import PracticeTable from '../components/Syllabus/PracticeTable';
 import getAllTasks from '../requests/tasks/getAllTasks';
 import AddUnitButton from '../components/Syllabus/AddUnitButton';
+import LessonTable from '../components/Syllabus/LessonTable';
 
 const Syllabus = () => {
   const { app, isAuthorized } = useFirebase();
@@ -55,6 +56,8 @@ const Syllabus = () => {
                   {selectedUnit && units && (
                     <>
                       <p style={{ fontSize: '24px', textAlign: 'right' }}>{units[selectedUnit]?.name}</p>
+                      <LessonTable app={app} tasks={allTasks} unit={selectedUnit} />
+
                       <PracticeTable app={app} tasks={allTasks} unit={selectedUnit} />
                     </>
                   )}
