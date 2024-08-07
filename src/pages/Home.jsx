@@ -4,7 +4,7 @@ import NavBar from '../components/NavBar/NavigateBar';
 
 import './Home.css';
 import { Button, Grid, Card } from '@mui/material';
-import { Accordion, AccordionItem, Tooltip, Badge, ScrollShadow } from '@nextui-org/react';
+import { Accordion, AccordionItem, Tooltip, Badge, ScrollShadow, Select, SelectItem } from '@nextui-org/react';
 import TaskCard from '../components/Home/TaskCard';
 import { useFirebase } from '../util/FirebaseProvider';
 import { CircularProgress } from '@nextui-org/react';
@@ -14,6 +14,13 @@ import SlideshowIcon from '@mui/icons-material/Slideshow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
+import spicyIcon from '../assets/svg/pepper.svg';
+
+const Levels = [
+  { id: 0, name: 'בקטנה, תן להתחמם' },
+  { id: 1, name: 'רגיל כזה' },
+  { id: 2, name: 'יאללה מלחמה' },
+];
 
 function Home() {
   const { app, userData, isUserLoading } = useFirebase();
@@ -66,11 +73,35 @@ function Home() {
                         )}
                       </AccordionItem>
                     ))}
-                  </Accordion>{' '}
+                  </Accordion>
                 </ScrollShadow>
               </Grid>
               <Grid item style={{ width: '35%' }}>
                 <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
+                {/* <h1 style={{ margin: '40px' }}> כמה חריף לשים? {userData.name}</h1> */}
+                <Select
+                  items={Levels}
+                  label="כמה חריף לשים"
+                  placeholder="בחרו"
+                  labelPlacement="outside"
+                  className="max-w-xs"
+                >
+                  {(level) => (
+                    <SelectItem key={level.id} textValue={level.name}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div className="flex flex-col">
+                          <span className="text-small">{level.name}</span>{' '}
+                        </div>
+
+                        <div style={{ display: 'flex', justifyContent: 'left' }}>
+                          {Array.from({ length: level.id + 1 }).map((index) => (
+                            <img src={spicyIcon} alt="spicyIcon" style={{ width: '20px', height: '20px' }} />
+                          ))}
+                        </div>
+                      </div>
+                    </SelectItem>
+                  )}
+                </Select>
               </Grid>
             </Grid>
           </div>
