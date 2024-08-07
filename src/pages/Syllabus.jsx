@@ -56,9 +56,12 @@ const Syllabus = () => {
                   {selectedUnit && units && (
                     <>
                       <p style={{ fontSize: '24px', textAlign: 'right' }}>{units[selectedUnit]?.name}</p>
-                      <LessonTable app={app} tasks={allTasks} unit={selectedUnit} />
-
-                      <PracticeTable app={app} tasks={allTasks} unit={selectedUnit} />
+                      <Grid style={{marginBottom:'5px'}}>
+                        <LessonTable app={app} tasks={allTasks} unit={selectedUnit} />
+                      </Grid>
+                      <Grid>
+                        <PracticeTable app={app} tasks={allTasks} unit={selectedUnit} />
+                      </Grid>
                     </>
                   )}
                 </Grid>

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button } from '@nextui-org/react';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Paper, Box } from '@mui/material';
 import { organizeDataByIndex } from './tableHandler';
 import { Tooltip } from '@nextui-org/tooltip';
+
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
 
 const Cell = ({ children, color, highlight, onClick }) => (
   <Paper
@@ -14,7 +15,7 @@ const Cell = ({ children, color, highlight, onClick }) => (
       width: '100%',
       backgroundColor: color,
       border: highlight ? '4px solid blue' : '1px solid gray',
-      cursor: 'pointer',
+      //   cursor: 'pointer',
       display: 'flex',
       justifyContent: 'center',
     }}
@@ -29,35 +30,37 @@ const Cell = ({ children, color, highlight, onClick }) => (
 const CellContent = ({ content, handleDelete, col }) => (
   <>
     {content && (
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-        <Button
-          color="primary"
-          variant="light"
-          radius="full"
-          isIconOnly
-          onClick={() => handleDelete(content)}
-          size="sm"
+      <>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <p style={{ margin: 0, flexShrink: 0 }}>{content.type === 'main' && col}</p>
+          <Tooltip content={content.name} closeDelay={1}>
+            <Button
+              color="primary"
+              variant="light"
+              radius="full"
+              isIconOnly
+              onClick={() => handleDelete(content)}
+              size="sm"
+            >
+              <CloseRoundedIcon />
+            </Button>
+          </Tooltip>
+        </div>
+        <div
+          style={{
+            fontSize: '12px',
+            direction: 'rtl',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            width: '100%',
+            textAlign: 'center',
+          }}
         >
-          <CloseRoundedIcon />
-        </Button>
-        <p style={{ margin: 0, flexShrink: 0 }}>{content.type === 'main' && col}</p>
-      </div>
+          {content.name}
+        </div>
+      </>
     )}
-    <Tooltip content={content.name}>
-      <div
-        style={{
-          fontSize: '12px',
-          direction: 'rtl',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          width: '100%',
-          textAlign: 'center',
-        }}
-      >
-        {content.name}
-      </div>
-    </Tooltip>
   </>
 );
 
@@ -103,10 +106,15 @@ const renderPracticeTable = (data, handleDelete, handleClick, highlightedCell) =
 
   const maxPreLength = Math.max(...columns.map((col) => col.pre.length));
   const maxDrillLength = Math.max(...columns.map((col) => col.drill.length));
-
+  const Header = (part) => {
+    <p style={{ writingMode: 'vertical-rl', color: getColor(part), position: 'absolute' }}>{part}</p>;
+  };
   return (
-    <table style={{ width: '100%', tableLayout: 'fixed' }}>
+    <table style={{ width: '95%', tableLayout: 'fixed', direction: 'rtl' }}>
       <tbody>
+        <p style={{ writingMode: 'vertical-rl', color: getColor('pre'), position: 'absolute', marginRight: '-25px' }}>
+          pre |
+        </p>
         {Array.from({ length: maxPreLength }).map((_, rowIndex) => (
           <TableRow
             key={`pre-${rowIndex}`}
@@ -119,6 +127,9 @@ const renderPracticeTable = (data, handleDelete, handleClick, highlightedCell) =
           />
         ))}
 
+        <p style={{ writingMode: 'vertical-rl', color: getColor('main'), position: 'absolute', marginRight: '-25px' }}>
+          main |
+        </p>
         <tr>
           {columns.map((col, colIndex) => (
             <td key={colIndex} style={{ width: '16.66%' }}>
@@ -133,6 +144,9 @@ const renderPracticeTable = (data, handleDelete, handleClick, highlightedCell) =
           ))}
         </tr>
 
+        <p style={{ writingMode: 'vertical-rl', color: getColor('drill'), position: 'absolute', marginRight: '-25px' }}>
+           drill |
+        </p>
         {Array.from({ length: maxDrillLength }).map((_, rowIndex) => (
           <TableRow
             key={`drill-${rowIndex}`}
@@ -144,7 +158,6 @@ const renderPracticeTable = (data, handleDelete, handleClick, highlightedCell) =
             highlightedCell={highlightedCell}
           />
         ))}
-
         <tr>
           {columns.map((col, colIndex) => (
             <td key={colIndex} style={{ width: '16.66%' }}>
@@ -166,35 +179,40 @@ const renderPracticeTable = (data, handleDelete, handleClick, highlightedCell) =
 };
 
 const renderLessonTable = (data, handleDelete, handleClick, highlightedCell) => {
-  console.log({ data });
+  const cellStyle = { width: '16.66%' };
+  const colElements = Array.from({ length: 6 }, (_, index) => <col key={index} style={{ width: '16.66%' }} />);
+
   return (
-    <table style={{ width: '100%', tableLayout: 'fixed' }}>
+    <table style={{ width: '95%', tableLayout: 'fixed', direction: 'rtl' }}>
+      <colgroup>{colElements}</colgroup>
       <tbody>
         <tr key={0}>
-          {Object.entries(data).map((id, material) => (
-            <td key={id} style={{ width: '16.66%' }}>
+          {Object.entries([data]).map(([id, material]) => (
+            <td key={id} style={cellStyle}>
               <Cell>
                 <CellContent content={material} handleDelete={handleDelete} />
               </Cell>
             </td>
           ))}
-          <td>
-            <Button
-              variant="light"
-              radius="full"
-              isIconOnly
-              onClick={() => handleClick(data.length, 'drill', maxDrillLength)}
-              size="sm"
-            >
-              <AddRoundedIcon />
-            </Button>
+          <td key={'add'} style={cellStyle}>
+            <Cell>
+              <Dropdown dir="rtl">
+                <DropdownTrigger>
+                  <Button variant="light" radius="full" isIconOnly size="sm">
+                    <AddRoundedIcon />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Action event example" onAction={(key) => alert(key)}>
+                  <DropdownItem key="new">קובץ</DropdownItem>
+                  <DropdownItem key="copy">משימה</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </Cell>
           </td>
         </tr>
       </tbody>
     </table>
   );
 };
-
-
 
 export { renderLessonTable, renderPracticeTable, CellContent, Cell };
