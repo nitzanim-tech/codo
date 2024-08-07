@@ -4,6 +4,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Paper, Box } from '@mui/material';
 import { organizeDataByIndex } from './tableHandler';
+import { Tooltip } from '@nextui-org/tooltip';
 
 const Cell = ({ children, color, highlight, onClick }) => (
   <Paper
@@ -14,40 +15,91 @@ const Cell = ({ children, color, highlight, onClick }) => (
       backgroundColor: color,
       border: highlight ? '4px solid blue' : '1px solid gray',
       cursor: 'pointer',
+      display: 'flex',
+      justifyContent: 'center',
     }}
     onClick={onClick}
   >
-    <Box p={2} textAlign="center">
+    <Box p={1} textAlign="center" display="flex" flexDirection="column" alignItems="center" width="100%">
       {children}
     </Box>
   </Paper>
 );
 
-const renderCellContent = (content, handleDelete) => {
-  return (
-    <>
-      {content ? (
-        <>
-          <Button
-            color="primary"
-            variant="light"
-            radius="full"
-            isIconOnly
-            onClick={() => handleDelete(content)}
-            size="sm"
-          >
-            <CloseRoundedIcon />
-          </Button>
-          <p style={{ fontSize: '12px', direction: 'rtl' }}> {content.name}</p>
-        </>
-      ) : null}
-    </>
-  );
+const CellContent = ({ content, handleDelete, col }) => (
+  <>
+    {content && (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+        <Button
+          color="primary"
+          variant="light"
+          radius="full"
+          isIconOnly
+          onClick={() => handleDelete(content)}
+          size="sm"
+        >
+          <CloseRoundedIcon />
+        </Button>
+        <p style={{ margin: 0, flexShrink: 0 }}>{content.type === 'main' && col}</p>
+      </div>
+    )}
+    <Tooltip content={content.name}>
+      <div
+        style={{
+          fontSize: '12px',
+          direction: 'rtl',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          width: '100%',
+          textAlign: 'center',
+        }}
+      >
+        {content.name}
+      </div>
+    </Tooltip>
+  </>
+);
+
+const TableRow = ({ columns, rowIndex, type, handleDelete, handleClick, highlightedCell }) => (
+  <tr key={`${type}-${rowIndex}`}>
+    {columns.map((col, colIndex) => (
+      <td key={colIndex} style={{ width: '16.66%' }}>
+        <Cell
+          color={col[type][rowIndex] ? getColor(type) : null}
+          highlight={
+            highlightedCell &&
+            highlightedCell.column === colIndex &&
+            highlightedCell.type === type &&
+            highlightedCell.row === rowIndex
+          }
+          onClick={() => handleClick(colIndex, type, rowIndex)}
+        >
+          {col[type][rowIndex] && (
+            <CellContent content={col[type][rowIndex]} handleDelete={handleDelete} col={colIndex} />
+          )}
+        </Cell>
+      </td>
+    ))}
+  </tr>
+);
+
+const getColor = (type) => {
+  switch (type) {
+    case 'pre':
+      return '#e63946';
+    case 'main':
+      return '#2D74A6';
+    case 'drill':
+      return '#7CAFC4';
+    default:
+      return null;
+  }
 };
 
 const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
-  data = organizeDataByIndex(data);
-  const columns = Array.from({ length: 6 }, (_, i) => data[i] || { pre: [], main: null, drill: [] });
+  const organizedData = organizeDataByIndex(data);
+  const columns = Array.from({ length: 6 }, (_, i) => organizedData[i] || { pre: [], main: null, drill: [] });
 
   const maxPreLength = Math.max(...columns.map((col) => col.pre.length));
   const maxDrillLength = Math.max(...columns.map((col) => col.drill.length));
@@ -55,69 +107,47 @@ const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
   return (
     <table style={{ width: '100%', tableLayout: 'fixed' }}>
       <tbody>
-        {/* Pre rows */}
         {Array.from({ length: maxPreLength }).map((_, rowIndex) => (
-          <tr key={`pre-${rowIndex}`}>
-            {columns.map((col, colIndex) => (
-              <td key={colIndex}>
-                <Cell
-                  color={col.pre[rowIndex] ? '#e63946' : null}
-                  highlight={
-                    highlightedCell &&
-                    highlightedCell.column === colIndex &&
-                    highlightedCell.type === 'pre' &&
-                    highlightedCell.row === rowIndex
-                  }
-                  onClick={() => handleClick(colIndex, 'pre', rowIndex)}
-                >
-                  {col.pre[rowIndex] && renderCellContent(col.pre[rowIndex], handleDelete)}
-                </Cell>
-              </td>
-            ))}
-          </tr>
+          <TableRow
+            key={`pre-${rowIndex}`}
+            columns={columns}
+            rowIndex={rowIndex}
+            type="pre"
+            handleDelete={handleDelete}
+            handleClick={handleClick}
+            highlightedCell={highlightedCell}
+          />
         ))}
 
-        {/* Main row */}
         <tr>
           {columns.map((col, colIndex) => (
-            <td key={colIndex}>
+            <td key={colIndex} style={{ width: '16.66%' }}>
               <Cell
-                color={col.main ? '#2D74A6' : null}
+                color={col.main ? getColor('main') : null}
                 highlight={highlightedCell && highlightedCell.column === colIndex && highlightedCell.type === 'main'}
                 onClick={() => handleClick(colIndex, 'main')}
               >
-                {renderCellContent(col.main, handleDelete)}
+                {col.main && <CellContent content={col.main} handleDelete={handleDelete} col={colIndex} />}
               </Cell>
             </td>
           ))}
         </tr>
 
-        {/* Drill rows */}
         {Array.from({ length: maxDrillLength }).map((_, rowIndex) => (
-          <tr key={`drill-${rowIndex}`}>
-            {columns.map((col, colIndex) => (
-              <td key={colIndex}>
-                <Cell
-                  color={col.drill[rowIndex] ? '#7CAFC4' : null}
-                  highlight={
-                    highlightedCell &&
-                    highlightedCell.column === colIndex &&
-                    highlightedCell.type === 'drill' &&
-                    highlightedCell.row === rowIndex
-                  }
-                  onClick={() => handleClick(colIndex, 'drill', rowIndex)}
-                >
-                  {col.drill[rowIndex] && renderCellContent(col.drill[rowIndex], handleDelete)}
-                </Cell>
-              </td>
-            ))}
-          </tr>
+          <TableRow
+            key={`drill-${rowIndex}`}
+            columns={columns}
+            rowIndex={rowIndex}
+            type="drill"
+            handleDelete={handleDelete}
+            handleClick={handleClick}
+            highlightedCell={highlightedCell}
+          />
         ))}
 
-        {/* Add button row for Drill */}
         <tr>
           {columns.map((col, colIndex) => (
-            <td key={colIndex}>
+            <td key={colIndex} style={{ width: '16.66%' }}>
               <Button
                 variant="light"
                 radius="full"
@@ -135,4 +165,4 @@ const renderTable = (data, handleDelete, handleClick, highlightedCell) => {
   );
 };
 
-export { renderTable, renderCellContent, Cell };
+export { renderTable, CellContent, Cell };

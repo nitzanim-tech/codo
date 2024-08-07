@@ -5,7 +5,7 @@ import { Grid, Paper, Box } from '@mui/material';
 import { addRowIndices, defaultPractice, deleteItem, addItem } from './tableHandler';
 import savePractice from '../../requests/practice/savePractice';
 import getPractice from '../../requests/practice/getPractice';
-import { renderTable, renderCellContent, Cell } from './PracticeTableElements';
+import { renderTable, Cell } from './PracticeTableElements';
 
 const PracticeTable = ({ app, tasks, unit }) => {
   const [chosenTask, setChosenTask] = useState(null);
