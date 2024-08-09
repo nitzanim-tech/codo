@@ -3,7 +3,7 @@ import NavBar from '../components/NavBar/NavigateBar';
 import { Button, Grid, CircularProgress } from '@mui/material';
 import { useFirebase } from '../util/FirebaseProvider';
 import getAllLessons from '../requests/lessons/getAllLessons';
-import getAllTasks from '../requests/tasks/getAllTasks';
+import getTasksList from '../requests/tasks/getTasksList';
 
 function Dashboard() {
   const { app, userData, isUserLoading } = useFirebase();
@@ -15,7 +15,7 @@ function Dashboard() {
     const fetchLessons = async () => {
       try {
         const allLessons = await getAllLessons({ app, groupId: userData.group.id });
-        const allTasks = await getAllTasks({ app });
+        const allTasks = await getTasksList({ app });
 
         const tasksArray = Object.values(allTasks);
 

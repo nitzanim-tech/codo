@@ -8,7 +8,7 @@ import PracticeTable from '../components/Syllabus/PracticeTable';
 import AddUnitButton from '../components/Syllabus/AddUnitButton';
 import LessonTable from '../components/Syllabus/LessonTable';
 
-import getAllTasks from '../requests/tasks/getAllTasks';
+import getTasksList from '../requests/tasks/getTasksList';
 import getSyllbusAndUnits from '../requests/syllabus/getSyllbusList';
 
 const Syllabus = () => {
@@ -21,22 +21,21 @@ const Syllabus = () => {
 
   useEffect(() => {
     const getSyllabusFromDb = async () => {
-      const syllabusFromDB = await getSyllbusAndUnits({ auth });
+      const syllabusFromDB = await getSyllbusAndUnits();
       console.log({ auth });
       const syllabusList = Object.entries(syllabusFromDB).map(([id, data]) => ({
         id: id,
         name: `${data.program} | ${data.hebYear}`,
         units: data.units,
       }));
-      const tasksFromDB = await getAllTasks({ app });
+      const tasksFromDB = await getTasksList({ app });
       setAllTasks(tasksFromDB);
       setSyllabusList(syllabusList);
     };
     auth && getSyllabusFromDb();
-  }, [auth]);
+  }, [app, auth]);
 
   useEffect(() => {
-    choosenSyllabusId && console.log(syllabusList[choosenSyllabusId].units);
     choosenSyllabusId && setUnits(syllabusList[choosenSyllabusId].units);
   }, [choosenSyllabusId]);
 

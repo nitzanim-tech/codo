@@ -16,20 +16,20 @@ export const FirebaseProvider = ({ children }) => {
   const [isUserLoading, setIsUserLoading] = useState(true); 
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      // if (user) {
-      //   const shouldBeAuthorized = user.email.includes('@nitzanim.tech');
-      //   setIsAuthorized(shouldBeAuthorized);
-      //   const current = await getCurrentUser({ app, id: user.uid });
-      //   setUserData(current);
-      // } else {
-      //   setUserData(null);
-      // }
-      // setIsUserLoading(false);
-    });
-    return () => unsubscribe();
-  }, [auth]);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  //     // if (user) {
+  //     //   const shouldBeAuthorized = user.email.includes('@nitzanim.tech');
+  //     //   setIsAuthorized(shouldBeAuthorized);
+  //     //   const current = await getCurrentUser({ app, id: user.uid });
+  //     //   setUserData(current);
+  //     // } else {
+  //     //   setUserData(null);
+  //     // }
+  //     // setIsUserLoading(false);
+  //   });
+  //   return () => unsubscribe();
+  // }, [auth]);
 
   return (
     <FirebaseContext.Provider value={{ app, auth, userData, isUserLoading, isAuthorized }}>
