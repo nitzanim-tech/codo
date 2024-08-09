@@ -3,9 +3,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Paper, Box } from '@mui/material';
 import { organizeDataByIndex } from './tableHandler';
-import { Tooltip } from '@nextui-org/tooltip';
-
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
+import { Tooltip, Button } from '@nextui-org/react';
 
 const Cell = ({ children, color, highlight, onClick }) => (
   <Paper
@@ -145,7 +143,7 @@ const renderPracticeTable = (data, handleDelete, handleClick, highlightedCell) =
         </tr>
 
         <p style={{ writingMode: 'vertical-rl', color: getColor('drill'), position: 'absolute', marginRight: '-25px' }}>
-           drill |
+          drill |
         </p>
         {Array.from({ length: maxDrillLength }).map((_, rowIndex) => (
           <TableRow
@@ -178,41 +176,5 @@ const renderPracticeTable = (data, handleDelete, handleClick, highlightedCell) =
   );
 };
 
-const renderLessonTable = (data, handleDelete, handleClick, highlightedCell) => {
-  const cellStyle = { width: '16.66%' };
-  const colElements = Array.from({ length: 6 }, (_, index) => <col key={index} style={{ width: '16.66%' }} />);
 
-  return (
-    <table style={{ width: '95%', tableLayout: 'fixed', direction: 'rtl' }}>
-      <colgroup>{colElements}</colgroup>
-      <tbody>
-        <tr key={0}>
-          {Object.entries([data]).map(([id, material]) => (
-            <td key={id} style={cellStyle}>
-              <Cell>
-                <CellContent content={material} handleDelete={handleDelete} />
-              </Cell>
-            </td>
-          ))}
-          <td key={'add'} style={cellStyle}>
-            <Cell>
-              <Dropdown dir="rtl">
-                <DropdownTrigger>
-                  <Button variant="light" radius="full" isIconOnly size="sm">
-                    <AddRoundedIcon />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Action event example" onAction={(key) => alert(key)}>
-                  <DropdownItem key="new">קובץ</DropdownItem>
-                  <DropdownItem key="copy">משימה</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </Cell>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  );
-};
-
-export { renderLessonTable, renderPracticeTable, CellContent, Cell };
+export { renderPracticeTable, CellContent, Cell };

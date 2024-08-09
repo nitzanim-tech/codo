@@ -1,7 +1,7 @@
 import { Tabs, Tab, Divider, Input } from '@nextui-org/react';
 import DevTasksTab from '../components/Dev/DevTasksTab';
 import AddNewTasks from '../components/Dev/addNewTask/AddNewTasks';
-import ManageLessons from '../components/Dev/manageLessons/ManageLessons';
+// import ManageLessons from '../components/Dev/manageLessons/ManageLessons';
 import MiniDrawer from '../components/Dev/TEST';
 import App from '../components/Dev/userTrack/UserTrack';
 
@@ -22,9 +22,9 @@ const DevTeam = () => {
         <Tab key="add" title="משימה חדשה">
           <AddNewTasks />
         </Tab>
-        <Tab key="lessons" title="מפגשים">
+        {/* <Tab key="lessons" title="מפגשים">
           <ManageLessons />
-        </Tab>
+        </Tab> */}
         <Tab key="track" title="מעקב">
           <App />
         </Tab>

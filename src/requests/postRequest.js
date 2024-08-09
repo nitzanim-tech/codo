@@ -1,29 +1,27 @@
 import firebaseConfig from '../../util/firebaseConfig';
 
-const addUnit = async ({ auth, unit }) => {
+const postRequest = async ({ auth, postUrl , object }) => {
   try {
-    const { index, name, syllabus } = unit;
     const apiUrl = firebaseConfig.apiUrl;
     const currentUser = auth.currentUser;
     const idToken = await currentUser.getIdToken(true);
-    const response = await fetch(`${apiUrl}/postUnit`, {
+    const response = await fetch(`${apiUrl}/${postUrl}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${idToken}`,
       },
-      body: { index, name, syllabus },
+      body: JSON.stringify({ ...object }),
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    const newUnitId = await response.json();
-    console.log(newUnitId);
-    return newUnitId;
+    const respondJson = await response.json();
+    return respondJson;
   } catch (error) {
-    console.error('Error adding unit:', error);
+    console.error('Error posting:', error);
     return;
   }
 };
 
-export default addUnit;
+export default postRequest;

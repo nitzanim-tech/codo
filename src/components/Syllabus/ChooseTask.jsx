@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 
-export default function ChooseTask({ tasks, setChosenTask }) {
+export default function ChooseTask({ tasks, setChosenTask, setClicked }) {
   const [mainSubjects, setMainSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState('');
 
@@ -31,7 +31,14 @@ export default function ChooseTask({ tasks, setChosenTask }) {
         Object.entries(tasks)
           .filter(([key, value]) => !selectedSubject || value.mainSubject === selectedSubject)
           .map(([key, value]) => (
-            <div key={key} onClick={() => setChosenTask(value)} style={{ cursor: 'pointer' }}>
+            <div
+              key={key}
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                setChosenTask(value);
+                setClicked(false);
+              }}
+            >
               {value.name}
               <Divider />
             </div>

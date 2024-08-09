@@ -1,18 +1,17 @@
 import firebaseConfig from '../../util/firebaseConfig';
 
-const addUnit = async ({ auth, unit }) => {
+const addUnitResource = async ({ auth, resource }) => {
   try {
-    const { index, name, syllabus } = unit;
     const apiUrl = firebaseConfig.apiUrl;
     const currentUser = auth.currentUser;
     const idToken = await currentUser.getIdToken(true);
-    const response = await fetch(`${apiUrl}/postUnit`, {
+    const response = await fetch(`${apiUrl}/postUnitMaterial`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${idToken}`,
       },
-      body: { index, name, syllabus },
+      body: JSON.stringify({ ...resource }),
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -26,4 +25,4 @@ const addUnit = async ({ auth, unit }) => {
   }
 };
 
-export default addUnit;
+export default addUnitResource;

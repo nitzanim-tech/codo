@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@nextui-org/react';
-import ChooseTask from './ChooseTask';
-import { Grid, Paper, Box } from '@mui/material';
+import { Grid } from '@mui/material';
 import { addRowIndices, defaultPractice, deleteItem, addItem } from './tableHandler';
 import savePractice from '../../requests/practice/savePractice';
 import getPractice from '../../requests/practice/getPractice';
 import { renderPracticeTable, Cell } from './PracticeTableElements';
 
-const PracticeTable = ({ app, tasks, unit }) => {
-  const [chosenTask, setChosenTask] = useState(null);
+const PracticeTable = ({ app, task, unit, setClicked }) => {
   const [practice, setPractice] = useState();
   const [clickedCell, setClickedCell] = useState(null);
 
@@ -25,14 +23,14 @@ const PracticeTable = ({ app, tasks, unit }) => {
   }, [unit, app]);
 
   useEffect(() => {
-    if (chosenTask && clickedCell) {
+    if (task && clickedCell) {
       const newPractice = addItem(practice, clickedCell, chosenTask);
       localStorage.setItem(`practice_${unit}`, JSON.stringify(newPractice));
       setPractice(newPractice);
       setChosenTask(null);
       setClickedCell(null);
     }
-  }, [chosenTask, clickedCell, practice]);
+  }, [task, clickedCell, practice]);
 
   const handleDelete = (content) => {
     const updatedPractice = deleteItem(practice, content);
@@ -40,6 +38,7 @@ const PracticeTable = ({ app, tasks, unit }) => {
   };
 
   const handleClick = (column, type, row = null) => {
+    setClicked(true);
     setClickedCell({ column, type, row });
   };
 
@@ -54,23 +53,14 @@ const PracticeTable = ({ app, tasks, unit }) => {
   };
 
   return (
-    <Grid container spacing={1} sx={{ height: '20%' }}>
-      <Grid item xs={3}>
-        {clickedCell && (
-          <Cell>
-            <ChooseTask tasks={tasks} setChosenTask={setChosenTask} />
-          </Cell>
-        )}
-      </Grid>
-      <Grid item xs={9}>
-        <Cell>
-          <p>תרגילים</p>
-          {practice && renderPracticeTable(practice, handleDelete, handleClick, clickedCell)}
-          <Button style={{ marginTop: '30px' }} onClick={handleSave}>
-            שמור
-          </Button>
-        </Cell>
-      </Grid>
+    <Grid item>
+      <Cell>
+        <p>תרגילים</p>
+        {practice && renderPracticeTable(practice, handleDelete, handleClick, clickedCell)}
+        <Button style={{ marginTop: '30px' }} onClick={handleSave}>
+          שמור
+        </Button>
+      </Cell>
     </Grid>
   );
 };
