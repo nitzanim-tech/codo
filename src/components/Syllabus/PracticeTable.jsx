@@ -24,10 +24,9 @@ const PracticeTable = ({ app, task, unit, setClicked }) => {
 
   useEffect(() => {
     if (task && clickedCell) {
-      const newPractice = addItem(practice, clickedCell, chosenTask);
+      const newPractice = addItem(practice, clickedCell, task);
       localStorage.setItem(`practice_${unit}`, JSON.stringify(newPractice));
       setPractice(newPractice);
-      setChosenTask(null);
       setClickedCell(null);
     }
   }, [task, clickedCell, practice]);

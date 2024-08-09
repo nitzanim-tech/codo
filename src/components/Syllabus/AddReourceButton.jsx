@@ -6,27 +6,19 @@ import { SuccessMessage, ErrorMessage } from '../general/Messages';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 
 import AddRoundedIcon from '@mui/icons-material/Add';
-import SlideshowIcon from '@mui/icons-material/Slideshow';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
-import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
+import postRequest from '../../requests/anew/postRequest';
+import { ResourcesIcons } from './ResoucresIcons';
 
-function AddUnitReource({ auth, unitId, syllabusId, index }) {
+function AddReource({ auth, unitId, syllabusId, index }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [choosenFormat, setChoosenFormat] = useState();
-  const [choosenTask, setChoosenTask] = useState();
   const [showError, setShowError] = useState(false);
   const [showSent, setShowSent] = useState(false);
   const [linkInput, setLinkInput] = useState('');
   const [sourceName, setSourceName] = useState('');
 
   const SelectFormat = () => {
-    const formatOptions = [
-      { format: 'ppt', color: '#FAE233', Icon: SlideshowIcon },
-      { format: 'pdf', color: '#BF1E2E', Icon: PictureAsPdfIcon },
-      { format: 'zip', color: '#386641', Icon: FolderZipRoundedIcon },
-      { format: 'webLink', color: '#8C7AA9', Icon: PublicRoundedIcon },
-    ];
+    const formatOptions = ['ppt', 'pdf', 'zip', 'webLink'];
 
     return (
       <Select
@@ -35,9 +27,9 @@ function AddUnitReource({ auth, unitId, syllabusId, index }) {
         onChange={(e) => setChoosenFormat(e.target.value)}
         selectedKeys={[choosenFormat]}
       >
-        {formatOptions.map(({ format, color, Icon }) => (
-          <SelectItem key={format} startContent={<Icon style={{ color }} />}>
-            {format}
+        {formatOptions.map((format) => (
+          <SelectItem key={format} startContent={<ResourcesIcons type={format} />}>
+            {format} {console.log(format)}
           </SelectItem>
         ))}
       </Select>
@@ -48,7 +40,6 @@ function AddUnitReource({ auth, unitId, syllabusId, index }) {
     setShowError(false);
     setShowSent(false);
     setChoosenFormat();
-    setChoosenTask('');
     setLinkInput('');
     setSourceName('');
   };
@@ -83,7 +74,7 @@ function AddUnitReource({ auth, unitId, syllabusId, index }) {
               <ModalBody>
                 <SelectFormat />
 
-                {['ppt', 'pdf', 'zip', 'webLink'].includes(choosenFormat) && (
+                {formatOptions.includes(choosenFormat) && (
                   <Input
                     placeholder="לינק"
                     variant="bordered"
@@ -91,18 +82,26 @@ function AddUnitReource({ auth, unitId, syllabusId, index }) {
                     onChange={(e) => setLinkInput(e.target.value)}
                   />
                 )}
+                {linkInput && (
+                  <Input
+                    label="שם האלמנט"
+                    variant="bordered"
+                    value={sourceName}
+                    onChange={(e) => setSourceName(e.target.value)}
+                  />
+                )}
               </ModalBody>
               <ModalFooter>
+                {showError && <ErrorMessage />}
+                {showSent && <SuccessMessage text={'האלמנט נוסף בהצלחה'} />}
                 <Button
-                  isDisabled={!choosenFormat || (!linkInput && !choosenTask)}
+                  isDisabled={!choosenFormat || !linkInput || !sourceName}
                   variant="ghost"
                   radius="full"
                   onClick={onSaveClick}
                 >
                   שמור
                 </Button>
-                {showError && <ErrorMessage />}
-                {showSent && <SuccessMessage text={'האלמנט נוסף בהצלחה'} />}
               </ModalFooter>
             </>
           )}
@@ -112,4 +111,4 @@ function AddUnitReource({ auth, unitId, syllabusId, index }) {
   );
 }
 
-export default AddUnitReource;
+export default AddReource;

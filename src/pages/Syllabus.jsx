@@ -21,10 +21,11 @@ const Syllabus = () => {
     const getSyllabusFromDb = async () => {
       const syllabusFromDB = await getSyllbusAndUnits();
       const syllabusList = Object.entries(syllabusFromDB).map(([id, data]) => ({
-        id: id,
+        id: data.id,
         name: `${data.program} | ${data.hebYear}`,
         units: data.units,
       }));
+      console.log(syllabusList);
       const tasksFromDB = await getTasksList({ app });
       setAllTasks(tasksFromDB);
       setSyllabusList(syllabusList);
@@ -33,7 +34,12 @@ const Syllabus = () => {
   }, [app, auth]);
 
   useEffect(() => {
-    choosenSyllabusId && setUnits(syllabusList[choosenSyllabusId].units);
+    if (choosenSyllabusId) {
+      const selectedSyllabus = syllabusList.find((syllabus) => syllabus.id === choosenSyllabusId);
+      if (selectedSyllabus) {
+        setUnits(selectedSyllabus.units);
+      }
+    }
   }, [choosenSyllabusId]);
 
   return (
@@ -84,7 +90,7 @@ const Syllabus = () => {
                       Object.entries(units)
                         .sort(([, unitA], [, unitB]) => unitA.index - unitB.index)
                         .map(([id, unit]) => (
-                          <ListboxItem key={id} value={unit.name} dir="rtl">
+                          <ListboxItem key={unit.id} value={unit.name} dir="rtl">
                             {unit.name}
                           </ListboxItem>
                         ))
