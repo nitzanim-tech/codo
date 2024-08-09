@@ -1,32 +1,27 @@
 import firebaseConfig from '../../util/firebaseConfig';
 
-const addUnit = async ({ auth, unit }) => {
+const getSyllbusAndUnits = async ({ auth }) => {
   try {
     const apiUrl = firebaseConfig.apiUrl;
     const currentUser = auth.currentUser;
     const idToken = await currentUser.getIdToken(true);
-    const response = await fetch(`${apiUrl}/postUnit`, {
-      method: 'POST',
+    const response = await fetch(`${apiUrl}/getSyllabusListWithUnits`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${idToken}`,
-      },
-      body: {
-        index: unit.index,
-        name: unit.name,
-        syllabus: unit.name,
       },
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    const newUnitId = await response.json();
-    console.log(newUnitId);
-    return newUnitId;
+    const syllbus = await response.json();
+    console.log(syllbus);
+    return syllbus;
   } catch (error) {
-    console.error('Error adding unit:', error);
-    return;
+    console.error('Error getting data:', error);
+    return [];
   }
 };
 
-export default addUnit;
+export default getSyllbusAndUnits;

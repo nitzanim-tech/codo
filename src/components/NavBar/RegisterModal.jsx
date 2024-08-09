@@ -6,7 +6,7 @@ import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import GoogleIcon from '@mui/icons-material/Google';
 import { registerUserInDB } from '../../requests/registerUser';
-import getAllSyllbus from '../../requests/syllabus/getAllSyllbus';
+import getAllSyllbus from '../../requests/syllabus/getSyllbusList';
 
 const RegisterModal = ({ app, auth, open, setOpen }) => {
   const [name, setName] = useState('');

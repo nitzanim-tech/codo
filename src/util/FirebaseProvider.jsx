@@ -18,15 +18,15 @@ export const FirebaseProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const shouldBeAuthorized = user.email.includes('@nitzanim.tech');
-        setIsAuthorized(shouldBeAuthorized);
-        const current = await getCurrentUser({ app, id: user.uid });
-        setUserData(current);
-      } else {
-        setUserData(null);
-      }
-      setIsUserLoading(false);
+      // if (user) {
+      //   const shouldBeAuthorized = user.email.includes('@nitzanim.tech');
+      //   setIsAuthorized(shouldBeAuthorized);
+      //   const current = await getCurrentUser({ app, id: user.uid });
+      //   setUserData(current);
+      // } else {
+      //   setUserData(null);
+      // }
+      // setIsUserLoading(false);
     });
     return () => unsubscribe();
   }, [auth]);

@@ -4,11 +4,12 @@ import NavBar from '../components/NavBar/NavigateBar';
 
 import './Home.css';
 import { Button, Grid, Card } from '@mui/material';
-import { Accordion, AccordionItem, Tooltip, Badge, ScrollShadow, Select, SelectItem } from '@nextui-org/react';
+import { Accordion, AccordionItem, ScrollShadow, Select, SelectItem } from '@nextui-org/react';
 import TaskCard from '../components/Home/TaskCard';
 import { useFirebase } from '../util/FirebaseProvider';
 import { CircularProgress } from '@nextui-org/react';
 import getAllLessons from '../requests/lessons/getAllLessons';
+import { getUnitsBySyllabus } from '../requests/units/getUnits';
 
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
@@ -25,12 +26,16 @@ const Levels = [
 function Home() {
   const { app, userData, isUserLoading } = useFirebase();
   const [lessons, setLessons] = useState({});
+  const [units, setUnits] = useState();
 
   useEffect(() => {
     const fetchLessons = async () => {
       const allLessons = await getAllLessons({ app, groupId: userData.group.id });
       const clearedLessons = clearUnvisable(allLessons);
       setLessons(clearedLessons);
+      const syllabusUnits = await getUnitsBySyllabus({ app, syllabusId: userData.syllabus });
+      setUnits(syllabusUnits);
+      console.log(syllabusUnits);
     };
 
     userData && fetchLessons();
@@ -45,20 +50,18 @@ function Home() {
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '30px' }}>
           <CircularProgress />
         </div>
-      ) : userData ? (
+      ) : units ? (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
             <Grid container spacing={1} columns={3} rows={1}>
               <Grid item style={{ width: '55%', margin: '2%' }}>
                 <ScrollShadow className="h-[550px]" size={5}>
                   <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
-                    {Object.entries(lessons).map(([lessonId, lessonData]) => (
-                      <AccordionItem
-                        key={`${lessonId}`}
-                        aria-label={`Accordion ${lessonData.lessonName}`}
-                        title={lessonData.lessonName}
-                      >
-                        {Object.entries(lessonData.elements).map(([elementId, element]) =>
+                    {Object.entries(units)
+                      .sort(([, unitA], [, unitB]) => unitA.index - unitB.index)
+                      .map(([id, unit]) => (
+                        <AccordionItem key={`${id}`} aria-label={`Accordion ${unit.name}`} title={unit.name}>
+                          {/* {Object.entries(unit.elements).map(([elementId, element]) =>
                           element.type === 'task' ? (
                             <TaskCard
                               taskId={elementId}
@@ -70,15 +73,14 @@ function Home() {
                           ) : (
                             <FileCard file={element} />
                           ),
-                        )}
-                      </AccordionItem>
-                    ))}
+                        )} */}
+                        </AccordionItem>
+                      ))}
                   </Accordion>
                 </ScrollShadow>
               </Grid>
               <Grid item style={{ width: '35%' }}>
                 <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
-                {/* <h1 style={{ margin: '40px' }}> כמה חריף לשים? {userData.name}</h1> */}
                 <Select
                   items={Levels}
                   label="כמה חריף לשים"
@@ -95,7 +97,12 @@ function Home() {
 
                         <div style={{ display: 'flex', justifyContent: 'left' }}>
                           {Array.from({ length: level.id + 1 }).map((index) => (
-                            <img src={spicyIcon} alt="spicyIcon" style={{ width: '20px', height: '20px' }} />
+                            <img
+                              key={`${level.name}-${index}`}
+                              src={spicyIcon}
+                              alt="spicyIcon"
+                              style={{ width: '20px', height: '20px' }}
+                            />
                           ))}
                         </div>
                       </div>

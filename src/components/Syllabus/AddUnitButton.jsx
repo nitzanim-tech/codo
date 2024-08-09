@@ -5,7 +5,7 @@ import { Modal, ModalHeader, ModalFooter, ModalContent, ModalBody } from '@nextu
 import addUnit from '../../requests/units/addUnit';
 import { SuccessMessage, ErrorMessage } from '../general/Messages';
 
-const AddUnitButton = ({ app, syllabus, length, setUnits }) => {
+const AddUnitButton = ({ auth, syllabus, length, setUnits }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [showError, setShowError] = useState(false);
   const [showSent, setShowSent] = useState(false);
@@ -13,7 +13,7 @@ const AddUnitButton = ({ app, syllabus, length, setUnits }) => {
 
   const onAddUnitClick = async () => {
     const newUnit = { name: unitName, syllabus, index: length };
-    const success = await addUnit({ app, unit: newUnit });
+    const success = await addUnit({ auth, unit: newUnit });
     if (success) {
       setShowSent(true);
       setUnits((prevUnits) => ({
