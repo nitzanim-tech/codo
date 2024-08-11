@@ -3,23 +3,21 @@ import { Grid } from '@mui/material';
 import { defaultPractice, deleteItem } from './tableHandler';
 import savePractice from '../../requests/practice/savePractice';
 import { Cell, CellContent } from './PracticeTableElements';
-import AddReource from './AddReourceButton';
+import AddReource from './AddResourceButton';
 import { useFirebase } from '../../util/FirebaseProvider';
 import getRequest from '../../requests/anew/getRequest';
 import { CircularProgress } from '@nextui-org/react';
-import { ResourcesIcons } from './ResoucresIcons';
 
 const ResourcesTable = ({ task, unit, syllabus, setClicked }) => {
   const { auth } = useFirebase();
+  console.log({task})
   const [resources, setResources] = useState();
   const [clickedCell, setClickedCell] = useState();
 
   useEffect(() => {
     const fetchPractice = async () => {
       const recorcesFromLocalstroge = localStorage.getItem(`resources_${unit}`);
-      console.log(unit);
       const ResurcesFromDb = await getRequest({ getUrl: `getResourcesByUnit/?unit=${unit}` });
-      console.log({ ResurcesFromDb });
       if (recorcesFromLocalstroge) setResources(JSON.parse(recorcesFromLocalstroge));
       else if (ResurcesFromDb) setResources(ResurcesFromDb);
       else setResources([]);
@@ -31,7 +29,6 @@ const ResourcesTable = ({ task, unit, syllabus, setClicked }) => {
   // useEffect(() => {
   //   if (chosenTask && clickedCell) {
   //     const newPractice = addItem(practice, clickedCell, chosenTask);
-  //     localStorage.setItem(`lesson_${unit}`, JSON.stringify(newPractice));
   //     setLesson(newPractice);
   //     setChosenTask(null);
   //     setClickedCell(null);
@@ -73,14 +70,13 @@ const ResourcesTable = ({ task, unit, syllabus, setClicked }) => {
                 {Object.entries(resources).map(([id, resource]) => (
                   <td key={id} style={cellStyle}>
                     <Cell>
-                      <ResourcesIcons type={resource.type} />
                       <CellContent content={resource} handleDelete={handleDelete} />
                     </Cell>
                   </td>
                 ))}
                 <td key={'add'} style={cellStyle}>
                   <Cell>
-                    <AddReource auth={auth} unitId={unit} syllabusId={syllabus} index={0} />
+                    <AddReource auth={auth} unitId={unit} syllabusId={syllabus} index={0} setClicked={setClicked}/>
                   </Cell>
                 </td>
               </tr>

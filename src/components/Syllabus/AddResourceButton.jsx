@@ -9,7 +9,9 @@ import AddRoundedIcon from '@mui/icons-material/Add';
 import postRequest from '../../requests/anew/postRequest';
 import { ResourcesIcons } from './ResoucresIcons';
 
-function AddReource({ auth, unitId, syllabusId, index }) {
+const formatOptions = ['ppt', 'pdf', 'zip', 'webLink'];
+
+function AddReource({ auth, unitId, syllabusId, index, setClicked }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [choosenFormat, setChoosenFormat] = useState();
   const [showError, setShowError] = useState(false);
@@ -18,8 +20,6 @@ function AddReource({ auth, unitId, syllabusId, index }) {
   const [sourceName, setSourceName] = useState('');
 
   const SelectFormat = () => {
-    const formatOptions = ['ppt', 'pdf', 'zip', 'webLink'];
-
     return (
       <Select
         label="פורמט"
@@ -58,11 +58,13 @@ function AddReource({ auth, unitId, syllabusId, index }) {
             <AddRoundedIcon />
           </Button>
         </DropdownTrigger>
-        <DropdownMenu aria-label="Action event example">
-          <DropdownItem key="new" onPress={onOpen}>
+        <DropdownMenu aria-label="selectResourceToAdd">
+          <DropdownItem key="file" onPress={onOpen}>
             קובץ
           </DropdownItem>
-          <DropdownItem key="copy">משימה</DropdownItem>
+          <DropdownItem key="task" onPress={setClicked}>
+            משימה
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
 

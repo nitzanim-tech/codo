@@ -1,15 +1,3 @@
-const practiceTemplate = [
-  { id: 'asda', index: 0, name: 'האם', type: 'main' },
-  { id: 'sdda', index: 1, name: 'שלום ', type: 'main' },
-  { id: 'dfgh', index: 2, name: 'שישי', type: 'drill' },
-  { id: 'daas', index: 3, name: 'עולם', type: 'pre' },
-  { id: null, index: 4, name: '', type: 'main' },
-  { id: 'qwer', index: 5, name: 'אני רוצה', type: 'main' },
-  { id: 'tyui', index: 6, name: 'תכלס', type: 'drill' },
-  { id: 'ghjk', index: 7, name: 'מתי אתם חוזרים', type: 'drill' },
-  { id: null, index: 8, name: '', type: 'main' },
-  { id: 'yuio', index: 9, name: 'לעבוד', type: 'main' },
-];
 const defaultPractice = [
   { id: null, index: 0, name: '', type: 'main' },
   { id: null, index: 1, name: '', type: 'main' },
@@ -67,6 +55,22 @@ const organizeDataByIndex = (template) => {
   return organizedData;
 };
 
+const movePreDown = (organizedData) => {
+  const columns = Object.values(organizedData);
+
+  const maxPreLength = columns.reduce((max, column) => {
+    return Math.max(max, column.pre.length);
+  }, 0);
+
+  columns.forEach((column) => {
+    column.pre.forEach((preItem, index) => {
+      const newRowIndex = maxPreLength - column.pre.length + index;
+      preItem.row = newRowIndex;
+    });
+  });
+
+  return organizedData;
+};
 
 const movePracticeListIndexes = (practice, startIndex, change) => {
   for (let i = startIndex; i < practice.length; i++) {
@@ -99,7 +103,6 @@ const deleteItem = (practice, content) => {
 };
 
 const addItem = (practice, clickedCell, chosenTask) => {
-  console.log({ practice, clickedCell });
   let index = 0;
   let mainObjectFound = 0;
   while (mainObjectFound < clickedCell.column) {
