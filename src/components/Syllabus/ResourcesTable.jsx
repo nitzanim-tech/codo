@@ -10,16 +10,13 @@ import { CircularProgress } from '@nextui-org/react';
 
 const ResourcesTable = ({ task, unit, syllabus, setClicked }) => {
   const { auth } = useFirebase();
-  console.log({task})
   const [resources, setResources] = useState();
   const [clickedCell, setClickedCell] = useState();
 
   useEffect(() => {
     const fetchPractice = async () => {
-      const recorcesFromLocalstroge = localStorage.getItem(`resources_${unit}`);
       const ResurcesFromDb = await getRequest({ getUrl: `getResourcesByUnit/?unit=${unit}` });
-      if (recorcesFromLocalstroge) setResources(JSON.parse(recorcesFromLocalstroge));
-      else if (ResurcesFromDb) setResources(ResurcesFromDb);
+      if (ResurcesFromDb) setResources(ResurcesFromDb);
       else setResources([]);
     };
 

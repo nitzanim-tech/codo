@@ -78,69 +78,55 @@ const CellContent = ({ content, handleDelete, col }) => (
   </>
 );
 
-const TableRow = ({ columns, rowIndex, type, handleDelete, handleClick, highlightedCell }) => {
-  const maxColumns = columns.reduce((acc, col) => {
-    Object.keys(col).forEach((key) => {
-      acc[key] = Math.max(acc[key] || 0, col[key].length);
-    });
-    return acc;
-  }, {});
-
-  return (
-    <tr key={`${type}-${rowIndex}`}>
-      {columns.map((col, colIndex) => {
-        console.log({ columns });
-        console.log({ colIndex, rowIndex, max: maxColumns[type], colTypeLen: col[type].length, colType: col[type] });
-        const cellIndex = rowIndex;
-        //  type === 'pre' ? maxColumns[type] - col[type].length + rowIndex  : rowIndex;
-        return (
-          <td key={colIndex} style={{ width: '16.66%' }}>
-            {col[type][cellIndex] && (
-              <Cell
-                color={col[type][cellIndex] ? getColor(type) : null}
-                highlight={
-                  highlightedCell &&
-                  highlightedCell.column === colIndex &&
-                  highlightedCell.type === type &&
-                  highlightedCell.row === rowIndex
-                }
-                onClick={() => handleClick(colIndex, type, rowIndex)}
-              >
-                <CellContent content={col[type][cellIndex]} handleDelete={handleDelete} col={colIndex} />
-              </Cell>
-            )}
-          </td>
-        );
-      })}
-    </tr>
-  );
-};
-
 const createMatrix = (columns) => {
-  const maxPreLength = Math.max(...columns.map((col) => col.pre.length));
-  const maxDrillLength = Math.max(...columns.map((col) => col.drill.length));
-  const matrix = Array.from({ length: maxPreLength + maxDrillLength + 2 }, () => Array(6).fill(null)); // Adjusted for button rows
+  const maxPreLength = Math.max(...columns.map((col) => col.pre?.length || 0));
+  const maxDrillLength = Math.max(...columns.map((col) => col.drill?.length || 0));
 
+  const matrix = Array.from({ length: maxPreLength + maxDrillLength + 3 }, () => Array(6).fill(null));
+  
   columns.forEach((col, colIndex) => {
-    const preButtonRow = maxPreLength - col.pre.length;
-    matrix[preButtonRow][colIndex] = { type: 'button', position: 'before' };
+    if (colIndex < 0 || colIndex >= matrix[0].length) return;
 
-    col.pre.forEach((item, index) => {
-      const rowIndex = maxPreLength - col.pre.length + index + 1;
-      matrix[rowIndex][colIndex] = { type: 'pre', content: item };
+    const lastColumn = colIndex > 0 ? Object.values(columns[colIndex - 1]).flat() : null;
+    let lastIndex = lastColumn? lastColumn[lastColumn.length - 1]?.index : 0;
+    const preButtonRow = maxPreLength - (col.pre?.length || 0);
+    matrix[preButtonRow][colIndex] = { type: 'button', position: 'before', lastIndex };
+
+    col.pre?.forEach((item, index) => {
+      const rowIndex = preButtonRow + index + 1;
+      if (rowIndex < matrix.length) {
+        matrix[rowIndex][colIndex] = { type: 'pre', content: item };
+      }
     });
+
     matrix[maxPreLength + 1][colIndex] = { type: 'main', content: col.main };
-    col.drill.forEach((item, index) => {
+
+    col.drill?.forEach((item, index) => {
       const rowIndex = maxPreLength + 2 + index;
-      matrix[rowIndex][colIndex] = { type: 'drill', content: item };
+      if (rowIndex < matrix.length) {
+        matrix[rowIndex][colIndex] = { type: 'drill', content: item };
+      }
     });
 
-    // Add button after the last 'drill'
-    const drillButtonRow = maxPreLength + 1 + col.drill.length + (col.drill.length ? 0 : 1);
-    matrix[drillButtonRow][colIndex] = { type: 'button', position: 'after' };
+    const thisColumn = Object.values(col).flat();
+    lastIndex = thisColumn[thisColumn.length - 1]?.index || lastIndex;
+    const drillButtonRow = maxPreLength + 2 + col.drill?.length || maxPreLength + 2;
+    if (drillButtonRow < matrix.length) {
+      matrix[drillButtonRow][colIndex] = { type: 'button', position: 'after', lastIndex };
+    }
   });
 
   return matrix;
+};
+
+
+const changeExistPractice = (index) => {
+  console.log(index);
+  // id, index, name
+};
+
+const addNewPractice = (index) => {
+  console.log(index);
 };
 
 const renderMatrixTable = (data, handleDelete, handleClick, highlightedCell) => {
@@ -175,7 +161,7 @@ const renderMatrixTable = (data, handleDelete, handleClick, highlightedCell) => 
                         variant="light"
                         radius="full"
                         isIconOnly
-                        onClick={() => handleClick(colIndex, 'drill', maxDrillLength)}
+                        onClick={() => addNewPractice(cell.lastIndex)}
                         size="sm"
                       >
                         <AddRoundedIcon color={cell.position === 'before' ? 'error' : 'primary'} />
@@ -190,7 +176,7 @@ const renderMatrixTable = (data, handleDelete, handleClick, highlightedCell) => 
                           highlightedCell.type === cell.type &&
                           highlightedCell.row === rowIndex
                         }
-                        onClick={() => handleClick(colIndex, cell.type, rowIndex)}
+                        onClick={() => changeExistPractice(cell.content)}
                       >
                         <CellContent content={cell.content} handleDelete={handleDelete} col={colIndex} />
                       </Cell>

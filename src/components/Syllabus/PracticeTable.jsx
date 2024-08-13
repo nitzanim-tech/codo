@@ -3,24 +3,23 @@ import { Button } from '@nextui-org/react';
 import { Grid } from '@mui/material';
 import { addRowIndices, defaultPractice, deleteItem, addItem } from './tableHandler';
 import savePractice from '../../requests/practice/savePractice';
-import getPractice from '../../requests/practice/getPractice';
 import { renderMatrixTable, Cell } from './PracticeTableElements';
 
-const PracticeTable = ({ app, task, unit, setClicked }) => {
+const PracticeTable = ({ task, unit, setClicked }) => {
   const [practice, setPractice] = useState();
   const [clickedCell, setClickedCell] = useState(null);
 
   useEffect(() => {
     const fetchPractice = async () => {
-      const savedPractice = localStorage.getItem(`practice_${unit}`);
-      const practiceFromDb = await getPractice({ app, unit });
-      if (savedPractice) setPractice(addRowIndices(JSON.parse(savedPractice)));
-      else if (practiceFromDb) setPractice(addRowIndices(practiceFromDb));
+      const practiceFromDb = null
+      // await getRequest({ getUrl: `getResourcesByUnit/?unit=${unit}` });
+
+      if (practiceFromDb) setPractice(addRowIndices(practiceFromDb));
       else setPractice(addRowIndices(defaultPractice));
     };
 
     fetchPractice();
-  }, [unit, app]);
+  }, [unit]);
 
   useEffect(() => {
     if (task && clickedCell) {

@@ -25,7 +25,6 @@ const Syllabus = () => {
         name: `${data.program} | ${data.hebYear}`,
         units: data.units,
       }));
-      console.log(syllabusList);
       const tasksFromDB = await getTasksList({ app });
       setAllTasks(tasksFromDB);
       setSyllabusList(syllabusList);

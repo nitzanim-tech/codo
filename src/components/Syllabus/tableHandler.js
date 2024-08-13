@@ -1,11 +1,26 @@
+// const defaultPractice = [
+//   { id: null, index: 0, name: '', type: 'main' },
+//   { id: null, index: 1, name: '', type: 'main' },
+//   { id: null, index: 2, name: '', type: 'main' },
+//   { id: null, index: 3, name: '', type: 'main' },
+//   { id: null, index: 4, name: '', type: 'main' },
+//   { id: null, index: 5, name: '', type: 'main' },
+// ];
 const defaultPractice = [
   { id: null, index: 0, name: '', type: 'main' },
-  { id: null, index: 1, name: '', type: 'main' },
-  { id: null, index: 2, name: '', type: 'pre' },
-  { id: null, index: 3, name: '', type: 'main' },
+  { id: 'sasa', index: 1, name: 'sasa', type: 'drill' },
+  { id: 'mmnkk', index: 2, name: 'mmnkk', type: 'drill' },
+  { id: 'mmnskk', index: 3, name: 'mmnskk', type: 'pre' },
+
   { id: null, index: 4, name: '', type: 'main' },
-  { id: null, index: 5, name: '', type: 'main' },
+
+  { id: 'asdas', index: 5, name: 'asdas', type: 'pre' },
   { id: null, index: 6, name: '', type: 'main' },
+  { id: null, index: 7, name: '', type: 'main' },
+  { id: null, index: 8, name: '', type: 'main' },
+  { id: 'mmnkk', index: 9, name: 'mmnkk', type: 'drill' },
+
+  { id: null, index: 10, name: '', type: 'main' },
 ];
 
 const addRowIndices = (template) => {
@@ -50,23 +65,6 @@ const organizeDataByIndex = (template) => {
       }
       organizedData[columnIndex - 1].drill.push(item);
     }
-  });
-
-  return organizedData;
-};
-
-const movePreDown = (organizedData) => {
-  const columns = Object.values(organizedData);
-
-  const maxPreLength = columns.reduce((max, column) => {
-    return Math.max(max, column.pre.length);
-  }, 0);
-
-  columns.forEach((column) => {
-    column.pre.forEach((preItem, index) => {
-      const newRowIndex = maxPreLength - column.pre.length + index;
-      preItem.row = newRowIndex;
-    });
   });
 
   return organizedData;
