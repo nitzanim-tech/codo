@@ -120,21 +120,19 @@ const createMatrix = (columns) => {
 };
 
 
-const changeExistPractice = (index) => {
-  console.log(index);
-  // id, index, name
+
+const handleCellClick = (cell, setClicked) => {
+  if (cell.type == 'button') {
+    const newType = cell.position == 'before' ? 'pre' : 'drill';
+    setClicked({ table: 'practice', action: 'add', type: newType, index: cell.lastIndex });
+  } else setClicked({ action: 'update', table: 'practice', type: cell.type, index: cell.index });
 };
 
-const addNewPractice = (index) => {
-  console.log(index);
-};
-
-const renderMatrixTable = (data, handleDelete, handleClick, highlightedCell) => {
+const renderMatrixTable = (data, handleDelete, setClicked, clicked) => {
   const organizedData = organizeDataByIndex(data);
   const columns = Array.from({ length: 6 }, (_, i) => organizedData[i] || { pre: [], main: null, drill: [] });
 
   const matrix = createMatrix(columns);
-
   return (
     <table style={{ width: '95%', tableLayout: 'fixed', direction: 'rtl' }}>
       <tbody>
@@ -161,7 +159,7 @@ const renderMatrixTable = (data, handleDelete, handleClick, highlightedCell) => 
                         variant="light"
                         radius="full"
                         isIconOnly
-                        onClick={() => addNewPractice(cell.lastIndex)}
+                        onClick={() => handleCellClick(cell, setClicked)}
                         size="sm"
                       >
                         <AddRoundedIcon color={cell.position === 'before' ? 'error' : 'primary'} />
@@ -171,12 +169,9 @@ const renderMatrixTable = (data, handleDelete, handleClick, highlightedCell) => 
                       <Cell
                         color={getColor(cell.type)}
                         highlight={
-                          highlightedCell &&
-                          highlightedCell.column === colIndex &&
-                          highlightedCell.type === cell.type &&
-                          highlightedCell.row === rowIndex
+                          clicked && clicked.index === cell.content.index && clicked.type === cell.content.type
                         }
-                        onClick={() => changeExistPractice(cell.content)}
+                        onClick={() => handleCellClick(cell.content, setClicked)}
                       >
                         <CellContent content={cell.content} handleDelete={handleDelete} col={colIndex} />
                       </Cell>

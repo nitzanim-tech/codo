@@ -7,14 +7,14 @@ import { Cell } from './PracticeTableElements';
 
 const UnitTables = ({ tasks, unit, syllabus }) => {
   const [chosenTask, setChosenTask] = useState(null);
-  const [clicked, setClicked] = useState(false);
+  const [clicked, setClicked] = useState();
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={3}>
         {clicked && (
           <Cell>
-            <ChooseTask tasks={tasks} setChosenTask={setChosenTask} setClicked={setClicked} />
+            <ChooseTask tasks={tasks} unit={unit} clicked={clicked} setClicked={setClicked} />
           </Cell>
         )}
       </Grid>
@@ -24,7 +24,13 @@ const UnitTables = ({ tasks, unit, syllabus }) => {
             <ResourcesTable task={chosenTask} unit={unit} syllabus={syllabus} setClicked={setClicked} />
           </Grid>
           <Grid item>
-            <PracticeTable task={chosenTask} unit={unit} syllabus={syllabus} setClicked={setClicked} />
+            <PracticeTable
+              task={chosenTask}
+              unit={unit}
+              syllabus={syllabus}
+              setClicked={setClicked}
+              clicked={clicked}
+            />
           </Grid>
         </Grid>
       </Grid>

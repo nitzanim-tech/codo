@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
-
-export default function ChooseTask({ tasks, setChosenTask, setClicked }) {
+import postRequest from '../../requests/anew/postRequest';
+export default function ChooseTask({ tasks, unit, clicked, setClicked }) {
   const [mainSubjects, setMainSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState('');
 
@@ -15,6 +15,19 @@ export default function ChooseTask({ tasks, setChosenTask, setClicked }) {
       setMainSubjects([...mainSubjectsSet]);
     }
   }, [tasks]);
+
+  const onChooseClick = async (value) => {
+    const newPractice = {
+      index: clicked.index,
+      name: value.name,
+      unitId: unit,
+      type: clicked.type,
+      taskId: value.id,
+    };
+    const newId = await postRequest({ auth: null, postUrl: 'postPractice', object: newPractice });
+    console.log({newId});
+    setClicked(false);
+  };
 
   return (
     <div style={{ width: '100%', textAlign: 'right', direction: 'rtl' }}>
@@ -35,8 +48,7 @@ export default function ChooseTask({ tasks, setChosenTask, setClicked }) {
               key={key}
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                setChosenTask(value);
-                setClicked(false);
+                onChooseClick(value);
               }}
             >
               {value.name}
