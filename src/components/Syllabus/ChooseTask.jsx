@@ -5,7 +5,7 @@ import postRequest from '../../requests/anew/postRequest';
 export default function ChooseTask({ tasks, unit, clicked, setClicked, addItem }) {
   const [mainSubjects, setMainSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState('');
-console.log(addItem)
+
   useEffect(() => {
     if (tasks) {
       const mainSubjectsSet = new Set(
@@ -17,7 +17,7 @@ console.log(addItem)
     }
   }, [tasks]);
 
-  const onChooseClick = async (value) => {
+  const addPratice = async (value) => {
     try {
       let postUrl;
       const newPractice = {
@@ -29,17 +29,41 @@ console.log(addItem)
       };
 
       if (clicked.action === 'update') {
+        newPractice['id'] = clicked.id;
         postUrl = 'updatePractice';
       } else {
         postUrl = 'postPractice';
       }
 
       newPractice['id'] = await postRequest({ auth: null, postUrl, object: newPractice });
-      addItem(newPractice);
-      setClicked(false);
+      if (newPractice.id) addItem(newPractice);
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const addResource = async (value) => {
+    try {
+      const newResource = {
+        index: clicked.index,
+        name: value.name,
+        unitId: unit,
+        type: 'task',
+        link: value.id,
+      };
+
+      newResource['id'] = await postRequest({ auth: null, postUrl: 'postUnitResource', object: newResource });
+      if (newResource.id) addItem(newResource);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const onChooseClick = (value) => {
+    if (clicked.table == 'practice') addPratice(value);
+    else addResource(value);
+
+    setClicked(false);
   };
 
   return (

@@ -11,7 +11,7 @@ import { ResourcesIcons } from './ResoucresIcons';
 
 const formatOptions = ['ppt', 'pdf', 'zip', 'webLink'];
 
-function AddReource({ auth, unitId, syllabusId, index, setClicked }) {
+function AddReource({ auth, unitId, syllabusId, index, setClicked, addFile }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [choosenFormat, setChoosenFormat] = useState();
   const [showError, setShowError] = useState(false);
@@ -46,13 +46,17 @@ function AddReource({ auth, unitId, syllabusId, index, setClicked }) {
 
   const onSaveClick = async () => {
     const newResource = { name: sourceName, unitId, syllabusId, type: choosenFormat, link: linkInput, index };
-    const updated = await postRequest({ auth, postUrl: 'postUnitResource', object: newResource });
-    updated ? setShowSent(true) : setShowError(true);
+    const { id } = await postRequest({ auth, postUrl: 'postUnitResource', object: newResource });
+    if (id) {
+      setShowSent(true);
+      newResource['id'] = id;
+      addFile(newResource);
+    } else setShowError(true);
   };
 
-  const onAddTaskClick = ()=>{
+  const onAddTaskClick = () => {
     setClicked({ table: 'resource', action: 'add', index });
-  }
+  };
 
   return (
     <>

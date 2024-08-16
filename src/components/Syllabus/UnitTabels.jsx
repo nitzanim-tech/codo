@@ -5,7 +5,8 @@ import ResourcesTable from './ResourcesTable';
 import PracticeTable from './PracticeTable';
 import { Cell } from './PracticeTableElements';
 import getRequest from '../../requests/anew/getRequest';
-import { addRowIndices, insertOrUpdateAtIndex } from './tableHandler';
+import { addRowIndices, insertOrUpdateAtIndex, deleteItem } from './tableHandler';
+import postRequest from '../../requests/anew/postRequest';
 
 const UnitTables = ({ tasks, unit, syllabus }) => {
   const [clicked, setClicked] = useState();
@@ -26,15 +27,29 @@ const UnitTables = ({ tasks, unit, syllabus }) => {
     fetchPractice();
   }, [unit]);
 
-  const addItem = (newObj) => {
+  const addTask = (newTask) => {
     if (clicked)
       if (clicked.table == 'practice') {
-        const newPractice = insertOrUpdateAtIndex(practice, newObj, clicked.action);
+        const newPractice = insertOrUpdateAtIndex(practice, newTask, clicked.action);
         setPractice(newPractice);
       } else {
-        const newResources = insertOrUpdateAtIndex(resources, newObj, clicked.action);
+        const newResources = insertOrUpdateAtIndex(resources, newTask, clicked.action);
         setResources(newResources);
       }
+  };
+  const addFile = (newFile) => {
+    const newResources = insertOrUpdateAtIndex(resources, newFile, 'add');
+    setResources(newResources);
+  };
+
+  const removeItem = async (task) => {
+    let success;
+    if (task.type != 'main') success = await postRequest({ auth: null, postUrl: 'deletePractice', object: task });
+    else success = await postRequest({ postUrl: 'updatePractice', object: { id: task.id, name: '', taskId: null } });
+    if (success) {
+      const updatedPractice = deleteItem(practice, task);
+      setPractice(updatedPractice);
+    }
   };
 
   return (
@@ -42,17 +57,23 @@ const UnitTables = ({ tasks, unit, syllabus }) => {
       <Grid item xs={3}>
         {clicked && (
           <Cell>
-            <ChooseTask tasks={tasks} unit={unit} clicked={clicked} setClicked={setClicked} addItem={addItem} />
+            <ChooseTask tasks={tasks} unit={unit} clicked={clicked} setClicked={setClicked} addItem={addTask} />
           </Cell>
         )}
       </Grid>
       <Grid item xs={9}>
         <Grid container direction="column" spacing={2}>
           <Grid item>
-            <ResourcesTable resources={resources} syllabus={syllabus} setClicked={setClicked} />
+            <ResourcesTable
+              unit={unit}
+              resources={resources}
+              syllabus={syllabus}
+              setClicked={setClicked}
+              addFile={addFile}
+            />
           </Grid>
           <Grid item>
-            <PracticeTable practice={practice} syllabus={syllabus} setClicked={setClicked} clicked={clicked} />
+            <PracticeTable practice={practice} setClicked={setClicked} clicked={clicked} removeItem={removeItem} />
           </Grid>
         </Grid>
       </Grid>

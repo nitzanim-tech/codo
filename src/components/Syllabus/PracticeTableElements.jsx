@@ -125,7 +125,7 @@ const handleCellClick = (cell, setClicked) => {
   if (cell.type == 'button') {
     const newType = cell.position == 'before' ? 'pre' : 'drill';
     setClicked({ table: 'practice', action: 'add', type: newType, index: cell.lastIndex + 1 });
-  } else setClicked({ action: 'update', table: 'practice', type: cell.type, index: cell.index });
+  } else setClicked({ action: 'update', table: 'practice', type: cell.type, index: cell.index, id: cell.id });
 };
 
 const renderMatrixTable = (data, handleDelete, setClicked, clicked) => {

@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { deleteItem } from './tableHandler';
 import { Cell, CellContent } from './PracticeTableElements';
 import AddReource from './AddResourceButton';
-import { useFirebase } from '../../util/FirebaseProvider';
-import getRequest from '../../requests/anew/getRequest';
 import { CircularProgress } from '@nextui-org/react';
 
-const ResourcesTable = ({ resources, unit, syllabus, setClicked }) => {
-  // const handleDelete = (content) => {
-  //   const updatedPractice = deleteItem(practice, content);
-  //   setResources(updatedPractice);
-  // };
+const ResourcesTable = ({ resources, unit, syllabus, setClicked, addFile }) => {
+  
+  const handleDelete = (content) => {
+    // const updatedPractice = deleteItem(practice, content);
+    // setResources(updatedPractice);
+  };
 
   const cellStyle = { width: '16.66%' };
   const colElements = Array.from({ length: 6 }, (_, index) => <col key={index} style={{ width: '16.66%' }} />);
@@ -34,7 +32,13 @@ const ResourcesTable = ({ resources, unit, syllabus, setClicked }) => {
                 ))}
                 <td key={'add'} style={cellStyle}>
                   <Cell>
-                    <AddReource unitId={unit} syllabusId={syllabus} index={0} setClicked={setClicked} />
+                    <AddReource
+                      unitId={unit}
+                      syllabusId={syllabus}
+                      index={resources.length}
+                      setClicked={setClicked}
+                      addFile={addFile}
+                    />
                   </Cell>
                 </td>
               </tr>

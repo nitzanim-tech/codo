@@ -45,28 +45,23 @@ const organizeDataByIndex = (template) => {
   return organizedData;
 };
 
-const deleteItem = (practice, content) => {
-  let index = practice.findIndex((item) => item.id === content.id);
-
-  if (index !== -1) {
-    const updatedPractice = practice
-      .map((item, i) => {
-        if (i === index) {
-          if (item.type === 'main') {
-            return { ...item, name: '', id: null };
-          } else {
-            return null;
-          }
+const deleteItem = (list, content) => {
+  let index = list.findIndex((item) => item.id === content.id);
+  const updatedList = list
+    .map((item, i) => {
+      if (i === index) {
+        if (item.type === 'main') {
+          return { ...item, name: '', id: null };
+        } else {
+          return null;
         }
-        return item;
-      })
-      .filter((item) => item !== null);
+      }
+      return item;
+    })
+    .filter((item) => item !== null);
 
-    moveListIndexes(updatedPractice, index, -1);
-    return updatedPractice;
-  }
-
-  return practice;
+  moveListIndexes(updatedList, index, -1);
+  return updatedList;
 };
 
 
