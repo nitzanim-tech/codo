@@ -42,13 +42,21 @@ const UnitTables = ({ tasks, unit, syllabus }) => {
     setResources(newResources);
   };
 
-  const removeItem = async (task) => {
+  const removePractice = async (task) => {
     let success;
     if (task.type != 'main') success = await postRequest({ auth: null, postUrl: 'deletePractice', object: task });
     else success = await postRequest({ postUrl: 'updatePractice', object: { id: task.id, name: '', taskId: null } });
     if (success) {
       const updatedPractice = deleteItem(practice, task);
       setPractice(updatedPractice);
+    }
+  };
+
+  const removeResource = async (task) => {
+    const success = await postRequest({ auth: null, postUrl: 'deleteResource', object: task });
+    if (success) {
+      const updatedResource = deleteItem(resources, task);
+      setResources(updatedResource);
     }
   };
 
@@ -70,10 +78,16 @@ const UnitTables = ({ tasks, unit, syllabus }) => {
               syllabus={syllabus}
               setClicked={setClicked}
               addFile={addFile}
+              removeResource={removeResource}
             />
           </Grid>
           <Grid item>
-            <PracticeTable practice={practice} setClicked={setClicked} clicked={clicked} removeItem={removeItem} />
+            <PracticeTable
+              practice={practice}
+              setClicked={setClicked}
+              clicked={clicked}
+              removePractice={removePractice}
+            />
           </Grid>
         </Grid>
       </Grid>

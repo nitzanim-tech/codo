@@ -4,13 +4,7 @@ import { Cell, CellContent } from './PracticeTableElements';
 import AddReource from './AddResourceButton';
 import { CircularProgress } from '@nextui-org/react';
 
-const ResourcesTable = ({ resources, unit, syllabus, setClicked, addFile }) => {
-  
-  const handleDelete = (content) => {
-    // const updatedPractice = deleteItem(practice, content);
-    // setResources(updatedPractice);
-  };
-
+const ResourcesTable = ({ resources, unit, syllabus, setClicked, addFile, removeResource }) => {
   const cellStyle = { width: '16.66%' };
   const colElements = Array.from({ length: 6 }, (_, index) => <col key={index} style={{ width: '16.66%' }} />);
 
@@ -26,7 +20,7 @@ const ResourcesTable = ({ resources, unit, syllabus, setClicked, addFile }) => {
                 {Object.entries(resources).map(([id, resource]) => (
                   <td key={id} style={cellStyle}>
                     <Cell>
-                      <CellContent content={resource} handleDelete={handleDelete} />
+                      <CellContent content={resource} handleDelete={removeResource} />
                     </Cell>
                   </td>
                 ))}
