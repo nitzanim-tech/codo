@@ -3,8 +3,10 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Paper, Box } from '@mui/material';
 import { organizeDataByIndex } from './tableHandler';
-import { Tooltip, Button } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 import { ResourcesIcons } from './ResoucresIcons';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
 
 const getColor = (type) => {
   switch (type) {
@@ -18,6 +20,18 @@ const getColor = (type) => {
       return null;
   }
 };
+
+const LightTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(
+  ({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.white,
+      color: 'rgba(0, 0, 0, 0.87)',
+      boxShadow: theme.shadows[2],
+      fontSize: 12,
+      fontFamily: '"Varela Round", sans-serif',
+    },
+  }),
+);
 
 const Cell = ({ children, color, highlight, onClick }) => (
   <Paper
@@ -47,7 +61,7 @@ const CellContent = ({ content, handleDelete, col }) => (
           <ResourcesIcons type={content.type} />
           <p style={{ margin: 0, flexShrink: 0 }}>{content.type === 'main' && col}</p>
 
-          <Tooltip content={content.name} closeDelay={1}>
+          <LightTooltip title={content.name} placement="top">
             <Button
               color="primary"
               variant="light"
@@ -58,7 +72,7 @@ const CellContent = ({ content, handleDelete, col }) => (
             >
               <CloseRoundedIcon />
             </Button>
-          </Tooltip>
+          </LightTooltip>
         </div>
         <div
           style={{
@@ -83,12 +97,12 @@ const createMatrix = (columns) => {
   const maxDrillLength = Math.max(...columns.map((col) => col.drill?.length || 0));
 
   const matrix = Array.from({ length: maxPreLength + maxDrillLength + 3 }, () => Array(6).fill(null));
-  
+
   columns.forEach((col, colIndex) => {
     if (colIndex < 0 || colIndex >= matrix[0].length) return;
 
     const lastColumn = colIndex > 0 ? Object.values(columns[colIndex - 1]).flat() : null;
-    let lastIndex = lastColumn? lastColumn[lastColumn.length - 1]?.index : 0;
+    let lastIndex = lastColumn ? lastColumn[lastColumn.length - 1]?.index : 0;
     const preButtonRow = maxPreLength - (col.pre?.length || 0);
     matrix[preButtonRow][colIndex] = { type: 'button', position: 'before', lastIndex };
 
@@ -119,18 +133,38 @@ const createMatrix = (columns) => {
   return matrix;
 };
 
-
-
 const handleCellClick = (cell, setClicked) => {
   if (cell.type == 'button') {
     const newType = cell.position == 'before' ? 'pre' : 'drill';
-    setClicked({ table: 'practice', action: 'add', type: newType, index: cell.lastIndex + 1 });
+    setClicked({ table: 'practice', action: 'add', type: newType, index: cell.lastIndex ? cell.lastIndex + 1 : 0 });
   } else setClicked({ action: 'update', table: 'practice', type: cell.type, index: cell.index, id: cell.id });
 };
 
 const renderMatrixTable = (data, handleDelete, setClicked, clicked) => {
   const organizedData = organizeDataByIndex(data);
   const columns = Array.from({ length: 6 }, (_, i) => organizedData[i] || { pre: [], main: null, drill: [] });
+  const Header = ({ cell }) => {
+    let newType;
+    if (cell?.type) {
+      if (cell.type === 'button' && cell.position === 'after') newType = 'drill';
+      else if (cell.type === 'button' && cell.position === 'before') newType = 'pre';
+      else newType = cell.type;
+    }
+    return (
+      cell && (
+        <p
+          style={{
+            writingMode: 'vertical-rl',
+            color: getColor(newType),
+            position: 'absolute',
+            marginRight: '-25px',
+          }}
+        >
+          {newType} |
+        </p>
+      )
+    );
+  };
 
   const matrix = createMatrix(columns);
   return (
@@ -140,18 +174,7 @@ const renderMatrixTable = (data, handleDelete, setClicked, clicked) => {
           <tr key={rowIndex}>
             {row.map((cell, colIndex) => (
               <td key={colIndex} style={{ width: '16.66%' }}>
-                {colIndex == 0 && (
-                  <p
-                    style={{
-                      writingMode: 'vertical-rl',
-                      color: getColor('pre'),
-                      position: 'absolute',
-                      marginRight: '-25px',
-                    }}
-                  >
-                    pre |
-                  </p>
-                )}
+                {colIndex == 0 && <Header cell={cell} />}
                 {cell && (
                   <>
                     {cell.type === 'button' && (

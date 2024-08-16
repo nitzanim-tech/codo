@@ -2,7 +2,7 @@ import firebaseConfig from '../../util/firebaseConfig';
 
 const getRequest = async ({ getUrl }) => {
   try {
-    document.body.style.cursor = 'wait';
+    document.body.classList.add('cursor-wait');
     const apiUrl = firebaseConfig.apiUrl;
     // const currentUser = auth.currentUser;
     // const idToken = await currentUser.getIdToken(true);
@@ -19,9 +19,10 @@ const getRequest = async ({ getUrl }) => {
 
     return responseJson;
   } catch (error) {
-    document.body.style.cursor = 'default';
     console.error('Error getting data:', error);
     return;
+  } finally {
+    document.body.classList.remove('cursor-wait');
   }
 }
 export default getRequest;

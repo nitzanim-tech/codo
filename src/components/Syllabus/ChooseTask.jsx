@@ -34,8 +34,9 @@ export default function ChooseTask({ tasks, unit, clicked, setClicked, addItem }
       } else {
         postUrl = 'postPractice';
       }
+      const { id } = await postRequest({ auth: null, postUrl, object: newPractice });
+      newPractice['id'] = id;
 
-      newPractice['id'] = await postRequest({ auth: null, postUrl, object: newPractice });
       if (newPractice.id) addItem(newPractice);
     } catch (error) {
       console.error('Error:', error);
@@ -52,7 +53,8 @@ export default function ChooseTask({ tasks, unit, clicked, setClicked, addItem }
         link: value.id,
       };
 
-      newResource['id'] = await postRequest({ auth: null, postUrl: 'postUnitResource', object: newResource });
+      const { id } = await postRequest({  postUrl: 'postUnitResource', object: newResource });
+      newResource['id'] = id;
       if (newResource.id) addItem(newResource);
     } catch (error) {
       console.error('Error:', error);

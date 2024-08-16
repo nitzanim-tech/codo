@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Grid, Paper, Box } from '@mui/material';
 import NavBar from '../components/NavBar/NavigateBar';
 import { useFirebase } from '../util/FirebaseProvider';
-import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
+import { Input, Select, Divider, SelectItem, CircularProgress } from '@nextui-org/react';
 import { Listbox, ListboxItem, Button } from '@nextui-org/react';
 import AddUnitButton from '../components/Syllabus/AddUnitButton';
 import getTasksList from '../requests/tasks/getTasksList';
@@ -44,10 +44,7 @@ const Syllabus = () => {
   return (
     <>
       <NavBar />
-      {/* {!isAuthorized ? (
-        <h1>הכניסה למנהלים בלבד</h1>
-      ) : true ? ( */}
-      <>
+      {syllabusList ? (
         <Grid container spacing={1} sx={{ height: '100%', width: '100%', padding: '10px' }}>
           {/* Right column */}
           <Grid item xs={10}>
@@ -112,12 +109,11 @@ const Syllabus = () => {
             </Grid>
           </Grid>
         </Grid>
-      </>
-      {/* ) : (
+      ) : (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <CircularProgress />
         </div>
-      )} */}
+      )}
     </>
   );
 };

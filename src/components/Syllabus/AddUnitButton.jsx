@@ -13,9 +13,9 @@ const AddUnitButton = ({ auth, syllabus, length, setUnits }) => {
 
   const onAddUnitClick = async () => {
     const newUnit = { name: unitName, syllabus, index: length };
-    console.log(newUnit);
-    const success = await postRequest({ auth: null, object: newUnit, postUrl: 'postUnit' });
-    if (success) {
+    const { id } = await postRequest({ object: newUnit, postUrl: 'postUnit' });
+    newUnit['id'] = id;
+    if (id) {
       setShowSent(true);
       setUnits((prevUnits) => ({
         ...prevUnits,
