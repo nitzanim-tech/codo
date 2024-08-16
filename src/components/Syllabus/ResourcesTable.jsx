@@ -1,56 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { defaultPractice, deleteItem } from './tableHandler';
-import savePractice from '../../requests/practice/savePractice';
+import { deleteItem } from './tableHandler';
 import { Cell, CellContent } from './PracticeTableElements';
 import AddReource from './AddResourceButton';
 import { useFirebase } from '../../util/FirebaseProvider';
 import getRequest from '../../requests/anew/getRequest';
 import { CircularProgress } from '@nextui-org/react';
 
-const ResourcesTable = ({ task, unit, syllabus, setClicked }) => {
-  const { auth } = useFirebase();
-  const [resources, setResources] = useState();
-  const [clickedCell, setClickedCell] = useState();
-
-  useEffect(() => {
-    const fetchPractice = async () => {
-      const ResurcesFromDb = await getRequest({ getUrl: `getResourcesByUnit/?unit=${unit}` });
-      if (ResurcesFromDb) setResources(ResurcesFromDb);
-      else setResources([]);
-    };
-
-    fetchPractice();
-  }, [unit]);
-
-  // useEffect(() => {
-  //   if (chosenTask && clickedCell) {
-  //     const newPractice = addItem(practice, clickedCell, chosenTask);
-  //     setLesson(newPractice);
-  //     setChosenTask(null);
-  //     setClickedCell(null);
-  //   }
-  // }, [chosenTask, clickedCell, practice]);
-
-  const handleDelete = (content) => {
-    const updatedPractice = deleteItem(practice, content);
-    setResources(updatedPractice);
-  };
-
-  const handleClick = (column, type, row = null) => {
-    setClicked(true);
-    setClickedCell({ column, type, row });
-  };
-
-  const handleSave = async () => {
-    const success = await savePractice({ app, practice, unit });
-    if (success) {
-      console.log('saved successfully');
-      localStorage.removeItem(`practice_${unit}`);
-    } else {
-      console.log('ERROR');
-    }
-  };
+const ResourcesTable = ({ resources, unit, syllabus, setClicked }) => {
+  // const handleDelete = (content) => {
+  //   const updatedPractice = deleteItem(practice, content);
+  //   setResources(updatedPractice);
+  // };
 
   const cellStyle = { width: '16.66%' };
   const colElements = Array.from({ length: 6 }, (_, index) => <col key={index} style={{ width: '16.66%' }} />);
@@ -73,7 +34,7 @@ const ResourcesTable = ({ task, unit, syllabus, setClicked }) => {
                 ))}
                 <td key={'add'} style={cellStyle}>
                   <Cell>
-                    <AddReource auth={auth} unitId={unit} syllabusId={syllabus} index={0} setClicked={setClicked}/>
+                    <AddReource unitId={unit} syllabusId={syllabus} index={0} setClicked={setClicked} />
                   </Cell>
                 </td>
               </tr>

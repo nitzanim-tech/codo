@@ -1,33 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@nextui-org/react';
 import { Grid } from '@mui/material';
-import { addRowIndices, defaultPractice, deleteItem, addItem } from './tableHandler';
+// import { addRowIndices, deleteItem, addItem } from './tableHandler';
 import { renderMatrixTable, Cell } from './PracticeTableElements';
+import getRequest from '../../requests/anew/getRequest';
 
-const PracticeTable = ({ task, unit, clicked, setClicked }) => {
-  const [practice, setPractice] = useState();
+const PracticeTable = ({ practice, clicked, setClicked }) => {
+  // useEffect(() => {
+  //   const fetchPractice = async () => {
+  //     const practiceFromDb = await getRequest({ getUrl: `getPracticeByUnit/?unit=${unit}` });
+  //     console.log(practiceFromDb);
+  //     setPractice(addRowIndices(practiceFromDb));
+  //   };
 
-  useEffect(() => {
-    const fetchPractice = async () => {
-      const practiceFromDb = null;
-      // await getRequest({ getUrl: `getResourcesByUnit/?unit=${unit}` });
-      if (practiceFromDb) setPractice(addRowIndices(practiceFromDb));
-      else setPractice(addRowIndices(defaultPractice));
-    };
+  //   fetchPractice();
+  // }, [unit]);
 
-    fetchPractice();
-  }, [unit]);
-
-  useEffect(() => {
-    if (task && clicked) {
-      const newPractice = addItem(practice, clickedCell, task);
-      setPractice(newPractice);
-    }
-  }, [task, clicked, practice]);
+  // useEffect(() => {
+  //   if (task && clicked) {
+  //     const newPractice = addItem(practice, clickedCell, task);
+  //     setPractice(newPractice);
+  //   }
+  // }, [task, clicked, practice]);
 
   const handleDelete = (content) => {
-    const updatedPractice = deleteItem(practice, content);
-    setPractice(updatedPractice);
+    // const updatedPractice = deleteItem(practice, content);
+    // setPractice(updatedPractice);
   };
 
   return (

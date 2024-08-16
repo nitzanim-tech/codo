@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import postRequest from '../../requests/anew/postRequest';
-export default function ChooseTask({ tasks, unit, clicked, setClicked }) {
+
+export default function ChooseTask({ tasks, unit, clicked, setClicked, addItem }) {
   const [mainSubjects, setMainSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState('');
-
+console.log(addItem)
   useEffect(() => {
     if (tasks) {
       const mainSubjectsSet = new Set(
@@ -17,16 +18,28 @@ export default function ChooseTask({ tasks, unit, clicked, setClicked }) {
   }, [tasks]);
 
   const onChooseClick = async (value) => {
-    const newPractice = {
-      index: clicked.index,
-      name: value.name,
-      unitId: unit,
-      type: clicked.type,
-      taskId: value.id,
-    };
-    const newId = await postRequest({ auth: null, postUrl: 'postPractice', object: newPractice });
-    console.log({newId});
-    setClicked(false);
+    try {
+      let postUrl;
+      const newPractice = {
+        index: clicked.index,
+        name: value.name,
+        unitId: unit,
+        type: clicked.type,
+        taskId: value.id,
+      };
+
+      if (clicked.action === 'update') {
+        postUrl = 'updatePractice';
+      } else {
+        postUrl = 'postPractice';
+      }
+
+      newPractice['id'] = await postRequest({ auth: null, postUrl, object: newPractice });
+      addItem(newPractice);
+      setClicked(false);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (

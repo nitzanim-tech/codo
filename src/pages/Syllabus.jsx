@@ -48,7 +48,7 @@ const Syllabus = () => {
         <h1>הכניסה למנהלים בלבד</h1>
       ) : true ? ( */}
       <>
-        <Grid container spacing={1} sx={{ height: '100vh', width: '100%', padding: '10px' }}>
+        <Grid container spacing={1} sx={{ height: '100%', width: '100%', padding: '10px' }}>
           {/* Right column */}
           <Grid item xs={10}>
             {selectedUnit && units && (

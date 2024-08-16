@@ -1,28 +1,3 @@
-// const defaultPractice = [
-//   { id: null, index: 0, name: '', type: 'main' },
-//   { id: null, index: 1, name: '', type: 'main' },
-//   { id: null, index: 2, name: '', type: 'main' },
-//   { id: null, index: 3, name: '', type: 'main' },
-//   { id: null, index: 4, name: '', type: 'main' },
-//   { id: null, index: 5, name: '', type: 'main' },
-// ];
-const defaultPractice = [
-  { id: null, index: 0, name: '', type: 'main' },
-  { id: 'sasa', index: 1, name: 'sasa', type: 'drill' },
-  { id: 'mmnkk', index: 2, name: 'mmnkk', type: 'drill' },
-  { id: 'mmnskk', index: 3, name: 'mmnskk', type: 'pre' },
-
-  { id: null, index: 4, name: '', type: 'main' },
-
-  { id: 'asdas', index: 5, name: 'asdas', type: 'pre' },
-  { id: null, index: 6, name: '', type: 'main' },
-  { id: null, index: 7, name: '', type: 'main' },
-  { id: null, index: 8, name: '', type: 'main' },
-  { id: 'mmnkk', index: 9, name: 'mmnkk', type: 'drill' },
-
-  { id: null, index: 10, name: '', type: 'main' },
-];
-
 const addRowIndices = (template) => {
   const updatedTemplate = [];
   let columnIndex = 0;
@@ -70,12 +45,6 @@ const organizeDataByIndex = (template) => {
   return organizedData;
 };
 
-const movePracticeListIndexes = (practice, startIndex, change) => {
-  for (let i = startIndex; i < practice.length; i++) {
-    practice[i].index += change;
-  }
-};
-
 const deleteItem = (practice, content) => {
   let index = practice.findIndex((item) => item.id === content.id);
 
@@ -93,37 +62,31 @@ const deleteItem = (practice, content) => {
       })
       .filter((item) => item !== null);
 
-    movePracticeListIndexes(updatedPractice, index, -1);
+    moveListIndexes(updatedPractice, index, -1);
     return updatedPractice;
   }
 
   return practice;
 };
 
-const addItem = (practice, clickedCell, chosenTask) => {
-  let index = 0;
-  let mainObjectFound = 0;
-  while (mainObjectFound < clickedCell.column) {
-    index++;
-    if (practice[index].type == 'main') mainObjectFound++;
+
+const moveListIndexes = (list, startIndex, change) => {
+  for (let i = startIndex; i < list.length; i++) {
+    list[i].index += change;
   }
-  if (clickedCell.type == 'drill') {
-    index += clickedCell.row + 1;
-  }
-  if (index >= practice.length) {
-    const newItem = { id: chosenTask.id, name: chosenTask.name, index, ...clickedCell };
-    practice.push(newItem);
-  } else {
-    if (practice[index].type == clickedCell.type && index < practice.length) {
-      practice[index].id = chosenTask.id;
-      practice[index].name = chosenTask.name;
-    } else {
-      const newItem = { id: chosenTask.id, name: chosenTask.name, index, ...clickedCell };
-      movePracticeListIndexes(practice, index, 1);
-      practice.splice(index, 0, newItem);
-    }
-  }
-  return practice;
 };
 
-export { defaultPractice, addRowIndices, organizeDataByIndex, deleteItem, addItem };
+
+function insertOrUpdateAtIndex(list, newObj, action) {
+  if (action === 'update') {
+    list.splice(newObj.index, 1);
+  } else if (action === 'add') {
+    moveListIndexes(list, newObj.index, 1);
+  }
+
+  return [...list.slice(0, newObj.index), newObj, ...list.slice(newObj.index)];
+}
+
+
+
+export { addRowIndices, organizeDataByIndex, deleteItem, insertOrUpdateAtIndex };

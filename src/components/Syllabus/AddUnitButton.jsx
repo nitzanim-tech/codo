@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Button, useDisclosure, Input } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalFooter, ModalContent, ModalBody } from '@nextui-org/react';
 
-import addUnit from '../../requests/units/addUnit';
 import { SuccessMessage, ErrorMessage } from '../general/Messages';
+import postRequest from '../../requests/anew/postRequest';
 
 const AddUnitButton = ({ auth, syllabus, length, setUnits }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -13,7 +13,8 @@ const AddUnitButton = ({ auth, syllabus, length, setUnits }) => {
 
   const onAddUnitClick = async () => {
     const newUnit = { name: unitName, syllabus, index: length };
-    const success = await addUnit({ auth, unit: newUnit });
+    console.log(newUnit);
+    const success = await postRequest({ auth: null, object: newUnit, postUrl: 'postUnit' });
     if (success) {
       setShowSent(true);
       setUnits((prevUnits) => ({
@@ -33,7 +34,7 @@ const AddUnitButton = ({ auth, syllabus, length, setUnits }) => {
   return (
     <>
       {syllabus && <Button onClick={onOpen}>יחידה חדשה</Button>}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center" size="xl" onClose={clearAll}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center" dir="rtl" size="m" onClose={clearAll}>
         <ModalContent>
           {(onClose) => (
             <>
@@ -47,15 +48,7 @@ const AddUnitButton = ({ auth, syllabus, length, setUnits }) => {
                 />
               </ModalBody>
               <ModalFooter>
-                <Button
-                  isDisabled={!unitName}
-                  variant="ghost"
-                  radius="full"
-                  onClick={async () => {
-                    await onAddUnitClick();
-                    onClose();
-                  }}
-                >
+                <Button isDisabled={!unitName} variant="ghost" radius="full" onClick={onAddUnitClick}>
                   שמור
                 </Button>
                 {showError && <ErrorMessage />}

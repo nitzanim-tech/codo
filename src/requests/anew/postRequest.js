@@ -2,6 +2,7 @@ import firebaseConfig from '../../util/firebaseConfig';
 
 const postRequest = async ({ auth, postUrl , object }) => {
   try {
+    document.body.style.cursor = 'wait';
     const apiUrl = firebaseConfig.apiUrl;
     // const currentUser = auth.currentUser;
     // const idToken = await currentUser.getIdToken(true);
@@ -17,8 +18,11 @@ const postRequest = async ({ auth, postUrl , object }) => {
       throw new Error('Network response was not ok');
     }
     const respondJson = await response.json();
+    document.body.style.cursor = 'default';
+
     return respondJson;
   } catch (error) {
+    document.body.style.cursor = 'default';
     console.error('Error posting:', error);
     return;
   }

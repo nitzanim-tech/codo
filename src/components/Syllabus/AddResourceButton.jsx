@@ -29,7 +29,7 @@ function AddReource({ auth, unitId, syllabusId, index, setClicked }) {
       >
         {formatOptions.map((format) => (
           <SelectItem key={format} startContent={<ResourcesIcons type={format} />}>
-            {format} {console.log(format)}
+            {format}
           </SelectItem>
         ))}
       </Select>
@@ -50,6 +50,10 @@ function AddReource({ auth, unitId, syllabusId, index, setClicked }) {
     updated ? setShowSent(true) : setShowError(true);
   };
 
+  const onAddTaskClick = ()=>{
+    setClicked({ table: 'resource', action: 'add', index });
+  }
+
   return (
     <>
       <Dropdown dir="rtl">
@@ -62,7 +66,7 @@ function AddReource({ auth, unitId, syllabusId, index, setClicked }) {
           <DropdownItem key="file" onPress={onOpen}>
             קובץ
           </DropdownItem>
-          <DropdownItem key="task" onPress={setClicked}>
+          <DropdownItem key="task" onPress={onAddTaskClick}>
             משימה
           </DropdownItem>
         </DropdownMenu>

@@ -2,6 +2,7 @@ import firebaseConfig from '../../util/firebaseConfig';
 
 const getRequest = async ({ getUrl }) => {
   try {
+    document.body.style.cursor = 'wait';
     const apiUrl = firebaseConfig.apiUrl;
     // const currentUser = auth.currentUser;
     // const idToken = await currentUser.getIdToken(true);
@@ -12,15 +13,15 @@ const getRequest = async ({ getUrl }) => {
         // Authorization: `Bearer ${idToken}`,
       },
     });
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
+    if (!response.ok) throw new Error('Network response was not ok');
     const responseJson = await response.json();
+    document.body.style.cursor = 'default';
+
     return responseJson;
   } catch (error) {
+    document.body.style.cursor = 'default';
     console.error('Error getting data:', error);
     return;
   }
-};
-
+}
 export default getRequest;
