@@ -3,7 +3,7 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@nextui-org/reac
 import logoImg from '../../assets/img/logo.png';
 import codoLogoImg from '../../assets/img/codoLogo.png';
 
-import FirebaseAuth from './FirebaseAuth';
+import LoginOrRegisterDropdown from './LoginOrRegisterDropdown';
 import { Link } from 'react-router-dom';
 
 export default function NavigateBar() {
@@ -17,7 +17,7 @@ export default function NavigateBar() {
       </NavbarBrand>
 
       <NavbarContent justify="end" style={{ flex: 1 }}>
-        <FirebaseAuth />
+        <LoginOrRegisterDropdown />
       </NavbarContent>
     </Navbar>
   );

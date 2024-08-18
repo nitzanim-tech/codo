@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, Suspense } from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 
 import { User, Dropdown } from '@nextui-org/react';
 import { DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
-import RegisterModal from './RegisterModal';
-import LoginModal from './LoginModal';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { useFirebase } from '../../util/FirebaseProvider';
 
-const FirebaseAuth = () => {
-  const { app, auth, userData } = useFirebase();
-  // const [userData, setCurrentUser] = useState(null);
+const RegisterModal = React.lazy(() => import('./RegisterModal'));
+const LoginModal = React.lazy(() => import('./LoginModal'));
 
+const LoginOrRegisterDropdown = () => {
+  const { app, auth, userData } = useFirebase();
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
 
@@ -21,10 +20,14 @@ const FirebaseAuth = () => {
     try {
       await signOut(auth);
       console.log('Signed out');
-      // setCurrentUser(null);
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  const clearAll = () => {
+    setOpenRegisterModal(false);
+    setOpenLoginModal(false);
   };
 
   return (
@@ -61,10 +64,29 @@ const FirebaseAuth = () => {
           </Dropdown>
         )}
       </div>
-      <RegisterModal app={app} auth={auth} open={openRegisterModal} setOpen={setOpenRegisterModal} />
-      <LoginModal app={app} auth={auth} open={openLoginModal} setOpen={setOpenLoginModal} />
+
+      <Suspense fallback={<div>Loading...</div>}>
+        {openRegisterModal && (
+          <RegisterModal
+            isOpen={openRegisterModal}
+            onOpenChange={setOpenRegisterModal}
+            onClose={clearAll}
+            app={app}
+            auth={auth}
+          />
+        )}
+        {openLoginModal && (
+          <LoginModal
+            isOpen={openLoginModal}
+            onOpenChange={setOpenLoginModal}
+            onClose={clearAll}
+            app={app}
+            auth={auth}
+          />
+        )}
+      </Suspense>
     </>
   );
 };
 
-export default FirebaseAuth;
+export default LoginOrRegisterDropdown;
