@@ -7,6 +7,10 @@ import { Button } from '@nextui-org/react';
 import { ResourcesIcons } from './ResoucresIcons';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 
 const getColor = (type) => {
   switch (type) {
@@ -61,6 +65,8 @@ const CellContent = ({ content, handleDelete, col }) => (
           <ResourcesIcons type={content.type} />
           <p style={{ margin: 0, flexShrink: 0 }}>{content.type === 'main' && col}</p>
 
+          {/* <Dropdown dir="rtl">
+            <DropdownTrigger> */}
           <LightTooltip title={content.name} placement="top">
             <Button
               color="primary"
@@ -70,9 +76,30 @@ const CellContent = ({ content, handleDelete, col }) => (
               onClick={() => handleDelete(content)}
               size="sm"
             >
-              <CloseRoundedIcon />
+              <MoreVertRoundedIcon />
             </Button>
           </LightTooltip>
+          {/* </DropdownTrigger>
+            <DropdownMenu aria-label="selectResourceToAdd">
+              <DropdownItem key="file" onPress={() => {}}>
+                קובץ
+              </DropdownItem>
+              <DropdownItem key="task" onPress={() => {}}>
+                משימה
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown> */}
+
+          {/* <Button
+            // color="primary"
+            variant="light"
+            radius="full"
+            isIconOnly
+            onClick={() => handleDelete(content)}
+            size="sm"
+          >
+            <CreateRoundedIcon fontSize="10px" />
+          </Button> */}
         </div>
         <div
           style={{
