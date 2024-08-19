@@ -8,6 +8,7 @@ import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import { SettingContext } from './ChangeSettingProvider';
 import updateElementSetting from '../../../requests/groups/updateElementSetting';
 import { ErrorMessage, SuccessMessage } from '../../general/Messages';
+import getRequest from '../../../requests/anew/getRequest';
 
 function ManageLessonsInst({ group }) {
   const { app } = useFirebase();
@@ -18,6 +19,9 @@ function ManageLessonsInst({ group }) {
 
   useEffect(() => {
     const fetchLessons = async () => {
+      const groupId = '435c59ddf19a';
+      const unitsFromDb = await getRequest({ getUrl: `getResourcesByGroup?group=${groupId}` });
+      console.log(unitsFromDb);
       setLessons(null);
       const allLessons = await getAllLessons({ app, groupId: group.id });
       setLessons(allLessons);

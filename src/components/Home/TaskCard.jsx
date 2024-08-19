@@ -9,6 +9,7 @@ import formatDate from '../../util/formatDate';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
 function TaskCard({ text, taskId, studentData, isChallenge, showReview }) {
+  console.log({ text, taskId, studentData, isChallenge, showReview });
   const findReviews = (trials) => {
     return trials
       .filter((trial) => trial.review)

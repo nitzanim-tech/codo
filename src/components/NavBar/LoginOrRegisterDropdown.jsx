@@ -1,7 +1,7 @@
 import React, { useState, Suspense } from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 
-import { User, Dropdown } from '@nextui-org/react';
+import { Avatar, User, Dropdown } from '@nextui-org/react';
 import { DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
@@ -33,10 +33,14 @@ const LoginOrRegisterDropdown = () => {
   return (
     <>
       <div>
-        {userData ? (
+        {auth.currentUser && userData ? (
           <Dropdown dir="rtl">
             <DropdownTrigger>
-              <User name={`${userData.name} ${userData.lastName}`} style={{ cursor: 'pointer' }} />
+              <Avatar
+                name={`${userData.name} ${userData.lastName}`}
+                style={{ cursor: 'pointer' }}
+                src={auth?.currentUser?.photoURL || 'fallback-image-url'}
+              />
             </DropdownTrigger>
             <DropdownMenu variant="faded" aria-label="Dropdown menu logout" onAction={(key) => console.log(key)}>
               <DropdownItem key="logout" onClick={() => handleSignOut()} startContent={<LogoutRoundedIcon />}>
@@ -47,7 +51,7 @@ const LoginOrRegisterDropdown = () => {
         ) : (
           <Dropdown dir="rtl">
             <DropdownTrigger>
-              <User name={'אורח'} style={{ cursor: 'pointer' }} />
+              <Avatar name={'אורח'} style={{ cursor: 'pointer' }} />
             </DropdownTrigger>
             <DropdownMenu variant="faded" aria-label="Dropdown menu sign or login">
               <DropdownItem
