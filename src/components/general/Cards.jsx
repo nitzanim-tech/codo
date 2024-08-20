@@ -5,9 +5,11 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
+import FormatListNumberedRtlRoundedIcon from '@mui/icons-material/FormatListNumberedRtlRounded';
 import { InstTaskButtons, InstFileButtons } from './InstCardsButtons';
 
 const FileCard = ({ file, isInst, setting, index }) => {
+  console.log({ file });
   return (
     <Card key={index} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -17,6 +19,7 @@ const FileCard = ({ file, isInst, setting, index }) => {
             {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
             {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
             {file.type === 'webLink' && <PublicRoundedIcon style={{ color: '#BF1E2E' }} />}
+            {file.type == 'practice' && <FormatListNumberedRtlRoundedIcon />}
           </Button>
           {file.name}
         </div>
