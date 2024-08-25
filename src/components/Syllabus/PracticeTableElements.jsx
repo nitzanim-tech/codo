@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Paper, Box } from '@mui/material';
 import { organizeDataByIndex } from './tableHandler';
-import { Button } from '@nextui-org/react';
+import { Button, useDisclosure, Input } from '@nextui-org/react';
+import { Modal, ModalHeader, ModalFooter, ModalContent, ModalBody } from '@nextui-org/react';
+
 import { ResourcesIcons } from './ResoucresIcons';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
@@ -45,7 +47,6 @@ const Cell = ({ children, color, highlight, onClick }) => (
       width: '100%',
       backgroundColor: color,
       border: highlight ? '4px solid blue' : '1px solid gray',
-      //   cursor: 'pointer',
       display: 'flex',
       justifyContent: 'center',
     }}
@@ -57,68 +58,89 @@ const Cell = ({ children, color, highlight, onClick }) => (
   </Paper>
 );
 
-const CellContent = ({ content, handleDelete, col }) => (
-  <>
-    {content && (
-      <>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-          <ResourcesIcons type={content.type} />
-          <p style={{ margin: 0, flexShrink: 0 }}>{content.type === 'main' && col}</p>
+function CellContent({ content, handleDelete, col, updateName }) {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [name, setName] = useState(content?.name || '');
 
-          {/* <Dropdown dir="rtl">
-            <DropdownTrigger> */}
+  // TODO: implement the resource
+
+  const onSaveClick = async () => {
+    const updatedPractice = content;
+    updatedPractice['name'] = name;
+    updateName(updatedPractice);
+    onOpenChange();
+  };
+
+  return (
+    <>
+      {content && (
+        <>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <ResourcesIcons type={content.type} />
+            <p style={{ margin: 0, flexShrink: 0 }}>{content.type === 'main' && col}</p>
+
+            <Dropdown dir="rtl">
+              <DropdownTrigger>
+                <Button color="primary" variant="light" radius="full" isIconOnly size="sm">
+                  <MoreVertRoundedIcon />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="selectResourceToAdd">
+                <DropdownItem key="file" onPress={onOpen} startContent={<CreateRoundedIcon />}>
+                  שנה שם
+                </DropdownItem>
+                <DropdownItem key="delete" onPress={() => handleDelete(content)} startContent={<DeleteRoundedIcon />}>
+                  מחק
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+
           <LightTooltip title={content.name} placement="top">
-            <Button
-              color="primary"
-              variant="light"
-              radius="full"
-              isIconOnly
-              onClick={() => handleDelete(content)}
-              size="sm"
+            <div
+              style={{
+                fontSize: '12px',
+                direction: 'rtl',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                width: '100%',
+                textAlign: 'center',
+              }}
             >
-              <MoreVertRoundedIcon />
-            </Button>
+              {content.name}
+            </div>
           </LightTooltip>
-          {/* </DropdownTrigger>
-            <DropdownMenu aria-label="selectResourceToAdd">
-              <DropdownItem key="file" onPress={() => {}}>
-                קובץ
-              </DropdownItem>
-              <DropdownItem key="task" onPress={() => {}}>
-                משימה
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown> */}
 
-          {/* <Button
-            // color="primary"
-            variant="light"
-            radius="full"
-            isIconOnly
-            onClick={() => handleDelete(content)}
-            size="sm"
+          <Modal
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            placement="top-center"
+            dir="rtl"
+            size="m"
+            // onClose={clearAll}
           >
-            <CreateRoundedIcon fontSize="10px" />
-          </Button> */}
-        </div>
-        <div
-          style={{
-            fontSize: '12px',
-            direction: 'rtl',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            width: '100%',
-            textAlign: 'center',
-          }}
-        >
-          {content.name}
-        </div>
-      </>
-    )}
-  </>
-);
-
+            <ModalContent>
+              {(onClose) => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">שנה שם</ModalHeader>
+                  <ModalBody>
+                    <Input placeholder="שם" variant="bordered" value={name} onChange={(e) => setName(e.target.value)} />
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button isDisabled={!name} variant="ghost" radius="full" onClick={onSaveClick}>
+                      שמור
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        </>
+      )}
+    </>
+  );
+}
 const createMatrix = (columns) => {
   const maxPreLength = Math.max(...columns.map((col) => col.pre?.length || 0));
   const maxDrillLength = Math.max(...columns.map((col) => col.drill?.length || 0));
@@ -167,7 +189,7 @@ const handleCellClick = (cell, setClicked) => {
   } else setClicked({ action: 'update', table: 'practice', type: cell.type, index: cell.index, id: cell.id });
 };
 
-const renderMatrixTable = (data, handleDelete, setClicked, clicked) => {
+const renderMatrixTable = (data, handleDelete, setClicked, clicked, updateName) => {
   const organizedData = organizeDataByIndex(data);
   const columns = Array.from({ length: 6 }, (_, i) => organizedData[i] || { pre: [], main: null, drill: [] });
   const Header = ({ cell }) => {
@@ -195,45 +217,53 @@ const renderMatrixTable = (data, handleDelete, setClicked, clicked) => {
 
   const matrix = createMatrix(columns);
   return (
-    <table style={{ width: '95%', tableLayout: 'fixed', direction: 'rtl' }}>
-      <tbody>
-        {matrix.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            {row.map((cell, colIndex) => (
-              <td key={colIndex} style={{ width: '16.66%' }}>
-                {colIndex == 0 && <Header cell={cell} />}
-                {cell && (
-                  <>
-                    {cell.type === 'button' && (
-                      <Button
-                        variant="light"
-                        radius="full"
-                        isIconOnly
-                        onClick={() => handleCellClick(cell, setClicked)}
-                        size="sm"
-                      >
-                        <AddRoundedIcon color={cell.position === 'before' ? 'error' : 'primary'} />
-                      </Button>
-                    )}
-                    {cell.type !== 'button' && (
-                      <Cell
-                        color={getColor(cell.type)}
-                        highlight={
-                          clicked && clicked.index === cell.content.index && clicked.type === cell.content.type
-                        }
-                        onClick={() => handleCellClick(cell.content, setClicked)}
-                      >
-                        <CellContent content={cell.content} handleDelete={handleDelete} col={colIndex} />
-                      </Cell>
-                    )}
-                  </>
-                )}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <>
+      <table style={{ width: '95%', tableLayout: 'fixed', direction: 'rtl' }}>
+        <tbody>
+          {matrix.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {row.map((cell, colIndex) => (
+                <td key={colIndex} style={{ width: '16.66%' }}>
+                  {colIndex == 0 && <Header cell={cell} />}
+                  {cell && (
+                    <>
+                      {cell.type === 'button' && (
+                        <Button
+                          variant="light"
+                          radius="full"
+                          isIconOnly
+                          onClick={() => handleCellClick(cell, setClicked)}
+                          size="sm"
+                        >
+                          <AddRoundedIcon color={cell.position === 'before' ? 'error' : 'primary'} />
+                        </Button>
+                      )}
+                      {cell.type !== 'button' && (
+                        <Cell
+                          color={getColor(cell.type)}
+                          highlight={
+                            clicked && clicked.index === cell.content.index && clicked.type === cell.content.type
+                          }
+                          onClick={() => handleCellClick(cell.content, setClicked)}
+                        >
+                          <CellContent
+                            content={cell.content}
+                            handleDelete={handleDelete}
+                            col={colIndex}
+                            updateName={updateName}
+                          />
+                        </Cell>
+                      )}
+                    </>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {/* <RenameElement/> */}
+    </>
   );
 };
 

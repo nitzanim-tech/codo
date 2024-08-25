@@ -39,26 +39,26 @@ function Instructors() {
     }
   }, [userData]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let data = await getStudentsByGroup({ app: app, groupId: selectedGroup.id });
-      data = data.filter((student) => !student.email.includes('@nitzanim.tech'));
-      data = getStudentGroups(userData.permissions, data);
-      setStudentsRawData(data);
-      setIsLoading(false);
-    };
-    selectedGroup && fetchData();
-  }, [selectedGroup]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     let data = await getStudentsByGroup({ app: app, groupId: selectedGroup.id });
+  //     data = data.filter((student) => !student.email.includes('@nitzanim.tech'));
+  //     data = getStudentGroups(userData.permissions, data);
+  //     setStudentsRawData(data);
+  //     setIsLoading(false);
+  //   };
+  //   selectedGroup && fetchData();
+  // }, [selectedGroup]);
 
-  const handleChangeGroup = async (groupId) => {
-    if (groupId != selectedGroup.id) {
-      const students = await getStudentsByGroup({ app, groupId });
-      const studentsWithGroup = getStudentGroups(userData.permissions, students);
-      const group = userData.permissions?.find((group) => group && group.id === groupId);
-      setSelectedGroup(group || { id: groupId });
-      setStudentsRawData(studentsWithGroup);
-    }
-  };
+  // const handleChangeGroup = async (groupId) => {
+  //   if (groupId != selectedGroup.id) {
+  //     const students = await getStudentsByGroup({ app, groupId });
+  //     const studentsWithGroup = getStudentGroups(userData.permissions, students);
+  //     const group = userData.permissions?.find((group) => group && group.id === groupId);
+  //     setSelectedGroup(group || { id: groupId });
+  //     setStudentsRawData(studentsWithGroup);
+  //   }
+  // };
 
   return (
     <>
@@ -94,7 +94,7 @@ function Instructors() {
                       {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}
                     </div>
                   </Tab>
-                  <Tab key="students" title="חניכים" aria-label="Students tab">
+                  {/* <Tab key="students" title="חניכים" aria-label="Students tab">
                     <CenteredDiv>
                       <StudentsTable
                         isLoading={isLoading}
@@ -103,7 +103,7 @@ function Instructors() {
                         auth={auth}
                       />
                     </CenteredDiv>
-                  </Tab>
+                  </Tab> */}
                   <Tab key="manage" title="מפגשים">
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                       <ChangeSettingProvider>
@@ -111,11 +111,11 @@ function Instructors() {
                       </ChangeSettingProvider>
                     </div>
                   </Tab>
-                  <Tab key="status" title="סטטוס">
+                  {/* <Tab key="status" title="סטטוס">
                     <CenteredDiv>
                       <PassMatrix studentsRawData={studentsRawData} tasksList={tasksList} />
                     </CenteredDiv>
-                  </Tab>
+                  </Tab> */}
                 </Tabs>
               </div>
             </>

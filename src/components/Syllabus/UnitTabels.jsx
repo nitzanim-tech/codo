@@ -42,25 +42,34 @@ const UnitTables = ({ tasks, unit, syllabus }) => {
     setResources(newResources);
   };
 
-  const removePractice = async (task) => {
-    let success;
-    if (task.type != 'main') success = await postRequest({ auth: null, postUrl: 'deletePractice', object: task });
-    else success = await postRequest({ postUrl: 'updatePractice', object: { id: task.id, name: '', taskId: null } });
-    if (success) {
-      const updatedPractice = deleteItem(practice, task);
-      setPractice(updatedPractice);
-    }
-  };
+const updateName = async (updatedTask) => {
+  const success = await postRequest({ postUrl: 'updatePractice', object: updatedTask });
+  if (success) {
+    const newPractice = insertOrUpdateAtIndex(practice, updatedTask, 'update');
+    setPractice(newPractice);
+  }
+};
 
-  const removeResource = async (task) => {
-    const success = await postRequest({ auth: null, postUrl: 'deleteResource', object: task });
-    if (success) {
-      const updatedResource = deleteItem(resources, task);
-      setResources(updatedResource);
-    }
-  };
+const removePractice = async (task) => {
+  let success;
+  if (task.type != 'main') success = await postRequest({ postUrl: 'deletePractice', object: task });
+  else success = await postRequest({ postUrl: 'updatePractice', object: { id: task.id, name: '', taskId: null } });
+  if (success) {
+    const updatedPractice = deleteItem(practice, task);
+    setPractice(updatedPractice);
+  }
+};
 
-  return (
+const removeResource = async (task) => {
+  const success = await postRequest({ auth: null, postUrl: 'deleteResource', object: task });
+  if (success) {
+    const updatedResource = deleteItem(resources, task);
+    setResources(updatedResource);
+  }
+};
+
+return (
+  <>
     <Grid container spacing={2}>
       <Grid item xs={3}>
         {clicked && (
@@ -87,12 +96,14 @@ const UnitTables = ({ tasks, unit, syllabus }) => {
               setClicked={setClicked}
               clicked={clicked}
               removePractice={removePractice}
+              updateName={updateName}
             />
           </Grid>
         </Grid>
       </Grid>
     </Grid>
-  );
+  </>
+);
 };
 
 export default UnitTables;
