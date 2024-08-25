@@ -5,9 +5,8 @@ import { useFirebase } from '../util/FirebaseProvider';
 import { Input, Select, Divider, SelectItem, CircularProgress } from '@nextui-org/react';
 import { Listbox, ListboxItem, Button } from '@nextui-org/react';
 import AddUnitButton from '../components/Syllabus/AddUnitButton';
-import getTasksList from '../requests/tasks/getTasksList';
-import getSyllbusAndUnits from '../requests/syllabus/getSyllbusList';
 import UnitTables from '../components/Syllabus/UnitTabels';
+import getRequest from '../requests/anew/getRequest';
 
 const Syllabus = () => {
   const { app, isAuthorized, auth } = useFirebase();
@@ -19,13 +18,13 @@ const Syllabus = () => {
 
   useEffect(() => {
     const getSyllabusFromDb = async () => {
-      const syllabusFromDB = await getSyllbusAndUnits();
+      const syllabusFromDB = await getRequest({ getUrl: `getSyllabusListWithUnits` });
       const syllabusList = Object.entries(syllabusFromDB).map(([id, data]) => ({
         id: data.id,
         name: `${data.program} | ${data.hebYear}`,
         units: data.units,
       }));
-      const tasksFromDB = await getTasksList({ app });
+      const tasksFromDB = await getRequest({ getUrl: `getTasksList` });
       setAllTasks(tasksFromDB);
       setSyllabusList(syllabusList);
     };

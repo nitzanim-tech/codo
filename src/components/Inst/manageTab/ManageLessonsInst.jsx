@@ -1,13 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Accordion, AccordionItem, CircularProgress, Button } from '@nextui-org/react';
 
-import { useFirebase } from '../../../util/FirebaseProvider';
-import getAllLessons from '../../../requests/lessons/getAllLessons';
 import { FileCard, DevTaskCard } from '../../general/Cards';
-import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
-import { SettingContext } from './ChangeSettingProvider';
-import updateElementSetting from '../../../requests/groups/updateElementSetting';
-import { ErrorMessage, SuccessMessage } from '../../general/Messages';
 import getRequest from '../../../requests/anew/getRequest';
    
 // const groupId = '435c59ddf19a';
