@@ -5,9 +5,9 @@ import NavBar from '../components/NavBar/NavigateBar';
 import './Home.css';
 import { Button, Grid, Card } from '@mui/material';
 import { Accordion, AccordionItem, ScrollShadow, Select, SelectItem } from '@nextui-org/react';
+import { CircularProgress, Divider, Slider } from '@nextui-org/react';
 import TaskCard from '../components/Home/TaskCard';
 import { useFirebase } from '../util/FirebaseProvider';
-import { CircularProgress } from '@nextui-org/react';
 
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
@@ -17,9 +17,9 @@ import spicyIcon from '../assets/svg/pepper.svg';
 import getRequest from '../requests/anew/getRequest';
 
 const Levels = [
-  { id: 0, name: 'בקטנה, תן להתחמם' },
-  { id: 1, name: 'רגיל כזה' },
-  { id: 2, name: 'יאללה מלחמה' },
+  { value: 0, name: 'בקטנה, תן להתחמם' },
+  { value: 1, name: 'רגיל כזה' },
+  { value: 2, name: 'יאללה מלחמה' },
 ];
 
 const FileCard = ({ file }) => {
@@ -71,23 +71,27 @@ function Home() {
                         .map((unit) => (
                           <AccordionItem key={unit.id} aria-label={`Accordion ${unit.name}`} title={unit.name}>
                             {unit.resources && unit.resources.length > 0 ? (
-                              unit.resources.map((resource) =>
-                                resource.type === 'task' ? (
-                                  <TaskCard
-                                    key={resource.id}
-                                    taskId={resource.id}
-                                    text={resource.name}
-                                    studentData={userData?.submissions?.[resource.id] || null}
-                                    isChallenge={resource.setting?.isChallenge || null}
-                                    showReview={resource.setting?.showReview || null}
-                                  />
-                                ) : (
-                                  <FileCard
-                                    key={resource.id} 
-                                    file={resource}
-                                  />
-                                ),
-                              )
+                              unit.resources
+                                .sort((A, B) => A.index - B.index)
+                                .map((resource) =>
+                                  resource.type === 'practice' ? (
+                                    <>
+                                      <Divider />
+                                      <p>ייאי תור</p>
+                                    </>
+                                  ) : resource.type === 'task' ? (
+                                    <TaskCard
+                                      key={resource.id}
+                                      taskId={resource.id}
+                                      text={resource.name}
+                                      studentData={userData?.submissions?.[resource.id] || null}
+                                      isChallenge={resource.setting?.isChallenge || null}
+                                      showReview={resource.setting?.showReview || null}
+                                    />
+                                  ) : (
+                                    <FileCard key={resource.id} file={resource} />
+                                  ),
+                                )
                             ) : (
                               <p>No resources available</p>
                             )}
@@ -101,6 +105,20 @@ function Home() {
               </Grid>
               <Grid item style={{ width: '35%' }}>
                 <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
+                <div style={{ width: '100%' }}>
+                  <Slider
+                    // value={level}
+                    // onChange={(event, newValue) => setLevel(newValue)}
+                    step={50}
+                    min={1}
+                    max={3}
+                    showSteps={true}
+                    marks={Levels}
+                    showTooltip={true}
+                    valueLabelDisplay="auto"
+                  />
+                </div>
+
                 <Select
                   items={Levels}
                   label="כמה חריף לשים"
@@ -109,14 +127,14 @@ function Home() {
                   className="max-w-xs"
                 >
                   {(level) => (
-                    <SelectItem key={level.id} textValue={level.name}>
+                    <SelectItem key={level.value} textValue={level.name}>
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div className="flex flex-col">
                           <span className="text-small">{level.name}</span>{' '}
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'left' }}>
-                          {Array.from({ length: level.id + 1 }).map((index) => (
+                          {Array.from({ length: level.value + 1 }).map((index) => (
                             <img
                               key={`${level.name}-${index}`}
                               src={spicyIcon}

@@ -9,13 +9,15 @@ import { SettingContext } from './ChangeSettingProvider';
 import updateElementSetting from '../../../requests/groups/updateElementSetting';
 import { ErrorMessage, SuccessMessage } from '../../general/Messages';
 import getRequest from '../../../requests/anew/getRequest';
+   
+// const groupId = '435c59ddf19a';
+const groupId = '70ad502eb5db';
 
 function ManageLessonsInst({ group }) {
   const [units, setUnits] = useState(null);
 
   useEffect(() => {
     const fetchLessons = async () => {
-      const groupId = '435c59ddf19a';
       const unitsFromDb = await getRequest({ getUrl: `getAllResourcesByGroup?group=${groupId}` });
       console.log({ unitsFromDb });
       setUnits(unitsFromDb);
@@ -44,6 +46,7 @@ function ManageLessonsInst({ group }) {
                                 key={resource.id}
                                 index={`${unit.id}-${resource.id}`}
                                 text={resource.name}
+                                groupId={groupId}
                                 isInst
                                 setting={resource?.setting || {}}
                               />
@@ -52,6 +55,7 @@ function ManageLessonsInst({ group }) {
                                 file={resource}
                                 index={`${unit.id}-${resource.id}`}
                                 setting={resource.setting}
+                                groupId={groupId}
                                 isInst
                               />
                             ),

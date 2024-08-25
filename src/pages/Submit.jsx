@@ -11,6 +11,7 @@ import SessionTracker from '../components/general/SessionTracker';
 import addSession from '../requests/sessions/addSession';
 import './Submit.css';
 
+const exampleCode = "# write your code here"
 function Submit() {
   const { app, userData } = useFirebase();
   const { index } = useParams();
@@ -18,7 +19,7 @@ function Submit() {
   const [testsOutputs, setTestsOutputs] = useState(null);
   const [highlightedLines, setHighlightedLines] = useState([]);
   const [noActivitySent, setNoActivitySent] = useState(false);
-  const [lastCode, setLastCode] = useState(localStorage.getItem('code') || examplecode);
+  const [lastCode, setLastCode] = useState(localStorage.getItem('code') || exampleCode);
 
   const handleUserActivity = useCallback(() => {
     clearTimeout(window.userActivityTimer);

@@ -88,12 +88,12 @@ function Instructors() {
                   </DropdownMenu>
                 </Dropdown>
 
-                <Tabs aria-label="Options">
-                  <Tab key="tasks" title="משימות" aria-label="Task tab">
+              <Tabs aria-label="Options">
+                  {/*   <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
                       {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}
                     </div>
-                  </Tab>
+                  </Tab> */}
                   {/* <Tab key="students" title="חניכים" aria-label="Students tab">
                     <CenteredDiv>
                       <StudentsTable

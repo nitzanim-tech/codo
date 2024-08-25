@@ -10,48 +10,55 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import { Tooltip } from '@nextui-org/react';
 import { useState, useContext } from 'react';
 import { SettingContext } from '../Inst/manageTab/ChangeSettingProvider';
+import postRequest from '../../requests/anew/postRequest';
 
-export const InstTaskButtons = ({ setting, index }) => {
+export const InstTaskButtons = ({ setting, index, groupId }) => {
   const [isVisible, setIsVisible] = useState(setting?.isVisible || false);
   const [showTest, setShowTest] = useState(setting?.showTest || false);
   const [showReview, setShowReview] = useState(setting?.showReview || false);
   const [challenge, setChallenge] = useState(setting?.isChallenge || false);
   const { setSettingChange } = useContext(SettingContext);
 
-  const updateSettingChange = (id, change) => {
-    setSettingChange((prevSettingChange) => ({
-      ...prevSettingChange,
-      [id]: { ...prevSettingChange[id], ...change },
-    }));
+  const updateSettingChange = async (id, change) => {
+    const resourceId = index.split('-')[1];
+
+    const updated = { groupId, resourceId, ...change };
+    console.log(updated);
+    const success = await postRequest({ postUrl: 'upsertGroupResource', object: updated });
+    if (success)
+      setSettingChange((prevSettingChange) => ({
+        ...prevSettingChange,
+        [id]: { ...prevSettingChange[id], ...change },
+      }));
   };
 
-  const toggleVisibility = () => {
+  const toggleVisibility = async () => {
     let changes = { isVisible: !isVisible };
-    if (isVisible) {
+    if (!isVisible) {
       setShowTest(false);
       setShowReview(false);
       setChallenge(false);
       changes = { ...changes, showTest: false, showReview: false, isChallenge: false };
     }
-    updateSettingChange(index, changes);
+    await updateSettingChange(index, changes);
     setIsVisible(!isVisible);
   };
 
-  const toggleShowTests = () => {
+  const toggleShowTests = async () => {
     const changes = { showTest: !showTest };
-    updateSettingChange(index, changes);
+    await updateSettingChange(index, changes);
     setShowTest(!showTest);
   };
 
-  const toggleChallenge = () => {
+  const toggleChallenge = async () => {
     const changes = { isChallenge: !challenge };
-    updateSettingChange(index, changes);
+    await updateSettingChange(index, changes);
     setChallenge(!challenge);
   };
 
-  const toggleShowReview = () => {
+  const toggleShowReview = async () => {
     const changes = { showReview: !showReview };
-    updateSettingChange(index, changes);
+    await updateSettingChange(index, changes);
     setShowReview(!showReview);
   };
 
@@ -87,20 +94,25 @@ export const InstTaskButtons = ({ setting, index }) => {
   );
 };
 
-export const InstFileButtons = ({ setting, index }) => {
+export const InstFileButtons = ({ setting, index, groupId }) => {
   const [isVisible, setIsVisible] = useState(setting?.isVisible || false);
   const { setSettingChange } = useContext(SettingContext);
 
-  const updateSettingChange = (id, change) => {
-    setSettingChange((prevSettingChange) => ({
-      ...prevSettingChange,
-      [id]: { ...prevSettingChange[id], ...change },
-    }));
+  const updateSettingChange = async (id, change) => {
+    const resourceId = index.split('-')[1];
+    const updated = { groupId, resourceId, ...change };
+    console.log({ updated });
+    const success = await postRequest({ postUrl: 'upsertGroupResource', object: updated });
+    if (success)
+      setSettingChange((prevSettingChange) => ({
+        ...prevSettingChange,
+        [id]: { ...prevSettingChange[id], ...change },
+      }));
   };
 
-  const toggleVisibility = () => {
+  const toggleVisibility = async () => {
     let changes = { isVisible: !isVisible };
-    updateSettingChange(index, changes);
+    await updateSettingChange(index, changes);
     setIsVisible(!isVisible);
   };
 
