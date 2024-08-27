@@ -1,8 +1,8 @@
 import firebaseConfig from '../../util/firebaseConfig';
 
-const postRequest = async ({ auth, postUrl , object }) => {
+const postRequest = async ({ auth, postUrl, object, setLoadCursor=true }) => {
   try {
-    document.body.classList.add('cursor-wait');
+    if (setLoadCursor) document.body.classList.add('cursor-wait');
     const apiUrl = firebaseConfig.apiUrl;
     // const currentUser = auth.currentUser;
     // const idToken = await currentUser.getIdToken(true);
@@ -24,7 +24,6 @@ const postRequest = async ({ auth, postUrl , object }) => {
     return;
   } finally {
     document.body.classList.remove('cursor-wait');
-
   }
 };
 

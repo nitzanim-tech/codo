@@ -43,13 +43,13 @@ function Home() {
   useEffect(() => {
     const fetchUnits = async () => {
       const unitsFromDb = await getRequest({ getUrl: `getHomepage?userId=${auth.currentUser.uid}` });
+      console.log({ unitsFromDb });
       setUnits(unitsFromDb);
       console.log(unitsFromDb);
     };
 
     userData && fetchUnits();
   }, [userData]);
-
 
   return (
     <>
@@ -58,49 +58,65 @@ function Home() {
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '30px' }}>
           <CircularProgress />
         </div>
-      ) : units ? (
+      ) : userData ? (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
             <Grid container spacing={1} columns={3} rows={1}>
               <Grid item style={{ width: '55%', margin: '2%' }}>
                 <ScrollShadow className="h-[100vh]" size={5}>
-                  <Accordion dir="rtl" selectedKeys={units.map((unit) => unit.id)} isCompact>
-                    {units && units.length > 0 ? (
-                      units
-                        .sort((unitA, unitB) => unitA.index - unitB.index)
-                        .map((unit) => (
-                          <AccordionItem key={unit.id} aria-label={`Accordion ${unit.name}`} title={unit.name}>
-                            {unit.resources && unit.resources.length > 0 ? (
-                              unit.resources
-                                .sort((A, B) => A.index - B.index)
-                                .map((resource) =>
-                                  resource.type === 'practice' ? (
-                                    <>
-                                      <Divider />
-                                      <p>ייאי תור</p>
-                                    </>
-                                  ) : resource.type === 'task' ? (
-                                    <TaskCard
-                                      key={resource.id}
-                                      taskId={resource.id}
-                                      text={resource.name}
-                                      studentData={userData?.submissions?.[resource.id] || null}
-                                      isChallenge={resource.setting?.isChallenge || null}
-                                      showReview={resource.setting?.showReview || null}
-                                    />
-                                  ) : (
-                                    <FileCard key={resource.id} file={resource} />
-                                  ),
-                                )
-                            ) : (
-                              <p>No resources available</p>
-                            )}
-                          </AccordionItem>
-                        ))
-                    ) : (
-                      <p>No units available</p>
-                    )}
-                  </Accordion>
+                  {units && (
+                    <Accordion dir="rtl" selectedKeys={units.map((unit) => unit.id)} isCompact>
+                      {units && units.length > 0 ? (
+                        units
+                          .sort((unitA, unitB) => unitA.index - unitB.index)
+                          .map((unit) => (
+                            <AccordionItem key={unit.id} aria-label={`Accordion ${unit.name}`} title={unit.name}>
+                              {unit.resources && unit.resources.length > 0 ? (
+                                unit.resources
+                                  .sort((A, B) => A.index - B.index)
+                                  .map((resource) =>
+                                    resource.type === 'practice' ? (
+                                      <>
+                                        <Divider />
+                                        <p style={{ textAlign: 'right' }}>תור אישי:</p>
+                                        {/* {unit.practices} */}
+                                        {unit.practices.length > 0 &&
+                                          unit.practices
+                                            .sort((A, B) => A.index - B.index)
+                                            .map((practice) => (
+                                              <TaskCard
+                                                key={practice.id}
+                                                taskId={practice.taskId}
+                                                text={practice.name}
+                                                // studentData={userData?.submissions?.[practice.id] || null}
+                                                // isChallenge={practice.setting?.isChallenge || null}
+                                                // showReview={practice.setting?.showReview || null}
+                                              />
+                                            ))}
+                                      </>
+                                    ) : resource.type === 'task' ? (
+                                      <TaskCard
+                                        key={resource.id}
+                                        taskId={resource.id}
+                                        text={resource.name}
+                                        studentData={userData?.submissions?.[resource.id] || null}
+                                        isChallenge={resource.setting?.isChallenge || null}
+                                        showReview={resource.setting?.showReview || null}
+                                      />
+                                    ) : (
+                                      <FileCard key={resource.id} file={resource} />
+                                    ),
+                                  )
+                              ) : (
+                                <p>No resources available</p>
+                              )}
+                            </AccordionItem>
+                          ))
+                      ) : (
+                        <p>No units available</p>
+                      )}
+                    </Accordion>
+                  )}
                 </ScrollShadow>
               </Grid>
               <Grid item style={{ width: '35%' }}>

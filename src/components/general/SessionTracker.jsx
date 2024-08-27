@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useFirebase } from '../../util/FirebaseProvider';
 import addSession from '../../requests/sessions/addSession';
 import { useParams } from 'react-router-dom';
+import postRequest from '../../requests/anew/postRequest';
 
 const SessionTracker = ({ type }) => {
   const { app, userData } = useFirebase();
@@ -11,23 +12,22 @@ const SessionTracker = ({ type }) => {
     if (!userData || !task || !type) return;
 
     if (type === 'start') {
-      const start = new Date().toISOString();
-      const session = { start };
-      addSession({ app, userId: userData.id, task, session });
+      const time = new Date().toISOString();
+      const newSession = { type, taskId: task, userId: userData.id, time };
+      postRequest({ postUrl: 'addSession', object: newSession, setLoadCursor: false });
     } else if (type === 'end') {
-      let end;
       const handleBeforeUnload = () => {
-        end = new Date().toISOString();
-        const session = { end };
-        addSession({ app, userId: userData.id, task, session });
+        const time = new Date().toISOString();
+        const newSession = { type, taskId: task, userId: userData.id, time, diff: 12 };
+        postRequest({ postUrl: 'addSession', object: newSession, setLoadCursor: false });
       };
 
       window.addEventListener('beforeunload', handleBeforeUnload);
 
       return () => {
-        end = new Date().toISOString();
-        const session = { end };
-        addSession({ app, userId: userData.id, task, session });
+        const time = new Date().toISOString();
+        const newSession = { type: 'end', taskId: task, userId: userData.id, time, diff: 14 };
+        postRequest({ postUrl: 'addSession', object: newSession, setLoadCursor: false });
         window.removeEventListener('beforeunload', handleBeforeUnload);
       };
     } else if (type === 'paste') {

@@ -34,7 +34,6 @@ function Instructors() {
   useEffect(() => {
     if (userData) {
       setSelectedGroup(userData.group);
-      console.log(isAuthorized(userData.email));
       isAuthorized(userData.email) ? setUnauthorized(false) : setUnauthorized(true);
     }
   }, [userData]);
@@ -76,13 +75,13 @@ function Instructors() {
                       variant="bordered"
                       endContent={<ApartmentRoundedIcon />}
                       style={{ marginLeft: '20px' }}
-                      isDisabled={userData.permissions.length === 1}
+                      isDisabled={userData?.permissions?.length === 1}
                     >
                       <b>{selectedGroup.name}</b>
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu onAction={(key) => handleChangeGroup(key)}>
-                    {userData.permissions.map((group) => (
+                    {userData.permissions?.map((group) => (
                       <DropdownItem key={group.id}>{group.name}</DropdownItem>
                     ))}
                   </DropdownMenu>
