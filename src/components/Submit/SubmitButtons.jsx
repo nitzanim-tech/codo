@@ -48,7 +48,8 @@ export default function SubmitButtons({ testsOutputs, taskObject, setHighlighted
             </>
           }
         >
-          {taskObject?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskObject} />}
+          {/* {taskObject?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskObject} />} */}
+          {taskObject && <TestsList testsOutputs={testsOutputs} taskObject={taskObject} />}
         </Tab>
 
         <Tab
@@ -60,7 +61,8 @@ export default function SubmitButtons({ testsOutputs, taskObject, setHighlighted
             </>
           }
         >
-          {taskObject?.setting?.showTest && <Instructions taskObject={taskObject} />}{' '}
+          {taskObject && <Instructions taskObject={taskObject} />}{' '}
+          {/* {taskObject?.setting?.showTest && <Instructions taskObject={taskObject} />}{' '} */}
         </Tab>
       </Tabs>
     </>

@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 
 export default function MonacoEditor({ code, setCode, theme, highlightedLines }) {
+  const { index } = useParams();
 
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
 
   useEffect(() => {
-    localStorage.setItem('code', code);
+    localStorage.setItem(`${index}-code`, code);
   }, [code]);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function MonacoEditor({ code, setCode, theme, highlightedLines })
 
   return (
     <StyledEditor
-      height="315px"
+      height="50vh"
       defaultLanguage="python"
       theme={theme}
       value={code}

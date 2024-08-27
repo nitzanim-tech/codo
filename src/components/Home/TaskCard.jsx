@@ -22,7 +22,7 @@ function TaskCard({ text, taskId, studentData, isChallenge, showReview }) {
   };
 
   const onTaskButtonClick = (index) => {
-    if (studentData) localStorage.setItem('code', studentData.trials[studentData.trials.length - 1].code);
+    if (studentData) localStorage.setItem(`${index}-code`, studentData.trials[studentData.trials.length - 1].code);
       window.location.href = `./submit/${index}`;
   };
   const submitsWithReview = studentData ? findReviews(studentData.trials) : [];

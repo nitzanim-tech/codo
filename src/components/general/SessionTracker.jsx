@@ -3,22 +3,27 @@ import { useFirebase } from '../../util/FirebaseProvider';
 import addSession from '../../requests/sessions/addSession';
 import { useParams } from 'react-router-dom';
 import postRequest from '../../requests/anew/postRequest';
+import levenshteinDistance from '../../util/levenshteinDistance';
 
 const SessionTracker = ({ type }) => {
   const { app, userData } = useFirebase();
-  const { index: task } = useParams();
+  const { index } = useParams();
 
   useEffect(() => {
-    if (!userData || !task || !type) return;
+    if (!userData || !index || !type) return;
 
     if (type === 'start') {
       const time = new Date().toISOString();
-      const newSession = { type, taskId: task, userId: userData.id, time };
+      const newSession = { type, taskId: index, userId: userData.id, time };
       postRequest({ postUrl: 'addSession', object: newSession, setLoadCursor: false });
     } else if (type === 'end') {
       const handleBeforeUnload = () => {
-        const time = new Date().toISOString();
-        const newSession = { type, taskId: task, userId: userData.id, time, diff: 12 };
+        const lastCode = localStorage.getItem(`${index}-lastCode`);
+                const code = localStorage.getItem(`${index}-code`);
+
+        const dist = levenshteinDistance(code, lastCode);
+        localStorage.setItem(`${index}-lastCode`, code);
+        const newSession = { type: 'end', taskId: index, userId: userData.id, time, dist };
         postRequest({ postUrl: 'addSession', object: newSession, setLoadCursor: false });
       };
 
@@ -26,7 +31,13 @@ const SessionTracker = ({ type }) => {
 
       return () => {
         const time = new Date().toISOString();
-        const newSession = { type: 'end', taskId: task, userId: userData.id, time, diff: 14 };
+        const lastCode = localStorage.getItem(`${index}-lastCode`);
+        const code =  localStorage.getItem(`${index}-code`);
+
+        const dist = levenshteinDistance(code, lastCode);
+        localStorage.setItem(`${index}-lastCode`, code);
+        
+        const newSession = { type: 'end', taskId: index, userId: userData.id, time, dist };
         postRequest({ postUrl: 'addSession', object: newSession, setLoadCursor: false });
         window.removeEventListener('beforeunload', handleBeforeUnload);
       };
@@ -36,7 +47,7 @@ const SessionTracker = ({ type }) => {
         const pastedData = clipboardData.getData('text');
         const time = new Date().toISOString();
         const session = { pastedData, time };
-        addSession({ app, userId: userData.id, task, session });
+        addSession({ app, userId: userData.id, task: index, session });
       };
 
       document.addEventListener('paste', handlePaste);
@@ -50,7 +61,7 @@ const SessionTracker = ({ type }) => {
         const copiedData = clipboardData.getData('text');
         const time = new Date().toISOString();
         const session = { copiedData, time };
-        addSession({ app, userId: userData.id, task, session });
+        addSession({ app, userId: userData.id, task: index, session });
       };
 
       document.addEventListener('copy', handleCopy);
@@ -59,7 +70,7 @@ const SessionTracker = ({ type }) => {
         document.removeEventListener('copy', handleCopy);
       };
     }
-  }, [app, userData, task, type]);
+  }, [app, userData, index, type]);
 
   return null;
 };

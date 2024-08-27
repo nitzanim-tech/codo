@@ -8,10 +8,11 @@ import addSession from '../../requests/sessions/addSession';
 import { useFirebase } from '../../util/FirebaseProvider';
 import { useParams } from 'react-router-dom';
 import levenshteinDistance from '../../util/levenshteinDistance';
+import postRequest from '../../requests/anew/postRequest';
 
 export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject, buttonElement }) {
   const pyodide = usePyodide();
-  const { app, userData } = useFirebase();
+  const { userData } = useFirebase();
   const { index } = useParams();
 
   useEffect(() => {
@@ -58,35 +59,29 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
   async function handleClick() {
     const userTestOutputs = await runTest({ code, tests: taskObject.tests });
     const isTaskDefault = Boolean(taskObject.code);
+    let testsOutput;
     if (isTaskDefault) {
       const ansTestOutputs = await runTest({ code: taskObject.code, tests: taskObject.tests });
-      const testsOutput = processTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
-      setTestsOutputs(testsOutput);
-      const pass = testsOutput.map((output) => output.correct);
-      const time = new Date().toISOString();
-      const editDist = levenshteinDistance(code, lastCode);
-      const session = { pass, time, editDist };
-      setLastCode(code);
-      addSession({ app, userId: userData.id, task: index, session });
-    } 
-    
-    
-    
-    else {
-      const testsOutput = getProcessOutputs({
+      testsOutput = processTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
+    } else {
+      testsOutput = getProcessOutputs({
         task: taskObject.id,
         taskTests: taskObject.tests,
         testsOutputs: userTestOutputs,
       });
-
-      setTestsOutputs(testsOutput);
-      const pass = testsOutput.map((output) => output.correct);
-      const time = new Date().toISOString();
-      const editDist = levenshteinDistance(code, lastCode);
-      const session = { pass, time, editDist };
-      setLastCode(code);
-      addSession({ app, userId: userData.id, task: index, session });
     }
+
+    setTestsOutputs(testsOutput);
+
+    const pass = testsOutput.map((output) => output.correct);
+    const time = new Date().toISOString();
+    const lastCode = localStorage.getItem(`${index}-lastCode`);
+    const dist = levenshteinDistance(code, lastCode);
+    console.log({ lastCode, code });
+    const session = { type: 'run', time, taskId: index, userId: userData.id, pass, dist };
+    postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
+
+    localStorage.setItem(`${index}-lastCode`, code);
   }
 
   const defaultButton = (

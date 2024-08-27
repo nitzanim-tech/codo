@@ -5,13 +5,13 @@ import NavBar from '../components/NavBar/NavigateBar';
 import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
-import getTaskById from '../requests/tasks/getTaskById';
 import SubmitButtons from '../components/Submit/SubmitButtons';
 import SessionTracker from '../components/general/SessionTracker';
 import addSession from '../requests/sessions/addSession';
 import './Submit.css';
+import getRequest from '../requests/anew/getRequest';
+import { examplecode } from '../util/examples/exampleCode';
 
-const exampleCode = "# write your code here"
 function Submit() {
   const { app, userData } = useFirebase();
   const { index } = useParams();
@@ -19,19 +19,19 @@ function Submit() {
   const [testsOutputs, setTestsOutputs] = useState(null);
   const [highlightedLines, setHighlightedLines] = useState([]);
   const [noActivitySent, setNoActivitySent] = useState(false);
-  const [lastCode, setLastCode] = useState(localStorage.getItem('code') || exampleCode);
+  const [code, setCode] = useState(localStorage.getItem(`${index}-code`) || examplecode);
 
   const handleUserActivity = useCallback(() => {
     clearTimeout(window.userActivityTimer);
     if (noActivitySent) {
-      const session = { type: 'userActive', time: new Date().toISOString() };
-      addSession({ app, userId: userData.id, task: index, session });
+      const session = { type: 'userActive', time: new Date().toISOString(), task: index, userId: userData.id };
+      postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
       setNoActivitySent(false);
     }
     window.userActivityTimer = setTimeout(
       () => {
-        const session = { type: 'noActivity', time: new Date().toISOString() };
-        addSession({ app, userId: userData.id, task: index, session });
+        const session = { type: 'noActivity', time: new Date().toISOString(), task: index, userId: userData.id };
+        postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
         setNoActivitySent(true);
       },
       10 * 60 * 1000, // 10 minutes
@@ -56,10 +56,15 @@ function Submit() {
   useEffect(() => {
     const fetchData = async () => {
       if (userData) {
-        const taskFromDb = await getTaskById({ app, taskId: index, groupId: userData?.group.id });
+        localStorage.setItem(`${index}-lastCode`, code);
+
+        const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${index}&&groupId=${1}` });
+        console.log({ taskFromDb });
+        // getTaskById({ app, taskId: index, groupId: userData?.group.id });
         taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
         setTaskData(taskFromDb);
         const testNames = taskFromDb.tests.map((test) => test.name);
+        console.log({ testNames });
         const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
         setTestsOutputs(newEmptyTests);
       }
@@ -80,6 +85,8 @@ function Submit() {
                 setTestsOutputs={setTestsOutputs}
                 taskObject={taskData}
                 highlightedLines={highlightedLines}
+                code={code}
+                setCode={setCode}
               />
             </Grid>
             <Grid item style={{ width: '40%' }}>

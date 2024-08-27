@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardBody, Divider } from "@nextui-org/react";
 
-import { examplecode } from "../../util/examples/exampleCode";
 import Terminal from "./Terminal";
 import IDEButtons from './IDEButtons';
 import MonacoEditor from './MonacoEditor';
 
-function PythonIDE({ testsOutputs, setTestsOutputs, taskObject, highlightedLines }) {
-  const [code, setCode] = useState(localStorage.getItem('code') || examplecode);
+function PythonIDE({ testsOutputs, setTestsOutputs, taskObject, highlightedLines, code, setCode }) {
   const [output, setOutput] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [inputCallback, setInputCallback] = useState(null);
