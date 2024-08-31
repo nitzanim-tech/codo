@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 
 export default function MonacoEditor({ code, setCode, theme, highlightedLines }) {
-  const { index } = useParams();
+  const { task } = useParams();
 
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
 
   useEffect(() => {
-    localStorage.setItem(`${index}-code`, code);
+    localStorage.setItem(`${task}-code`, code);
   }, [code]);
 
   useEffect(() => {

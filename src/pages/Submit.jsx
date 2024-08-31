@@ -11,36 +11,30 @@ import addSession from '../requests/sessions/addSession';
 import './Submit.css';
 import getRequest from '../requests/anew/getRequest';
 import { examplecode } from '../util/examples/exampleCode';
+import postRequest from '../requests/anew/postRequest';
+import { handleUserActivity } from '../components/Submit/activityTracker';
 
 function Submit() {
   const { app, userData } = useFirebase();
-  const { index } = useParams();
+  const { task, unit } = useParams();
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState(null);
   const [highlightedLines, setHighlightedLines] = useState([]);
   const [noActivitySent, setNoActivitySent] = useState(false);
-  const [code, setCode] = useState(localStorage.getItem(`${index}-code`) || examplecode);
+  const [code, setCode] = useState(localStorage.getItem(`${task}-code`) || examplecode);
 
-  const handleUserActivity = useCallback(() => {
-    clearTimeout(window.userActivityTimer);
-    if (noActivitySent) {
-      const session = { type: 'userActive', time: new Date().toISOString(), task: index, userId: userData.id };
-      postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
-      setNoActivitySent(false);
-    }
-    window.userActivityTimer = setTimeout(
-      () => {
-        const session = { type: 'noActivity', time: new Date().toISOString(), task: index, userId: userData.id };
-        postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
-        setNoActivitySent(true);
-      },
-      10 * 60 * 1000, // 10 minutes
-    );
-  }, [app, index, userData, noActivitySent]);
+  const userActivityHandler = useCallback(() => {
+    handleUserActivity(task, userData, noActivitySent, setNoActivitySent);
+  }, [task, userData, noActivitySent]);
 
   useEffect(() => {
+    let activityTimeout = null;
+
     const activityHandler = () => {
-      handleUserActivity();
+      clearTimeout(activityTimeout);
+      activityTimeout = setTimeout(() => {
+        userActivityHandler();
+      }, 100);
     };
 
     window.addEventListener('mousemove', activityHandler);
@@ -48,30 +42,29 @@ function Submit() {
 
     return () => {
       clearTimeout(window.userActivityTimer);
+      clearTimeout(activityTimeout);
       window.removeEventListener('mousemove', activityHandler);
       window.removeEventListener('keypress', activityHandler);
     };
-  }, [handleUserActivity]);
+  }, [userActivityHandler]);
 
   useEffect(() => {
     const fetchData = async () => {
       if (userData) {
-        localStorage.setItem(`${index}-lastCode`, code);
+        localStorage.setItem(`${task}-lastCode`, code);
 
-        const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${index}&&groupId=${1}` });
+        const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${task}&&groupId=${1}` });
         console.log({ taskFromDb });
-        // getTaskById({ app, taskId: index, groupId: userData?.group.id });
         taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
         setTaskData(taskFromDb);
         const testNames = taskFromDb.tests.map((test) => test.name);
-        console.log({ testNames });
         const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
         setTestsOutputs(newEmptyTests);
       }
     };
 
     fetchData();
-  }, [index, userData]);
+  }, [task, userData]);
 
   return (
     <>
@@ -101,6 +94,8 @@ function Submit() {
       </PyodideProvider>
       <SessionTracker type={'start'} />
       <SessionTracker type={'end'} />
+      <SessionTracker type={'copy'} />
+      <SessionTracker type={'paste'} />
     </>
   );
 }

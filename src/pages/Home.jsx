@@ -37,7 +37,7 @@ const FileCard = ({ file }) => {
 };
 
 function Home() {
-  const { app, auth, userData, isUserLoading } = useFirebase();
+  const { auth, userData, isUserLoading } = useFirebase();
   const [units, setUnits] = useState();
 
   useEffect(() => {
@@ -88,6 +88,7 @@ function Home() {
                                                 key={practice.id}
                                                 taskId={practice.taskId}
                                                 text={practice.name}
+                                                unitId={unit.id}
                                                 // studentData={userData?.submissions?.[practice.id] || null}
                                                 // isChallenge={practice.setting?.isChallenge || null}
                                                 // showReview={practice.setting?.showReview || null}
@@ -99,6 +100,7 @@ function Home() {
                                         key={resource.id}
                                         taskId={resource.id}
                                         text={resource.name}
+                                        unitId={unit.id}
                                         studentData={userData?.submissions?.[resource.id] || null}
                                         isChallenge={resource.setting?.isChallenge || null}
                                         showReview={resource.setting?.showReview || null}

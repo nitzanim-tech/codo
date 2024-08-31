@@ -13,7 +13,7 @@ import postRequest from '../../requests/anew/postRequest';
 export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject, buttonElement }) {
   const pyodide = usePyodide();
   const { userData } = useFirebase();
-  const { index } = useParams();
+  const { task } = useParams();
 
   useEffect(() => {
     if (runTests) handleClick();
@@ -70,18 +70,17 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
         testsOutputs: userTestOutputs,
       });
     }
-
+console.log({ testsOutput, taskTests: taskObject.tests, userTestOutputs });
     setTestsOutputs(testsOutput);
 
     const pass = testsOutput.map((output) => output.correct);
     const time = new Date().toISOString();
-    const lastCode = localStorage.getItem(`${index}-lastCode`);
+    const lastCode = localStorage.getItem(`${task}-lastCode`);
     const dist = levenshteinDistance(code, lastCode);
-    console.log({ lastCode, code });
-    const session = { type: 'run', time, taskId: index, userId: userData.id, pass, dist };
+    const session = { type: 'run', time, taskId: task, userId: userData.id, pass, dist };
     postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
 
-    localStorage.setItem(`${index}-lastCode`, code);
+    localStorage.setItem(`${task}-lastCode`, code);
   }
 
   const defaultButton = (

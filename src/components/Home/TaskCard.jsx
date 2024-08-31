@@ -8,7 +8,7 @@ import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUnch
 import formatDate from '../../util/formatDate';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
-function TaskCard({ text, taskId, studentData, isChallenge, showReview }) {
+function TaskCard({ text, taskId, studentData, isChallenge, showReview, unitId }) {
   const findReviews = (trials) => {
     return trials
       .filter((trial) => trial.review)
@@ -21,9 +21,9 @@ function TaskCard({ text, taskId, studentData, isChallenge, showReview }) {
       }));
   };
 
-  const onTaskButtonClick = (index) => {
-    if (studentData) localStorage.setItem(`${index}-code`, studentData.trials[studentData.trials.length - 1].code);
-      window.location.href = `./submit/${index}`;
+  const onTaskButtonClick = (taskId) => {
+    if (studentData) localStorage.setItem(`${taskId}-code`, studentData.trials[studentData.trials.length - 1].code);
+      window.location.href = `./submit/${unitId}/${taskId}`;
   };
   const submitsWithReview = studentData ? findReviews(studentData.trials) : [];
 
