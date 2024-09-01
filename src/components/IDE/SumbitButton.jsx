@@ -15,7 +15,7 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
   const { task, unit } = useParams();
 
   const [openModal, setOpenModal] = useState(false);
-  const [succesfulySent, setSuccesfulySent] = useState(false);
+  const [nextTask, setNextTask] = useState();
   const [errorSent, setErrorSent] = useState(false);
   const [testStatus, setTestStatus] = useState('');
   const [sumbitCalled, setSumbitCalled] = useState(false);
@@ -42,14 +42,14 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
     const time = new Date().toISOString();
     const newSubmit = { userId: auth.currentUser.uid, taskId: task, code, time, pass, unitId: unit };
 
-    const { id } = await postRequest({ postUrl: 'postSubmit', object: newSubmit });
-    id ? setSuccesfulySent(true) : setErrorSent(true);
+    const { nextPractice } = await postRequest({ postUrl: 'postSubmit', object: newSubmit });
+    nextPractice ? setNextTask(nextPractice) : setErrorSent(true);
   };
 
   const resetState = () => {
     setTestStatus('');
     setOpenModal(false);
-    setSuccesfulySent(false);
+    setNextTask('');
     setSumbitCalled(false);
     setErrorSent(false);
   };
@@ -69,11 +69,24 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
             <ModalBody style={{ textAlign: 'center' }}>
               {testStatus && auth.currentUser && <p>הקוד עבר {testStatus} טסטים</p>}
               {auth.currentUser.uid ? <p>האם ברצונך להגיש?</p> : <p>יש להרשם או להתחבר</p>}
-              {succesfulySent && (
-                <p style={{ fontWeight: 'bold', color: '#005395' }}>
-                  <CheckCircleRoundedIcon />
-                  הוגש בהצלחה
-                </p>
+              {nextTask && (
+                <>
+                  <p style={{ fontWeight: 'bold', color: '#005395' }}>
+                    <CheckCircleRoundedIcon />
+                    הוגש בהצלחה
+                  </p>
+                  {nextTask === 'end' && (
+                    <p style={{ fontWeight: 'bold', color: '#005395' }}>סיימת את כל המשימות ליחידה, כל הכבוד!</p>
+                  )}
+                  {nextTask === 'none' && (
+                    <p style={{ fontWeight: 'bold', color: '#005395' }}>
+                      איזה מהירות… בקושי ישבת על התרגיל, עוד קצת ויש לך את זה!
+                    </p>
+                  )}
+                  {nextTask !== 'none' && nextTask !== 'end' && (
+                    <p style={{ fontWeight: 'bold', color: '#005395' }}>יאללה, שנעבור לתרגיל הבא?</p>
+                  )}
+                </>
               )}
               {errorSent && (
                 <p style={{ fontWeight: 'bold', color: 'red' }}>

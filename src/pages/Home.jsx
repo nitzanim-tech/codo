@@ -58,7 +58,7 @@ function Home() {
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '30px' }}>
           <CircularProgress />
         </div>
-      ) : userData ? (
+      ) : auth.currentUser ? (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
             <Grid container spacing={1} columns={3} rows={1}>

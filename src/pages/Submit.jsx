@@ -15,7 +15,7 @@ import postRequest from '../requests/anew/postRequest';
 import { handleUserActivity } from '../components/Submit/activityTracker';
 
 function Submit() {
-  const { app, userData } = useFirebase();
+  const { auth, userData } = useFirebase();
   const { task, unit } = useParams();
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState(null);
@@ -58,6 +58,7 @@ function Submit() {
         taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
         setTaskData(taskFromDb);
         const testNames = taskFromDb.tests.map((test) => test.name);
+        console.log({ testNames });
         const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
         setTestsOutputs(newEmptyTests);
       }
@@ -70,28 +71,33 @@ function Submit() {
     <>
       <NavBar />
       <PyodideProvider>
-        {taskData && testsOutputs && (
-          <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
-            <Grid item style={{ width: '60%' }}>
-              <PythonIDE
-                testsOutputs={testsOutputs}
-                setTestsOutputs={setTestsOutputs}
-                taskObject={taskData}
-                highlightedLines={highlightedLines}
-                code={code}
-                setCode={setCode}
-              />
+        {auth.currentUser ? (
+          taskData && testsOutputs ? (
+            <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
+              <Grid item style={{ width: '60%' }}>
+                <PythonIDE
+                  testsOutputs={testsOutputs}
+                  setTestsOutputs={setTestsOutputs}
+                  taskObject={taskData}
+                  highlightedLines={highlightedLines}
+                  code={code}
+                  setCode={setCode}
+                />
+              </Grid>
+              <Grid item style={{ width: '40%' }}>
+                <SubmitButtons
+                  testsOutputs={testsOutputs}
+                  taskObject={taskData}
+                  setHighlightedLines={setHighlightedLines}
+                />
+              </Grid>
             </Grid>
-            <Grid item style={{ width: '40%' }}>
-              <SubmitButtons
-                testsOutputs={testsOutputs}
-                taskObject={taskData}
-                setHighlightedLines={setHighlightedLines}
-              />
-            </Grid>
-          </Grid>
+          ) : null
+        ) : (
+          <h1>אנא התחברו</h1>
         )}
       </PyodideProvider>
+
       <SessionTracker type={'start'} />
       <SessionTracker type={'end'} />
       <SessionTracker type={'copy'} />
