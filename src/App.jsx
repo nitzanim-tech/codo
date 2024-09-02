@@ -13,7 +13,7 @@ import Manager from './pages/Manager';
 import Dashboard from './pages/Dashboard';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
-
+import Syllabus from './pages/Syllabus';
 import './App.css';
 
 ReactGA.initialize(firebaseConfig.measurementId);
@@ -28,7 +28,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/inst" element={<Instructurs />} />
-        <Route path="/submit/:index" element={<Submit />} />
+        <Route path="/submit/:unit/:task" element={<Submit />} />
         <Route path="/submit/:index/play" element={<Play />} />
         <Route path="/review" element={<Review />} />
         <Route path="/readReview" element={<ReadReview />} />
@@ -40,6 +40,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/manager" element={<Manager />} />
+
+        <Route path="/syllabus" element={<Syllabus />} />
       </Routes>
     </BrowserRouter>
   );

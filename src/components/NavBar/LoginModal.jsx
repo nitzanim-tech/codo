@@ -1,29 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 import { ModalBody, ModalFooter, Button } from '@nextui-org/react';
-import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
-import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
+import { Modal, ModalHeader, ModalContent, Divider } from '@nextui-org/react';
 import GoogleIcon from '@mui/icons-material/Google';
-import { isUserExists } from '../../requests/registerUser';
 import { signOut } from 'firebase/auth';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import getRequest from '../../requests/anew/getRequest';
 
-const LoginModal = ({ app, auth, open, setOpen }) => {
+const LoginModal = ({ auth, isOpen, onOpenChange, onClose }) => {
   const [error, setError] = useState('');
 
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      const isExist = await isUserExists({ uid: result.user.uid, app });
-      if (!isExist) {
+      console.log('User signed in:', result.user);
+      const idToken = await result.user.getIdToken(true);
+      const { token } = await getRequest({ getUrl: `login`, token: idToken });
+      console.log(auth);
+      
+      if (token) localStorage.setItem('token', token);
+      else {
+        console.log('in else');
         await signOut(auth);
         setError('משתמש לא רשום');
         return;
       }
-      setOpen(false);
+
+      onOpenChange();
     } catch (error) {
       setError(error.message);
     }
@@ -35,25 +40,29 @@ const LoginModal = ({ app, auth, open, setOpen }) => {
   };
   return (
     <>
-      <Modal isOpen={open} dir="rtl">
-        <ModalContent onClose={handleClose}>
-          <ModalHeader>התחבר</ModalHeader>
-          <ModalBody>
-            <Button onClick={handleGoogleSignIn} startContent={<GoogleIcon />}>
-              התחבר באמצעות גוגל
-            </Button>
-            <Divider />
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} placement="top-center" dir="rtl" size="m">
+        <ModalContent>
+          {(close) => (
+            <>
+              <ModalHeader>התחבר</ModalHeader>
+              <ModalBody>
+                <Button onClick={handleGoogleSignIn} startContent={<GoogleIcon />}>
+                  התחבר באמצעות גוגל
+                </Button>
+                <Divider />
 
-            {error && (
-              <p style={{ fontWeight: 'bold', color: 'red' }}>
-                <CancelRoundedIcon />
-                {error}
-              </p>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <button onClick={handleClose}>סגור</button>
-          </ModalFooter>
+                {error && (
+                  <p style={{ fontWeight: 'bold', color: 'red' }}>
+                    <CancelRoundedIcon />
+                    {error}
+                  </p>
+                )}
+              </ModalBody>
+              <ModalFooter>
+                <button onClick={handleClose}>סגור</button>
+              </ModalFooter>
+            </>
+          )}
         </ModalContent>
       </Modal>
     </>

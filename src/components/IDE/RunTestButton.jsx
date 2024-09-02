@@ -8,17 +8,18 @@ import addSession from '../../requests/sessions/addSession';
 import { useFirebase } from '../../util/FirebaseProvider';
 import { useParams } from 'react-router-dom';
 import levenshteinDistance from '../../util/levenshteinDistance';
+import postRequest from '../../requests/anew/postRequest';
 
 export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject, buttonElement }) {
   const pyodide = usePyodide();
-  const { app, userData } = useFirebase();
-  const { index } = useParams();
-  const [lastCode, setLastCode] = useState(code);
+  const { userData } = useFirebase();
+  const { task } = useParams();
+
   useEffect(() => {
     if (runTests) handleClick();
   }, [runTests]);
 
-  async function runPython({ code, input }) {
+  async function runPython({ code, input = '' }) {
     try {
       pyodide.runPython('import io, sys');
       pyodide.runPython(`sys.stdin = io.StringIO("${input}")`);
@@ -45,10 +46,11 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
       const codeToRun = code + '\n' + (test.runningCode || '');
       try {
         if (!test.isHidden) {
-          const output = await runPython({ code: codeToRun, input: test.input.replace(/\n/g, '\\n') });
+          const output = await runPython({ code: codeToRun, input: test.input?.replace(/\n/g, '\\n')|| '' });
           testsOutputs.push({ input: test.input, output });
         }
-      } catch {
+      } catch (error) {
+        console.error('Error:', error);
         break;
       }
     }
@@ -57,26 +59,30 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
 
   async function handleClick() {
     const userTestOutputs = await runTest({ code, tests: taskObject.tests });
-    const isTaskDefault = Boolean(taskObject.code);
+    console.log({ taskObject });
+    const isTaskDefault = taskObject.isDefault;
+    let testsOutput;
     if (isTaskDefault) {
       const ansTestOutputs = await runTest({ code: taskObject.code, tests: taskObject.tests });
-      const testsOutput = processTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
-      setTestsOutputs(testsOutput);
+      testsOutput = processDefaultTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
     } else {
-      const testsOutput = getProcessOutputs({
+      testsOutput = getProcessOutputs({
         task: taskObject.id,
         taskTests: taskObject.tests,
         testsOutputs: userTestOutputs,
       });
-
-      setTestsOutputs(testsOutput);
-      const pass = testsOutput.map((output) => output.correct);
-      const time = new Date().toISOString();
-      const editDist = levenshteinDistance(code, lastCode);
-      const session = { pass, time, editDist };
-      setLastCode(code);
-      addSession({ app, userId: userData.id, task: index, session });
     }
+    console.log({ testsOutput, taskTests: taskObject.tests, userTestOutputs });
+    setTestsOutputs(testsOutput);
+
+    const pass = testsOutput.map((output) => output.correct);
+    const time = new Date().toISOString();
+    const lastCode = localStorage.getItem(`${task}-lastCode`);
+    const dist = levenshteinDistance(code, lastCode);
+    const session = { type: 'run', time, taskId: task, userId: userData.id, pass, dist };
+    postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
+
+    localStorage.setItem(`${task}-lastCode`, code);
   }
 
   const defaultButton = (
@@ -95,7 +101,8 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
   );
 }
 
-function processTestsOutputs({ taskTests, userTestOutputs, ansTestOutputs }) {
+function processDefaultTestsOutputs({ taskTests, userTestOutputs, ansTestOutputs }) {
+  console.log({ taskTests, userTestOutputs, ansTestOutputs });
   const names = taskTests.map((test) => test.name);
 
   return userTestOutputs.map((testsOutput, index) => {

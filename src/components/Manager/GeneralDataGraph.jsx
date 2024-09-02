@@ -12,7 +12,7 @@ const GeneralDataGraph = ({ students }) => {
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', width: '50%', textAlign: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '70%', textAlign: 'center' }}>
           <CustomNumber text={'משובים'} number={parameters.reviews} />
           <CustomNumber text={'הגשות'} number={parameters.submissions} />
           <CustomNumber text={'חניכים'} number={students.length} />

@@ -6,6 +6,7 @@ const addSession = async ({ app, userId, task, session }) => {
 
   const db = getDatabase(app);
   const sessionSubmitsRef = ref(db, `sessions/${userId}/${task}/${sessionUuid}`);
+  console.log(`sessions/${userId}/${task}/${sessionUuid}`);
   try {
     await set(sessionSubmitsRef, session);
     console.log(session);

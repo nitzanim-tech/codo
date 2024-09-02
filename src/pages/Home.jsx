@@ -4,73 +4,133 @@ import NavBar from '../components/NavBar/NavigateBar';
 
 import './Home.css';
 import { Button, Grid, Card } from '@mui/material';
-import { Accordion, AccordionItem, Tooltip, Badge, ScrollShadow } from '@nextui-org/react';
+import { Accordion, AccordionItem, ScrollShadow, Select, SelectItem } from '@nextui-org/react';
+import { CircularProgress, Divider, Slider } from '@nextui-org/react';
 import TaskCard from '../components/Home/TaskCard';
 import { useFirebase } from '../util/FirebaseProvider';
-import { CircularProgress } from '@nextui-org/react';
-import getAllLessons from '../requests/lessons/getAllLessons';
 
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
+import spicyIcon from '../assets/svg/pepper.svg';
+import getRequest from '../requests/anew/getRequest';
+
+const Levels = [
+  { value: 0, name: 'בקטנה, תן להתחמם' },
+  { value: 1, name: 'רגיל כזה' },
+  { value: 2, name: 'יאללה מלחמה' },
+];
+
+const FileCard = ({ file }) => {
+  return (
+    <Card dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
+      <Button radius="full" variant="faded" onClick={() => window.open(file.link)}>
+        {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
+        {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
+        {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
+        {file.type === 'webLink' && <PublicRoundedIcon style={{ color: '#BF1E2E' }} />}
+      </Button>
+      {file.name}
+    </Card>
+  );
+};
 
 function Home() {
-  const { app, userData, isUserLoading } = useFirebase();
-  const [lessons, setLessons] = useState({});
+  const { userData } = useFirebase();
+  const [units, setUnits] = useState();
 
   useEffect(() => {
-    const fetchLessons = async () => {
-      const allLessons = await getAllLessons({ app, groupId: userData.group.id });
-      const clearedLessons = clearUnvisable(allLessons);
-      setLessons(clearedLessons);
+    const fetchUnits = async () => {
+      const unitsFromDb = await getRequest({ getUrl: `getHomepage?userId=${userData.id}` });
+      // console.log({ unitsFromDb });
+      setUnits(unitsFromDb);
+      console.log(unitsFromDb);
     };
 
-    userData && fetchLessons();
+    userData && fetchUnits();
   }, [userData]);
-
-  const allKeys = Object.keys(lessons).map((lesson) => lesson.toString());
 
   return (
     <>
       <NavBar />
-      {isUserLoading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '30px' }}>
-          <CircularProgress />
-        </div>
-      ) : userData ? (
+      {userData ? (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
             <Grid container spacing={1} columns={3} rows={1}>
               <Grid item style={{ width: '55%', margin: '2%' }}>
-                <ScrollShadow className="h-[550px]" size={5}>
-                  <Accordion dir="rtl" selectedKeys={allKeys} isCompact>
-                    {Object.entries(lessons).map(([lessonId, lessonData]) => (
-                      <AccordionItem
-                        key={`${lessonId}`}
-                        aria-label={`Accordion ${lessonData.lessonName}`}
-                        title={lessonData.lessonName}
-                      >
-                        {Object.entries(lessonData.elements).map(([elementId, element]) =>
-                          element.type === 'task' ? (
-                            <TaskCard
-                              taskId={elementId}
-                              text={element.name}
-                              studentData={userData.submissions ? userData.submissions[elementId] : null}
-                              isChallenge={element.setting?.isChallenge || null}
-                              showReview={element.setting?.showReview || null}
-                            />
-                          ) : (
-                            <FileCard file={element} />
-                          ),
-                        )}
-                      </AccordionItem>
-                    ))}
-                  </Accordion>{' '}
+                <ScrollShadow className="h-[100vh]" size={5}>
+                  {units ? (
+                    <Accordion dir="rtl" selectedKeys={units.map((unit) => unit.id)} isCompact>
+                      {units && units.length > 0 ? (
+                        units
+                          .sort((unitA, unitB) => unitA.index - unitB.index)
+                          .map((unit) => (
+                            <AccordionItem key={unit.id} aria-label={`Accordion ${unit.name}`} title={unit.name}>
+                              {unit.resources && unit.resources.length > 0 ? (
+                                unit.resources
+                                  .sort((A, B) => A.index - B.index)
+                                  .map((resource) =>
+                                    resource.type === 'practice' ? (
+                                      <>
+                                        <Divider />
+                                        <p style={{ textAlign: 'right' }}>תור אישי:</p>
+                                        {unit.practices.length > 0 &&
+                                          unit.practices
+                                            .sort((A, B) => A.index - B.index)
+                                            .map((practice) => (
+                                              <TaskCard
+                                                key={practice.id}
+                                                taskId={practice.taskId}
+                                                text={practice.name}
+                                                unitId={unit.id}
+                                                studentData={practice.submission || false}
+                                                // isChallenge={practice.setting?.isChallenge || null}
+                                                // showReview={practice.setting?.showReview || null}
+                                              />
+                                            ))}
+                                      </>
+                                    ) : resource.type === 'task' ? (
+                                      <TaskCard
+                                        key={resource.id}
+                                        taskId={resource.id}
+                                        text={resource.name}
+                                        unitId={unit.id}
+                                        studentData={userData?.submissions?.[resource.id] || null}
+                                        isChallenge={resource.setting?.isChallenge || null}
+                                        showReview={resource.setting?.showReview || null}
+                                      />
+                                    ) : (
+                                      <FileCard key={resource.id} file={resource} />
+                                    ),
+                                  )
+                              ) : (
+                                <p>No resources available</p>
+                              )}
+                            </AccordionItem>
+                          ))
+                      ) : (
+                        <p>No units available</p>
+                      )}
+                    </Accordion>
+                  ) : (
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        margin: '30px',
+                        height: '80vh',
+                      }}
+                    >
+                      <CircularProgress />
+                    </div>
+                  )}
                 </ScrollShadow>
               </Grid>
               <Grid item style={{ width: '35%' }}>
                 <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
+                {/* <SelectLevel levels={Levels} /> */}
               </Grid>
             </Grid>
           </div>
@@ -84,17 +144,46 @@ function Home() {
 
 export default Home;
 
-const FileCard = ({ file }) => {
+const SelectLevel = ({ levels }) => {
   return (
-    <Card key={file.name} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
-      <Button radius="full" variant="faded" onClick={() => window.open(file.link)}>
-        {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
-        {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
-        {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
-        {file.type === 'webLink' && <PublicRoundedIcon style={{ color: '#BF1E2E' }} />}
-      </Button>
-      {file.name}
-    </Card>
+    <>
+      <div style={{ width: '100%' }}>
+        <Slider
+          // value={level}
+          // onChange={(event, newValue) => setLevel(newValue)}
+          step={50}
+          min={1}
+          max={3}
+          showSteps={true}
+          marks={levels}
+          showTooltip={true}
+          valueLabelDisplay="auto"
+        />
+      </div>
+
+      <Select items={levels} label="כמה חריף לשים" placeholder="בחרו" labelPlacement="outside" className="max-w-xs">
+        {(level) => (
+          <SelectItem key={level.value} textValue={level.name}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div className="flex flex-col">
+                <span className="text-small">{level.name}</span>{' '}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'left' }}>
+                {Array.from({ length: level.value + 1 }).map((index) => (
+                  <img
+                    key={`${level.name}-${index}`}
+                    src={spicyIcon}
+                    alt="spicyIcon"
+                    style={{ width: '20px', height: '20px' }}
+                  />
+                ))}
+              </div>
+            </div>
+          </SelectItem>
+        )}
+      </Select>
+    </>
   );
 };
 

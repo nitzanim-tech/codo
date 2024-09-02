@@ -3,27 +3,22 @@ import { Button, Tooltip } from '@nextui-org/react';
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import { useParams } from 'react-router-dom';
 
-import sumbitCode from '../../requests/sumbitCode';
 import { ModalBody, ModalFooter } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
+import postRequest from '../../requests/anew/postRequest';
 
-function SumbitButton({ code, testsOutputs, setRunTests, taskId, showTests }) {
-  const { app, auth } = useFirebase();
-  const [currentUser, setCurrentUser] = useState(null);
+function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
+  const { auth } = useFirebase();
+  const { task, unit } = useParams();
+
   const [openModal, setOpenModal] = useState(false);
-  const [succesfulySent, setSuccesfulySent] = useState(false);
+  const [nextTask, setNextTask] = useState();
   const [errorSent, setErrorSent] = useState(false);
   const [testStatus, setTestStatus] = useState('');
   const [sumbitCalled, setSumbitCalled] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-    });
-    return unsubscribe;
-  }, []);
 
   useEffect(() => {
     countCorrectTests(testsOutputs);
@@ -42,17 +37,19 @@ function SumbitButton({ code, testsOutputs, setRunTests, taskId, showTests }) {
     setOpenModal(true);
   };
 
-  const callSumbitCode = () => {
+  const callSumbitCode = async () => {
     const pass = testsOutputs.map((test) => test.correct);
-    sumbitCode({ user: currentUser, app, code, task: taskId, pass }).then((succesfulySent) => {
-      succesfulySent ? setSuccesfulySent(true) : setErrorSent(true);
-    });
+    const time = new Date().toISOString();
+    const newSubmit = { userId: auth.currentUser.uid, taskId: task, code, time, pass, unitId: unit };
+
+    const { nextPractice } = await postRequest({ postUrl: 'postSubmit', object: newSubmit });
+    nextPractice ? setNextTask(nextPractice) : setErrorSent(true);
   };
 
   const resetState = () => {
     setTestStatus('');
     setOpenModal(false);
-    setSuccesfulySent(false);
+    setNextTask('');
     setSumbitCalled(false);
     setErrorSent(false);
   };
@@ -70,13 +67,27 @@ function SumbitButton({ code, testsOutputs, setRunTests, taskId, showTests }) {
           <ModalHeader style={{ textAlign: 'center' }}>הגש</ModalHeader>
           <>
             <ModalBody style={{ textAlign: 'center' }}>
-              {testStatus && currentUser && <p>הקוד עבר {testStatus} טסטים</p>}
-              {currentUser ? <p>האם ברצונך להגיש?</p> : <p>יש להרשם או להתחבר</p>}
-              {succesfulySent && (
-                <p style={{ fontWeight: 'bold', color: '#005395' }}>
-                  <CheckCircleRoundedIcon />
-                  הוגש בהצלחה
-                </p>
+              {testStatus && auth.currentUser && <p>הקוד עבר {testStatus} טסטים</p>}
+              {auth.currentUser.uid ? <p>האם ברצונך להגיש?</p> : <p>יש להרשם או להתחבר</p>}
+              {nextTask && (
+                <>
+                  <p style={{ fontWeight: 'bold', color: '#005395' }}>
+                    <CheckCircleRoundedIcon />
+                    הוגש בהצלחה
+                  </p>
+                  {console.log({ nextTask })}
+                  {nextTask === 'end' && (
+                    <p style={{ fontWeight: 'bold', color: '#005395' }}>סיימת את כל המשימות ליחידה, כל הכבוד!</p>
+                  )}
+                  {nextTask === 'none' && (
+                    <p style={{ fontWeight: 'bold', color: '#005395' }}>
+                      איזה מהירות… בקושי ישבת על התרגיל, עוד קצת ויש לך את זה!
+                    </p>
+                  )}
+                  {nextTask !== 'none' && nextTask !== 'end' && nextTask !== 'resource' && (
+                    <p style={{ fontWeight: 'bold', color: '#005395' }}>יאללה, שנעבור לתרגיל הבא?</p>
+                  )}
+                </>
               )}
               {errorSent && (
                 <p style={{ fontWeight: 'bold', color: 'red' }}>
@@ -86,7 +97,7 @@ function SumbitButton({ code, testsOutputs, setRunTests, taskId, showTests }) {
               )}
             </ModalBody>
             <ModalFooter>
-              {currentUser && (
+              {auth.currentUser.uid && (
                 <Button
                   isDisabled={sumbitCalled}
                   onClick={() => {

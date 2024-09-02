@@ -2,114 +2,113 @@ import React, { useState, useEffect } from 'react';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 import { ModalBody, ModalFooter, Button } from '@nextui-org/react';
-import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
+import { Modal, ModalHeader, ModalContent, CircularProgress } from '@nextui-org/react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import GoogleIcon from '@mui/icons-material/Google';
-import { registerUserInDB } from '../../requests/registerUser';
-import getGroupsByRegion from '../../requests/groups/getGroupsByRegion';
+import getRequest from '../../requests/anew/getRequest';
+import { jwtDecode } from 'jwt-decode';
+import postRequest from '../../requests/anew/postRequest';
+import { ErrorMessage } from '../general/Messages';
 
-const RegisterModal = ({ app, auth, open, setOpen }) => {
-  const [regions, setRegions] = useState(null);
+const RegisterModal = ({ auth, isOpen, onOpenChange, onClose }) => {
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [choosenGroup, setChoosenGroup] = useState('');
-  const [choosenRegion, setChoosenRegion] = useState('');
-  // const [currentUser, setCurrentUser] = useState(null);
 
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((user) => {
-  //     setCurrentUser(user);
-  //   });
-  //   return unsubscribe;
-  // }, []);
-
+  const [syllabusList, setSyllabus] = useState();
+  const [choosenSyllabusId, setChoosenSyllabus] = useState();
+  const [errorMassgae, setErrorMassage] = useState('');
   useEffect(() => {
-    const getGroupFromDb = async () => {
-      const regionsFromDB = await getGroupsByRegion(app);
-      setRegions(regionsFromDB);
+    const getSyllabusFromDb = async () => {
+      const syllabusFromDB = await getRequest({ getUrl: `getOpenSyllabus` });
+      const syllabusList = Object.entries(syllabusFromDB).map(([id, data]) => ({
+        id: data.id,
+        name: `${data.program} | ${data.hebYear}`,
+        defaultGroup: data.defaultGroup,
+      }));
+      console.log(syllabusList);
+      setSyllabus(syllabusList);
     };
-    getGroupFromDb();
+    getSyllabusFromDb();
   }, []);
 
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
+      const choosenSyllabus = syllabusList.find((syllabus) => syllabus.id === choosenSyllabusId);
       const user = {
+        id: result.user.uid,
         name: name,
         lastName: lastName,
-        email: result.user.email,
-        region: choosenRegion,
-        group: choosenGroup,
+        groupId: choosenSyllabus.defaultGroup,
+        syllabusId: choosenSyllabusId,
       };
-      registerUserInDB({ user, uid: result.user.uid, app });
-      setOpen(false);
+
+      const idToken = await result.user.getIdToken(true);
+      const { token, error, status } = await postRequest({ postUrl: `registerUser`, object: user, token: idToken });
+      if (error) {
+        console.log({ token, error, status });
+        if (status == 409) {
+          if (token) localStorage.setItem('token', token);
+          setErrorMassage('משתמש קיים');
+        }
+        else setErrorMassage('שגיאה במהלך ההרשמה');
+      } else {
+        localStorage.setItem('token', token);
+        onClose();
+      }
     } catch (error) {
       console.log(error.message);
     }
   };
 
   return (
-    <>
-      <Modal isOpen={open} dir="rtl">
-        <ModalContent onClose={() => setOpen(false)}>
-          <ModalHeader> הרשמה</ModalHeader>
-
-          <ModalBody>
-            <Input label="שם" value={name} onChange={(e) => setName(e.target.value)} />
-            <Input label="שם משפחה" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-
-            <Select
-              label="מרחב"
-              value={choosenRegion}
-              onChange={(e) => {
-                setChoosenRegion(e.target.value);
-                setChoosenGroup(null);
-              }}
-              dir="rtl"
-            >
-              {regions &&
-                regions.map((region) => (
-                  <SelectItem key={region.id} value={region} dir="rtl">
-                    {region.name}
-                  </SelectItem>
-                ))}
-            </Select>
-
-            <Select
-              label="קבוצה"
-              value={choosenGroup}
-              onChange={(e) => setChoosenGroup(e.target.value)}
-              dir="rtl"
-              disabled={!choosenRegion}
-            >
-              {choosenRegion &&
-                regions
-                  .find((region) => region && region.id === choosenRegion)
-                  ?.groups.map((group) => (
-                    <SelectItem key={group.id} value={group} dir="rtl">
-                      {group.name}
-                    </SelectItem>
-                  ))}
-            </Select>
-
-            <Divider />
-
-            <Button
-              onClick={handleGoogleSignIn}
-              startContent={<GoogleIcon />}
-              isDisabled={!name || !lastName || !choosenGroup}
-            >
-              הרשמה באמצעות גוגל
-            </Button>
-          </ModalBody>
-
-          <ModalFooter>
-            <button onClick={() => setOpen(false)}>סגור</button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} placement="top-center" dir="rtl" size="m">
+      <ModalContent>
+        {(close) => (
+          <>
+            <ModalHeader> הרשמה</ModalHeader>
+            <ModalBody>
+              <Input label="שם" value={name} onChange={(e) => setName(e.target.value)} />
+              <Input label="שם משפחה" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+              {syllabusList ? (
+                <Select
+                  label="סילבוס"
+                  value={choosenSyllabusId}
+                  onChange={(e) => setChoosenSyllabus(e.target.value)}
+                  dir="rtl"
+                >
+                  {syllabusList &&
+                    Object.entries(syllabusList).map(([id, syllabusData]) => (
+                      <SelectItem key={syllabusData.id} value={syllabusData.id} dir="rtl">
+                        {syllabusData.name}
+                      </SelectItem>
+                    ))}
+                </Select>
+              ) : (
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <CircularProgress />
+                </div>
+              )}
+              <Divider />
+            </ModalBody>
+            <ModalFooter>
+              {errorMassgae == '' ? (
+                <Button
+                  onClick={handleGoogleSignIn}
+                  startContent={<GoogleIcon />}
+                  isDisabled={!name || !lastName || !choosenSyllabusId}
+                >
+                  הרשמה באמצעות גוגל
+                </Button>
+              ) : (
+                <ErrorMessage text={errorMassgae} />
+              )}
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
   );
 };
 

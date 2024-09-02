@@ -13,9 +13,10 @@ import { useFirebase } from '../util/FirebaseProvider';
 import styled from 'styled-components';
 import getTasksData from '../requests/tasks/getTasksData';
 import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettingProvider';
+import isAuthorized from '../util/permissions';
 
 function Instructors() {
-  const { app, userData } = useFirebase();
+  const { app, userData, auth } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(userData ? userData.group : null);
@@ -33,30 +34,30 @@ function Instructors() {
   useEffect(() => {
     if (userData) {
       setSelectedGroup(userData.group);
-      userData.email.includes('@nitzanim.tech') ? setUnauthorized(false) : setUnauthorized(true);
+      isAuthorized(userData.email) ? setUnauthorized(false) : setUnauthorized(true);
     }
   }, [userData]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let data = await getStudentsByGroup({ app: app, groupId: selectedGroup.id });
-      data = data.filter((student) => !student.email.includes('@nitzanim.tech'));
-      data = getStudentGroups(userData.permissions, data);
-      setStudentsRawData(data);
-      setIsLoading(false);
-    };
-    selectedGroup && fetchData();
-  }, [selectedGroup]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     let data = await getStudentsByGroup({ app: app, groupId: selectedGroup.id });
+  //     data = data.filter((student) => !student.email.includes('@nitzanim.tech'));
+  //     data = getStudentGroups(userData.permissions, data);
+  //     setStudentsRawData(data);
+  //     setIsLoading(false);
+  //   };
+  //   selectedGroup && fetchData();
+  // }, [selectedGroup]);
 
-  const handleChangeGroup = async (groupId) => {
-    if (groupId != selectedGroup.id) {
-      const students = await getStudentsByGroup({ app, groupId });
-      const studentsWithGroup = getStudentGroups(userData.permissions, students);
-      const group = userData.permissions?.find((group) => group && group.id === groupId);
-      setSelectedGroup(group || { id: groupId });
-      setStudentsRawData(studentsWithGroup);
-    }
-  };
+  // const handleChangeGroup = async (groupId) => {
+  //   if (groupId != selectedGroup.id) {
+  //     const students = await getStudentsByGroup({ app, groupId });
+  //     const studentsWithGroup = getStudentGroups(userData.permissions, students);
+  //     const group = userData.permissions?.find((group) => group && group.id === groupId);
+  //     setSelectedGroup(group || { id: groupId });
+  //     setStudentsRawData(studentsWithGroup);
+  //   }
+  // };
 
   return (
     <>
@@ -74,29 +75,34 @@ function Instructors() {
                       variant="bordered"
                       endContent={<ApartmentRoundedIcon />}
                       style={{ marginLeft: '20px' }}
-                      isDisabled={userData.permissions.length === 1}
+                      isDisabled={userData?.permissions?.length === 1}
                     >
                       <b>{selectedGroup.name}</b>
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu onAction={(key) => handleChangeGroup(key)}>
-                    {userData.permissions.map((group) => (
+                    {userData.permissions?.map((group) => (
                       <DropdownItem key={group.id}>{group.name}</DropdownItem>
                     ))}
                   </DropdownMenu>
                 </Dropdown>
 
-                <Tabs aria-label="Options">
-                  <Tab key="tasks" title="משימות" aria-label="Task tab">
+              <Tabs aria-label="Options">
+                  {/*   <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
                       {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}
                     </div>
-                  </Tab>
-                  <Tab key="students" title="חניכים" aria-label="Students tab">
+                  </Tab> */}
+                  {/* <Tab key="students" title="חניכים" aria-label="Students tab">
                     <CenteredDiv>
-                      <StudentsTable isLoading={isLoading} students={formatStudentTable(studentsRawData)} app={app} />
+                      <StudentsTable
+                        isLoading={isLoading}
+                        students={formatStudentTable(studentsRawData)}
+                        app={app}
+                        auth={auth}
+                      />
                     </CenteredDiv>
-                  </Tab>
+                  </Tab> */}
                   <Tab key="manage" title="מפגשים">
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                       <ChangeSettingProvider>
@@ -104,11 +110,11 @@ function Instructors() {
                       </ChangeSettingProvider>
                     </div>
                   </Tab>
-                  <Tab key="status" title="סטטוס">
+                  {/* <Tab key="status" title="סטטוס">
                     <CenteredDiv>
                       <PassMatrix studentsRawData={studentsRawData} tasksList={tasksList} />
                     </CenteredDiv>
-                  </Tab>
+                  </Tab> */}
                 </Tabs>
               </div>
             </>

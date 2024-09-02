@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useFirebase } from '../../util/FirebaseProvider';
-import getAllTasks from '../../requests/tasks/getAllTasks';
+import getTasksList from '../../requests/tasks/getTasksList';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip } from '@nextui-org/react';
 import formatDate from '../../util/formatDate';
 const DevTasksTab = () => {
@@ -10,7 +10,7 @@ const DevTasksTab = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const allTasks = await getAllTasks({ app });
+      const allTasks = await getTasksList({ app });
       const tasksArray = Object.entries(allTasks).map(([id, taskData]) => ({
         uid: id,
         ...taskData,
