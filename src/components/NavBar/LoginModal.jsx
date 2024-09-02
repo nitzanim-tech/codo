@@ -16,11 +16,10 @@ const LoginModal = ({ auth, isOpen, onOpenChange, onClose }) => {
     try {
       const result = await signInWithPopup(auth, provider);
       console.log('User signed in:', result.user);
-
       const idToken = await result.user.getIdToken(true);
-
       const { token } = await getRequest({ getUrl: `login`, token: idToken });
       console.log(auth);
+      
       if (token) localStorage.setItem('token', token);
       else {
         console.log('in else');

@@ -9,23 +9,23 @@ import formatDate from '../../util/formatDate';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
 function TaskCard({ text, taskId, studentData, isChallenge, showReview, unitId }) {
-  const findReviews = (trials) => {
-    return trials
-      .filter((trial) => trial.review)
-      .map((trial) => ({
-        review: trial.review,
-        submitDate: trial.date,
-        code: trial.code,
-        selectedTests: trial.pass.reduce((acc, val, index) => (val === true ? [...acc, index] : acc), []),
-        task: taskId,
-      }));
-  };
+  // const findReviews = (trials) => {
+  //   return trials
+  //     .filter((trial) => trial.review)
+  //     .map((trial) => ({
+  //       review: trial.review,
+  //       submitDate: trial.date,
+  //       code: trial.code,
+  //       selectedTests: trial.pass.reduce((acc, val, index) => (val === true ? [...acc, index] : acc), []),
+  //       task: taskId,
+  //     }));
+  // };
 
   const onTaskButtonClick = (taskId) => {
-    if (studentData) localStorage.setItem(`${taskId}-code`, studentData.trials[studentData.trials.length - 1].code);
-      window.location.href = `./submit/${unitId}/${taskId}`;
+    if (studentData) localStorage.setItem(`${taskId}-code`);
+    window.location.href = `./submit/${unitId}/${taskId}`;
   };
-  const submitsWithReview = studentData ? findReviews(studentData.trials) : [];
+  // const submitsWithReview = studentData ? findReviews(studentData.trials) : [];
 
   return (
     <>
@@ -47,9 +47,7 @@ function TaskCard({ text, taskId, studentData, isChallenge, showReview, unitId }
 
             {studentData ? (
               <Tooltip content="בוצע">
-                <CheckCircleOutlineRoundedIcon
-                  style={{ marginRight: '15px', color: submitsWithReview.length > 0 ? '#6ED268' : 'grey' }}
-                />
+                <CheckCircleOutlineRoundedIcon style={{ marginRight: '15px', color: false ? '#6ED268' : 'grey' }} />
               </Tooltip>
             ) : (
               <Tooltip content="טרם בוצע">
@@ -57,9 +55,9 @@ function TaskCard({ text, taskId, studentData, isChallenge, showReview, unitId }
               </Tooltip>
             )}
 
-            <Dropdown aria-label="Versions menu">
-              {/* <Tooltip content="למשוב"> */}
-              <DropdownTrigger>
+            {/* <Dropdown aria-label="Versions menu"> */}
+            {/* <Tooltip content="למשוב"> */}
+            {/* <DropdownTrigger>
                 <Button disabled={!showReview || submitsWithReview.length === 0} onClick={() => {}}>
                   {submitsWithReview.length > 1 ? (
                     <Badge variant="flat" size="sm" content={submitsWithReview.length} color="primary">
@@ -69,10 +67,10 @@ function TaskCard({ text, taskId, studentData, isChallenge, showReview, unitId }
                     <GradingIcon />
                   )}
                 </Button>
-              </DropdownTrigger>
-              {/* </Tooltip> */}
+              </DropdownTrigger> */}
+            {/* </Tooltip> */}
 
-              <DropdownMenu>
+            {/* <DropdownMenu>
                 {submitsWithReview.map((submit, index) => (
                   <DropdownItem
                     key={index}
@@ -87,7 +85,7 @@ function TaskCard({ text, taskId, studentData, isChallenge, showReview, unitId }
                   </DropdownItem>
                 ))}
               </DropdownMenu>
-            </Dropdown>
+            </Dropdown> */}
           </div>
         </div>
       </Card>

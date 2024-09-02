@@ -20,7 +20,7 @@ export const FirebaseProvider = ({ children }) => {
       const updateUserData = async () => {
         const jwt = localStorage.getItem('token');
         console.log(user, jwt);
-        if (user && jwt) {
+        if (jwt) {
           try {
             const decoded = jwtDecode(jwt);
             const currentTime = Date.now() / 1000;
@@ -32,7 +32,7 @@ export const FirebaseProvider = ({ children }) => {
             } else {
               setIsAuthorized(decoded.permission);
               setUserData({
-                userId: decoded.userId,
+                id: decoded.userId,
                 group: decoded.group,
                 permission: decoded.permission,
                 syllabus: decoded.syllabus,

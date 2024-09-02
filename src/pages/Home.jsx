@@ -41,12 +41,9 @@ function Home() {
   const [units, setUnits] = useState();
 
   useEffect(() => {
-    // setUnits();
-    console.log('in hompgae user data');
     const fetchUnits = async () => {
-      console.log({ userData });
-      const unitsFromDb = await getRequest({ getUrl: `getHomepage?userId=${userData.userId}` });
-      console.log({ unitsFromDb });
+      const unitsFromDb = await getRequest({ getUrl: `getHomepage?userId=${userData.id}` });
+      // console.log({ unitsFromDb });
       setUnits(unitsFromDb);
       console.log(unitsFromDb);
     };
@@ -78,7 +75,6 @@ function Home() {
                                       <>
                                         <Divider />
                                         <p style={{ textAlign: 'right' }}>תור אישי:</p>
-                                        {/* {unit.practices} */}
                                         {unit.practices.length > 0 &&
                                           unit.practices
                                             .sort((A, B) => A.index - B.index)
@@ -88,7 +84,7 @@ function Home() {
                                                 taskId={practice.taskId}
                                                 text={practice.name}
                                                 unitId={unit.id}
-                                                // studentData={userData?.submissions?.[practice.id] || null}
+                                                studentData={practice.submission || false}
                                                 // isChallenge={practice.setting?.isChallenge || null}
                                                 // showReview={practice.setting?.showReview || null}
                                               />

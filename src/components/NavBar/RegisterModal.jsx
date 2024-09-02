@@ -48,7 +48,10 @@ const RegisterModal = ({ auth, isOpen, onOpenChange, onClose }) => {
       const { token, error, status } = await postRequest({ postUrl: `registerUser`, object: user, token: idToken });
       if (error) {
         console.log({ token, error, status });
-        if (status == 409) setErrorMassage('משתמש קיים');
+        if (status == 409) {
+          if (token) localStorage.setItem('token', token);
+          setErrorMassage('משתמש קיים');
+        }
         else setErrorMassage('שגיאה במהלך ההרשמה');
       } else {
         localStorage.setItem('token', token);
