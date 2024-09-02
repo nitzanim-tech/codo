@@ -75,6 +75,7 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
                     <CheckCircleRoundedIcon />
                     הוגש בהצלחה
                   </p>
+                  {console.log({ nextTask })}
                   {nextTask === 'end' && (
                     <p style={{ fontWeight: 'bold', color: '#005395' }}>סיימת את כל המשימות ליחידה, כל הכבוד!</p>
                   )}
@@ -83,7 +84,7 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
                       איזה מהירות… בקושי ישבת על התרגיל, עוד קצת ויש לך את זה!
                     </p>
                   )}
-                  {nextTask !== 'none' && nextTask !== 'end' && (
+                  {nextTask !== 'none' && nextTask !== 'end' && nextTask !== 'resource' && (
                     <p style={{ fontWeight: 'bold', color: '#005395' }}>יאללה, שנעבור לתרגיל הבא?</p>
                   )}
                 </>

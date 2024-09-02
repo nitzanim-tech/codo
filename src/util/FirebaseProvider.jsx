@@ -1,9 +1,8 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getAnalytics } from 'firebase/analytics';
+import { jwtDecode } from 'jwt-decode';
 import firebaseConfig from './firebaseConfig';
-import {getCurrentUser} from '../requests/getCurrentUser';
 
 export const FirebaseContext = createContext();
 
@@ -13,22 +12,51 @@ export const FirebaseProvider = ({ children }) => {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const [userData, setUserData] = useState(null);
-  const [isUserLoading, setIsUserLoading] = useState(true); 
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(0);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const shouldBeAuthorized = user.email.includes('@nitzanim.tech');
-        setIsAuthorized(shouldBeAuthorized);
-        const current = await getCurrentUser({ app, id: user.uid });
-        setUserData(current);
-      } else {
-        setUserData(null);
-      }
-      setIsUserLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      const updateUserData = async () => {
+        const jwt = localStorage.getItem('token');
+        console.log(user, jwt);
+        if (user && jwt) {
+          try {
+            const decoded = jwtDecode(jwt);
+            const currentTime = Date.now() / 1000;
+
+            if (decoded.exp < currentTime) {
+              localStorage.removeItem('token');
+              setUserData(null);
+              signOut(auth);
+            } else {
+              setIsAuthorized(decoded.permission);
+              setUserData({
+                userId: decoded.userId,
+                group: decoded.group,
+                permission: decoded.permission,
+                syllabus: decoded.syllabus,
+                name: decoded.name,
+              });
+            }
+          } catch (error) {
+            console.error('Invalid token:', error);
+            localStorage.removeItem('token');
+            setUserData(null);
+            signOut(auth);
+          }
+        } else {
+          setUserData(null);
+          signOut(auth);
+        }
+
+        setIsUserLoading(false);
+      };
+
+      updateUserData();
     });
-    return () => unsubscribe();
+
+    return () => unsubscribe(); // Cleanup the listener on unmount
   }, [auth]);
 
   return (

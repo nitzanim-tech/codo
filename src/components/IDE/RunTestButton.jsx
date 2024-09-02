@@ -19,7 +19,7 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
     if (runTests) handleClick();
   }, [runTests]);
 
-  async function runPython({ code, input }) {
+  async function runPython({ code, input = '' }) {
     try {
       pyodide.runPython('import io, sys');
       pyodide.runPython(`sys.stdin = io.StringIO("${input}")`);
@@ -46,10 +46,11 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
       const codeToRun = code + '\n' + (test.runningCode || '');
       try {
         if (!test.isHidden) {
-          const output = await runPython({ code: codeToRun, input: test.input.replace(/\n/g, '\\n') });
+          const output = await runPython({ code: codeToRun, input: test.input?.replace(/\n/g, '\\n')|| '' });
           testsOutputs.push({ input: test.input, output });
         }
-      } catch {
+      } catch (error) {
+        console.error('Error:', error);
         break;
       }
     }
@@ -58,11 +59,12 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
 
   async function handleClick() {
     const userTestOutputs = await runTest({ code, tests: taskObject.tests });
-    const isTaskDefault = Boolean(taskObject.code);
+    console.log({ taskObject });
+    const isTaskDefault = taskObject.isDefault;
     let testsOutput;
     if (isTaskDefault) {
       const ansTestOutputs = await runTest({ code: taskObject.code, tests: taskObject.tests });
-      testsOutput = processTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
+      testsOutput = processDefaultTestsOutputs({ taskTests: taskObject.tests, userTestOutputs, ansTestOutputs });
     } else {
       testsOutput = getProcessOutputs({
         task: taskObject.id,
@@ -70,7 +72,7 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
         testsOutputs: userTestOutputs,
       });
     }
-console.log({ testsOutput, taskTests: taskObject.tests, userTestOutputs });
+    console.log({ testsOutput, taskTests: taskObject.tests, userTestOutputs });
     setTestsOutputs(testsOutput);
 
     const pass = testsOutput.map((output) => output.correct);
@@ -99,7 +101,8 @@ console.log({ testsOutput, taskTests: taskObject.tests, userTestOutputs });
   );
 }
 
-function processTestsOutputs({ taskTests, userTestOutputs, ansTestOutputs }) {
+function processDefaultTestsOutputs({ taskTests, userTestOutputs, ansTestOutputs }) {
+  console.log({ taskTests, userTestOutputs, ansTestOutputs });
   const names = taskTests.map((test) => test.name);
 
   return userTestOutputs.map((testsOutput, index) => {

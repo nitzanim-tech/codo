@@ -4,8 +4,8 @@ import { Accordion, AccordionItem, CircularProgress, Button } from '@nextui-org/
 import { FileCard, DevTaskCard } from '../../general/Cards';
 import getRequest from '../../../requests/anew/getRequest';
    
-// const groupId = '435c59ddf19a';
-const groupId = '70ad502eb5db';
+const groupId = '435c59ddf19a';
+// const groupId = '70ad502eb5db';
 
 function ManageLessonsInst({ group }) {
   const [units, setUnits] = useState(null);

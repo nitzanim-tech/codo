@@ -63,7 +63,7 @@ const DefaultExplanation = (selectedValue) => {
 
   return (
     <>
-      {selectedValue.input.trim() !== '' && (
+      {selectedValue.input?.trim() !== '' && (
         <>
           <Tooltip content="העתק">
             <Button radius="full" isIconOnly variant="faded" onClick={handleCopyClick}>

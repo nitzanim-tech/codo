@@ -6,8 +6,9 @@ import { Modal, ModalHeader, ModalContent, CircularProgress } from '@nextui-org/
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import GoogleIcon from '@mui/icons-material/Google';
 import getRequest from '../../requests/anew/getRequest';
-import postRequest from '../../requests/anew/postRequest';
 import { jwtDecode } from 'jwt-decode';
+import postRequest from '../../requests/anew/postRequest';
+import { ErrorMessage } from '../general/Messages';
 
 const RegisterModal = ({ auth, isOpen, onOpenChange, onClose }) => {
   const [name, setName] = useState('');
@@ -15,7 +16,7 @@ const RegisterModal = ({ auth, isOpen, onOpenChange, onClose }) => {
 
   const [syllabusList, setSyllabus] = useState();
   const [choosenSyllabusId, setChoosenSyllabus] = useState();
-
+  const [errorMassgae, setErrorMassage] = useState('');
   useEffect(() => {
     const getSyllabusFromDb = async () => {
       const syllabusFromDB = await getRequest({ getUrl: `getOpenSyllabus` });
@@ -40,16 +41,19 @@ const RegisterModal = ({ auth, isOpen, onOpenChange, onClose }) => {
         name: name,
         lastName: lastName,
         groupId: choosenSyllabus.defaultGroup,
-        email: result.user.email,
-        syllabus: choosenSyllabusId,
+        syllabusId: choosenSyllabusId,
       };
-      const { token } = await postRequest({ postUrl: `registerUser`, object: user });
 
-      localStorage.setItem('token', token);
-
-      const decoded = jwtDecode(token);
-      console.log(decoded);
-      onClose();
+      const idToken = await result.user.getIdToken(true);
+      const { token, error, status } = await postRequest({ postUrl: `registerUser`, object: user, token: idToken });
+      if (error) {
+        console.log({ token, error, status });
+        if (status == 409) setErrorMassage('משתמש קיים');
+        else setErrorMassage('שגיאה במהלך ההרשמה');
+      } else {
+        localStorage.setItem('token', token);
+        onClose();
+      }
     } catch (error) {
       console.log(error.message);
     }
@@ -86,13 +90,17 @@ const RegisterModal = ({ auth, isOpen, onOpenChange, onClose }) => {
               <Divider />
             </ModalBody>
             <ModalFooter>
-              <Button
-                onClick={handleGoogleSignIn}
-                startContent={<GoogleIcon />}
-                isDisabled={!name || !lastName || !choosenSyllabusId}
-              >
-                הרשמה באמצעות גוגל
-              </Button>
+              {errorMassgae == '' ? (
+                <Button
+                  onClick={handleGoogleSignIn}
+                  startContent={<GoogleIcon />}
+                  isDisabled={!name || !lastName || !choosenSyllabusId}
+                >
+                  הרשמה באמצעות גוגל
+                </Button>
+              ) : (
+                <ErrorMessage text={errorMassgae} />
+              )}
             </ModalFooter>
           </>
         )}

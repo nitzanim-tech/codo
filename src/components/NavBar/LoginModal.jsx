@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 import { ModalBody, ModalFooter, Button } from '@nextui-org/react';
-import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
-import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
+import { Modal, ModalHeader, ModalContent, Divider } from '@nextui-org/react';
 import GoogleIcon from '@mui/icons-material/Google';
 import { signOut } from 'firebase/auth';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import getRequest from '../../requests/anew/getRequest';
 
 const LoginModal = ({ auth, isOpen, onOpenChange, onClose }) => {
   const [error, setError] = useState('');
@@ -16,13 +15,19 @@ const LoginModal = ({ auth, isOpen, onOpenChange, onClose }) => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log({ result });
-      // const isExist = await isUserExists({ uid: result.user.uid, app });
-      // if (!isExist) {
-      //   await signOut(auth);
-      //   setError('משתמש לא רשום');
-      //   return;
-      // }
+      console.log('User signed in:', result.user);
+
+      const idToken = await result.user.getIdToken(true);
+
+      const { token } = await getRequest({ getUrl: `login`, token: idToken });
+      console.log(auth);
+      if (token) localStorage.setItem('token', token);
+      else {
+        console.log('in else');
+        await signOut(auth);
+        setError('משתמש לא רשום');
+        return;
+      }
 
       onOpenChange();
     } catch (error) {

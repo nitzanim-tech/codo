@@ -37,12 +37,15 @@ const FileCard = ({ file }) => {
 };
 
 function Home() {
-  const { auth, userData, isUserLoading } = useFirebase();
+  const { userData } = useFirebase();
   const [units, setUnits] = useState();
 
   useEffect(() => {
+    // setUnits();
+    console.log('in hompgae user data');
     const fetchUnits = async () => {
-      const unitsFromDb = await getRequest({ getUrl: `getHomepage?userId=${auth.currentUser.uid}` });
+      console.log({ userData });
+      const unitsFromDb = await getRequest({ getUrl: `getHomepage?userId=${userData.userId}` });
       console.log({ unitsFromDb });
       setUnits(unitsFromDb);
       console.log(unitsFromDb);
@@ -54,17 +57,13 @@ function Home() {
   return (
     <>
       <NavBar />
-      {isUserLoading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '30px' }}>
-          <CircularProgress />
-        </div>
-      ) : auth.currentUser ? (
+      {userData ? (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
             <Grid container spacing={1} columns={3} rows={1}>
               <Grid item style={{ width: '55%', margin: '2%' }}>
                 <ScrollShadow className="h-[100vh]" size={5}>
-                  {units && (
+                  {units ? (
                     <Accordion dir="rtl" selectedKeys={units.map((unit) => unit.id)} isCompact>
                       {units && units.length > 0 ? (
                         units
@@ -118,53 +117,24 @@ function Home() {
                         <p>No units available</p>
                       )}
                     </Accordion>
+                  ) : (
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        margin: '30px',
+                        height: '80vh',
+                      }}
+                    >
+                      <CircularProgress />
+                    </div>
                   )}
                 </ScrollShadow>
               </Grid>
               <Grid item style={{ width: '35%' }}>
                 <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
-                <div style={{ width: '100%' }}>
-                  <Slider
-                    // value={level}
-                    // onChange={(event, newValue) => setLevel(newValue)}
-                    step={50}
-                    min={1}
-                    max={3}
-                    showSteps={true}
-                    marks={Levels}
-                    showTooltip={true}
-                    valueLabelDisplay="auto"
-                  />
-                </div>
-
-                <Select
-                  items={Levels}
-                  label="כמה חריף לשים"
-                  placeholder="בחרו"
-                  labelPlacement="outside"
-                  className="max-w-xs"
-                >
-                  {(level) => (
-                    <SelectItem key={level.value} textValue={level.name}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <div className="flex flex-col">
-                          <span className="text-small">{level.name}</span>{' '}
-                        </div>
-
-                        <div style={{ display: 'flex', justifyContent: 'left' }}>
-                          {Array.from({ length: level.value + 1 }).map((index) => (
-                            <img
-                              key={`${level.name}-${index}`}
-                              src={spicyIcon}
-                              alt="spicyIcon"
-                              style={{ width: '20px', height: '20px' }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </SelectItem>
-                  )}
-                </Select>
+                {/* <SelectLevel levels={Levels} /> */}
               </Grid>
             </Grid>
           </div>
@@ -178,6 +148,48 @@ function Home() {
 
 export default Home;
 
+const SelectLevel = ({ levels }) => {
+  return (
+    <>
+      <div style={{ width: '100%' }}>
+        <Slider
+          // value={level}
+          // onChange={(event, newValue) => setLevel(newValue)}
+          step={50}
+          min={1}
+          max={3}
+          showSteps={true}
+          marks={levels}
+          showTooltip={true}
+          valueLabelDisplay="auto"
+        />
+      </div>
+
+      <Select items={levels} label="כמה חריף לשים" placeholder="בחרו" labelPlacement="outside" className="max-w-xs">
+        {(level) => (
+          <SelectItem key={level.value} textValue={level.name}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div className="flex flex-col">
+                <span className="text-small">{level.name}</span>{' '}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'left' }}>
+                {Array.from({ length: level.value + 1 }).map((index) => (
+                  <img
+                    key={`${level.name}-${index}`}
+                    src={spicyIcon}
+                    alt="spicyIcon"
+                    style={{ width: '20px', height: '20px' }}
+                  />
+                ))}
+              </div>
+            </div>
+          </SelectItem>
+        )}
+      </Select>
+    </>
+  );
+};
 
 const clearUnvisable = (lessons) => {
   const lessonsArray = Object.values(lessons);
