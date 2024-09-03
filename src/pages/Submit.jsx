@@ -13,6 +13,8 @@ import getRequest from '../requests/anew/getRequest';
 import { examplecode } from '../util/examples/exampleCode';
 import postRequest from '../requests/anew/postRequest';
 import { handleUserActivity } from '../components/Submit/activityTracker';
+import { CircularProgress } from '@nextui-org/react';
+import { Loading } from '../components/general/Messages';
 
 function Submit() {
   const { auth, userData } = useFirebase();
@@ -22,6 +24,7 @@ function Submit() {
   const [highlightedLines, setHighlightedLines] = useState([]);
   const [noActivitySent, setNoActivitySent] = useState(false);
   const [code, setCode] = useState(localStorage.getItem(`${task}-code`) || examplecode);
+  const [loading, setLoading] = useState(true);
 
   const userActivityHandler = useCallback(() => {
     handleUserActivity(task, userData, noActivitySent, setNoActivitySent);
@@ -52,13 +55,10 @@ function Submit() {
     const fetchData = async () => {
       if (userData) {
         localStorage.setItem(`${task}-lastCode`, code);
-
         const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${task}&&groupId=${1}` });
-        console.log({ taskFromDb });
         taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
         setTaskData(taskFromDb);
         const testNames = taskFromDb.tests.map((test) => test.name);
-        console.log({ testNames });
         const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
         setTestsOutputs(newEmptyTests);
       }
@@ -67,11 +67,28 @@ function Submit() {
     fetchData();
   }, [task, userData]);
 
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      if (auth.currentUser !== null) {
+        setLoading(false);
+      } else {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+          setLoading(false);
+          unsubscribe();
+        });
+      }
+    };
+
+    checkAuthStatus();
+  }, [auth]);
+
   return (
     <>
       <NavBar />
       <PyodideProvider>
-        {auth.currentUser ? (
+        {loading ? (
+          <Loading />
+        ) : auth.currentUser ? (
           taskData && testsOutputs ? (
             <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
               <Grid item style={{ width: '60%' }}>

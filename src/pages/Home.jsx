@@ -15,6 +15,7 @@ import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import spicyIcon from '../assets/svg/pepper.svg';
 import getRequest from '../requests/anew/getRequest';
+import { Loading } from '../components/general/Messages';
 
 const Levels = [
   { value: 0, name: 'בקטנה, תן להתחמם' },
@@ -114,17 +115,7 @@ function Home() {
                       )}
                     </Accordion>
                   ) : (
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        margin: '30px',
-                        height: '80vh',
-                      }}
-                    >
-                      <CircularProgress />
-                    </div>
+                    <Loading />
                   )}
                 </ScrollShadow>
               </Grid>
