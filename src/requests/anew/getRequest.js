@@ -1,12 +1,14 @@
 import firebaseConfig from '../../util/firebaseConfig';
 
-const getRequest = async ({ getUrl, token }) => {
+const getRequest = async ({ getUrl, token, authMethod }) => {
   try {
     document.body.classList.add('cursor-wait');
     const apiUrl = firebaseConfig.apiUrl;
-
     const headers = { 'Content-Type': 'application/json' };
+
+    if (authMethod === 'jwt') token = localStorage.getItem('token');
     if (token) headers['Authorization'] = `Bearer ${token}`;
+    
     const response = await fetch(`${apiUrl}/${getUrl}`, {
       method: 'GET',
       headers,

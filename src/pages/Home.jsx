@@ -43,7 +43,7 @@ function Home() {
 
   useEffect(() => {
     const fetchUnits = async () => {
-      const unitsFromDb = await getRequest({ getUrl: `getHomepage?userId=${userData.id}` });
+      const unitsFromDb = await getRequest({ getUrl: `getHomepage`, authMethod: 'jwt' });
       // console.log({ unitsFromDb });
       setUnits(unitsFromDb);
       console.log(unitsFromDb);

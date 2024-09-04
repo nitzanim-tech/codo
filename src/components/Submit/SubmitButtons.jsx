@@ -10,11 +10,20 @@ import Coduck from '../Coduck/Coduck';
 
 export default function SubmitButtons({ testsOutputs, taskObject, setHighlightedLines }) {
   const [chatHistory, setChatHistory] = useState([]);
+  const [selectedTab, setSelectedTab] = useState('instructions');
+
+  useEffect(() => {
+    console.log({ testsOutputs });
+    testsOutputs[0]?.input && setSelectedTab('tests');
+  }, [testsOutputs]);
 
   return (
     <>
       <Tabs
         aria-label="Options"
+        variant="underlined"
+        selectedKey={selectedTab}
+        onSelectionChange={setSelectedTab}
         classNames={{
           tab: 'max-w-fit px-0 h-10',
           tabContent: 'group-data-[selected=true]:text-[#103C6F]',
