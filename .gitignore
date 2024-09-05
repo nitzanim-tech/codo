@@ -29,3 +29,4 @@ todo.txt
 functions/.env
 src/util/permissions.js
 src/components/Dashboards/CodoData.json
+src/components/Dev/Developers.js

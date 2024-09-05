@@ -1,24 +1,40 @@
-import { useState, useEffect } from 'react';
-import { useFirebase } from '../../util/FirebaseProvider';
-import getTasksList from '../../requests/tasks/getTasksList';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip } from '@nextui-org/react';
-import formatDate from '../../util/formatDate';
-const DevTasksTab = () => {
-  const { app } = useFirebase();
-  const [tasks, setTasks] = useState([]);
-  const DEVELOPERS = { kTqDi3pSI5NkUW21FbJF6sxDm3D3: 'dev A', ChckIIGujWbg2FFZeRzDHbcIMrk2: 'בינקי ביל' };
+import { useAsyncList } from '@react-stately/data';
+import { Chip, Spinner, Button } from '@nextui-org/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const allTasks = await getTasksList({ app });
+import formatDate from '../../util/formatDate';
+import getRequest from '../../requests/anew/getRequest';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import DEVELOPERS from './Developers';
+
+const DevTasksTab = () => {
+  let list = useAsyncList({
+    async load({ signal }) {
+      const allTasks = await getRequest({ getUrl: 'getTasksList', authMethod: 'jwt', signal });
       const tasksArray = Object.entries(allTasks).map(([id, taskData]) => ({
-        uid: id,
+        uid: taskData.id,
         ...taskData,
       }));
-      setTasks(tasksArray);
-    };
-    fetchData();
-  }, []);
+      return {
+        items: tasksArray,
+      };
+    },
+    async sort({ items, sortDescriptor }) {
+      return {
+        items: items.sort((a, b) => {
+          let first = a[sortDescriptor.column];
+          let second = b[sortDescriptor.column];
+          let cmp = (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1;
+
+          if (sortDescriptor.direction === 'descending') {
+            cmp *= -1;
+          }
+
+          return cmp;
+        }),
+      };
+    },
+  });
 
   const onTaskClick = (task) => {
     localStorage.setItem('taskId', task.id);
@@ -35,39 +51,65 @@ const DevTasksTab = () => {
   };
 
   return (
-    <>
-      <Table aria-label="Tasks">
-        <TableHeader>
-          <TableColumn>id</TableColumn>
-          <TableColumn>name</TableColumn>
-          <TableColumn>lastUpdate</TableColumn>
-          <TableColumn>level</TableColumn>
-          <TableColumn>subjects</TableColumn>
-          <TableColumn>writer</TableColumn>
-        </TableHeader>
+    <Table
+      aria-label="Tasks Table with Sorting"
+      sortDescriptor={list.sortDescriptor}
+      onSortChange={list.sort}
+      classNames={{
+        table: 'min-h-[400px]',
+      }}
+    >
+      <TableHeader>
+        <TableColumn key="edit">Edit</TableColumn>
+        <TableColumn key="uid" allowsSorting>
+          ID
+        </TableColumn>
+        <TableColumn key="name" allowsSorting>
+          Name
+        </TableColumn>
+        <TableColumn key="lastUpdate" allowsSorting>
+          Last Update
+        </TableColumn>
+        <TableColumn key="level" allowsSorting>
+          Level
+        </TableColumn>
+        <TableColumn key="mainSubject" allowsSorting>
+          Main Subject
+        </TableColumn>
+        <TableColumn key="writer" allowsSorting>
+          Writer
+        </TableColumn>
+        <TableColumn key="syllabus">Syllabus</TableColumn>
+      </TableHeader>
 
-        <TableBody>
-          {tasks &&
-            tasks.map((task) => (
-              <TableRow key={task.uid} onClick={() => onTaskClick(task)}>
-                <TableCell>{task.uid}</TableCell>
-                <TableCell>{task.name}</TableCell>
-                <TableCell>{task.lastUpdate ? formatDate(task.lastUpdate) : '?'}</TableCell>
-                <TableCell>{task.level || '?'}</TableCell>
-                <TableCell>
-                  {task.subjects &&
-                    task.subjects.map((subject) => (
-                      <Chip key={subject} variant="faded">
-                        {subject}
-                      </Chip>
-                    ))}
-                </TableCell>
-                <TableCell>{DEVELOPERS[task.writer]}</TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-    </>
+      <TableBody items={list.items} isLoading={list.isLoading} loadingContent={<Spinner label="Loading..." />}>
+        {(task) => (
+          <TableRow key={task.uid}>
+            <TableCell>
+              <Button variant="light" radius="full" isIconOnly size="sm" onClick={() => onTaskClick(task)}>
+                <EditRoundedIcon style={{ color: '#005395' }} />
+              </Button>
+            </TableCell>
+            <TableCell>{task.uid}</TableCell>
+            <TableCell>{task.name}</TableCell>
+            <TableCell>{task.lastUpdate ? formatDate(task.lastUpdate) : '?'}</TableCell>
+            <TableCell>{task.level || '?'}</TableCell>
+            <TableCell>{task.mainSubject}</TableCell>
+
+            <TableCell>{DEVELOPERS[task.writer]}</TableCell>
+            <TableCell>
+              {task.syllabus &&
+                task.syllabus.map((syllab) => (
+                  <Chip key={syllab} color="success" variant="bordered" size="sm">
+                    {syllab}
+                  </Chip>
+                ))}
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   );
 };
+
 export default DevTasksTab;
