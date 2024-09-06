@@ -22,72 +22,63 @@ const AddNewTasks = () => {
   const { index } = useParams();
 
   const dist = '20';
+  const localStorageKey = `newTask-${index}`;
+
+  // Load the task data from localStorage or use default values
+  const loadTaskData = () => {
+    const savedTask = JSON.parse(localStorage.getItem(localStorageKey)) || {};
+    return {
+      name: savedTask.name || '',
+      subjects: savedTask.subjects || [],
+      description: savedTask.description || '',
+      example: savedTask.example || '',
+      code: savedTask.code || '# write here',
+      tests: savedTask.tests || [],
+      level: savedTask.level || 1,
+      taskType: savedTask.taskType || 'default',
+    };
+  };
 
   const [currentEdit, setCurretEdit] = useState('name');
   const [htmlEditing, setHtmlEditing] = useState('');
   const [saved, setSaved] = useState(false);
 
-  const [name, setName] = useState(localStorage.getItem('name') || '');
-  const [subjects, setSubjects] = useState(JSON.parse(localStorage.getItem('subjects')) || []);
-  const [description, setDescription] = useState(localStorage.getItem('description') || '');
-  const [example, setExample] = useState(localStorage.getItem('example') || '');
-  const [code, setCode] = useState(localStorage.getItem('newTaskCode') || '# write here');
-  const [tests, setTests] = useState(JSON.parse(localStorage.getItem('tests')) || []);
-  const [level, setLevel] = useState(localStorage.getItem('level') || 1);
-  const [taskType, setTaskType] = useState(localStorage.getItem('taskType') || 'default');
+  const [taskData, setTaskData] = useState(loadTaskData);
+
+  const { name, subjects, description, example, code, tests, level, taskType } = taskData;
 
   useEffect(() => {
-    localStorage.setItem('name', name);
-  }, [name]);
+    localStorage.setItem(localStorageKey, JSON.stringify(taskData));
+  }, [taskData]);
 
-  useEffect(() => {
-    localStorage.setItem('subjects', JSON.stringify(subjects));
-  }, [subjects]);
-
-  useEffect(() => {
-    localStorage.setItem('description', description);
-  }, [description]);
-
-  useEffect(() => {
-    localStorage.setItem('example', example);
-  }, [example]);
-
-  useEffect(() => {
-    localStorage.setItem('newTaskCode', code);
-  }, [code]);
-
-  useEffect(() => {
-    localStorage.setItem('tests', JSON.stringify(tests));
-  }, [tests]);
-
-  useEffect(() => {
-    localStorage.setItem('level', level);
-  }, [level]);
-
-  useEffect(() => {
-    localStorage.setItem('taskType', taskType);
-  }, [taskType]);
+  const handleChange = (key, value) => {
+    setTaskData((prevData) => ({ ...prevData, [key]: value }));
+  };
 
   const saveTask = async () => {
     const lastUpdate = new Date().toISOString();
     const writer = userData.id;
     const isDefault = taskType === 'default';
-    const newTask = { name, subjects, description, example, code, tests, writer, level, lastUpdate, isDefault };
+    const newTask = { ...taskData, writer, lastUpdate, isDefault };
 
     const success = await addTask({ app, newTask, index });
     if (success) clearTask();
   };
 
   const clearTask = () => {
-    setName('');
-    setSubjects([]);
-    setDescription('');
-    setExample('');
-    setCode('# write here');
-    setTests([]);
+    const defaultTaskData = {
+      name: '',
+      subjects: [],
+      description: '',
+      example: '',
+      code: '# write here',
+      tests: [],
+      level: 1,
+      taskType: 'default',
+    };
+    setTaskData(defaultTaskData);
     setSaved(true);
-    setLevel(1);
-    setTaskType('default');
+    localStorage.removeItem(localStorageKey); // Clear localStorage
   };
 
   return (
@@ -113,7 +104,7 @@ const AddNewTasks = () => {
           <div onClick={() => setCurretEdit('subjects')} style={{ marginBottom: `${dist}px` }}>
             <SubjectstChip
               chipsList={subjects}
-              setChipsList={setSubjects}
+              setChipsList={(value) => handleChange('subjects', value)}
               isSelected={currentEdit === 'subjects'}
               setCurretEditing={setCurretEdit}
             />
@@ -144,14 +135,21 @@ const AddNewTasks = () => {
         >
           {currentEdit === 'name' && (
             <div style={{ width: '70%' }}>
-              <Input label="שם" variant="bordered" value={name} onChange={(e) => setName(e.target.value)} />
+              <Input
+                label="שם"
+                variant="bordered"
+                value={name}
+                onChange={(e) => handleChange('name', e.target.value)}
+              />
             </div>
           )}
-          {currentEdit === 'subjects' && <EditSubjectsChips setChipsList={setSubjects} ChipsList={subjects} />}
+          {currentEdit === 'subjects' && (
+            <EditSubjectsChips setChipsList={(value) => handleChange('subjects', value)} ChipsList={subjects} />
+          )}
           {currentEdit === 'description' && (
             <AcordionTextEditor
               text={description}
-              setText={setDescription}
+              setText={(value) => handleChange('description', value)}
               htmlContent={htmlEditing}
               setHtmlContent={setHtmlEditing}
             />
@@ -159,7 +157,7 @@ const AddNewTasks = () => {
           {currentEdit === 'example' && (
             <AcordionTextEditor
               text={example}
-              setText={setExample}
+              setText={(value) => handleChange('example', value)}
               htmlContent={htmlEditing}
               setHtmlContent={setHtmlEditing}
             />
@@ -175,20 +173,24 @@ const AddNewTasks = () => {
             theme="vs-dark"
             defaultLanguage="python"
             value={code}
-            onChange={(newValue) => setCode(newValue)}
+            onChange={(newValue) => handleChange('code', newValue)}
             options={{ minimap: { enabled: false } }}
           />
         </ListboxWrapper>
       </div>
 
       <Header title={'טסטים'} icon={ChecklistRtlRoundedIcon} />
-      <AddTests testsList={tests} setTestList={setTests} code={code} />
+      <AddTests testsList={tests} setTestList={(value) => handleChange('tests', value)} code={code} />
 
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ width: '50%' }}>
           <Header title={'סוג משימה'} icon={HdrStrongRoundedIcon} />
           <div style={{ direction: 'rtl', width: '50%' }}>
-            <RadioGroup orientation="horizontal" value={taskType} onValueChange={setTaskType}>
+            <RadioGroup
+              orientation="horizontal"
+              value={taskType}
+              onValueChange={(value) => handleChange('taskType', value)}
+            >
               <Radio value="default">ברירת מחדל</Radio>
               <Radio value="custom"> מותאם אישית </Radio>
             </RadioGroup>
@@ -197,7 +199,7 @@ const AddNewTasks = () => {
 
         <div style={{ width: '50%', marginBottom: '40px' }}>
           <Header title={'רמת קושי'} icon={HikingRoundedIcon} />
-          <DifficultSlider level={level} setLevel={setLevel} />
+          <DifficultSlider level={level} setLevel={(value) => handleChange('level', value)} />
         </div>
       </div>
 
@@ -264,4 +266,3 @@ const DifficultSlider = ({ level, setLevel }) => {
     </div>
   );
 };
-

@@ -22,7 +22,8 @@ function TaskCard({ text, taskId, studentData, isChallenge, showReview, unitId }
   // };
 
   const onTaskButtonClick = (taskId) => {
-    if (studentData) localStorage.setItem(`${taskId}-code`);
+    console.log(taskId)
+    // if (studentData) localStorage.setItem(`${taskId}-code`);
     window.location.href = `./submit/${unitId}/${taskId}`;
   };
   // const submitsWithReview = studentData ? findReviews(studentData.trials) : [];

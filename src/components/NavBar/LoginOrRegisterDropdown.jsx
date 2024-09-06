@@ -6,7 +6,6 @@ import { DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { useFirebase } from '../../util/FirebaseProvider';
 
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
@@ -29,8 +28,6 @@ const LoginOrRegisterDropdown = ({ auth, userData }) => {
     setOpenRegisterModal(false);
     setOpenLoginModal(false);
   };
-
-  console.log('LoginOrRegisterDropdown rendered, userData:', userData);
 
   return (
     <div>
