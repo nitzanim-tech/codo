@@ -14,6 +14,7 @@ import Dashboard from './pages/Dashboard';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
 import Syllabus from './pages/Syllabus';
+import ManageGroups from './components/Admin/ManageGroups';
 import './App.css';
 
 ReactGA.initialize(firebaseConfig.measurementId);
@@ -33,11 +34,13 @@ function App() {
         <Route path="/review" element={<Review />} />
         <Route path="/readReview" element={<ReadReview />} />
         <Route path="/dev" element={<DevTeam />} />
-        
+
         <Route path="/dev/newTask" element={<AddNewTasks />} />
         <Route path="/dev/editTask/:task" element={<AddNewTasks />} />
 
         <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/groups" element={<ManageGroups />} />
+
         <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/manager" element={<Manager />} />
