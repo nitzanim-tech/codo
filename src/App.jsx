@@ -33,8 +33,9 @@ function App() {
         <Route path="/review" element={<Review />} />
         <Route path="/readReview" element={<ReadReview />} />
         <Route path="/dev" element={<DevTeam />} />
+        
         <Route path="/dev/newTask" element={<AddNewTasks />} />
-        <Route path="/dev/editTask/:index" element={<AddNewTasks />} />
+        <Route path="/dev/editTask/:task" element={<AddNewTasks />} />
 
         <Route path="/admin" element={<Admin />} />
         <Route path="/dashboard" element={<Dashboard />} />

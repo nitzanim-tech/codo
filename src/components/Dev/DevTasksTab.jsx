@@ -48,16 +48,6 @@ const DevTasksTab = () => {
   });
 
   const onTaskClick = (task) => {
-    localStorage.setItem('taskId', task.id);
-    localStorage.setItem('name', task.name);
-    localStorage.setItem('subjects', JSON.stringify(task.subjects));
-    localStorage.setItem('description', task.description);
-    localStorage.setItem('example', task.example);
-    localStorage.setItem('newTaskCode', task.code);
-    localStorage.setItem('tests', JSON.stringify(task.tests));
-    localStorage.setItem('level', task.level || 1);
-    localStorage.setItem('taskType', task.taskType || 'default');
-
     window.location.href = `./dev/editTask/${task.id}`;
   };
 
