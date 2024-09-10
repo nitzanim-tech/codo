@@ -1,5 +1,5 @@
 import { useAsyncList } from '@react-stately/data';
-import { Chip, Spinner, Button, Select, SelectItem } from '@nextui-org/react';
+import { Chip, Spinner, Button, Select, SelectItem, Tooltip } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import { Input } from '@nextui-org/react';
 import SearchIcon from '@mui/icons-material/Search';
@@ -13,6 +13,12 @@ const DevTasksTab = () => {
   const [filterValue, setFilterValue] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
 
+  const syllabusColors = {
+    'שנה א | תשפד': '#FAE233',
+    'שנה א | תשפה': '#BF1E2E',
+    'מחנה קיץ | תשפד': '#386641',
+    '': '#005395',
+  };
   let list = useAsyncList({
     async load({ signal }) {
       const allTasks = await getRequest({ getUrl: 'getTasksList', authMethod: 'jwt', signal });
@@ -20,6 +26,7 @@ const DevTasksTab = () => {
         uid: taskData.id,
         ...taskData,
       }));
+      console.log(tasksArray);
       return {
         items: tasksArray,
       };
@@ -130,9 +137,18 @@ const DevTasksTab = () => {
               <TableCell>
                 {task.syllabus &&
                   task.syllabus.map((syllab) => (
-                    <Chip key={syllab} color="success" variant="bordered" size="sm">
-                      {syllab}
-                    </Chip>
+                    <Tooltip key={syllab} content={syllab} arrow>
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          width: '12px',
+                          height: '12px',
+                          borderRadius: '50%',
+                          backgroundColor: syllabusColors[syllab] || 'gray',
+                          marginRight: '5px',
+                        }}
+                      />
+                    </Tooltip>
                   ))}
               </TableCell>
             </TableRow>

@@ -85,7 +85,13 @@ const Syllabus = () => {
                       Object.entries(units)
                         .sort(([, unitA], [, unitB]) => unitA.index - unitB.index)
                         .map(([id, unit]) => (
-                          <ListboxItem key={unit.id} value={unit.name} dir="rtl">
+                          <ListboxItem
+                            key={unit.id}
+                            value={unit.name}
+                            dir="rtl"
+                            className={unit.id == selectedUnit && 'text-primary'}
+                            color={unit.id == selectedUnit ? 'primary':'default'}
+                          >
                             {unit.name}
                           </ListboxItem>
                         ))
