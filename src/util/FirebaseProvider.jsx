@@ -14,21 +14,36 @@ export const FirebaseProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [isUserLoading, setIsUserLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(0);
+  const [jwt, setJwt] = useState(localStorage.getItem('token') || null);
+
+  const logOut = async () => {
+    try {
+      console.log('Logging out...');
+      await signOut(auth); 
+      localStorage.removeItem('token');
+      setJwt(null); // Clear JWT state
+      setUserData(null); // Reset user data
+      setIsAuthorized(0); // Reset authorization level
+      console.log('User logged out');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log('onAuthStateChanged triggered:', auth.currentUser);
+
       const updateUserData = async () => {
-        const jwt = localStorage.getItem('token');
-        console.log(user, jwt);
         if (jwt) {
+          console.log('Using JWT to set user data');
           try {
             const decoded = jwtDecode(jwt);
             const currentTime = Date.now() / 1000;
 
             if (decoded.exp < currentTime) {
-              localStorage.removeItem('token');
-              setUserData(null);
-              signOut(auth);
+              console.log('Token expired, logging out');
+              logOut();
             } else {
               setIsAuthorized(decoded.permission);
               setUserData({
@@ -41,26 +56,24 @@ export const FirebaseProvider = ({ children }) => {
             }
           } catch (error) {
             console.error('Invalid token:', error);
-            localStorage.removeItem('token');
-            setUserData(null);
-            signOut(auth);
+            logOut();
           }
-        } else {
-          setUserData(null);
-          signOut(auth);
+        } else if (!auth.currentUser) {
+          console.log('No JWT or Firebase user found, logging out');
+          logOut();
         }
 
-        setIsUserLoading(false);
+        setIsUserLoading(false); // Ensure this is called in all branches
       };
 
       updateUserData();
     });
 
     return () => unsubscribe(); // Cleanup the listener on unmount
-  }, [auth]);
+  }, [auth, jwt]);
 
   return (
-    <FirebaseContext.Provider value={{ app, auth, userData, isUserLoading, isAuthorized }}>
+    <FirebaseContext.Provider value={{ app, auth, userData, isUserLoading, isAuthorized, setJwt, logOut }}>
       {children}
     </FirebaseContext.Provider>
   );

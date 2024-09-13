@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import getTasksData from '../requests/tasks/getTasksData';
 import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettingProvider';
 import isAuthorized from '../util/permissions';
-
+import { Unauthorized } from '../components/general/Messages';
 function Instructors() {
   const { app, userData, auth } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
@@ -23,20 +23,20 @@ function Instructors() {
   const [unauthorized, setUnauthorized] = useState(true);
   const [tasksList, setTasksList] = useState(null);
 
-  useEffect(() => {
-    const fetchTasksData = async () => {
-      const tasksData = await getTasksData({ app });
-      setTasksList(tasksData);
-    };
-    fetchTasksData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchTasksData = async () => {
+  //     const tasksData = await getTasksData({ app });
+  //     setTasksList(tasksData);
+  //   };
+  //   fetchTasksData();
+  // }, []);
 
-  useEffect(() => {
-    if (userData) {
-      setSelectedGroup(userData.group);
-      isAuthorized(userData.email) ? setUnauthorized(false) : setUnauthorized(true);
-    }
-  }, [userData]);
+  // useEffect(() => {
+  //   if (userData) {
+  //     setSelectedGroup(userData.group);
+  //     isAuthorized(userData.email) ? setUnauthorized(false) : setUnauthorized(true);
+  //   }
+  // }, [userData]);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -64,30 +64,13 @@ function Instructors() {
       <NavBar />
       {userData ? (
         <>
-          {unauthorized ? (
-            <h1>הכניסה למדריכים בלבד</h1>
+          {unauthorized&& 0 ? (
+            <Unauthorized />
           ) : (
             <>
               <div dir="rtl">
-                <Dropdown aria-label="User Group Dropdown">
-                  <DropdownTrigger>
-                    <Button
-                      variant="bordered"
-                      endContent={<ApartmentRoundedIcon />}
-                      style={{ marginLeft: '20px' }}
-                      isDisabled={userData?.permissions?.length === 1}
-                    >
-                      <b>{selectedGroup.name}</b>
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu onAction={(key) => handleChangeGroup(key)}>
-                    {userData.permissions?.map((group) => (
-                      <DropdownItem key={group.id}>{group.name}</DropdownItem>
-                    ))}
-                  </DropdownMenu>
-                </Dropdown>
-
-              <Tabs aria-label="Options">
+ 
+                <Tabs aria-label="Options">
                   {/*   <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
                       {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}

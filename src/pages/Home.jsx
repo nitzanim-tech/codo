@@ -94,7 +94,7 @@ function Home() {
                                     ) : resource.type === 'task' ? (
                                       <TaskCard
                                         key={resource.id}
-                                        taskId={resource.id}
+                                        taskId={resource.link}
                                         text={resource.name}
                                         unitId={unit.id}
                                         studentData={userData?.submissions?.[resource.id] || null}

@@ -5,22 +5,19 @@ import codoLogoImg from '../../assets/img/codoLogo.png';
 
 import LoginOrRegisterDropdown from './LoginOrRegisterDropdown';
 import { Link } from 'react-router-dom';
-import { useFirebase } from '../../util/FirebaseProvider';
 
 export default function NavigateBar() {
-  const { auth, userData } = useFirebase();
-
   return (
-    <Navbar dir="rtl" position="static">
+    <Navbar dir="rtl" position="static" height={'40px'}>
       <NavbarBrand style={{ flex: 1 }}>
         <Link to="/">
-          <img src={codoLogoImg} style={{ width: '180px', marginRight: '-30%' }} />
+          <img src={codoLogoImg} style={{ width: '100px', marginRight: '-30%' }} />
         </Link>
-        {/* <img src={logoImg} style={{ width: '180px' }} /> */}
+        <img src={logoImg} style={{ width: '100px' }} />
       </NavbarBrand>
 
       <NavbarContent justify="end" style={{ flex: 1 }}>
-        <LoginOrRegisterDropdown auth={auth} userData={userData} />
+        <LoginOrRegisterDropdown />
       </NavbarContent>
     </Navbar>
   );
