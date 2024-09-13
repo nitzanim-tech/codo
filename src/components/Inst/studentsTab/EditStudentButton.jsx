@@ -6,8 +6,8 @@ import CoPresentRoundedIcon from '@mui/icons-material/CoPresentRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 
-import { removeStudent } from '../../../requests/removeStudent';
-import { updateUserProperties } from '../../../requests/updateStudentProp ';
+// import { removeStudent } from '../../../requests/removeStudent';
+// import { updateUserProperties } from '../../../requests/updateStudentProp ';
 
 export default function EditStudentButton({ studentData, groups, app }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

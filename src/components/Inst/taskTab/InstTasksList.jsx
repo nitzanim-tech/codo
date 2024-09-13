@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
-import getAllLessons from '../../../requests/lessons/getAllLessons';
 import { useFirebase } from '../../../util/FirebaseProvider';
 
 
@@ -10,7 +9,9 @@ export default function InstTasksList({ tasks, selectedTask, setSelectedTask }) 
 
   useEffect(() => {
     const fetchLessons = async () => {
-      const allLessons = await getAllLessons({ app });
+      // const allLessons = await getAllLessons({ app });
+       const allLessons = null;
+
       setLessons(allLessons);
     };
     fetchLessons();

@@ -10,7 +10,7 @@ import ReadReview from './pages/ReadReview'
 import Play from './pages/Play';
 import Admin from './pages/Admin';
 import Manager from './pages/Manager';
-import Dashboard from './pages/Dashboard';
+// import Dashboard from './pages/Dashboard';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
 import Syllabus from './pages/Syllabus';
@@ -41,7 +41,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/groups" element={<ManageGroups />} />
 
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
         <Route path="/manager" element={<Manager />} />
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
 import { Tabs, Tab, Button } from '@nextui-org/react';
 import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
-import getStudentsByGroup from '../requests/getStudents';
+// import getStudentsByGroup from '../requests/getStudents';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageLessonsInst from '../components/Inst/manageTab/ManageLessonsInst';

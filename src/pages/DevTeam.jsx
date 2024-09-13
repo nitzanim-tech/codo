@@ -3,7 +3,6 @@ import DevTasksTab from '../components/Dev/DevTasksTab';
 import AddNewTasks from '../components/Dev/addNewTask/AddNewTasks';
 // import ManageLessons from '../components/Dev/manageLessons/ManageLessons';
 import MiniDrawer from '../components/Dev/TEST';
-import App from '../components/Dev/userTrack/UserTrack';
 import NavBar from '../components/NavBar/NavigateBar';
 import { useFirebase } from '../util/FirebaseProvider';
 import LoginOrRegisterDropdown from '../components/NavBar/LoginOrRegisterDropdown';

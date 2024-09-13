@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
 import getGroupsByRegion from '../requests/groups/getGroupsByRegion';
-import getStudentsByGroup from '../requests/getStudents';
+// import getStudentsByGroup from '../requests/getStudents';
 import { CircularProgress } from '@nextui-org/react';
 import { useFirebase } from '../util/FirebaseProvider';
 import ChooseGroups from '../components/Manager/ChooseGroups';
@@ -9,7 +9,6 @@ import GeneralDataGraph from '../components/Manager/GeneralDataGraph';
 import WeeklySubmissions from '../components/Manager/WeeklySubmissions';
 import { Grid, Paper, Box } from '@mui/material';
 import StudentPerformanceTable from '../components/Manager/StudentPerformanceTable';
-import getAllLessons from '../requests/lessons/getAllLessons';
 import VisiableLessonsGraph from '../components/Manager/VisiableLessonsGraph';
 import TaskGraph from '../components/Manager/TaskGraph';
 import './Manager.css';
@@ -55,8 +54,10 @@ const Manager = () => {
       let data = [];
       let allLessons = {};
       for (const groupId of choosenGroups) {
-        let groupData = await getStudentsByGroup({ app, groupId });
-        let groupLessons = await getAllLessons({ app, groupId });
+        let groupData = null;
+        let groupLessons = null;
+        // let groupData = await getStudentsByGroup({ app, groupId });
+        // let groupLessons = await getAllLessons({ app, groupId });
         allLessons = { ...allLessons, ...groupLessons };
         groupData = groupData.filter((student) => !student.email.includes('@nitzanim.tech'));
         data = data.concat(groupData);

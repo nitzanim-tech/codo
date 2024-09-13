@@ -4,7 +4,6 @@ import RuleRoundedIcon from '@mui/icons-material/RuleRounded';
 import { usePyodide } from './PyodideProvider';
 import { cleanTracebackTest } from '../../util/cleanTraceback';
 import { getProcessOutputs } from '../../Tasks/TaskComponents';
-import addSession from '../../requests/sessions/addSession';
 import { useFirebase } from '../../util/FirebaseProvider';
 import { useParams } from 'react-router-dom';
 import levenshteinDistance from '../../util/levenshteinDistance';

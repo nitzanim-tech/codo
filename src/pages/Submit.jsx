@@ -7,7 +7,6 @@ import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import SubmitButtons from '../components/Submit/SubmitButtons';
 import SessionTracker from '../components/general/SessionTracker';
-import addSession from '../requests/sessions/addSession';
 import './Submit.css';
 import getRequest from '../requests/anew/getRequest';
 import { examplecode } from '../util/examples/exampleCode';
