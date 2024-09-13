@@ -13,7 +13,7 @@ export default function NavigateBar() {
         <Link to="/">
           <img src={codoLogoImg} style={{ width: '100px', marginRight: '-30%' }} />
         </Link>
-        <img src={logoImg} style={{ width: '100px' }} />
+        {/* <img src={logoImg} style={{ width: '100px' }} /> */}
       </NavbarBrand>
 
       <NavbarContent justify="end" style={{ flex: 1 }}>

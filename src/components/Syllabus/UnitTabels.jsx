@@ -74,7 +74,14 @@ return (
       <Grid item xs={3}>
         {clicked && (
           <Cell>
-            <ChooseTask tasks={tasks} unit={unit} clicked={clicked} setClicked={setClicked} addItem={addTask} />
+            <ChooseTask
+              tasks={tasks}
+              unit={unit}
+              clicked={clicked}
+              setClicked={setClicked}
+              addItem={addTask}
+              syllabusId={syllabus}
+            />
           </Cell>
         )}
       </Grid>

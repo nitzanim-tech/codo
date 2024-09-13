@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Input, Select, Divider, SelectItem } from '@nextui-org/react';
 import postRequest from '../../requests/anew/postRequest';
 
-export default function ChooseTask({ tasks, unit, clicked, setClicked, addItem }) {
+export default function ChooseTask({ tasks, unit, clicked, setClicked, addItem ,syllabusId}) {
   const [mainSubjects, setMainSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState('');
 
@@ -26,6 +26,7 @@ export default function ChooseTask({ tasks, unit, clicked, setClicked, addItem }
         unitId: unit,
         type: clicked.type,
         taskId: value.id,
+        syllabusId,
       };
 
       if (clicked.action === 'update') {
@@ -51,6 +52,7 @@ export default function ChooseTask({ tasks, unit, clicked, setClicked, addItem }
         unitId: unit,
         type: 'task',
         link: value.id,
+        syllabusId
       };
 
       const { id } = await postRequest({  postUrl: 'postUnitResource', object: newResource });
