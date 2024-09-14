@@ -39,6 +39,10 @@ const DevTasksTab = () => {
           let first = a[sortDescriptor.column];
           let second = b[sortDescriptor.column];
 
+          if (sortDescriptor.column === 'edit') {
+            first = localStorage.getItem(`newTask-${a.uid}`) ? 1 : 0;
+            second = localStorage.getItem(`newTask-${b.uid}`) ? 1 : 0;
+          }
           if (sortDescriptor.column === 'lastUpdate') {
             first = first ? new Date(first) : new Date(0);
             second = second ? new Date(second) : new Date(0);
@@ -107,7 +111,9 @@ const DevTasksTab = () => {
         }}
       >
         <TableHeader>
-          <TableColumn key="edit">Edit</TableColumn>
+          <TableColumn key="edit" allowsSorting>
+            Edit
+          </TableColumn>
           <TableColumn key="uid" allowsSorting>
             ID
           </TableColumn>

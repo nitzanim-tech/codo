@@ -42,7 +42,6 @@ const Syllabus = () => {
 
   return (
     <>
-      <NavBar />
       {syllabusList ? (
         <Grid container spacing={1} sx={{ height: '100%', width: '100%', padding: '10px' }}>
           {/* Right column */}

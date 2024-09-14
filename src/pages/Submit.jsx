@@ -83,7 +83,6 @@ function Submit() {
 
   return (
     <>
-      <NavBar />
       <PyodideProvider>
         {loading ? (
           <Loading />

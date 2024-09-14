@@ -61,7 +61,6 @@ function Instructors() {
 
   return (
     <>
-      <NavBar />
       {userData ? (
         <>
           {unauthorized&& 0 ? (

@@ -96,9 +96,9 @@ function Home() {
                                         taskId={resource.link}
                                         text={resource.name}
                                         unitId={unit.id}
-                                        studentData={userData?.submissions?.[resource.id] || null}
-                                        isChallenge={resource.setting?.isChallenge || null}
-                                        showReview={resource.setting?.showReview || null}
+                                        studentData={resource.submission || false}
+                                        // isChallenge={resource.setting?.isChallenge || null}
+                                        // showReview={resource.setting?.showReview || null}
                                       />
                                     ) : (
                                       <FileCard key={resource.id} file={resource} />
