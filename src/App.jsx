@@ -37,8 +37,7 @@ function App() {
         <Route path="/readReview" element={<ReadReview />} />
         <Route path="/dev" element={<DevTeam />} />
 
-        <Route path="/dev/newTask" element={<AddNewTasks />} />
-        <Route path="/dev/editTask/:task" element={<AddNewTasks />} />
+        <Route path="/dev/:task" element={<AddNewTasks />} />
 
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/groups" element={<ManageGroups />} />

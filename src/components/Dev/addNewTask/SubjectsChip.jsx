@@ -6,7 +6,7 @@ const SubjectsChip = ({ chipsList, setChipsList, isSelected, setCurretEditing })
   function handleChipClose(chip) {
     setChipsList(chipsList.filter((item) => item !== chip));
   }
-
+  console.log(chipsList);
   return (
     <>
       <Accordion dir="rtl" variant="splitted" selectionMode="multiple" selectedKeys={'1'} isCompact>
@@ -16,32 +16,31 @@ const SubjectsChip = ({ chipsList, setChipsList, isSelected, setCurretEditing })
           style={{ background: isSelected ? ' #008AD1' : null }}
           onClick={() => setCurretEditing('subjects')}
         >
-          {chipsList.map((chip) => (
-            <Chip key={chip} onClose={() => handleChipClose(chip)}>
-              {chip}
-            </Chip>
-          ))}
+          {chipsList?.length &&
+            chipsList.map((chip) => (
+              <Chip key={chip} onClose={() => handleChipClose(chip)}>
+                {chip}
+              </Chip>
+            ))}
         </AccordionItem>
       </Accordion>
     </>
   );
 };
 
-const EditSubjectsChips = ({ ChipsList, setChipsList }) => {
+const EditSubjectsChips = ({ chipsList, setChipsList }) => {
   const handleChipClick = (e) => {
     const chipElement = e.currentTarget;
+    console.log(chipElement.textContent);
     if (chipElement) {
       const chipText = chipElement.textContent;
-      setChipsList((prevSubjects) => {
-        if (prevSubjects.includes(chipText)) {
-          return prevSubjects.filter((subject) => subject !== chipText);
-        } else {
-          return [...prevSubjects, chipText];
-        }
-      });
+      console.log(chipsList);
+      const newList = chipsList.includes(chipText)
+        ? chipsList.filter((subject) => subject !== chipText)
+        : [...chipsList, chipText];
+      setChipsList(newList);
     }
   };
-
   return (
     <div>
       <table style={{ direction: 'rtl' }}>
@@ -52,7 +51,7 @@ const EditSubjectsChips = ({ ChipsList, setChipsList }) => {
               <td>
                 {SUBJECTS[header].map((subject) => (
                   <Chip
-                    color={ChipsList.includes(subject) ? 'primary' : 'default'}
+                    color={chipsList?.includes(subject) ? 'primary' : 'default'}
                     onClick={handleChipClick}
                     style={{ margin: '2.5px', cursor: 'pointer' }}
                   >

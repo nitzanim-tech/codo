@@ -17,36 +17,38 @@ import AddTests from './AddTests';
 import { EditSubjectsChips, SubjectstChip } from './SubjectsChip';
 import postRequest from '../../../requests/anew/postRequest';
 import { Editor } from '@monaco-editor/react';
+import { SuccessMessage, ErrorMessage } from '../../general/Messages';
 
 const dist = '20';
 
 const AddNewTasks = () => {
-  const { userData } = useFirebase();
   const { task } = useParams();
   const [loading, setLoading] = useState(true);
 
   const [currentEdit, setCurretEdit] = useState('name');
   const [htmlEditing, setHtmlEditing] = useState('');
   const [saved, setSaved] = useState(false);
-
+  const [error, setError] = useState(false);
   const [taskData, setTaskData] = useState();
 
   const handleChange = (key, value) => {
-    const updatedTaskData = taskData;
-    updatedTaskData[key] = value;
+    const updatedTaskData = { ...taskData, [key]: value };
     setTaskData(updatedTaskData);
     localStorage.setItem(`newTask-${task}`, JSON.stringify(updatedTaskData));
   };
-
+  console.log(taskData);
   const saveTask = async () => {
-    const success = await postRequest({ postUrl: 'postTask', object: taskData, authMethod: 'jwt' });
-    if (success) clearTask();
+    const { id } = await postRequest({ postUrl: 'upsertTask', object: taskData, authMethod: 'jwt' });
+    console.log(id);
+    if (id) {
+      localStorage.removeItem(`newTask-${task}`);
+      setSaved(true);
+    } else {
+      setError(true);
+    }
   };
 
-  const clearTask = () => {
-    localStorage.removeItem(`newTask-${task}`);
-  };
-  const mainSubjects = ['תנאים', 'לולאות', 'פונקציות'];
+  const mainSubjects = ['תנאים', 'לולאות', 'פונקציות', 'בוחן'];
   return (
     <div
       style={{ margin: '30px', justifyContent: 'center', padding: '40px', backgroundColor: 'rgba(255,255,255, 0.8)' }}
@@ -63,10 +65,14 @@ const AddNewTasks = () => {
                   label="נושא עיקרי"
                   className="max-w-xs"
                   variant="bordered"
-                  onSelectionChange={(value) => handleChange('mainSubject', value)}
+                  defaultSelectedKey={taskData.mainSubject || ''}
+                  selectedKeys={[taskData.mainSubject] || []}
+                  onSelectionChange={(event) => handleChange('mainSubject', event.currentKey)}
                 >
                   {mainSubjects.map((mSubject) => (
-                    <SelectItem key={mSubject}>{mSubject}</SelectItem>
+                    <SelectItem key={mSubject} value={mSubject}>
+                      {mSubject}
+                    </SelectItem>
                   ))}
                 </Select>
               </div>
@@ -78,7 +84,7 @@ const AddNewTasks = () => {
 
               <div onClick={() => setCurretEdit('subjects')} style={{ marginBottom: `${dist}px` }}>
                 <SubjectstChip
-                  chipsList={taskData.subjects}
+                  chipsList={taskData.subjects || []}
                   setChipsList={(value) => handleChange('subjects', value)}
                   isSelected={currentEdit === 'subjects'}
                   setCurretEditing={setCurretEdit}
@@ -99,7 +105,7 @@ const AddNewTasks = () => {
               {currentEdit === 'subjects' && (
                 <EditSubjectsChips
                   setChipsList={(value) => handleChange('subjects', value)}
-                  ChipsList={taskData.subjects}
+                  chipsList={taskData.subjects}
                 />
               )}
             </div>
@@ -170,7 +176,7 @@ const AddNewTasks = () => {
               <div style={{ direction: 'rtl', width: '50%' }}>
                 <RadioGroup
                   orientation="horizontal"
-                  value={taskData.taskType || true}
+                  value={!taskData?.isDefault ? 'custom' : 'default'}
                   onValueChange={(value) => handleChange('isDefault', value == 'default')}
                 >
                   <Radio value="default">ברירת מחדל</Radio>
@@ -181,7 +187,7 @@ const AddNewTasks = () => {
 
             <div style={{ width: '50%', marginBottom: '40px' }}>
               <Header title={'רמת קושי'} icon={HikingRoundedIcon} />
-              <DifficultSlider level={taskData.level} setLevel={(value) => handleChange('level', value)} />
+              <DifficultSlider level={taskData.level || 3} setLevel={(value) => handleChange('level', value)} />
             </div>
           </div>
 
@@ -194,10 +200,11 @@ const AddNewTasks = () => {
           >
             שמור
           </Button>
-          <Button onClick={clearTask} variant="bordered" radius="full" endContent={<ClearRoundedIcon />}>
+          {/* <Button onClick={clearTask} variant="bordered" radius="full" endContent={<ClearRoundedIcon />}>
             נקה הכל
-          </Button>
-          {saved && <p>נשמר בהצלחה</p>}
+          </Button> */}
+          {saved && <SuccessMessage />}
+          {error && <ErrorMessage />}
         </>
       )}
     </div>
@@ -244,6 +251,7 @@ const DifficultSlider = ({ level, setLevel }) => {
           ]}
           value={level}
           onChange={setLevel}
+          aria-label="Difficulty level"
         />
       </div>
     </div>

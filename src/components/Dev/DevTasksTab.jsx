@@ -1,14 +1,17 @@
+import { useState, useMemo } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { useAsyncList } from '@react-stately/data';
-import { Chip, Spinner, Button, Select, SelectItem, Tooltip } from '@nextui-org/react';
+import { Spinner, Button, Select, SelectItem, Tooltip, Input } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
-import { Input } from '@nextui-org/react';
-import SearchIcon from '@mui/icons-material/Search';
+
 import formatDate from '../../util/formatDate';
 import getRequest from '../../requests/anew/getRequest';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DEVELOPERS from './Developers';
-import { useState, useMemo } from 'react';
+
+import SearchIcon from '@mui/icons-material/Search';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
+
 const DevTasksTab = () => {
   const [filterValue, setFilterValue] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
@@ -26,7 +29,6 @@ const DevTasksTab = () => {
         uid: taskData.id,
         ...taskData,
       }));
-      console.log(tasksArray);
       return {
         items: tasksArray,
       };
@@ -55,7 +57,7 @@ const DevTasksTab = () => {
   });
 
   const onTaskClick = (task) => {
-    window.location.href = `./dev/editTask/${task.id}`;
+    window.location.href = `./dev/${task.id}`;
   };
 
   const filteredItems = useMemo(() => {
@@ -86,7 +88,14 @@ const DevTasksTab = () => {
             <SelectItem key={subject}>{subject}</SelectItem>
           ))}
         </Select>
-        <Button onClick={() => (window.location.href = './dev/newTask')}>Add new</Button>
+        <Button
+          onClick={() => {
+            const newTaskId = uuidv4().replace(/-/g, '').slice(-12);
+            window.location.assign(`./dev/${newTaskId}`);
+          }}
+        >
+          Add new
+        </Button>
       </div>
 
       <Table

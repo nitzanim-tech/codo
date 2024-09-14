@@ -1,13 +1,15 @@
 import firebaseConfig from '../../util/firebaseConfig';
 
-const postRequest = async ({ postUrl, object, setLoadCursor = true, token }) => {
-  let response; // Declare response variable outside the try block
+const postRequest = async ({ postUrl, object, setLoadCursor = true, token, authMethod }) => {
+  let response;
 
   try {
     if (setLoadCursor) document.body.classList.add('cursor-wait');
 
     const apiUrl = firebaseConfig.apiUrl;
     const headers = { 'Content-Type': 'application/json' };
+
+    if (authMethod === 'jwt') token = localStorage.getItem('token');
     if (token) headers['Authorization'] = `Bearer ${token}`;
     const body = JSON.stringify(object);
 
