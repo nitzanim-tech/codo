@@ -155,7 +155,7 @@ const AddTests = ({ testsList, setTestList, code }) => {
                   code={code}
                   setTestsOutputs={setOutput}
                   runTests={false}
-                  taskObject={{ code, tests: [{ input, runningCode }] }}
+                  taskObject={{ code, isDefault: true,inDev:true, tests: [{ input, runningCode }] }}
                   buttonElement={
                     <Button color="primary" variant="light" radius="full" isIconOnly>
                       <PlayArrowRoundedIcon />

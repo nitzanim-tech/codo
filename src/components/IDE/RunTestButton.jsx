@@ -45,7 +45,7 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
       const codeToRun = code + '\n' + (test.runningCode || '');
       try {
         if (!test.isHidden) {
-          const output = await runPython({ code: codeToRun, input: test.input?.replace(/\n/g, '\\n')|| '' });
+          const output = await runPython({ code: codeToRun, input: test.input?.replace(/\n/g, '\\n') || '' });
           testsOutputs.push({ input: test.input, output });
         }
       } catch (error) {
@@ -58,7 +58,6 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
 
   async function handleClick() {
     const userTestOutputs = await runTest({ code, tests: taskObject.tests });
-    console.log({ taskObject });
     const isTaskDefault = taskObject.isDefault;
     let testsOutput;
     if (isTaskDefault) {
@@ -71,17 +70,18 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
         testsOutputs: userTestOutputs,
       });
     }
-    console.log({ testsOutput, taskTests: taskObject.tests, userTestOutputs });
     setTestsOutputs(testsOutput);
 
-    const pass = testsOutput.map((output) => output.correct);
-    const time = new Date().toISOString();
-    const lastCode = localStorage.getItem(`${task}-lastCode`);
-    const dist = levenshteinDistance(code, lastCode);
-    const session = { type: 'run', time, taskId: task, userId: userData.id, pass, dist };
-    postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
+    if (!taskObject.inDev) {
+      const pass = testsOutput.map((output) => output.correct);
+      const time = new Date().toISOString();
+      const lastCode = localStorage.getItem(`${task}-lastCode`);
+      const dist = levenshteinDistance(code, lastCode);
+      const session = { type: 'run', time, taskId: task, userId: userData.id, pass, dist };
+      postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
 
-    localStorage.setItem(`${task}-lastCode`, code);
+      localStorage.setItem(`${task}-lastCode`, code);
+    }
   }
 
   const defaultButton = (
@@ -101,7 +101,6 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
 }
 
 function processDefaultTestsOutputs({ taskTests, userTestOutputs, ansTestOutputs }) {
-  console.log({ taskTests, userTestOutputs, ansTestOutputs });
   const names = taskTests.map((test) => test.name);
 
   return userTestOutputs.map((testsOutput, index) => {

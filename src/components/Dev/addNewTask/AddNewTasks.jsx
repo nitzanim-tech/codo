@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFirebase } from '../../../util/FirebaseProvider';
 import { AcordionTextEditor, AcordionPreview } from './AcordionTextEditor';
-import { RadioGroup, Radio, Divider, Input, Button, Slider } from '@nextui-org/react';
+import { RadioGroup, Radio, Divider, Input, Button, Slider, Select, SelectItem } from '@nextui-org/react';
 
 import ChecklistRtlRoundedIcon from '@mui/icons-material/ChecklistRtlRounded';
 import TerminalRoundedIcon from '@mui/icons-material/TerminalRounded';
@@ -39,14 +39,14 @@ const AddNewTasks = () => {
   };
 
   const saveTask = async () => {
-    const success = await postRequest({ postUrl: 'postTask', object: taskData, authMethod: 'jwt'});
+    const success = await postRequest({ postUrl: 'postTask', object: taskData, authMethod: 'jwt' });
     if (success) clearTask();
   };
 
   const clearTask = () => {
     localStorage.removeItem(`newTask-${task}`);
   };
-
+  const mainSubjects = ['תנאים', 'לולאות', 'פונקציות'];
   return (
     <div
       style={{ margin: '30px', justifyContent: 'center', padding: '40px', backgroundColor: 'rgba(255,255,255, 0.8)' }}
@@ -54,15 +54,28 @@ const AddNewTasks = () => {
       <TaskLoaderModal taskId={task} setTaskData={setTaskData} loading={loading} setLoading={setLoading} />
       {!loading && taskData && (
         <>
-          <Header title={'הסבר'} icon={EmojiSymbolsRoundedIcon} />
+          <Header title={'כללי'} icon={EmojiSymbolsRoundedIcon} />
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '40px', direction: 'rtl' }}>
-            <div style={{ overflow: 'hidden' }}>
+            <div style={{ overflow: 'hidden', height: '360px' }}>
+              <div onClick={() => setCurretEdit('mainSubject')} style={{ marginBottom: `${dist}px` }}>
+                <Select
+                  label="נושא עיקרי"
+                  className="max-w-xs"
+                  variant="bordered"
+                  onSelectionChange={(value) => handleChange('mainSubject', value)}
+                >
+                  {mainSubjects.map((mSubject) => (
+                    <SelectItem key={mSubject}>{mSubject}</SelectItem>
+                  ))}
+                </Select>
+              </div>
               <div onClick={() => setCurretEdit('name')} style={{ marginBottom: `${dist}px` }}>
                 <p style={{ fontSize: '20px', color: currentEdit === 'name' ? ' #008AD1' : null }}>
                   {taskData.name || 'שם המשימה'}
                 </p>
               </div>
+
               <div onClick={() => setCurretEdit('subjects')} style={{ marginBottom: `${dist}px` }}>
                 <SubjectstChip
                   chipsList={taskData.subjects}
@@ -71,24 +84,7 @@ const AddNewTasks = () => {
                   setCurretEditing={setCurretEdit}
                 />
               </div>
-              <div onClick={() => setCurretEdit('description')} style={{ marginBottom: `${dist}px` }}>
-                <AcordionPreview
-                  type={'description'}
-                  htmlContent={taskData.description}
-                  isSelected={currentEdit === 'description'}
-                  setCurretEditing={setCurretEdit}
-                />
-              </div>
-              <div onClick={() => setCurretEdit('example')} style={{ marginBottom: `${dist}px` }}>
-                <AcordionPreview
-                  type={'example'}
-                  htmlContent={taskData.example}
-                  isSelected={currentEdit === 'example'}
-                  setCurretEditing={setCurretEdit}
-                />
-              </div>
             </div>
-
             <div style={{ overflow: 'hidden' }}>
               {currentEdit === 'name' && (
                 <div style={{ width: '70%' }}>
@@ -106,6 +102,31 @@ const AddNewTasks = () => {
                   ChipsList={taskData.subjects}
                 />
               )}
+            </div>
+          </div>
+
+          <Header title={'הסבר'} icon={EmojiSymbolsRoundedIcon} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '40px', direction: 'rtl' }}>
+            <div style={{ overflow: 'hidden' }}>
+              <div onClick={() => setCurretEdit('description')} style={{ marginBottom: `${dist}px` }}>
+                <AcordionPreview
+                  type={'description'}
+                  htmlContent={taskData.description}
+                  isSelected={currentEdit === 'description'}
+                  setCurretEditing={setCurretEdit}
+                />
+              </div>
+              <div onClick={() => setCurretEdit('example')} style={{ marginBottom: `${dist}px` }}>
+                <AcordionPreview
+                  type={'example'}
+                  htmlContent={taskData.example}
+                  isSelected={currentEdit === 'example'}
+                  setCurretEditing={setCurretEdit}
+                />
+              </div>
+            </div>
+            {/*RIGHT*/}
+            <div style={{ overflow: 'hidden' }}>
               {currentEdit === 'description' && (
                 <AcordionTextEditor
                   text={taskData.description}
@@ -124,7 +145,6 @@ const AddNewTasks = () => {
               )}
             </div>
           </div>
-
           <Header title={'קוד פתרון'} icon={TerminalRoundedIcon} />
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <ListboxWrapper width="70%">
@@ -138,26 +158,24 @@ const AddNewTasks = () => {
               />
             </ListboxWrapper>
           </div>
-
           <Header title={'טסטים'} icon={ChecklistRtlRoundedIcon} />
           <AddTests
             testsList={taskData.tests}
             setTestList={(value) => handleChange('tests', value)}
-            code={taskData.codecode}
+            code={taskData.code}
           />
-
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ width: '50%' }}>
               <Header title={'סוג משימה'} icon={HdrStrongRoundedIcon} />
               <div style={{ direction: 'rtl', width: '50%' }}>
-                {/* <RadioGroup
+                <RadioGroup
                   orientation="horizontal"
-                  value={taskType}
-                  onValueChange={(value) => handleChange('taskType', value)}
+                  value={taskData.taskType || true}
+                  onValueChange={(value) => handleChange('isDefault', value == 'default')}
                 >
                   <Radio value="default">ברירת מחדל</Radio>
                   <Radio value="custom"> מותאם אישית </Radio>
-                </RadioGroup> */}
+                </RadioGroup>
               </div>
             </div>
 
@@ -179,7 +197,6 @@ const AddNewTasks = () => {
           <Button onClick={clearTask} variant="bordered" radius="full" endContent={<ClearRoundedIcon />}>
             נקה הכל
           </Button>
-
           {saved && <p>נשמר בהצלחה</p>}
         </>
       )}

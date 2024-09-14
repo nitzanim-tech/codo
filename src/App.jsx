@@ -15,8 +15,9 @@ import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
 import Syllabus from './pages/Syllabus';
 import ManageGroups from './components/Admin/ManageGroups';
+import NotFound from './pages/NotFound';
 import './App.css';
-
+import NavigateBar from './components/NavBar/NavigateBar';
 ReactGA.initialize(firebaseConfig.measurementId);
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <NavigateBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/inst" element={<Instructurs />} />
@@ -46,6 +48,8 @@ function App() {
         <Route path="/manager" element={<Manager />} />
 
         <Route path="/syllabus" element={<Syllabus />} />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

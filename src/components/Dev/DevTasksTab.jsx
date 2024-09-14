@@ -8,7 +8,7 @@ import getRequest from '../../requests/anew/getRequest';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DEVELOPERS from './Developers';
 import { useState, useMemo } from 'react';
-
+import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 const DevTasksTab = () => {
   const [filterValue, setFilterValue] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
@@ -125,7 +125,11 @@ const DevTasksTab = () => {
             <TableRow key={task.uid}>
               <TableCell>
                 <Button variant="light" radius="full" isIconOnly size="sm" onClick={() => onTaskClick(task)}>
-                  <EditRoundedIcon style={{ color: '#005395' }} />
+                  {localStorage.getItem(`newTask-${task.uid}`) ? (
+                    <BorderColorRoundedIcon style={{ color: 'red' }} />
+                  ) : (
+                    <EditRoundedIcon style={{ color: '#005395' }} />
+                  )}
                 </Button>
               </TableCell>
               <TableCell>{task.uid}</TableCell>

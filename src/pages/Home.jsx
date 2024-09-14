@@ -54,13 +54,12 @@ function Home() {
 
   return (
     <>
-      <NavBar />
       {userData ? (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
             <Grid container spacing={1} columns={3} rows={1}>
               <Grid item style={{ width: '55%', margin: '2%' }}>
-                <ScrollShadow className="h-[100vh]" size={5}>
+                <ScrollShadow className="h-[85vh]" size={5}>
                   {units ? (
                     <Accordion dir="rtl" selectedKeys={units.map((unit) => unit.id)} isCompact>
                       {units && units.length > 0 ? (
