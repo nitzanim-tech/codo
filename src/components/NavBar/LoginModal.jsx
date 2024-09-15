@@ -4,7 +4,6 @@ import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { ModalBody, ModalFooter, Button } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent, Divider } from '@nextui-org/react';
 import GoogleIcon from '@mui/icons-material/Google';
-import { signOut } from 'firebase/auth';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import getRequest from '../../requests/anew/getRequest';
 

@@ -18,13 +18,12 @@ export const FirebaseProvider = ({ children }) => {
 
   const logOut = async () => {
     try {
-      console.log('Logging out...');
       await signOut(auth); 
       localStorage.removeItem('token');
       setJwt(null); // Clear JWT state
       setUserData(null); // Reset user data
       setIsAuthorized(0); // Reset authorization level
-      console.log('User logged out');
+      console.log('Logged out');
     } catch (error) {
       console.error('Error logging out:', error);
     }
@@ -32,11 +31,8 @@ export const FirebaseProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log('onAuthStateChanged triggered:', auth.currentUser);
-
       const updateUserData = async () => {
         if (jwt) {
-          console.log('Using JWT to set user data');
           try {
             const decoded = jwtDecode(jwt);
             const currentTime = Date.now() / 1000;
@@ -63,13 +59,13 @@ export const FirebaseProvider = ({ children }) => {
           logOut();
         }
 
-        setIsUserLoading(false); // Ensure this is called in all branches
+        setIsUserLoading(false); 
       };
 
       updateUserData();
     });
 
-    return () => unsubscribe(); // Cleanup the listener on unmount
+    return () => unsubscribe(); 
   }, [auth, jwt]);
 
   return (

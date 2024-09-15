@@ -67,7 +67,13 @@ const LoginOrRegisterDropdown = () => {
       )}
 
       {openRegisterModal && (
-        <RegisterModal isOpen={openRegisterModal} onOpenChange={setOpenRegisterModal} onClose={clearAll} auth={auth} />
+        <RegisterModal
+          isOpen={openRegisterModal}
+          onOpenChange={setOpenRegisterModal}
+          onClose={clearAll}
+          auth={auth}
+          setJwt={setJwt}
+        />
       )}
       {openLoginModal && (
         <LoginModal
