@@ -74,7 +74,7 @@ const ManageGroups = () => {
 
   return (
     <>
-      <Sidebar/>
+      <Sidebar />
       <div className="flex gap-4 mb-4 w-7/10 mx-auto" style={{ width: '70%' }}>
         <Select
           placeholder="Select Region"
@@ -105,7 +105,12 @@ const ManageGroups = () => {
                     filteredData[region][syllabus] &&
                     filteredData[region][syllabus].map((group) => (
                       <div key={group.id}>
-                        <Button variant="light" radius="full" onClick={() => onGroupClick(group)}>
+                        <Button
+                          variant="light"
+                          radius="full"
+                          onClick={() => onGroupClick(group)}
+                          color={group.isDefault && 'primary'}
+                        >
                           {/* <EditRoundedIcon style={{ color: '#005395' }} /> */}
                           {group.name}
                         </Button>

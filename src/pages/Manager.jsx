@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
-import getGroupsByRegion from '../requests/groups/getGroupsByRegion';
+// import getGroupsByRegion from '../requests/groups/getGroupsByRegion';
 // import getStudentsByGroup from '../requests/getStudents';
 import { CircularProgress } from '@nextui-org/react';
 import { useFirebase } from '../util/FirebaseProvider';
@@ -31,7 +31,9 @@ const Manager = () => {
   const [lessons, setLessons] = useState();
   useEffect(() => {
     const fetchData = async () => {
-      const [regionsFromDb] = await Promise.all([getGroupsByRegion(app)]);
+      // const [regionsFromDb] = await Promise.all([getGroupsByRegion(app)]);
+      const [regionsFromDb] = [];
+
       const index = makeNameIdIndex(regionsFromDb);
       setGroupIndex(index);
       setRegions(regionsFromDb);

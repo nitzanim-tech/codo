@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NavBar from '../components/NavBar/NavigateBar';
-import getInsts from '../requests/manager/getInsts';
-import getGroupsByRegion from '../requests/groups/getGroupsByRegion';
+// import getInsts from '../requests/manager/getInsts';
+// import getGroupsByRegion from '../requests/groups/getGroupsByRegion';
 import { Table, TableHeader, TableRow, TableCell, TableBody, TableColumn } from '@nextui-org/react';
 import { CircularProgress, Chip, Button } from '@nextui-org/react';
 
-import addPermissionToUser from '../requests/manager/addPermission';
+// import addPermissionToUser from '../requests/manager/addPermission';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import { useFirebase } from '../util/FirebaseProvider';
 
@@ -17,7 +17,9 @@ function Admin() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [instFromDb, regionsFromDb] = await Promise.all([getInsts({ app }), getGroupsByRegion(app)]);
+      // const [instFromDb, regionsFromDb] = await Promise.all([getInsts({ app }), getGroupsByRegion(app)]);
+      const [instFromDb, regionsFromDb] = [[],[]];
+
       const index = makeNameIdIndex(regionsFromDb);
       setGroupIndex(index);
       setInstructorsData(instFromDb);
@@ -112,11 +114,12 @@ function Admin() {
                       onClick={async () => {
                         const newPermission = autocompleteRef.current.value;
                         if (newPermission) {
-                          const haveAdded = addPermissionToUser({
-                            app: app,
-                            userId: user.id,
-                            permission: findIdByName(newPermission),
-                          });
+                          const haveAdded = false
+                          //  addPermissionToUser({
+                          //   app: app,
+                          //   userId: user.id,
+                          //   permission: findIdByName(newPermission),
+                          // });
                           if (haveAdded) {
                             const updatedPermissions = [...user.permissions, newPermission];
                             const updatedInstructorsData = instructorsData.map((inst) =>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavBar from '../components/NavBar/NavigateBar';
 
 import './Home.css';
 import { Button, Grid, Card } from '@mui/material';
@@ -44,9 +43,8 @@ function Home() {
   useEffect(() => {
     const fetchUnits = async () => {
       const unitsFromDb = await getRequest({ getUrl: `getHomepage`, authMethod: 'jwt' });
-      // console.log({ unitsFromDb });
       setUnits(unitsFromDb);
-      console.log(unitsFromDb);
+      console.log({unitsFromDb});
     };
 
     userData && fetchUnits();

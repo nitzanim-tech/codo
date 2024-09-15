@@ -29,12 +29,12 @@ const LoginModal = ({ auth, isOpen, onOpenChange, onClose, setJwt, logOut }) => 
 
       onOpenChange();
     } catch (error) {
-      setError(error.message);
+        setError('משתמש לא רשום');
     }
   };
 
   const handleClose = () => {
-    setOpen(false);
+    onOpenChange();
     setError('');
   };
   return (

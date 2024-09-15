@@ -3,7 +3,7 @@ import { Button } from '@nextui-org/react';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import duckIcon from '../../assets/svg/rubber-duck.svg';
 import ChecklistRtlRoundedIcon from '@mui/icons-material/ChecklistRtlRounded';
-import Instructions from '../Instructions';
+import Instructions from './Instructions';
 import TestsList from '../TestsList/TestsList';
 import { Tabs, Tab } from '@nextui-org/react';
 import Coduck from '../Coduck/Coduck';

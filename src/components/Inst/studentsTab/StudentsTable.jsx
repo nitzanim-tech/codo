@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import { getKeyValue, Spinner } from '@nextui-org/react';
 import EditStudentButton from './EditStudentButton';
-import getGroups from '../../../requests/groups/getGroups';
+// import getGroups from '../../../requests/groups/getGroups';
 
 export default function StudentsTable({ app, auth, isLoading, students }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'name', direction: 'ascending' });
@@ -11,7 +11,9 @@ export default function StudentsTable({ app, auth, isLoading, students }) {
   useEffect(() => {
     const getGroupFromDb = async () => {
       try {
-        const groupFromDB = await getGroups(app, auth);
+        // const groupFromDB = await getGroups(app, auth);
+        const groupFromDB = [];
+
         setGroups(groupFromDB);
       } catch (error) {
         console.error('Error fetching groups:', error);
