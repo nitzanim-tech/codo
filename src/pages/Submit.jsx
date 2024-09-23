@@ -14,6 +14,7 @@ import postRequest from '../requests/anew/postRequest';
 import { handleUserActivity } from '../components/Submit/activityTracker';
 import { CircularProgress } from '@nextui-org/react';
 import { Loading } from '../components/general/Messages';
+import Sidebar from '../components/Submit/Sidebar';
 
 function Submit() {
   const { auth, userData } = useFirebase();
@@ -88,25 +89,28 @@ function Submit() {
           <Loading />
         ) : auth.currentUser ? (
           taskData && testsOutputs ? (
-            <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
-              <Grid item style={{ width: '60%' }}>
-                <PythonIDE
-                  testsOutputs={testsOutputs}
-                  setTestsOutputs={setTestsOutputs}
-                  taskObject={taskData}
-                  highlightedLines={highlightedLines}
-                  code={code}
-                  setCode={setCode}
-                />
+            <>
+              {/* <Sidebar /> */}
+              <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
+                <Grid item style={{ width: '60%' }}>
+                  <PythonIDE
+                    testsOutputs={testsOutputs}
+                    setTestsOutputs={setTestsOutputs}
+                    taskObject={taskData}
+                    highlightedLines={highlightedLines}
+                    code={code}
+                    setCode={setCode}
+                  />
+                </Grid>
+                <Grid item style={{ width: '40%' }}>
+                  <SubmitButtons
+                    testsOutputs={testsOutputs}
+                    taskObject={taskData}
+                    setHighlightedLines={setHighlightedLines}
+                  />
+                </Grid>
               </Grid>
-              <Grid item style={{ width: '40%' }}>
-                <SubmitButtons
-                  testsOutputs={testsOutputs}
-                  taskObject={taskData}
-                  setHighlightedLines={setHighlightedLines}
-                />
-              </Grid>
-            </Grid>
+            </>
           ) : null
         ) : (
           <h1>אנא התחברו</h1>
