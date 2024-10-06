@@ -6,7 +6,7 @@ import Review from './pages/Review';
 import DevTeam from './pages/DevTeam';
 import AddNewTasks from './components/Dev/addNewTask/AddNewTasks';
 import Home from './pages/Home';
-import ReadReview from './pages/ReadReview'
+import ReadReview from './components/Submit/ReadReview';
 import Play from './pages/Play';
 import Admin from './pages/Admin';
 import Manager from './pages/Manager';
@@ -33,15 +33,14 @@ function App() {
         <Route path="/inst" element={<Instructurs />} />
         <Route path="/submit/:unit/:task" element={<Submit />} />
         <Route path="/submit/:index/play" element={<Play />} />
-        <Route path="/review" element={<Review />} />
-        <Route path="/readReview" element={<ReadReview />} />
+        {/* <Route path="/review" element={<Review />} />
+        <Route path="/readReview" element={<ReadReview />} /> */}
         <Route path="/dev" element={<DevTeam />} />
 
         <Route path="/dev/:task" element={<AddNewTasks />} />
 
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/admin/groups" element={<ManageGroups />} />
-
+        {/* <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/groups" element={<ManageGroups />} />*/}
         {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
         <Route path="/manager" element={<Manager />} />

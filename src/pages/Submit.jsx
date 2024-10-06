@@ -14,6 +14,7 @@ import postRequest from '../requests/anew/postRequest';
 import { handleUserActivity } from '../components/Submit/activityTracker';
 import { CircularProgress } from '@nextui-org/react';
 import { Loading } from '../components/general/Messages';
+import ReadReview from '../components/Submit/ReadReview';
 
 function Submit() {
   const { auth, userData } = useFirebase();
@@ -24,6 +25,8 @@ function Submit() {
   const [noActivitySent, setNoActivitySent] = useState(false);
   const [code, setCode] = useState(localStorage.getItem(`${task}-code`) || examplecode);
   const [loading, setLoading] = useState(true);
+  const [submissions, setSubmissions] = useState();
+  const [openReview, setOpenReview] = useState(false);
 
   const userActivityHandler = useCallback(() => {
     handleUserActivity(task, userData, noActivitySent, setNoActivitySent);
@@ -54,7 +57,8 @@ function Submit() {
     const fetchData = async () => {
       if (userData) {
         localStorage.setItem(`${task}-lastCode`, code);
-        const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${task}&&groupId=${1}` });
+        const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${task}&&groupId=${1}`, authMethod: 'jwt' });
+        setSubmissions(taskFromDb.submissions);
         taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
         setTaskData(taskFromDb);
         const testNames = taskFromDb.tests.map((test) => test.name);
@@ -90,20 +94,29 @@ function Submit() {
           taskData && testsOutputs ? (
             <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
               <Grid item style={{ width: '60%' }}>
-                <PythonIDE
-                  testsOutputs={testsOutputs}
-                  setTestsOutputs={setTestsOutputs}
-                  taskObject={taskData}
-                  highlightedLines={highlightedLines}
-                  code={code}
-                  setCode={setCode}
-                />
+                {openReview && submissions ? (
+                  <ReadReview
+                    code={submissions[0].code}
+                    comments={submissions[0].comments}
+                    general={submissions[0].general}
+                  />
+                ) : (
+                  <PythonIDE
+                    testsOutputs={testsOutputs}
+                    setTestsOutputs={setTestsOutputs}
+                    taskObject={taskData}
+                    highlightedLines={highlightedLines}
+                    code={code}
+                    setCode={setCode}
+                  />
+                )}{' '}
               </Grid>
               <Grid item style={{ width: '40%' }}>
                 <SubmitButtons
                   testsOutputs={testsOutputs}
                   taskObject={taskData}
                   setHighlightedLines={setHighlightedLines}
+                  submissions={submissions}
                 />
               </Grid>
             </Grid>

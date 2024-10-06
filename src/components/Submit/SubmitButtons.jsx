@@ -7,8 +7,8 @@ import Instructions from './Instructions';
 import TestsList from '../TestsList/TestsList';
 import { Tabs, Tab } from '@nextui-org/react';
 import Coduck from '../Coduck/Coduck';
-
-export default function SubmitButtons({ testsOutputs, taskObject, setHighlightedLines }) {
+import GradingRoundedIcon from '@mui/icons-material/GradingRounded';
+export default function SubmitButtons({ testsOutputs, taskObject, setHighlightedLines, submissions }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [selectedTab, setSelectedTab] = useState('instructions');
 
@@ -47,6 +47,41 @@ export default function SubmitButtons({ testsOutputs, taskObject, setHighlighted
             setHighlightedLines={setHighlightedLines}
           />
         </Tab> */}
+
+        <Tab
+          key="reviews"
+          title={
+            <>
+              <span style={{ margin: '10px' }}>משוב</span>
+              <GradingRoundedIcon />
+            </>
+          }
+        >
+          {taskObject && (
+            <>
+              {submissions && submissions.length > 0 ? (
+                submissions
+                  .sort((a, b) => new Date(b.time) - new Date(a.time)) 
+                  .map((submission, index) => (
+                    <div key={index} style={{ marginBottom: '20px' }}>
+                      {/* <p>קוד: {submission.code}</p> */}
+                      <p>ציון: {submission.pass ? 'עבר' : 'לא עבר'}</p>
+                      <p>זמן הגשה: {new Date(submission.time).toLocaleString()}</p>
+                      {submission.comments && (
+                        <>
+                          <p>משוב:</p>
+                          {/* <p>{submission.comments}</p> */}
+                        </>
+                      )}
+                      <hr />
+                    </div>
+                  ))
+              ) : (
+                <p>אין הגשות</p>
+              )}
+            </>
+          )}
+        </Tab>
 
         <Tab
           key="tests"

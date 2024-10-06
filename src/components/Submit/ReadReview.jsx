@@ -3,38 +3,21 @@ import Editor from '@monaco-editor/react';
 import { Card, Textarea } from '@nextui-org/react';
 import { CircularProgress } from '@nextui-org/react';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import TestsCheckbox from '../components/Review/TestsCheckbox';
-import getTaskById from '../requests/tasks/getTaskById';
-import { useFirebase } from '../util/FirebaseProvider';
+import TestsCheckbox from '../Review/TestsCheckbox';
 const LINE_HEGITH = 20;
 
-export default function ReadReview() {
+export default function ReadReview({ code, comments, general }) {
   const theme = 'vs-light';
-  const { app } = useFirebase();
 
-  const [version, setVersion] = useState(null);
-  const [comments, setComments] = useState(null);
-  const [taskData, setTaskData] = useState(null);
-
+  const [convertedComments, setConvertedComments] = useState();
   useEffect(() => {
-    const storedVersion = localStorage.getItem('checkedSubmit');
-    if (storedVersion) {
-      const parsedVersion = JSON.parse(storedVersion);
-      const fetchData = async () => {
-        const taskFromDb = await getTaskById({ app, taskId: parsedVersion.task });
-        setVersion(parsedVersion);
-        setTaskData(taskFromDb);
-        const convertedComments = convertCommentsToObject(parsedVersion.review.comments, parsedVersion.code);
-        setComments(convertedComments);
-      };
-      fetchData();
-    }
-  }, []);
+    setConvertedComments(convertCommentsToObject(comments, code));
+  }, [comments]);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', padding: '30px' }}>
       <Card style={{ width: '60%' }}>
-        {comments ? (
+        {convertedComments ? (
           <>
             <p
               style={{
@@ -45,10 +28,10 @@ export default function ReadReview() {
               }}
             >
               <b>כללי:</b>
-              <Textarea isReadOnly disableAnimation variant="bordered" defaultValue={version.review.general} />
+              <Textarea isReadOnly disableAnimation variant="bordered" defaultValue={general} />
             </p>
-            <div style={{ marginTop: '30px' }}>
-              {comments.map((editor, index) => (
+            <div>
+              {convertedComments.map((editor, index) => (
                 <React.Fragment key={index}>
                   <Editor
                     height={editor.height}
@@ -86,9 +69,9 @@ export default function ReadReview() {
           <CircularProgress />
         )}
       </Card>
-      {version && (
+      {/* {version && (
         <TestsCheckbox task={taskData} selectedTests={version.selectedTests} setSelectedTests={() => {}} viewOnly />
-      )}
+      )} */}
     </div>
   );
 }
