@@ -8,7 +8,10 @@ import TestsList from '../TestsList/TestsList';
 import { Tabs, Tab } from '@nextui-org/react';
 import Coduck from '../Coduck/Coduck';
 import GradingRoundedIcon from '@mui/icons-material/GradingRounded';
-export default function SubmitButtons({ testsOutputs, taskObject, setHighlightedLines, submissions }) {
+import { Accordion, AccordionItem, Textarea } from '@nextui-org/react';
+import DonutChart from '../Inst/Chart';
+
+export default function SubmitButtons({ testsOutputs, taskObject, setHighlightedLines, submissions, setOpenReview }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [selectedTab, setSelectedTab] = useState('instructions');
 
@@ -16,6 +19,10 @@ export default function SubmitButtons({ testsOutputs, taskObject, setHighlighted
     console.log({ testsOutputs });
     testsOutputs[0]?.input && setSelectedTab('tests');
   }, [testsOutputs]);
+
+  useEffect(() => {
+    setOpenReview(null);
+  }, [selectedTab]);
 
   return (
     <>
@@ -60,22 +67,52 @@ export default function SubmitButtons({ testsOutputs, taskObject, setHighlighted
           {taskObject && (
             <>
               {submissions && submissions.length > 0 ? (
-                submissions
-                  .sort((a, b) => new Date(b.time) - new Date(a.time)) 
-                  .map((submission, index) => (
-                    <div key={index} style={{ marginBottom: '20px' }}>
-                      {/* <p>קוד: {submission.code}</p> */}
-                      <p>ציון: {submission.pass ? 'עבר' : 'לא עבר'}</p>
-                      <p>זמן הגשה: {new Date(submission.time).toLocaleString()}</p>
-                      {submission.comments && (
-                        <>
-                          <p>משוב:</p>
-                          {/* <p>{submission.comments}</p> */}
-                        </>
-                      )}
-                      <hr />
-                    </div>
-                  ))
+                <Accordion dir="rtl" isCompact>
+                  {submissions
+                    .sort((a, b) => new Date(a.time) - new Date(b.time))
+                    .map((submission, index) => (
+                      <AccordionItem
+                        key={index}
+                        variant="bordered"
+                        aria-label={`Submission ${index + 1}`}
+                        onClick={() => {
+                          console.log('here');
+                          setOpenReview(submission);
+                        }}
+                        title={`${new Date(submission.time).toLocaleString()} ${
+                          submission.comments || submission.general ? ' - משוב' : ''
+                        }`}
+                        startContent={
+                          <>
+                            <div style={{ fontSize: '10px' }}>
+                              <DonutChart
+                                ratio={`${submission.pass.filter(Boolean).length}/${submission.pass.length}`}
+                                percentage={(submission.pass.filter(Boolean).length / submission.pass.length) * 100}
+                                size={40}
+                                showPrecent={false}
+                              />
+                            </div>
+                          </>
+                        }
+                      >
+                        <div style={{ marginBottom: '20px' }}>
+                          {submission.comments || submission.general ? (
+                            <>
+                              <Textarea
+                                dir="rtl"
+                                isReadOnly
+                                disableAnimation
+                                variant="bordered"
+                                defaultValue={submission.general}
+                              />
+                            </>
+                          ) : (
+                            <p>אין משוב להגשה זו</p>
+                          )}
+                        </div>
+                      </AccordionItem>
+                    ))}
+                </Accordion>
               ) : (
                 <p>אין הגשות</p>
               )}

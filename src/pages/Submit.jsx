@@ -26,7 +26,7 @@ function Submit() {
   const [code, setCode] = useState(localStorage.getItem(`${task}-code`) || examplecode);
   const [loading, setLoading] = useState(true);
   const [submissions, setSubmissions] = useState();
-  const [openReview, setOpenReview] = useState(false);
+  const [openReview, setOpenReview] = useState();
 
   const userActivityHandler = useCallback(() => {
     handleUserActivity(task, userData, noActivitySent, setNoActivitySent);
@@ -95,11 +95,7 @@ function Submit() {
             <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
               <Grid item style={{ width: '60%' }}>
                 {openReview && submissions ? (
-                  <ReadReview
-                    code={submissions[0].code}
-                    comments={submissions[0].comments}
-                    general={submissions[0].general}
-                  />
+                  <ReadReview code={openReview.code} comments={openReview.comments} />
                 ) : (
                   <PythonIDE
                     testsOutputs={testsOutputs}
@@ -117,6 +113,7 @@ function Submit() {
                   taskObject={taskData}
                   setHighlightedLines={setHighlightedLines}
                   submissions={submissions}
+                  setOpenReview={setOpenReview}
                 />
               </Grid>
             </Grid>
