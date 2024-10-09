@@ -6,21 +6,24 @@ import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { useFirebase } from '../../util/FirebaseProvider';
-
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
+import UserSettingModal from './UserSettingModal';
 
 const LoginOrRegisterDropdown = () => {
-    const { auth, userData, setJwt, logOut } = useFirebase();
+  const { auth, userData, setJwt, logOut } = useFirebase();
 
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
+  const [openLSettingModal, setOpenLSettingModal] = useState(false);
 
   const handleSignOut = async () => {
-    await logOut(); 
+    await logOut();
   };
 
   const clearAll = () => {
+    setOpenLSettingModal(false);
     setOpenRegisterModal(false);
     setOpenLoginModal(false);
   };
@@ -40,7 +43,17 @@ const LoginOrRegisterDropdown = () => {
               <p>{userData.name}</p>
             </div>
           </DropdownTrigger>
+
           <DropdownMenu variant="faded" aria-label="Dropdown menu logout" onAction={(key) => console.log(key)}>
+            <DropdownItem
+              key="setting"
+              onClick={() => setOpenLSettingModal(true)}
+              showDivider
+              startContent={<SettingsRoundedIcon />}
+            >
+              הגדרות
+            </DropdownItem>
+
             <DropdownItem key="logout" onClick={handleSignOut} startContent={<LogoutRoundedIcon />}>
               התנתק
             </DropdownItem>
@@ -84,6 +97,10 @@ const LoginOrRegisterDropdown = () => {
           setJwt={setJwt}
           logOut={logOut}
         />
+      )}
+
+      {openLSettingModal && (
+        <UserSettingModal isOpen={openLSettingModal} onOpenChange={setOpenLSettingModal} onClose={clearAll} />
       )}
     </div>
   );
