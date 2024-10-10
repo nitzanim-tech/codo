@@ -15,21 +15,40 @@ import getTasksData from '../requests/tasks/getTasksData';
 import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettingProvider';
 import isAuthorized from '../util/permissions';
 import { Unauthorized } from '../components/general/Messages';
+import getRequest from '../requests/anew/getRequest';
+
 function Instructors() {
   const { app, userData, auth } = useFirebase();
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(userData ? userData.group : null);
+  const [selectedGroupName, setSelectedGroupName] = useState(null);
   const [unauthorized, setUnauthorized] = useState(true);
   const [tasksList, setTasksList] = useState(null);
+  const [instructorGroups, setInstructorGroups] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchTasksData = async () => {
-  //     const tasksData = await getTasksData({ app });
-  //     setTasksList(tasksData);
-  //   };
-  //   fetchTasksData();
-  // }, []);
+  useEffect(() => {
+    const fetchGroups = async () => {
+      const groups = await getRequest({ getUrl: `getGroupsByInstructor?instructor=${userData.id}`});
+      setInstructorGroups(groups);
+    };
+
+    userData && fetchGroups();
+  }, [userData]);
+
+  useEffect(() => {
+    if (selectedGroup) {
+        setSelectedGroupName(instructorGroups.filter(x => x.id == selectedGroup)[0].name);
+    }
+  }, [instructorGroups, selectedGroup]);
+
+//   useEffect(() => {
+//     const fetchTasksData = async () => {
+//       const tasksData = await getTasksData({ app });
+//       setTasksList(tasksData);
+//     };
+//     fetchTasksData();
+//   }, []);
 
   // useEffect(() => {
   //   if (userData) {
@@ -68,7 +87,22 @@ function Instructors() {
           ) : (
             <>
               <div dir="rtl">
- 
+                <Dropdown>
+                    <DropdownTrigger>
+                        <Button
+                            variant="bordered"
+                        >
+                            {selectedGroupName || "בחירת קבוצה"}
+                        </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                        onAction={(key) => setSelectedGroup(key)}
+                    >
+                        {instructorGroups.map((group) => (
+                            <DropdownItem key={group.id} value={group}>{group.name}</DropdownItem>
+                        ))}
+                    </DropdownMenu>
+                </Dropdown>
                 <Tabs aria-label="Options">
                   {/*   <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">

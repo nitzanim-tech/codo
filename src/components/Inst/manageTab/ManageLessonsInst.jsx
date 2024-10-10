@@ -4,16 +4,12 @@ import { Accordion, AccordionItem, CircularProgress, Button } from '@nextui-org/
 import { FileCard, DevTaskCard } from '../../general/Cards';
 import getRequest from '../../../requests/anew/getRequest';
    
-// const groupId = '435c59ddf19a';
-// const groupId = '70ad502eb5db';
-const groupId = '4540dfb5087e';
-
 function ManageLessonsInst({ group }) {
   const [units, setUnits] = useState(null);
 
   useEffect(() => {
     const fetchLessons = async () => {
-      const unitsFromDb = await getRequest({ getUrl: `getAllResourcesByGroup?group=${groupId}` });
+      const unitsFromDb = await getRequest({ getUrl: `getAllResourcesByGroup?group=${group}` });
       console.log({ unitsFromDb });
       setUnits(unitsFromDb);
     };
@@ -41,16 +37,17 @@ function ManageLessonsInst({ group }) {
                                 key={resource.id}
                                 index={`${unit.id}-${resource.id}`}
                                 text={resource.name}
-                                groupId={groupId}
+                                groupId={group}
                                 isInst
                                 setting={resource?.setting || {}}
                               />
                             ) : (
                               <FileCard
                                 file={resource}
+                                key={resource.id}
                                 index={`${unit.id}-${resource.id}`}
                                 setting={resource.setting}
-                                groupId={groupId}
+                                groupId={group}
                                 isInst
                               />
                             ),
