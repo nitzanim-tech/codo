@@ -100,7 +100,12 @@ const LoginOrRegisterDropdown = () => {
       )}
 
       {openLSettingModal && (
-        <UserSettingModal isOpen={openLSettingModal} onOpenChange={setOpenLSettingModal} onClose={clearAll} />
+        <UserSettingModal
+          auth={auth}
+          isOpen={openLSettingModal}
+          onOpenChange={setOpenLSettingModal}
+          onClose={clearAll}
+        />
       )}
     </div>
   );
