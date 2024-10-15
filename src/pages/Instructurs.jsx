@@ -16,6 +16,7 @@ import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettin
 import isAuthorized from '../util/permissions';
 import { Unauthorized } from '../components/general/Messages';
 import getRequest from '../requests/anew/getRequest';
+import ChangeGroupReq from '../components/Inst/studentsTab/ChangeGroupReq';
 
 function Instructors() {
   const { app, userData, auth } = useFirebase();
@@ -26,10 +27,11 @@ function Instructors() {
   const [unauthorized, setUnauthorized] = useState(true);
   const [tasksList, setTasksList] = useState(null);
   const [instructorGroups, setInstructorGroups] = useState([]);
+  const [changeGroupRequests, setChangeGroupRequests] = useState([]);
 
   useEffect(() => {
     const fetchGroups = async () => {
-      const groups = await getRequest({ getUrl: `getGroupsByInstructor?instructor=${userData.id}`});
+      const groups = await getRequest({ getUrl: `getGroupsByInstructor?instructor=${userData.id}` });
       setInstructorGroups(groups);
     };
 
@@ -37,18 +39,27 @@ function Instructors() {
   }, [userData]);
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      const groupData = await getRequest({ getUrl: `getInstPage?groupId=${selectedGroup}`, authMethod: 'jwt' });
+      console.log(groupData);
+      setChangeGroupRequests(groupData?.requests);
+    };
+    selectedGroup && fetchUserData();
+  }, [selectedGroup]);
+
+  useEffect(() => {
     if (selectedGroup) {
-        setSelectedGroupName(instructorGroups.filter(x => x.id == selectedGroup)[0].name);
+      setSelectedGroupName(instructorGroups.filter((x) => x.id == selectedGroup)[0].name);
     }
   }, [instructorGroups, selectedGroup]);
 
-//   useEffect(() => {
-//     const fetchTasksData = async () => {
-//       const tasksData = await getTasksData({ app });
-//       setTasksList(tasksData);
-//     };
-//     fetchTasksData();
-//   }, []);
+  //   useEffect(() => {
+  //     const fetchTasksData = async () => {
+  //       const tasksData = await getTasksData({ app });
+  //       setTasksList(tasksData);
+  //     };
+  //     fetchTasksData();
+  //   }, []);
 
   // useEffect(() => {
   //   if (userData) {
@@ -82,33 +93,31 @@ function Instructors() {
     <>
       {userData ? (
         <>
-          {unauthorized&& 0 ? (
+          {unauthorized && 0 ? (
             <Unauthorized />
           ) : (
             <>
               <div dir="rtl">
                 <Dropdown>
-                    <DropdownTrigger>
-                        <Button
-                            variant="bordered"
-                        >
-                            {selectedGroupName || "בחירת קבוצה"}
-                        </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                        onAction={(key) => setSelectedGroup(key)}
-                    >
-                        {instructorGroups.map((group) => (
-                            <DropdownItem key={group.id} value={group}>{group.name}</DropdownItem>
-                        ))}
-                    </DropdownMenu>
+                  <DropdownTrigger>
+                    <Button variant="bordered">{selectedGroupName || 'בחירת קבוצה'}</Button>
+                  </DropdownTrigger>
+                  <DropdownMenu onAction={(key) => setSelectedGroup(key)}>
+                    {instructorGroups.map((group) => (
+                      <DropdownItem key={group.id} value={group}>
+                        {group.name}
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
                 </Dropdown>
+                
                 <Tabs aria-label="Options">
                   {/*   <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
                       {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}
                     </div>
                   </Tab> */}
+
                   {/* <Tab key="students" title="חניכים" aria-label="Students tab">
                     <CenteredDiv>
                       <StudentsTable
@@ -119,6 +128,7 @@ function Instructors() {
                       />
                     </CenteredDiv>
                   </Tab> */}
+
                   <Tab key="manage" title="מפגשים">
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                       <ChangeSettingProvider>
@@ -126,6 +136,11 @@ function Instructors() {
                       </ChangeSettingProvider>
                     </div>
                   </Tab>
+
+                  <Tab key="changeGroupRequest" title="בקשות הצטרפות">
+                    <ChangeGroupReq requests={changeGroupRequests} setRequests={setChangeGroupRequests} />
+                  </Tab>
+
                   {/* <Tab key="status" title="סטטוס">
                     <CenteredDiv>
                       <PassMatrix studentsRawData={studentsRawData} tasksList={tasksList} />

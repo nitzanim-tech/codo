@@ -34,7 +34,7 @@ const findGroupName = (groupsFromDb, reqGroupId) => {
       try {
         const [groupsFromDb, curRequest] = await Promise.all([
           getRequest({ getUrl: `getSyllabusGroups`, authMethod: 'jwt' }),
-          getRequest({ getUrl: `getChangeGroupReq/?userId=${userData.id}` }),
+          getRequest({ getUrl: `getChangeGroupReq?userId=${userData.id}` }),
         ]);
 
         if (curRequest.length > 0) {
