@@ -20,7 +20,8 @@ const DevTasksTab = () => {
     'שנה א | תשפד': '#FAE233',
     'שנה א | תשפה': '#BF1E2E',
     'מחנה קיץ | תשפד': '#386641',
-    '': '#005395',
+    'טסט | שנה ': '#005395',
+    // 'בוחן כניסה | ב   ': 'blue',
   };
   let list = useAsyncList({
     async load({ signal }) {
@@ -29,6 +30,7 @@ const DevTasksTab = () => {
         uid: taskData.id,
         ...taskData,
       }));
+      console.log(tasksArray);
       return {
         items: tasksArray,
       };

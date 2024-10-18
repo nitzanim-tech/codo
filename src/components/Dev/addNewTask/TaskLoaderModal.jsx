@@ -14,7 +14,7 @@ const TaskLoaderModal = ({ taskId, setTaskData, loading, setLoading }) => {
   useEffect(() => {
     const loadTasks = async () => {
       const localTask = JSON.parse(localStorage.getItem(localStorageKey));
-      const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${taskId}` });
+      const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${taskId}`, authMethod: 'jwt' });
       setServerTask(taskFromDb);
       if (localTask && taskFromDb) onOpenChange(true);
       else if (localTask) setTaskData(localTask);
