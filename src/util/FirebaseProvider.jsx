@@ -20,9 +20,9 @@ export const FirebaseProvider = ({ children }) => {
     try {
       await signOut(auth); 
       localStorage.removeItem('token');
-      setJwt(null); // Clear JWT state
-      setUserData(null); // Reset user data
-      setIsAuthorized(0); // Reset authorization level
+      setJwt(null); 
+      setUserData(null); 
+      setIsAuthorized(0); 
       console.log('Logged out');
     } catch (error) {
       console.error('Error logging out:', error);

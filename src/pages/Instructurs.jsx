@@ -23,8 +23,6 @@ function Instructors() {
   const [isLoading, setIsLoading] = useState(true);
   const [studentsRawData, setStudentsRawData] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState(userData ? userData.group : null);
-  const [selectedGroupName, setSelectedGroupName] = useState(null);
-  const [unauthorized, setUnauthorized] = useState(true);
   const [tasksList, setTasksList] = useState(null);
   const [instructorGroups, setInstructorGroups] = useState([]);
   const [changeGroupRequests, setChangeGroupRequests] = useState([]);
@@ -32,26 +30,21 @@ function Instructors() {
   useEffect(() => {
     const fetchGroups = async () => {
       const groups = await getRequest({ getUrl: `getGroupsByInstructor?instructor=${userData.id}` });
+      if (groups.length > 0) setSelectedGroup(groups[0].id);
       setInstructorGroups(groups);
     };
-
     userData && fetchGroups();
   }, [userData]);
 
   useEffect(() => {
     const fetchUserData = async () => {
       const groupData = await getRequest({ getUrl: `getInstPage?groupId=${selectedGroup}`, authMethod: 'jwt' });
-      console.log(groupData);
       setChangeGroupRequests(groupData?.requests);
     };
     selectedGroup && fetchUserData();
   }, [selectedGroup]);
 
-  useEffect(() => {
-    if (selectedGroup) {
-      setSelectedGroupName(instructorGroups.filter((x) => x.id == selectedGroup)[0].name);
-    }
-  }, [instructorGroups, selectedGroup]);
+  const getGroupName = (groupId) => instructorGroups.filter((x) => x.id == groupId)[0].name;
 
   //   useEffect(() => {
   //     const fetchTasksData = async () => {
@@ -79,28 +72,18 @@ function Instructors() {
   //   selectedGroup && fetchData();
   // }, [selectedGroup]);
 
-  // const handleChangeGroup = async (groupId) => {
-  //   if (groupId != selectedGroup.id) {
-  //     const students = await getStudentsByGroup({ app, groupId });
-  //     const studentsWithGroup = getStudentGroups(userData.permissions, students);
-  //     const group = userData.permissions?.find((group) => group && group.id === groupId);
-  //     setSelectedGroup(group || { id: groupId });
-  //     setStudentsRawData(studentsWithGroup);
-  //   }
-  // };
-
   return (
     <>
       {userData ? (
         <>
-          {unauthorized && 0 ? (
+          {!userData.permission ? (
             <Unauthorized />
           ) : (
             <>
               <div dir="rtl">
                 <Dropdown>
                   <DropdownTrigger>
-                    <Button variant="bordered">{selectedGroupName || 'בחירת קבוצה'}</Button>
+                    <Button variant="bordered">{selectedGroup ? getGroupName(selectedGroup) : 'בחירת קבוצה'}</Button>
                   </DropdownTrigger>
                   <DropdownMenu onAction={(key) => setSelectedGroup(key)}>
                     {instructorGroups.map((group) => (
@@ -110,7 +93,7 @@ function Instructors() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                
+
                 <Tabs aria-label="Options">
                   {/*   <Tab key="tasks" title="משימות" aria-label="Task tab">
                     <div dir="ltr">
