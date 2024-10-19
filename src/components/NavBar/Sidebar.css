@@ -2,7 +2,7 @@
 .sidebar {
   height: 100vh; /* Full height */
   width: 60px;
-  background-color: #333;
+  background-color: #2C244D;
   color: white;
   position: fixed;
   top: 0;
@@ -46,4 +46,14 @@
 
 .sidebar-list li:hover {
   background-color: #555;
+}
+
+
+.sidebar-box {
+  width: 80%;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid #616099;
+  background-color: #1F183E;
+  direction: rtl;
 }

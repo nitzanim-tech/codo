@@ -15,6 +15,7 @@ import { handleUserActivity } from '../components/Submit/activityTracker';
 import { CircularProgress } from '@nextui-org/react';
 import { Loading } from '../components/general/Messages';
 import ReadReview from '../components/Submit/ReadReview';
+import Sidebar from '../components/NavBar/Sidebar';
 
 function Submit() {
   const { auth, userData } = useFirebase();
@@ -93,28 +94,34 @@ function Submit() {
         ) : auth.currentUser ? (
           taskData && testsOutputs ? (
             <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
-              <Grid item style={{ width: '60%' }}>
-                {openReview && submissions ? (
-                  <ReadReview code={openReview.code} comments={openReview.comments} />
-                ) : (
-                  <PythonIDE
-                    testsOutputs={testsOutputs}
-                    setTestsOutputs={setTestsOutputs}
-                    taskObject={taskData}
-                    highlightedLines={highlightedLines}
-                    code={code}
-                    setCode={setCode}
-                  />
-                )}{' '}
+              <Grid item style={{ width: '15%' }}>
+                <Sidebar />
               </Grid>
-              <Grid item style={{ width: '40%' }}>
-                <SubmitButtons
-                  testsOutputs={testsOutputs}
-                  taskObject={taskData}
-                  setHighlightedLines={setHighlightedLines}
-                  submissions={submissions}
-                  setOpenReview={setOpenReview}
-                />
+
+              <Grid container style={{ width: '84%' }}>
+                <Grid item style={{ width: '60%' }}>
+                  {openReview && submissions ? (
+                    <ReadReview code={openReview.code} comments={openReview.comments} />
+                  ) : (
+                    <PythonIDE
+                      testsOutputs={testsOutputs}
+                      setTestsOutputs={setTestsOutputs}
+                      taskObject={taskData}
+                      highlightedLines={highlightedLines}
+                      code={code}
+                      setCode={setCode}
+                    />
+                  )}
+                </Grid>
+                <Grid item style={{ width: '40%' }}>
+                  <SubmitButtons
+                    testsOutputs={testsOutputs}
+                    taskObject={taskData}
+                    setHighlightedLines={setHighlightedLines}
+                    submissions={submissions}
+                    setOpenReview={setOpenReview}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           ) : null
