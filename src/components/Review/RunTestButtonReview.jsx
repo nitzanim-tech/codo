@@ -4,23 +4,13 @@ import RunTestButton from '../IDE/RunTestButton';
 import { Button, Tooltip, Textarea } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
 
-export default function RunTestButtonReview({ version, setTestsOutputs }) {
-  const [taskData, setTaskData] = useState();
+export default function RunTestButtonReview({ version, setTestsOutputs, taskData }) {
   const { app } = useFirebase();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const taskFromDb = await getTaskById({ app, taskId: version.task });
-      setTaskData(taskFromDb);
-    };
-    fetchData();
-  }, []);
 
   return (
     <>
-      <Tooltip content="הרץ טסטים">
-        <RunTestButton code={version.code} setTestsOutputs={setTestsOutputs} runTests={true} taskObject={taskData} />
-      </Tooltip>
+      <RunTestButton code={version.code} setTestsOutputs={setTestsOutputs} runTests={true}
+                     taskObject={taskData} logSession={false} tooltipText='הרץ טסטים' tooltipPlacement='top' />
     </>
   );
 }

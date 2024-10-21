@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import ReviewComponent from '../components/Review/ReviewComponent';
 import { Card, Spinner } from '@nextui-org/react';
 import { DashboardCard } from '../components/Inst/DashboardCard';
@@ -8,31 +9,32 @@ import formatDate from '../util/formatDate';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
 import getTaskById from '../requests/tasks/getTaskById';
 import { useFirebase } from '../util/FirebaseProvider';
+import { Unauthorized } from '../components/general/Messages';
+import getRequest from '../requests/anew/getRequest';
 
 function Review() {
-  const { app } = useFirebase();
+  const { app, userData } = useFirebase();
   const [version, setVersion] = useState(null);
   const [selectedTests, setSelectedTests] = useState([]);
   const [taskData, setTaskData] = useState(null);
-    const [testsOutputs, setTestsOutputs] = useState();
+  const [testsOutputs, setTestsOutputs] = useState();
+
+  let { submissionId } = useParams();
 
   useEffect(() => {
-    const storedVersion = localStorage.getItem('versionToCheck');
-    if (storedVersion) {
-      const parsedVersion = JSON.parse(storedVersion);
-      const fetchData = async () => {
-        const taskFromDb = await getTaskById({ app, taskId: parsedVersion.task });
+    const fetchData = async () => {
+        const data = await getRequest({ getUrl: `getSubmissionData?submission=${submissionId}` });
+        const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${data.task}`, authMethod: 'jwt' });
         setTaskData(taskFromDb);
-        setVersion(parsedVersion);
-        const passTestsIndexes = parsedVersion.tests.reduce(
+        setVersion(data);
+        const passTestsIndexes = data.tests.reduce(
           (acc, val, index) => (val === true ? [...acc, index] : acc),
           [],
         );
         setSelectedTests(passTestsIndexes);
-      };
-      fetchData();
-    }
-  }, []);
+    };
+    fetchData();
+  }, [submissionId]);
 
   const calculateGrade = (taskData, selectedTests) => {
     return selectedTests.reduce((sum, testIndex) => sum + taskData.tests[testIndex].score, 0);
@@ -43,9 +45,10 @@ function Review() {
       100,
     );
   };
+
   return (
     <>
-      {taskData ? (
+      {!userData ? <Spinner /> : !userData.permission ? <Unauthorized/ > : taskData ? (
         <>
           <Grid container spacing={1} columns={3} rows={1} style={{ marginTop: '20px', padding: '20px' }}>
             <Grid item style={{ width: '69%' }}>
@@ -56,6 +59,7 @@ function Review() {
                     selectedTests={selectedTests}
                     testsAmount={taskData.tests.length}
                     setTestsOutputs={setTestsOutputs}
+                    taskData={taskData}
                   />
                 </Card>
               </div>
