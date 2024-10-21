@@ -6,6 +6,7 @@ import SlideshowIcon from '@mui/icons-material/Slideshow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
+import CustomScrollbar from '../general/CustomScrollbar';
 
 const unitData = {
   id: '95e017a52ea0',
@@ -95,57 +96,56 @@ const unitData = {
   ],
 };
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const Sidebar = ({openUnit, setOpenUnit}) => {
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    setOpenUnit(!openUnit);
   };
 
   return (
-    <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
-      <Button  onClick={toggleSidebar}>
-        {isOpen ? '❌' : '☰'}
-      </Button>
-      {isOpen && (
-        <>
-          <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%' }}>{unitData.name}</h1>
-          <Divider />
-          {unitData.resources && unitData.resources.length > 0 ? (
-            unitData.resources
-              .sort((A, B) => A.index - B.index)
-              .map((resource) =>
-                resource.type === 'practice' ? (
-                  <>
+    <div className="sidebar bg-[theme('colors.green.sidebarBg')] text-[theme('colors.green.textColor')]">
+      <div className={`sidebar ${openUnit ? 'open' : 'closed'}`}>
+        <Button onClick={toggleSidebar} size='sm'>{openUnit ? '❌' : '☰'}</Button>
+        {openUnit && (
+          <>
+            <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%' }}>{unitData.name}</h1>
+            <Divider />
+            {unitData.resources && unitData.resources.length > 0 ? (
+              unitData.resources
+                .sort((A, B) => A.index - B.index)
+                .map((resource) =>
+                  resource.type === 'practice' ? (
+                    <>
+                      <div className="sidebar-box">
+                        <Divider />
+                        <p style={{ textAlign: 'right', fontSize: '22px' }}>תור אישי:</p>
+                        {unitData.practices.length > 0 && (
+                          <Practices practices={unitData.practices} unitId={unitData.id} />
+                        )}
+                      </div>
+                    </>
+                  ) : resource.type === 'task' ? (
                     <div className="sidebar-box">
-                      <Divider />
-                      <p style={{ textAlign: 'right', fontSize: '22px' }}>תור אישי:</p>
-                      {unitData.practices.length > 0 && (
-                        <Practices practices={unitData.practices} unitId={unitData.id} />
-                      )}
+                      <TaskCard
+                        key={resource.id}
+                        taskId={resource.link}
+                        text={resource.name}
+                        unitId={unitData.id}
+                        studentData={resource.submission || false}
+                        // isChallenge={resource.setting?.isChallenge || null}
+                        // showReview={resource.setting?.showReview || null}
+                      />
                     </div>
-                  </>
-                ) : resource.type === 'task' ? (
-                  <div className="sidebar-box">
-                    <TaskCard
-                      key={resource.id}
-                      taskId={resource.link}
-                      text={resource.name}
-                      unitId={unitData.id}
-                      studentData={resource.submission || false}
-                      // isChallenge={resource.setting?.isChallenge || null}
-                      // showReview={resource.setting?.showReview || null}
-                    />
-                  </div>
-                ) : (
-                  <FileCard key={resource.id} file={resource} />
-                ),
-              )
-          ) : (
-            <p>No resources available</p>
-          )}
-        </>
-      )}
+                  ) : (
+                    <FileCard key={resource.id} file={resource} />
+                  ),
+                )
+            ) : (
+              <p>No resources available</p>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

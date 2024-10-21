@@ -15,7 +15,7 @@ import { handleUserActivity } from '../components/Submit/activityTracker';
 import { CircularProgress } from '@nextui-org/react';
 import { Loading } from '../components/general/Messages';
 import ReadReview from '../components/Submit/ReadReview';
-import Sidebar from '../components/NavBar/Sidebar';
+import Sidebar from '../components/Submit/Sidebar';
 
 function Submit() {
   const { auth, userData } = useFirebase();
@@ -28,6 +28,7 @@ function Submit() {
   const [loading, setLoading] = useState(true);
   const [submissions, setSubmissions] = useState();
   const [openReview, setOpenReview] = useState();
+  const [openUnit, setOpenUnit] = useState(true);
 
   const userActivityHandler = useCallback(() => {
     handleUserActivity(task, userData, noActivitySent, setNoActivitySent);
@@ -94,11 +95,30 @@ function Submit() {
         ) : auth.currentUser ? (
           taskData && testsOutputs ? (
             <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
-              <Grid item style={{ width: '15%' }}>
-                <Sidebar />
+              <Grid
+                item
+                style={{
+                  width: openUnit ? '15%' : '0%',
+                  transition: 'width 0.5s',
+                  order: 2,
+                }}
+              >
+                <Sidebar openUnit={openUnit} setOpenUnit={setOpenUnit} />
               </Grid>
 
-              <Grid container style={{ width: '84%' }}>
+              <Grid
+                container
+                style={{
+                  width: openUnit ? '84%' : '100%',
+                  alignItems: 'stretch',
+                  transition: 'width 0.5s',
+                  order: 1,
+                  borderRadius: '20px',
+                  background: 'rgba(66, 55, 104, 0.80)',
+                  boxShadow: '1px 1px 3px 0px rgba(255, 255, 255, 0.10)',
+                  padding: '20px',
+                }}
+              >
                 <Grid item style={{ width: '60%' }}>
                   {openReview && submissions ? (
                     <ReadReview code={openReview.code} comments={openReview.comments} />
@@ -137,5 +157,4 @@ function Submit() {
     </>
   );
 }
-
 export default Submit;
