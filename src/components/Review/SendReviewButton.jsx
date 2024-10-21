@@ -4,8 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalContent, ModalFooter, useDisclosure
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
-import addReview from '../../requests/review/addReview';
-import changePassScore from '../../requests/review/changePassScore';
+import postRequest from '../../requests/anew/postRequest';
 import { useFirebase } from '../../util/FirebaseProvider';
 
 export default function SendReviewButton({ setErrorText, general, comments, selectedTests, version, testsAmount }) {
@@ -16,21 +15,25 @@ export default function SendReviewButton({ setErrorText, general, comments, sele
   const sendReview = async () => {
     const userId = version.student.uid;
     const task = version.task;
-    const trialIndex = version.id;
+    const submissionId = version.id;
 
     if (haveTestsChanged(selectedTests, version.tests, false)) {
       const pass = indexToBooleanArray(selectedTests, testsAmount);
-      const passedChanged = await changePassScore({ app, userId, task, trialIndex, pass });
+      const passedChanged = await postRequest({ postUrl: 'changePassScore',
+                                                object: { submissionId, pass } });
       if (!passedChanged) setErrorText('שגיאה בתיקון ציון הטסטים');
     }
 
     const reviewData = {
-      comments: comments.current || {},
-      general,
-      date: new Date(),
-      hasOpened: false,
+        submissionId, userId,
+        comments: comments.current || {},
+        general,
+        grade: null, reviewer: null, time: new Date()
     };
-    const hadSaved = await addReview({ app, userId, task, trialIndex, reviewData });
+
+    const hadSaved = await postRequest({ postUrl: 'addReview',
+                                         object: reviewData });
+
     if (!hadSaved) setErrorText('שגיאה בשליחת המשוב לחניך');
 
     setSaved(hadSaved);

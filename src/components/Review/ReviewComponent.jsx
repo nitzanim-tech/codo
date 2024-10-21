@@ -7,10 +7,10 @@ import { PyodideProvider } from '../IDE/PyodideProvider';
 import SendReviewButton from './SendReviewButton';
 import RunTestButtonReview from './RunTestButtonReview';
 
-export default function ReviewComponent({ version, selectedTests, testsAmount, setTestsOutputs }) {
+export default function ReviewComponent({ version, selectedTests, testsAmount, setTestsOutputs, taskData }) {
   const [errorText, setErrorText] = useState('');
   const [generalReview, setGeneralReview] = useState(version.review ? version.review.general : '');
-  const comments = useRef(version.review ? version.review.comments : {});
+  const comments = useRef(version.review ? version.review.comments || {} : {});
 
   const handlePreviewClick = () => {
     const review = { comments: comments.current, general: generalReview };
@@ -43,14 +43,9 @@ export default function ReviewComponent({ version, selectedTests, testsAmount, s
           version={version}
           testsAmount={testsAmount}
         />
-        <Tooltip content="תצוגה מקדימה">
-          <Button style={{ margin: '10px ' }} radius="full" isIconOnly variant="faded" onClick={handlePreviewClick}>
-            <PageviewRoundedIcon />
-          </Button>
-        </Tooltip>
 
         <PyodideProvider>
-          <RunTestButtonReview version={version} setTestsOutputs={setTestsOutputs} />
+          <RunTestButtonReview version={version} setTestsOutputs={setTestsOutputs} taskData={taskData} />
         </PyodideProvider>
 
         <p style={{ fontWeight: 'bold', color: 'red' }}>

@@ -9,10 +9,17 @@ import { useParams } from 'react-router-dom';
 import levenshteinDistance from '../../util/levenshteinDistance';
 import postRequest from '../../requests/anew/postRequest';
 
-export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject, buttonElement }) {
+export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject, buttonElement, logSession,
+                                        tooltipText, tooltipPlacement}) {
   const pyodide = usePyodide();
   const { userData } = useFirebase();
   const { task } = useParams();
+  if (logSession == null) {
+    logSession = true;
+  }
+
+  tooltipText ||= 'בדוק';
+  tooltipPlacement ||= 'bottom';
 
   useEffect(() => {
     if (runTests) handleClick();
@@ -72,10 +79,10 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
     }
     setTestsOutputs(testsOutput);
 
-    if (!taskObject.inDev) {
+    if (!taskObject.inDev && logSession) {
       const pass = testsOutput.map((output) => output.correct);
       const time = new Date().toISOString();
-      const lastCode = localStorage.getItem(`${task}-lastCode`);
+      const lastCode = localStorage.getItem(`${task}-lastCode`) || "";
       const dist = levenshteinDistance(code, lastCode);
       const session = { type: 'run', time, taskId: task, userId: userData.id, pass, dist };
       postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
@@ -91,7 +98,7 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
   );
 
   return (
-    <Tooltip content={'בדוק'} placement={'bottom'}>
+    <Tooltip content={tooltipText} placement={tooltipPlacement}>
       {React.cloneElement(buttonElement || defaultButton, {
         isDisabled: !pyodide,
         onClick: handleClick,

@@ -33,8 +33,7 @@ function App() {
         <Route path="/inst" element={<Instructurs />} />
         <Route path="/submit/:unit/:task" element={<Submit />} />
         <Route path="/submit/:index/play" element={<Play />} />
-        {/* <Route path="/review" element={<Review />} />
-        <Route path="/readReview" element={<ReadReview />} /> */}
+        <Route path="/review/:submissionId" element={<Review />} />
         <Route path="/dev" element={<DevTeam />} />
 
         <Route path="/dev/:task" element={<AddNewTasks />} />
