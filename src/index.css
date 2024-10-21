@@ -36,17 +36,6 @@ a:hover {
   cursor: wait !important;
 }
 
-/* body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  background-image: url("/src/assets/img/background.png");
-  background-repeat: no-repeat;
-  background-position: right bottom;
-  background-size: 406px 406px;
-
-} */
 
 body {
   background-image: url("/src/assets/svg/PurpleBackground.svg");
