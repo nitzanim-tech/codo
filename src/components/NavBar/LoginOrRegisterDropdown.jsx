@@ -45,14 +45,14 @@ const LoginOrRegisterDropdown = () => {
           </DropdownTrigger>
 
           <DropdownMenu variant="faded" aria-label="Dropdown menu logout" onAction={(key) => console.log(key)}>
-            {/* <DropdownItem
+            <DropdownItem
               key="setting"
               onClick={() => setOpenLSettingModal(true)}
               showDivider
               startContent={<SettingsRoundedIcon />}
             >
               הגדרות
-            </DropdownItem> */}
+            </DropdownItem>
 
             <DropdownItem key="logout" onClick={handleSignOut} startContent={<LogoutRoundedIcon />}>
               התנתק
