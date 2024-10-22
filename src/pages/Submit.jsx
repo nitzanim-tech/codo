@@ -100,8 +100,8 @@ function Submit() {
               <Grid
                 item
                 style={{
-                  width: openUnit ? '15%' : '0%',
                   transition: 'width 0.5s',
+                  width: openUnit ? '22%' : '0%',
                   order: 2,
                 }}
               >
@@ -113,7 +113,7 @@ function Submit() {
                   style={{
                     zIndex: 1,
                     position: 'relative',
-                    width: openUnit ? '84%' : '100%',
+                    width: openUnit ? '78%' : '100%',
                     transition: 'width 0.5s',
                   }}
                 >
@@ -123,8 +123,8 @@ function Submit() {
                   container
                   style={{
                     zIndex: 2,
-                    marginTop:'-3.5px',
-                    width: openUnit ? '84%' : '100%',
+                    marginTop: '-3.5px',
+                    width: openUnit ? '78%' : '100%',
                     alignItems: 'stretch',
                     justifyContent: 'center',
                     transition: 'width 0.5s',

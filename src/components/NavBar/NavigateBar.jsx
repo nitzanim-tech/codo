@@ -7,10 +7,7 @@ import './NavBar.css';
 
 export default function NavigateBar() {
   return (
-    <Navbar dir="rtl" position="static" height="50px" style={{ background: 'rgba(44, 36, 77, 0.9)' }}>
-      {/* <NavbarBrand style={{ flex: 1 }}>
-      </NavbarBrand> */}
-
+    <Navbar dir="rtl" height="50px" style={{ background: 'rgba(44, 36, 77, 0.9)', zIndex: 1100 }}>
       <NavbarContent justify="end" style={{ flex: 1 }}>
         <LoginOrRegisterDropdown />
         <Link

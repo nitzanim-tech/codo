@@ -24,6 +24,8 @@ const Tab = ({ text, icon: Icon, chosen, setChosen }) => {
   );
 };
 
+
+
 const StyledTab = styled.div`
   position: relative;
   display: flex;
@@ -83,6 +85,8 @@ const NonChosenTabSvg = () => (
     </defs>
   </svg>
 );
+                    // background: 'rgba(66, 55, 104, 0.80)',
+                    // boxShadow: '1px 1px 3px 0px rgba(255, 255, 255, 0.10)',
 
 const ChosenTabSvg = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="90" viewBox="0 0 109 114" fill="none">
@@ -90,7 +94,7 @@ const ChosenTabSvg = () => (
       <path
         d="M8 54.5C8 26.6096 30.6096 4 58.5 4C86.3904 4 109 26.6096 109 54.5V110H8V54.5Z"
         fill="#423768"
-        fillOpacity="0.9"
+        fillOpacity="0.8"
         shapeRendering="crispEdges"
       />
     </g>
