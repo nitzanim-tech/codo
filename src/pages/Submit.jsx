@@ -16,6 +16,7 @@ import { CircularProgress } from '@nextui-org/react';
 import { Loading } from '../components/general/Messages';
 import ReadReview from '../components/Submit/ReadReview';
 import Sidebar from '../components/Submit/Sidebar';
+import SubmitTabs from '../components/Submit/SubmitTabs';
 
 function Submit() {
   const { auth, userData } = useFirebase();
@@ -29,6 +30,7 @@ function Submit() {
   const [submissions, setSubmissions] = useState();
   const [openReview, setOpenReview] = useState();
   const [openUnit, setOpenUnit] = useState(true);
+  const [chosenTab, setChosenTab] = useState('תרגול');
 
   const userActivityHandler = useCallback(() => {
     handleUserActivity(task, userData, noActivitySent, setNoActivitySent);
@@ -105,42 +107,57 @@ function Submit() {
               >
                 <Sidebar openUnit={openUnit} setOpenUnit={setOpenUnit} />
               </Grid>
-
-              <Grid
-                container
-                style={{
-                  width: openUnit ? '84%' : '100%',
-                  alignItems: 'stretch',
-                  transition: 'width 0.5s',
-                  order: 1,
-                  borderRadius: '20px',
-                  background: 'rgba(66, 55, 104, 0.80)',
-                  boxShadow: '1px 1px 3px 0px rgba(255, 255, 255, 0.10)',
-                  padding: '20px',
-                }}
-              >
-                <Grid item style={{ width: '60%' }}>
-                  {openReview && submissions ? (
-                    <ReadReview code={openReview.code} comments={openReview.comments} />
-                  ) : (
-                    <PythonIDE
-                      testsOutputs={testsOutputs}
-                      setTestsOutputs={setTestsOutputs}
-                      taskObject={taskData}
-                      highlightedLines={highlightedLines}
-                      code={code}
-                      setCode={setCode}
-                    />
-                  )}
+              <Grid container direction="column">
+                <Grid
+                  item
+                  style={{
+                    zIndex: 1,
+                    position: 'relative',
+                    width: openUnit ? '84%' : '100%',
+                    transition: 'width 0.5s',
+                  }}
+                >
+                  <SubmitTabs chosenTab={chosenTab} setChosenTab={setChosenTab} />
                 </Grid>
-                <Grid item style={{ width: '40%' }}>
-                  <SubmitButtons
-                    testsOutputs={testsOutputs}
-                    taskObject={taskData}
-                    setHighlightedLines={setHighlightedLines}
-                    submissions={submissions}
-                    setOpenReview={setOpenReview}
-                  />
+                <Grid
+                  container
+                  style={{
+                    zIndex: 2,
+                    marginTop:'-3.5px',
+                    width: openUnit ? '84%' : '100%',
+                    alignItems: 'stretch',
+                    justifyContent: 'center',
+                    transition: 'width 0.5s',
+                    borderRadius: '20px',
+                    background: 'rgba(66, 55, 104, 0.80)',
+                    boxShadow: '1px 1px 3px 0px rgba(255, 255, 255, 0.10)',
+                    padding: '20px',
+                  }}
+                >
+                  <Grid item style={{ width: '60%' }}>
+                    {openReview && submissions ? (
+                      <ReadReview code={openReview.code} comments={openReview.comments} />
+                    ) : (
+                      <PythonIDE
+                        testsOutputs={testsOutputs}
+                        setTestsOutputs={setTestsOutputs}
+                        taskObject={taskData}
+                        highlightedLines={highlightedLines}
+                        code={code}
+                        setCode={setCode}
+                      />
+                    )}
+                  </Grid>
+                  <Grid item style={{ width: '40%' }}>
+                    <SubmitButtons
+                      chosenTab={chosenTab}
+                      testsOutputs={testsOutputs}
+                      taskObject={taskData}
+                      setHighlightedLines={setHighlightedLines}
+                      submissions={submissions}
+                      setOpenReview={setOpenReview}
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
