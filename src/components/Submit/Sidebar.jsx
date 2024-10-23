@@ -19,7 +19,6 @@ const unitData = {
       type: 'ppt',
       link: 'https://1drv.ms/p/s!AhbjJ-PvNB7Dd513ZLFuzAOiqow?e=ETi23c',
       index: 2,
-      submission: false,
     },
     {
       id: '3c090b48e824',
@@ -27,7 +26,6 @@ const unitData = {
       type: 'pdf',
       link: 'https://1drv.ms/b/s!AhbjJ-PvNB7Ddi1doErWmMGb7tw?e=njl3z4',
       index: 3,
-      submission: false,
     },
   ],
   tasks: [
@@ -103,36 +101,39 @@ const Sidebar = ({ openUnit, setOpenUnit }) => {
         </div>
         {openUnit && (
           <>
-            <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%' }}>{unitData.name}</h1>
-            <Divider />
-
-            <p style={{ textAlign: 'right', fontSize: '22px' }}>חומרי עזר</p>
-            {unitData.files?.length > 0 && (
-              <div className="sidebar-box">
-                {unitData.files
+            <div style={{ width: '100%', padding: '10%' }}>
+              <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%' }}>{unitData.name}</h1>
+              <ProgressBar percent={80} />
+              <Divider />
+              <p style={{ textAlign: 'right', fontSize: '22px' }}>חומרי עזר</p>
+              {unitData.files?.length > 0 && (
+                <div className="sidebar-box">
+                  {unitData.files
+                    .sort((A, B) => A.index - B.index)
+                    .map((file, index) => (
+                      <React.Fragment key={file.id || index}>
+                        <Divider />
+                        <FileCard file={file} />
+                      </React.Fragment>
+                    ))}
+                </div>
+              )}
+              <p style={{ textAlign: 'right', fontSize: '22px' }}>תרגילים</p>
+              {unitData.tasks?.length > 0 &&
+                unitData.tasks
                   .sort((A, B) => A.index - B.index)
-                  .map((file, index) => (
-                    <React.Fragment key={file.id || index}>
-                      <Divider />
-                      <FileCard file={file} />
-                    </React.Fragment>
+                  .map((task, index) => (
+                    <>
+                      {!task.personal && <ClassTag />}
+                      {task.submission && <CompleteIcon />}
+                      <div className="sidebar-box" key={task.id || index}>
+                        <Divider />
+                        <ReviewIcon />
+                        <p>{task.name}</p>
+                      </div>
+                    </>
                   ))}
-              </div>
-            )}
-
-            <p style={{ textAlign: 'right', fontSize: '22px' }}>תרגילים</p>
-            {unitData.tasks?.length > 0 &&
-              unitData.tasks
-                .sort((A, B) => A.index - B.index)
-                .map((task, index) => (
-                  <>
-                    <ClassTask />
-                    <div className="sidebar-box" key={task.id || index}>
-                      <Divider />
-                      <p>{task.name}</p>
-                    </div>
-                  </>
-                ))}
+            </div>
           </>
         )}
       </div>
@@ -142,39 +143,19 @@ const Sidebar = ({ openUnit, setOpenUnit }) => {
 
 export default Sidebar;
 
-const Practices = ({ practices, unitId }) => {
-  return (
-    <>
-      <CustomScrollbar>
-        {practices
-          .sort((A, B) => A.index - B.index)
-          .map((practice, index) => (
-            <>
-              <div key={practice.id}>
-                <TaskIcon />
-                {practice.name}
-              </div>
-              {index !== practices.length - 1 && (
-                <hr className="solid" style={{ background: '#36356A', height: '1px', border: 'none' }} />
-              )}
-            </>
-          ))}
-      </CustomScrollbar>
-    </>
-  );
-};
-
-{
-  /* <TaskCard
-              key={practice.id}
-              taskId={practice.taskId}
-              text={practice.name}
-              unitId={unitId}
-              studentData={practice.submission || false}
-              // isChallenge={practice.setting?.isChallenge || null}
-              // showReview={practice.setting?.showReview || null}
-            /> */
-}
+const ClassTag = () => (
+  <div
+    style={{
+      background: '#423768',
+      borderRadius: '10px 10px 0 0',
+      width: '30%',
+      height: '20px',
+      marginLeft: '65%',
+    }}
+  >
+    <p style={{ fontSize: '11px', padding: '4px' }}>משימת כיתה</p>
+  </div>
+);
 
 const FileCard = ({ file }) => {
   return (
@@ -191,10 +172,79 @@ const FileCard = ({ file }) => {
       >
         <p style={{ fontSize: '16px', margin: 0 }}>{file.name}</p>
         {file.type === 'ppt' && <PPTIcon />}
-        {file.type === 'pdf' && <PDFIcon style={{ color: '#BF1E2E' }} />}
-        {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
-        {file.type === 'webLink' && <PublicRoundedIcon style={{ color: '#BF1E2E' }} />}
+        {file.type === 'pdf' && <PDFIcon />}
+        {file.type === 'zip' && <FolderZipRoundedIcon />}
+        {file.type === 'webLink' && <PublicRoundedIcon />}
       </div>
+    </div>
+  );
+};
+
+const CompleteIcon = () => (
+  <div
+    style={{
+      position: 'absolute',
+      left: '85%',
+      // transform: 'translate(-50%, -50%)', // Centers the element
+      width: '30px',
+      height: '30px',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(58.67deg, #05C4FD 16.63%, #09D5CE 92%)',
+    }}
+  >
+    <CompleteSvg />
+  </div>
+);
+
+const ReviewIcon = () => (
+  <div
+    style={{
+      position: 'absolute',
+      left: '85%',
+      // transform: 'translate(-50%, -50%)', // Centers the element
+      width: '30px',
+      height: '30px',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(54.94deg, #DD41B1 22.19%, #FF7BDA 82.85%)',
+    }}
+  >
+    <CompleteSvg />
+  </div>
+);
+
+const CompleteSvg = () => (
+  <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1.5 5.5L5 9L13 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+);
+
+const ProgressBar = ({ percent }) => {
+  const containerStyle = {
+    height: '20px',
+    width: '100%',
+    backgroundColor: '#2c2358',
+    borderRadius: '10px',
+    display: 'flex',
+    alignItems: 'center',
+  };
+
+  const fillerStyle = {
+    height: '100%',
+    width: `${percent}%`,
+    background: 'linear-gradient(90deg, #7a9bff, #576bfa)',
+    borderRadius: '10px',
+    transition: 'width 0.5s ease-in-out',
+  };
+
+  return (
+    <div style={containerStyle}>
+      <div style={fillerStyle}></div>
     </div>
   );
 };
@@ -299,40 +349,17 @@ const ArrowButtonIcon = () => (
   </svg>
 );
 
-const ClassTask = () => (
-  <svg width="85" height="29" viewBox="0 0 85 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g filter="url(#filter0_d_208_4528)">
-      <path
-        d="M5 14C5 8.47715 9.47715 4 15 4L72 4C77.5229 4 82 8.47715 82 14V25L5 25L5 14Z"
-        fill="#423768"
-        fill-opacity="0.9"
-        shape-rendering="crispEdges"
-      />
-    </g>
+const Progress = () => {
+  <svg width="308" height="25" viewBox="0 0 308 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M0 12.5C0 5.59644 5.59644 0 12.5 0H295.5C302.404 0 308 5.59644 308 12.5C308 19.4036 302.404 25 295.5 25H12.5C5.59645 25 0 19.4036 0 12.5Z"
+      fill="url(#paint0_linear_208_4520)"
+    />
     <defs>
-      <filter
-        id="filter0_d_208_4528"
-        x="0"
-        y="0"
-        width="85"
-        height="29"
-        filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
-      >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-        <feColorMatrix
-          in="SourceAlpha"
-          type="matrix"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          result="hardAlpha"
-        />
-        <feOffset dx="-1" />
-        <feGaussianBlur stdDeviation="2" />
-        <feComposite in2="hardAlpha" operator="out" />
-        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_208_4528" />
-        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_208_4528" result="shape" />
-      </filter>
+      <linearGradient id="paint0_linear_208_4520" x1="0" y1="12.5" x2="308" y2="12.5" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#5683F9" />
+        <stop offset="1" stop-color="#4362B4" />
+      </linearGradient>
     </defs>
-  </svg>
-);
+  </svg>;
+};
