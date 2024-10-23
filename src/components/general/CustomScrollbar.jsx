@@ -1,9 +1,7 @@
 const CustomScrollbar = ({ children }) => {
   const customScrollbarStyle = {
     overflowX: 'auto',
-    scrollbarWidth: 'thick',
     scrollbarColor: '#616099; gray',
-    
   };
 
   return (

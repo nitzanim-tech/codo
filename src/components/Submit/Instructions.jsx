@@ -12,7 +12,7 @@ export default function Instructions({ taskObject }) {
         <div style={{ fontSize: `22px`, fontWeight: `500`, textAlign: 'right', width: '100%' }}>{taskObject.name}</div>
         <hr className="solid" style={{ background: '#36356A', height: '1px', border: 'none' }} />
 
-        <div dangerouslySetInnerHTML={{ __html: taskObject.description }} />
+        <div style={{ direction: 'rtl' }} dangerouslySetInnerHTML={{ __html: taskObject.description }} />
         <div style={{ width: '100%', textAlign: 'right', direction: 'rtl' }}>
           <Accordion dir="rtl" variant="splitted" selectionMode="multiple" isCompact>
             {/* <AccordionItem title="מה צריך לדעת?">

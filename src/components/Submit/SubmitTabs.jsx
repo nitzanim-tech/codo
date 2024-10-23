@@ -85,8 +85,6 @@ const NonChosenTabSvg = () => (
     </defs>
   </svg>
 );
-                    // background: 'rgba(66, 55, 104, 0.80)',
-                    // boxShadow: '1px 1px 3px 0px rgba(255, 255, 255, 0.10)',
 
 const ChosenTabSvg = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="90" viewBox="0 0 109 114" fill="none">

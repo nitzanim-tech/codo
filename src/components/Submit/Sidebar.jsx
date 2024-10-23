@@ -12,6 +12,7 @@ const unitData = {
   id: '95e017a52ea0',
   name: 'חזרה',
   index: 1,
+  practiceGoalIndex: 6,
   files: [
     {
       id: '02b8e4f8432b',
@@ -56,6 +57,7 @@ const unitData = {
       type: 'main',
       taskId: '8e37e437f83e',
       submission: true,
+      review: true,
       personal: true,
     },
     {
@@ -69,6 +71,26 @@ const unitData = {
     },
     {
       id: '3e53a8596a96',
+      index: 5,
+      name: 'הוספה 1',
+      type: 'drill',
+      taskId: 'c664ba1217e3',
+      submission: false,
+      personal: true,
+    },
+    ,
+    {
+      id: '3e53a8596a96',
+      index: 6,
+      name: 'הוספה 2',
+      type: 'drill',
+      taskId: 'c664ba1217e3',
+      submission: false,
+      personal: true,
+    },
+    ,
+    {
+      id: '3e53a8596a96',
       index: 4,
       name: 'החבר הדמיוני',
       type: 'drill',
@@ -78,7 +100,9 @@ const unitData = {
     },
   ],
 };
-
+const lastSubmitedIndex = () => {
+  return 3;
+};
 const Sidebar = ({ openUnit, setOpenUnit }) => {
   const toggleSidebar = () => {
     setOpenUnit(!openUnit);
@@ -101,9 +125,10 @@ const Sidebar = ({ openUnit, setOpenUnit }) => {
         </div>
         {openUnit && (
           <>
-            <div style={{ width: '100%', padding: '10%' }}>
+            {/* <CustomScrollbar> */}
+            <div style={{ width: '100%', padding: '10%', height: '90vh' }}>
               <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%' }}>{unitData.name}</h1>
-              <ProgressBar percent={80} />
+              <ProgressBar percent={lastSubmitedIndex(12) / unitData.practiceGoalIndex} />
               <Divider />
               <p style={{ textAlign: 'right', fontSize: '22px' }}>חומרי עזר</p>
               {unitData.files?.length > 0 && (
@@ -127,13 +152,13 @@ const Sidebar = ({ openUnit, setOpenUnit }) => {
                       {!task.personal && <ClassTag />}
                       {task.submission && <CompleteIcon />}
                       <div className="sidebar-box" key={task.id || index}>
-                        <Divider />
-                        <ReviewIcon />
+                        {task.review && <ReviewIcon />}
                         <p>{task.name}</p>
                       </div>
                     </>
                   ))}
             </div>
+            {/* </CustomScrollbar> */}
           </>
         )}
       </div>
@@ -185,7 +210,6 @@ const CompleteIcon = () => (
     style={{
       position: 'absolute',
       left: '85%',
-      // transform: 'translate(-50%, -50%)', // Centers the element
       width: '30px',
       height: '30px',
       borderRadius: '50%',
@@ -199,11 +223,23 @@ const CompleteIcon = () => (
   </div>
 );
 
+const ReviewSvg = ({ color = 'white' }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 36 32" fill="none">
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M33.294 12.2464C33.2939 5.48292 27.8111 0 21.0476 0C18.1838 0 15.1102 0 12.2464 0C8.99848 0 5.88353 1.29024 3.58691 3.58691C1.29024 5.88359 0 8.99849 0 12.2464V16.8033C0 20.0512 1.29024 23.1661 3.58691 25.4628C5.88353 27.7594 8.99848 29.0497 12.2464 29.0497H27.401C27.4764 29.0497 27.5488 29.0796 27.6022 29.1328L29.8923 31.4176C30.4629 31.9869 31.32 32.1566 32.0644 31.8477C32.8088 31.5388 33.294 30.8122 33.294 30.0063C33.294 26.0805 33.294 18.6316 33.294 12.2464ZM31.5851 12.2464V30.0063C31.5851 30.1214 31.5158 30.2253 31.4095 30.2694C31.3032 30.3135 31.1808 30.2892 31.0992 30.2079C31.0992 30.2079 28.8091 27.9231 28.8091 27.9231C28.4354 27.5503 27.929 27.3409 27.401 27.3409C25.5519 27.3409 18.5808 27.3409 12.2464 27.3409C9.45167 27.3409 6.77138 26.2306 4.79521 24.2545C2.81905 22.2783 1.70879 19.598 1.70879 16.8033C1.70879 15.297 1.70879 13.7527 1.70879 12.2464C1.70879 9.45167 2.81905 6.77138 4.79521 4.79521C6.77138 2.81905 9.45167 1.70879 12.2464 1.70879H21.0476C26.8673 1.70879 31.5851 6.42664 31.5851 12.2464ZM10.1822 20.2194H22.7992C23.2708 20.2194 23.6537 19.8365 23.6537 19.365C23.6537 18.8934 23.2708 18.5106 22.7992 18.5106H10.1822C9.71067 18.5106 9.32781 18.8934 9.32781 19.365C9.32781 19.8365 9.71067 20.2194 10.1822 20.2194ZM10.1822 15.3147H22.7992C23.2708 15.3147 23.6537 14.9319 23.6537 14.4603C23.6537 13.9887 23.2708 13.6059 22.7992 13.6059H10.1822C9.71067 13.6059 9.32781 13.9887 9.32781 14.4603C9.32781 14.9319 9.71067 15.3147 10.1822 15.3147ZM10.1822 10.41H22.7992C23.2708 10.41 23.6537 10.0272 23.6537 9.55561C23.6537 9.08404 23.2708 8.70125 22.7992 8.70125H10.1822C9.71067 8.70125 9.32781 9.08404 9.32781 9.55561C9.32781 10.0272 9.71067 10.41 10.1822 10.41Z"
+      fill={color}
+    />
+  </svg>
+);
+
 const ReviewIcon = () => (
   <div
     style={{
       position: 'absolute',
-      left: '85%',
+      left: '13%',
+      marginTop: '-20px',
       // transform: 'translate(-50%, -50%)', // Centers the element
       width: '30px',
       height: '30px',
@@ -214,7 +250,7 @@ const ReviewIcon = () => (
       background: 'linear-gradient(54.94deg, #DD41B1 22.19%, #FF7BDA 82.85%)',
     }}
   >
-    <CompleteSvg />
+    <ReviewSvg />
   </div>
 );
 
@@ -236,7 +272,7 @@ const ProgressBar = ({ percent }) => {
 
   const fillerStyle = {
     height: '100%',
-    width: `${percent}%`,
+    width: `${percent * 100}%`,
     background: 'linear-gradient(90deg, #7a9bff, #576bfa)',
     borderRadius: '10px',
     transition: 'width 0.5s ease-in-out',
@@ -349,17 +385,3 @@ const ArrowButtonIcon = () => (
   </svg>
 );
 
-const Progress = () => {
-  <svg width="308" height="25" viewBox="0 0 308 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M0 12.5C0 5.59644 5.59644 0 12.5 0H295.5C302.404 0 308 5.59644 308 12.5C308 19.4036 302.404 25 295.5 25H12.5C5.59645 25 0 19.4036 0 12.5Z"
-      fill="url(#paint0_linear_208_4520)"
-    />
-    <defs>
-      <linearGradient id="paint0_linear_208_4520" x1="0" y1="12.5" x2="308" y2="12.5" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#5683F9" />
-        <stop offset="1" stop-color="#4362B4" />
-      </linearGradient>
-    </defs>
-  </svg>;
-};
