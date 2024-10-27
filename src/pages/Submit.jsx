@@ -21,9 +21,12 @@ import SubmitTabs from '../components/Submit/SubmitTabs';
 function Submit() {
   const { auth, userData } = useFirebase();
   const { task, unit } = useParams();
+
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState(null);
-  const [highlightedLines, setHighlightedLines] = useState([]);
+    const [unitData, setUnitData] = useState(null)
+    
+const [highlightedLines, setHighlightedLines] = useState([]);
   const [noActivitySent, setNoActivitySent] = useState(false);
   const [code, setCode] = useState(localStorage.getItem(`${task}-code`) || examplecode);
   const [loading, setLoading] = useState(true);
@@ -65,6 +68,10 @@ function Submit() {
         setSubmissions(taskFromDb.submissions);
         taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
         setTaskData(taskFromDb);
+
+        const unitFromDb = await getRequest({ getUrl: `getUnitData?unitId=${unit}`, authMethod: 'jwt' });
+        setUnitData(unitFromDb);
+        console.log({ unitFromDb });
         const testNames = taskFromDb.tests.map((test) => test.name);
         const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
         setTestsOutputs(newEmptyTests);
@@ -105,7 +112,7 @@ function Submit() {
                   order: 2,
                 }}
               >
-                <Sidebar openUnit={openUnit} setOpenUnit={setOpenUnit} />
+                <Sidebar openUnit={openUnit} setOpenUnit={setOpenUnit} unitData={unitData} />
               </Grid>
               <Grid container direction="column">
                 <Grid
@@ -129,7 +136,7 @@ function Submit() {
                     justifyContent: 'center',
                     transition: 'width 0.5s',
                     borderRadius: '20px',
-                    background: 'rgba(66, 55, 104, 0.80)',
+                    background: 'rgba(66, 55, 104, 0.90)',
                     boxShadow: '1px 1px 3px 0px rgba(255, 255, 255, 0.10)',
                     padding: '20px',
                   }}

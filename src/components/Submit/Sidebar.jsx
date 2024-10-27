@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import './Sidebar.css'; // Add this to style the sidebar
 import { Button, Divider } from '@nextui-org/react';
-import TaskCard from '../Home/TaskCard';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import CustomScrollbar from '../general/CustomScrollbar';
+import { Loading } from '../general/Messages';
 
+/*
 const unitData = {
   id: '95e017a52ea0',
   name: 'חזרה',
@@ -100,10 +101,12 @@ const unitData = {
     },
   ],
 };
+*/
 const lastSubmitedIndex = () => {
   return 3;
 };
-const Sidebar = ({ openUnit, setOpenUnit }) => {
+
+const Sidebar = ({ openUnit, setOpenUnit, unitData }) => {
   const toggleSidebar = () => {
     setOpenUnit(!openUnit);
   };
@@ -123,44 +126,41 @@ const Sidebar = ({ openUnit, setOpenUnit }) => {
         >
           <ArrowButtonIcon />
         </div>
-        {openUnit && (
-          <>
-            {/* <CustomScrollbar> */}
-            <div style={{ width: '100%', padding: '10%', height: '90vh' }}>
-              <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%' }}>{unitData.name}</h1>
-              <ProgressBar percent={lastSubmitedIndex(12) / unitData.practiceGoalIndex} />
-              <Divider />
-              <p style={{ textAlign: 'right', fontSize: '22px' }}>חומרי עזר</p>
-              {unitData.files?.length > 0 && (
-                <div className="sidebar-box">
-                  {unitData.files
-                    .sort((A, B) => A.index - B.index)
-                    .map((file, index) => (
-                      <React.Fragment key={file.id || index}>
-                        <Divider />
-                        <FileCard file={file} />
-                      </React.Fragment>
-                    ))}
-                </div>
-              )}
-              <p style={{ textAlign: 'right', fontSize: '22px' }}>תרגילים</p>
-              {unitData.tasks?.length > 0 &&
-                unitData.tasks
-                  .sort((A, B) => A.index - B.index)
-                  .map((task, index) => (
-                    <>
-                      {!task.personal && <ClassTag />}
-                      {task.submission && <CompleteIcon />}
-                      <div className="sidebar-box" key={task.id || index}>
-                        {task.review && <ReviewIcon />}
-                        <p>{task.name}</p>
+        {openUnit &&
+          (unitData ? (
+            <>
+              <div style={{ width: '100%', padding: '10%' }}>
+                <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%' }}>{unitData.name}</h1>
+                <ProgressBar percent={lastSubmitedIndex(12) / unitData.practiceGoalIndex} />
+                <Divider style={{ marginBottom: '20px' }} />
+
+                <CustomScrollbar>
+                  <div style={{ width: '100%', height: '70vh' }}>
+                    <p style={{ textAlign: 'right', fontSize: '22px' }}>חומרי עזר</p>
+                    {unitData.files?.length > 0 && (
+                      <div className="sidebar-box">
+                        {unitData.files
+                          .sort((A, B) => A.index - B.index)
+                          .map((file, index) => (
+                            <React.Fragment key={file.id || index}>
+                              <Divider />
+                              <FileCard file={file} />
+                            </React.Fragment>
+                          ))}
                       </div>
-                    </>
-                  ))}
-            </div>
-            {/* </CustomScrollbar> */}
-          </>
-        )}
+                    )}
+                    <p style={{ textAlign: 'right', fontSize: '22px', marginTop: '20px' }}>תרגילים</p>
+                    {unitData.tasks?.length > 0 &&
+                      unitData.tasks
+                        .sort((A, B) => A.index - B.index)
+                        .map((task, index) => <TaskCard key={task.id || index} task={task} index={index} />)}
+                  </div>
+                </CustomScrollbar>
+              </div>
+            </>
+          ) : (
+            <Loading />
+          ))}
       </div>
     </div>
   );
@@ -168,9 +168,22 @@ const Sidebar = ({ openUnit, setOpenUnit }) => {
 
 export default Sidebar;
 
+const TaskCard = ({ task, index }) => (
+  <div style={{ position: 'relative' }}>
+    {!task.personal && <ClassTag />}
+    {task.submission && <CompleteIcon />}
+    <div className="sidebar-box" key={task.id || index}>
+      {task.review && <ReviewIcon />}
+      <p>{task.name}</p>
+    </div>
+  </div>
+);
+
 const ClassTag = () => (
   <div
     style={{
+      position: 'absolute',
+      marginTop: '-20px',
       background: '#423768',
       borderRadius: '10px 10px 0 0',
       width: '30%',
@@ -182,34 +195,11 @@ const ClassTag = () => (
   </div>
 );
 
-const FileCard = ({ file }) => {
-  return (
-    <div dir="rtl" style={{ margin: '5px', textAlign: 'right', opacity: '1' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          cursor: 'pointer',
-          padding: ' 0 5px 0 5px',
-        }}
-        onClick={() => window.open(file.link)}
-      >
-        <p style={{ fontSize: '16px', margin: 0 }}>{file.name}</p>
-        {file.type === 'ppt' && <PPTIcon />}
-        {file.type === 'pdf' && <PDFIcon />}
-        {file.type === 'zip' && <FolderZipRoundedIcon />}
-        {file.type === 'webLink' && <PublicRoundedIcon />}
-      </div>
-    </div>
-  );
-};
-
 const CompleteIcon = () => (
   <div
     style={{
       position: 'absolute',
-      left: '85%',
+      left: '90%',
       width: '30px',
       height: '30px',
       borderRadius: '50%',
@@ -217,6 +207,7 @@ const CompleteIcon = () => (
       alignItems: 'center',
       justifyContent: 'center',
       background: 'linear-gradient(58.67deg, #05C4FD 16.63%, #09D5CE 92%)',
+      zIndex: '1900',
     }}
   >
     <CompleteSvg />
@@ -238,9 +229,8 @@ const ReviewIcon = () => (
   <div
     style={{
       position: 'absolute',
-      left: '13%',
+      left: '5%',
       marginTop: '-20px',
-      // transform: 'translate(-50%, -50%)', // Centers the element
       width: '30px',
       height: '30px',
       borderRadius: '50%',
@@ -264,7 +254,7 @@ const ProgressBar = ({ percent }) => {
   const containerStyle = {
     height: '20px',
     width: '100%',
-    backgroundColor: '#2c2358',
+    background: 'linear-gradient(90deg, #5683F9 0%, #4362B4 100%)',
     borderRadius: '10px',
     display: 'flex',
     alignItems: 'center',
@@ -273,7 +263,7 @@ const ProgressBar = ({ percent }) => {
   const fillerStyle = {
     height: '100%',
     width: `${percent * 100}%`,
-    background: 'linear-gradient(90deg, #7a9bff, #576bfa)',
+    background: 'rgba(123, 160, 255, 1)',
     borderRadius: '10px',
     transition: 'width 0.5s ease-in-out',
   };
@@ -385,3 +375,25 @@ const ArrowButtonIcon = () => (
   </svg>
 );
 
+const FileCard = ({ file }) => {
+  return (
+    <div dir="rtl" style={{ margin: '5px', textAlign: 'right', opacity: '1' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          cursor: 'pointer',
+          padding: ' 0 5px 0 5px',
+        }}
+        onClick={() => window.open(file.link)}
+      >
+        <p style={{ fontSize: '16px', margin: 0 }}>{file.name}</p>
+        {file.type === 'ppt' && <PPTIcon />}
+        {file.type === 'pdf' && <PDFIcon />}
+        {file.type === 'zip' && <FolderZipRoundedIcon />}
+        {file.type === 'webLink' && <PublicRoundedIcon />}
+      </div>
+    </div>
+  );
+};

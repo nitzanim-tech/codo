@@ -92,7 +92,7 @@ const ChosenTabSvg = () => (
       <path
         d="M8 54.5C8 26.6096 30.6096 4 58.5 4C86.3904 4 109 26.6096 109 54.5V110H8V54.5Z"
         fill="#423768"
-        fillOpacity="0.8"
+        fillOpacity="0.9"
         shapeRendering="crispEdges"
       />
     </g>
