@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const LINE_HEGITH = 20;
 const theme = 'vs-light';
 
-export default function ReviewEditor({ version, comments = {} }) {
+export default function ReviewEditor({ submittion, comments = {} }) {
   const handleEditorDidMount = (editor, monaco) => {
     updateDecorations(editor, monaco);
 
@@ -46,10 +46,10 @@ export default function ReviewEditor({ version, comments = {} }) {
 
   return (
     <StyledEditor
-      height={`${version.code.split('\n').length * LINE_HEGITH}px`}
+      height={`${submittion.code.split('\n').length * LINE_HEGITH}px`}
       defaultLanguage="python"
       theme={theme}
-      value={version.code}
+      value={submittion.code}
       options={{ minimap: { enabled: false }, readOnly: true, scrollBeyondLastLine: false }}
       onMount={handleEditorDidMount}
     />

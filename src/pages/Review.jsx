@@ -17,7 +17,7 @@ function Review() {
   // SO THE REQUESTS FROM THE SERVER WILL HAPPEN SIMULTANEOUSLY
   // 2. ADD NUMERIC GARDE  
   const { app, userData } = useFirebase();
-  const [version, setVersion] = useState(null);
+  const [submission, setSubmmition] = useState(null);
   const [selectedTests, setSelectedTests] = useState([]);
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState();
@@ -28,8 +28,9 @@ function Review() {
     const fetchData = async () => {
       const submissionData = await getRequest({ getUrl: `getSubmissionData?submission=${submissionId}` });
       const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${submissionData.task}`, authMethod: 'jwt' });
+      console.log({ submissionData });
       setTaskData(taskFromDb);
-      setVersion(submissionData);
+      setSubmmition(submissionData);
       const passTestsIndexes = submissionData.tests.reduce(
         (acc, val, index) => (val === true ? [...acc, index] : acc),
         [],
@@ -62,7 +63,7 @@ function Review() {
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Card style={{ width: '95%' }}>
                   <ReviewComponent
-                    version={version}
+                    submittion={submission}
                     selectedTests={selectedTests}
                     testsAmount={taskData.tests.length}
                     setTestsOutputs={setTestsOutputs}
@@ -74,9 +75,9 @@ function Review() {
 
             <Grid item style={{ width: '30%' }}>
               <h2 style={{ fontSize: '1.7vw' }}>
-                <b>{version.student.name}</b>
+                <b>{submission.student.name}</b>
               </h2>
-              <h2 style={{ fontSize: '1.7vw' }}>{formatDate(version.date)}</h2>
+              <h2 style={{ fontSize: '1.7vw' }}>{formatDate(submission.date)}</h2>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <DashboardCard
                   ratio={calculateGrade(taskData, selectedTests) + '/' + maxGrade(taskData)}

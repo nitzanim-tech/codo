@@ -6,15 +6,15 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
 import postRequest from '../../requests/anew/postRequest';
 
-export default function SendReviewButton({ setErrorText, general, comments, selectedTests, version, testsAmount }) {
+export default function SendReviewButton({ setErrorText, general, comments, selectedTests, submission, testsAmount }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [saved, setSaved] = useState(false);
 
   const sendReview = async () => {
-    const userId = version.student.uid;
-    const submissionId = version.id;
+    const userId = submission.student.uid;
+    const submissionId = submission.id;
 
-    if (haveTestsChanged(selectedTests, version.tests, false)) {
+    if (haveTestsChanged(selectedTests, submission.tests, false)) {
       const pass = indexToBooleanArray(selectedTests, testsAmount);
       const passedChanged = await postRequest({ postUrl: 'changePassScore', object: { submissionId, pass } });
       if (!passedChanged) setErrorText('שגיאה בתיקון ציון הטסטים');
@@ -42,7 +42,7 @@ export default function SendReviewButton({ setErrorText, general, comments, sele
   };
 
   const handleSendClick = () => {
-    if (haveTestsChanged(selectedTests, version.tests, true)) onOpen();
+    if (haveTestsChanged(selectedTests, submission.tests, true)) onOpen();
     else sendReview();
   };
 
