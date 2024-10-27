@@ -1,0 +1,34 @@
+/* Sidebar.css */
+.sidebar {
+  height: 100vh;
+  background-color: #2C244D;
+  color: white;
+  position: fixed;
+  top: 0;
+  right: 0; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  z-index: 500; 
+  margin-top: 50px;
+}
+
+.sidebar.open {
+  width: 320px; 
+}
+
+.sidebar.closed {
+  width: 3px; 
+}
+
+
+.sidebar-box {
+  min-height: 40px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid #616099;
+  background-color: #1F183E;
+  direction: rtl;
+  margin-top: 30px;
+}

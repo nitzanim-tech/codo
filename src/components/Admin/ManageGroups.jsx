@@ -6,7 +6,6 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from 
 import SearchIcon from '@mui/icons-material/Search';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import getRequest from '../../requests/anew/getRequest';
-import Sidebar from '../NavBar/Sidebar';
 
 const ManageGroups = () => {
   const [filterValue, setFilterValue] = useState('');
@@ -74,7 +73,6 @@ const ManageGroups = () => {
 
   return (
     <>
-      <Sidebar />
       <div className="flex gap-4 mb-4 w-7/10 mx-auto" style={{ width: '70%' }}>
         <Select
           placeholder="Select Region"

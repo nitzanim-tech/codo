@@ -10,6 +10,7 @@ import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
 import UserSettingModal from './UserSettingModal';
+import FollowTheSignsRoundedIcon from '@mui/icons-material/FollowTheSignsRounded';
 
 const LoginOrRegisterDropdown = () => {
   const { auth, userData, setJwt, logOut } = useFirebase();
@@ -45,15 +46,23 @@ const LoginOrRegisterDropdown = () => {
           </DropdownTrigger>
 
           <DropdownMenu variant="faded" aria-label="Dropdown menu logout" onAction={(key) => console.log(key)}>
-            {/* <DropdownItem
+            {userData.permission && (
+              <DropdownItem
+                key="setting"
+                onClick={() => (window.location.href = `./inst`)}
+                startContent={<FollowTheSignsRoundedIcon />}
+              >
+                לדף מדריך
+              </DropdownItem>
+            )}
+            <DropdownItem
               key="setting"
               onClick={() => setOpenLSettingModal(true)}
               showDivider
               startContent={<SettingsRoundedIcon />}
             >
               הגדרות
-            </DropdownItem> */}
-
+            </DropdownItem>
             <DropdownItem key="logout" onClick={handleSignOut} startContent={<LogoutRoundedIcon />}>
               התנתק
             </DropdownItem>

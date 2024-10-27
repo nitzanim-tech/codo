@@ -15,6 +15,9 @@ import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import spicyIcon from '../assets/svg/pepper.svg';
 import getRequest from '../requests/anew/getRequest';
 import { Loading } from '../components/general/Messages';
+import styled from 'styled-components';
+
+import CustomScrollbar from '../components/general/CustomScrollbar';
 
 const Levels = [
   { value: 0, name: 'בקטנה, תן להתחמם' },
@@ -42,9 +45,9 @@ function Home() {
 
   useEffect(() => {
     const fetchUnits = async () => {
-      const unitsFromDb = await getRequest({ getUrl: `getHomepage`, authMethod: 'jwt' });
+      const unitsFromDb = await getRequest({ getUrl: `getNewHomepage`, authMethod: 'jwt' });
       setUnits(unitsFromDb);
-      console.log({unitsFromDb});
+      console.log({ unitsFromDb });
     };
 
     userData && fetchUnits();
@@ -57,64 +60,33 @@ function Home() {
           <div style={{ display: 'flex', justifyContent: 'center', width: '70%' }}>
             <Grid container spacing={1} columns={3} rows={1}>
               <Grid item style={{ width: '55%', margin: '2%' }}>
-                <ScrollShadow className="h-[85vh]" size={5}>
-                  {units ? (
-                    <Accordion dir="rtl" selectedKeys={units.map((unit) => unit.id)} isCompact>
-                      {units && units.length > 0 ? (
-                        units
-                          .sort((unitA, unitB) => unitA.index - unitB.index)
-                          .map((unit) => (
-                            <AccordionItem key={unit.id} aria-label={`Accordion ${unit.name}`} title={unit.name}>
-                              {unit.resources && unit.resources.length > 0 ? (
-                                unit.resources
-                                  .sort((A, B) => A.index - B.index)
-                                  .map((resource) =>
-                                    resource.type === 'practice' ? (
-                                      <>
-                                        <Divider />
-                                        <p style={{ textAlign: 'right' }}>תור אישי:</p>
-                                        {unit.practices.length > 0 &&
-                                          unit.practices
-                                            .sort((A, B) => A.index - B.index)
-                                            .map((practice) => (
-                                              <TaskCard
-                                                key={practice.id}
-                                                taskId={practice.taskId}
-                                                text={practice.name}
-                                                unitId={unit.id}
-                                                studentData={practice.submission || false}
-                                                // isChallenge={practice.setting?.isChallenge || null}
-                                                // showReview={practice.setting?.showReview || null}
-                                              />
-                                            ))}
-                                      </>
-                                    ) : resource.type === 'task' ? (
-                                      <TaskCard
-                                        key={resource.id}
-                                        taskId={resource.link}
-                                        text={resource.name}
-                                        unitId={unit.id}
-                                        studentData={resource.submission || false}
-                                        // isChallenge={resource.setting?.isChallenge || null}
-                                        // showReview={resource.setting?.showReview || null}
-                                      />
-                                    ) : (
-                                      <FileCard key={resource.id} file={resource} />
-                                    ),
-                                  )
-                              ) : (
-                                <p>No resources available</p>
-                              )}
-                            </AccordionItem>
-                          ))
-                      ) : (
-                        <p>No units available</p>
-                      )}
-                    </Accordion>
-                  ) : (
-                    <Loading />
-                  )}
-                </ScrollShadow>
+                <CustomScrollbar>
+                  <div className="h-[85vh]">
+                    {units ? (
+                      <div dir="rtl" selectedKeys={units.map((unit) => unit.id)} isCompact>
+                        {units && units.length > 0 ? (
+                          units
+                            .sort((unitA, unitB) => unitA.index - unitB.index)
+                            .map((unit) => (
+                              <div key={unit.id} aria-label={`div ${unit.name}`}>
+                                <UnitBox
+                                  isOpen={unit.isOpen && unit.firstTask}
+                                  disabled={!unit.isOpen || !unit.firstTask}
+                                  onClick={() => (window.location.href = `./submit/${unit.id}/${unit.firstTask}`)}
+                                >
+                                  {unit.name}
+                                </UnitBox>
+                              </div>
+                            ))
+                        ) : (
+                          <p>איו יחידות פתוחות</p>
+                        )}
+                      </div>
+                    ) : (
+                      <Loading />
+                    )}
+                  </div>
+                </CustomScrollbar>
               </Grid>
               <Grid item style={{ width: '35%' }}>
                 <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
@@ -131,6 +103,21 @@ function Home() {
 }
 
 export default Home;
+
+const UnitBox = styled.button`
+  background-color: ${(props) => (props.isOpen ? 'rgba(31, 24, 62, 0.8)' : 'rgba(128, 128, 128, 0.8)')};
+  color: white;
+  font-size: 18px;
+  margin: 5px;
+  width: 80%;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid #616099;
+  direction: rtl;
+`;
+
+
+
 
 const SelectLevel = ({ levels }) => {
   return (
@@ -197,3 +184,6 @@ const clearUnvisable = (lessons) => {
     };
   });
 };
+
+
+

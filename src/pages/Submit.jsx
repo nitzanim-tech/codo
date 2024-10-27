@@ -15,18 +15,25 @@ import { handleUserActivity } from '../components/Submit/activityTracker';
 import { CircularProgress } from '@nextui-org/react';
 import { Loading } from '../components/general/Messages';
 import ReadReview from '../components/Submit/ReadReview';
+import Sidebar from '../components/Submit/Sidebar';
+import SubmitTabs from '../components/Submit/SubmitTabs';
 
 function Submit() {
   const { auth, userData } = useFirebase();
   const { task, unit } = useParams();
+
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState(null);
-  const [highlightedLines, setHighlightedLines] = useState([]);
+    const [unitData, setUnitData] = useState(null)
+    
+const [highlightedLines, setHighlightedLines] = useState([]);
   const [noActivitySent, setNoActivitySent] = useState(false);
   const [code, setCode] = useState(localStorage.getItem(`${task}-code`) || examplecode);
   const [loading, setLoading] = useState(true);
   const [submissions, setSubmissions] = useState();
   const [openReview, setOpenReview] = useState();
+  const [openUnit, setOpenUnit] = useState(true);
+  const [chosenTab, setChosenTab] = useState('תרגול');
 
   const userActivityHandler = useCallback(() => {
     handleUserActivity(task, userData, noActivitySent, setNoActivitySent);
@@ -61,6 +68,10 @@ function Submit() {
         setSubmissions(taskFromDb.submissions);
         taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
         setTaskData(taskFromDb);
+
+        const unitFromDb = await getRequest({ getUrl: `getUnitData?unitId=${unit}`, authMethod: 'jwt' });
+        setUnitData(unitFromDb);
+        console.log({ unitFromDb });
         const testNames = taskFromDb.tests.map((test) => test.name);
         const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
         setTestsOutputs(newEmptyTests);
@@ -93,28 +104,68 @@ function Submit() {
         ) : auth.currentUser ? (
           taskData && testsOutputs ? (
             <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
-              <Grid item style={{ width: '60%' }}>
-                {openReview && submissions ? (
-                  <ReadReview code={openReview.code} comments={openReview.comments} />
-                ) : (
-                  <PythonIDE
-                    testsOutputs={testsOutputs}
-                    setTestsOutputs={setTestsOutputs}
-                    taskObject={taskData}
-                    highlightedLines={highlightedLines}
-                    code={code}
-                    setCode={setCode}
-                  />
-                )}{' '}
+              <Grid
+                item
+                style={{
+                  transition: 'width 0.5s',
+                  width: openUnit ? '22%' : '0%',
+                  order: 2,
+                }}
+              >
+                <Sidebar openUnit={openUnit} setOpenUnit={setOpenUnit} unitData={unitData} />
               </Grid>
-              <Grid item style={{ width: '40%' }}>
-                <SubmitButtons
-                  testsOutputs={testsOutputs}
-                  taskObject={taskData}
-                  setHighlightedLines={setHighlightedLines}
-                  submissions={submissions}
-                  setOpenReview={setOpenReview}
-                />
+              <Grid container direction="column">
+                <Grid
+                  item
+                  style={{
+                    zIndex: 1,
+                    position: 'relative',
+                    width: openUnit ? '78%' : '100%',
+                    transition: 'width 0.5s',
+                  }}
+                >
+                  <SubmitTabs chosenTab={chosenTab} setChosenTab={setChosenTab} />
+                </Grid>
+                <Grid
+                  container
+                  style={{
+                    zIndex: 2,
+                    marginTop: '-3.5px',
+                    width: openUnit ? '78%' : '100%',
+                    alignItems: 'stretch',
+                    justifyContent: 'center',
+                    transition: 'width 0.5s',
+                    borderRadius: '20px',
+                    background: 'rgba(66, 55, 104, 0.90)',
+                    boxShadow: '1px 1px 3px 0px rgba(255, 255, 255, 0.10)',
+                    padding: '20px',
+                  }}
+                >
+                  <Grid item style={{ width: '60%' }}>
+                    {openReview && submissions ? (
+                      <ReadReview code={openReview.code} comments={openReview.comments} />
+                    ) : (
+                      <PythonIDE
+                        testsOutputs={testsOutputs}
+                        setTestsOutputs={setTestsOutputs}
+                        taskObject={taskData}
+                        highlightedLines={highlightedLines}
+                        code={code}
+                        setCode={setCode}
+                      />
+                    )}
+                  </Grid>
+                  <Grid item style={{ width: '40%' }}>
+                    <SubmitButtons
+                      chosenTab={chosenTab}
+                      testsOutputs={testsOutputs}
+                      taskObject={taskData}
+                      setHighlightedLines={setHighlightedLines}
+                      submissions={submissions}
+                      setOpenReview={setOpenReview}
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           ) : null
@@ -130,5 +181,4 @@ function Submit() {
     </>
   );
 }
-
 export default Submit;
