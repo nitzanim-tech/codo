@@ -15,27 +15,40 @@ const LoginModal = ({ auth, isOpen, onOpenChange, onClose, setJwt, logOut }) => 
     try {
       const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken(true);
-      const { token } = await getRequest({ getUrl: `login`, token: idToken });
+
+      const { token, error, status } = await getRequest({ getUrl: 'login', token: idToken });
 
       if (token) {
         setJwt(token);
         localStorage.setItem('token', token);
+        onClose();
+        onOpenChange();
       } else {
+        if (status === 404) {
+          setError('משתמש לא קיים, אנא הרשם');
+        } else if (status === 401 || status === 400) {
+          setError(`שגיאה ${status}, אנא נסה להתחבר שוב`);
+        } else if (status === 500) {
+          setError('שגיאה בשרת. נסה שוב מאוחר יותר.');
+        } else {
+          setError('שגיאה במהלך ההתחברות');
+        }
         await logOut();
-        setError('משתמש לא רשום');
-        return;
-      }
+        setJwt(null);
 
-      onOpenChange();
+        console.error({ token, error, status });
+      }
     } catch (error) {
-        setError('משתמש לא רשום');
+      console.error('Error during Google sign-in:', error);
+      setError('שגיאה בחיבור Google');
+      setJwt(null);
     }
   };
-
   const handleClose = () => {
     onOpenChange();
     setError('');
   };
+
   return (
     <>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} placement="top-center" dir="rtl" size="m">
