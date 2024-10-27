@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from '../components/NavBar/NavigateBar';
 import { Tabs, Tab, Button } from '@nextui-org/react';
 import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
-// import getStudentsByGroup from '../requests/getStudents';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageLessonsInst from '../components/Inst/manageTab/ManageLessonsInst';
@@ -11,9 +9,7 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-o
 import PassMatrix from '../components/Inst/statusTab/PassMatrix';
 import { useFirebase } from '../util/FirebaseProvider';
 import styled from 'styled-components';
-import getTasksData from '../requests/tasks/getTasksData';
 import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettingProvider';
-import isAuthorized from '../util/permissions';
 import { Unauthorized } from '../components/general/Messages';
 import getRequest from '../requests/anew/getRequest';
 import ChangeGroupReq from '../components/Inst/studentsTab/ChangeGroupReq';

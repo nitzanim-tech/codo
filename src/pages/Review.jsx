@@ -7,12 +7,15 @@ import { Card, Spinner } from '@nextui-org/react';
 import { DashboardCard } from '../components/Inst/DashboardCard';
 import formatDate from '../util/formatDate';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
-import getTaskById from '../requests/tasks/getTaskById';
 import { useFirebase } from '../util/FirebaseProvider';
 import { Unauthorized } from '../components/general/Messages';
 import getRequest from '../requests/anew/getRequest';
 
 function Review() {
+  // TODO: 
+  // 1. WHEN IT HAS BEEN CALLED FROM THE INST PAGE - PASS THE TASK_ID TOO
+  // SO THE REQUESTS FROM THE SERVER WILL HAPPEN SIMULTANEOUSLY
+  // 2. ADD NUMERIC GARDE  
   const { app, userData } = useFirebase();
   const [version, setVersion] = useState(null);
   const [selectedTests, setSelectedTests] = useState([]);
@@ -23,18 +26,18 @@ function Review() {
 
   useEffect(() => {
     const fetchData = async () => {
-        const data = await getRequest({ getUrl: `getSubmissionData?submission=${submissionId}` });
-        const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${data.task}`, authMethod: 'jwt' });
-        setTaskData(taskFromDb);
-        setVersion(data);
-        const passTestsIndexes = data.tests.reduce(
-          (acc, val, index) => (val === true ? [...acc, index] : acc),
-          [],
-        );
-        setSelectedTests(passTestsIndexes);
+      const submissionData = await getRequest({ getUrl: `getSubmissionData?submission=${submissionId}` });
+      const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${submissionData.task}`, authMethod: 'jwt' });
+      setTaskData(taskFromDb);
+      setVersion(submissionData);
+      const passTestsIndexes = submissionData.tests.reduce(
+        (acc, val, index) => (val === true ? [...acc, index] : acc),
+        [],
+      );
+      setSelectedTests(passTestsIndexes);
     };
     fetchData();
-  }, [submissionId]);
+  }, []);
 
   const calculateGrade = (taskData, selectedTests) => {
     return selectedTests.reduce((sum, testIndex) => sum + taskData.tests[testIndex].score, 0);
@@ -48,7 +51,11 @@ function Review() {
 
   return (
     <>
-      {!userData ? <Spinner /> : !userData.permission ? <Unauthorized/ > : taskData ? (
+      {!userData ? (
+        <Spinner />
+      ) : !userData.permission ? (
+        <Unauthorized />
+      ) : taskData ? (
         <>
           <Grid container spacing={1} columns={3} rows={1} style={{ marginTop: '20px', padding: '20px' }}>
             <Grid item style={{ width: '69%' }}>

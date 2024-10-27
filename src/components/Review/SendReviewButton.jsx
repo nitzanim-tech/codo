@@ -5,34 +5,31 @@ import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
 import postRequest from '../../requests/anew/postRequest';
-import { useFirebase } from '../../util/FirebaseProvider';
 
 export default function SendReviewButton({ setErrorText, general, comments, selectedTests, version, testsAmount }) {
-  const { app } = useFirebase();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [saved, setSaved] = useState(false);
 
   const sendReview = async () => {
     const userId = version.student.uid;
-    const task = version.task;
     const submissionId = version.id;
 
     if (haveTestsChanged(selectedTests, version.tests, false)) {
       const pass = indexToBooleanArray(selectedTests, testsAmount);
-      const passedChanged = await postRequest({ postUrl: 'changePassScore',
-                                                object: { submissionId, pass } });
+      const passedChanged = await postRequest({ postUrl: 'changePassScore', object: { submissionId, pass } });
       if (!passedChanged) setErrorText('שגיאה בתיקון ציון הטסטים');
     }
 
     const reviewData = {
-        submissionId, userId,
-        comments: comments.current || {},
-        general,
-        grade: null, reviewer: null, time: new Date()
+      submissionId,
+      userId,
+      comments: comments.current || {},
+      general,
+      grade: null, // ADD NUMERIC GRADE
+      time: new Date(),
     };
 
-    const hadSaved = await postRequest({ postUrl: 'addReview',
-                                         object: reviewData });
+    const hadSaved = await postRequest({ postUrl: 'addReview', object: reviewData, authMethod:'jwt' });
 
     if (!hadSaved) setErrorText('שגיאה בשליחת המשוב לחניך');
 
