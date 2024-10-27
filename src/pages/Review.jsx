@@ -1,37 +1,43 @@
 
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import ReviewComponent from '../components/Review/ReviewComponent';
 import { Card, Spinner } from '@nextui-org/react';
 import { DashboardCard } from '../components/Inst/DashboardCard';
 import formatDate from '../util/formatDate';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
-import getTaskById from '../requests/tasks/getTaskById';
 import { useFirebase } from '../util/FirebaseProvider';
+import { Unauthorized } from '../components/general/Messages';
+import getRequest from '../requests/anew/getRequest';
 
 function Review() {
-  const { app } = useFirebase();
-  const [version, setVersion] = useState(null);
+  // TODO: 
+  // 1. WHEN IT HAS BEEN CALLED FROM THE INST PAGE - PASS THE TASK_ID TOO
+  // SO THE REQUESTS FROM THE SERVER WILL HAPPEN SIMULTANEOUSLY
+  // 2. ADD NUMERIC GARDE  
+  const { app, userData } = useFirebase();
+  const [submission, setSubmmition] = useState(null);
   const [selectedTests, setSelectedTests] = useState([]);
   const [taskData, setTaskData] = useState(null);
-    const [testsOutputs, setTestsOutputs] = useState();
+  const [testsOutputs, setTestsOutputs] = useState();
+
+  let { submissionId } = useParams();
 
   useEffect(() => {
-    const storedVersion = localStorage.getItem('versionToCheck');
-    if (storedVersion) {
-      const parsedVersion = JSON.parse(storedVersion);
-      const fetchData = async () => {
-        const taskFromDb = await getTaskById({ app, taskId: parsedVersion.task });
-        setTaskData(taskFromDb);
-        setVersion(parsedVersion);
-        const passTestsIndexes = parsedVersion.tests.reduce(
-          (acc, val, index) => (val === true ? [...acc, index] : acc),
-          [],
-        );
-        setSelectedTests(passTestsIndexes);
-      };
-      fetchData();
-    }
+    const fetchData = async () => {
+      const submissionData = await getRequest({ getUrl: `getSubmissionData?submission=${submissionId}` });
+      const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${submissionData.task}`, authMethod: 'jwt' });
+      console.log({ submissionData });
+      setTaskData(taskFromDb);
+      setSubmmition(submissionData);
+      const passTestsIndexes = submissionData.tests.reduce(
+        (acc, val, index) => (val === true ? [...acc, index] : acc),
+        [],
+      );
+      setSelectedTests(passTestsIndexes);
+    };
+    fetchData();
   }, []);
 
   const calculateGrade = (taskData, selectedTests) => {
@@ -43,19 +49,25 @@ function Review() {
       100,
     );
   };
+
   return (
     <>
-      {taskData ? (
+      {!userData ? (
+        <Spinner />
+      ) : !userData.permission ? (
+        <Unauthorized />
+      ) : taskData ? (
         <>
           <Grid container spacing={1} columns={3} rows={1} style={{ marginTop: '20px', padding: '20px' }}>
             <Grid item style={{ width: '69%' }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Card style={{ width: '95%' }}>
                   <ReviewComponent
-                    version={version}
+                    submittion={submission}
                     selectedTests={selectedTests}
                     testsAmount={taskData.tests.length}
                     setTestsOutputs={setTestsOutputs}
+                    taskData={taskData}
                   />
                 </Card>
               </div>
@@ -63,9 +75,9 @@ function Review() {
 
             <Grid item style={{ width: '30%' }}>
               <h2 style={{ fontSize: '1.7vw' }}>
-                <b>{version.student.name}</b>
+                <b>{submission.student.name}</b>
               </h2>
-              <h2 style={{ fontSize: '1.7vw' }}>{formatDate(version.date)}</h2>
+              <h2 style={{ fontSize: '1.7vw' }}>{formatDate(submission.date)}</h2>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <DashboardCard
                   ratio={calculateGrade(taskData, selectedTests) + '/' + maxGrade(taskData)}

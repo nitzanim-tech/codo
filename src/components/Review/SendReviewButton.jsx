@@ -4,33 +4,33 @@ import { Modal, ModalHeader, ModalBody, ModalContent, ModalFooter, useDisclosure
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
-import addReview from '../../requests/review/addReview';
-import changePassScore from '../../requests/review/changePassScore';
-import { useFirebase } from '../../util/FirebaseProvider';
+import postRequest from '../../requests/anew/postRequest';
 
-export default function SendReviewButton({ setErrorText, general, comments, selectedTests, version, testsAmount }) {
-  const { app } = useFirebase();
+export default function SendReviewButton({ setErrorText, general, comments, selectedTests, submission, testsAmount }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [saved, setSaved] = useState(false);
 
   const sendReview = async () => {
-    const userId = version.student.uid;
-    const task = version.task;
-    const trialIndex = version.id;
+    const userId = submission.student.uid;
+    const submissionId = submission.id;
 
-    if (haveTestsChanged(selectedTests, version.tests, false)) {
+    if (haveTestsChanged(selectedTests, submission.tests, false)) {
       const pass = indexToBooleanArray(selectedTests, testsAmount);
-      const passedChanged = await changePassScore({ app, userId, task, trialIndex, pass });
+      const passedChanged = await postRequest({ postUrl: 'changePassScore', object: { submissionId, pass } });
       if (!passedChanged) setErrorText('שגיאה בתיקון ציון הטסטים');
     }
 
     const reviewData = {
+      submissionId,
+      userId,
       comments: comments.current || {},
       general,
-      date: new Date(),
-      hasOpened: false,
+      grade: null, // ADD NUMERIC GRADE
+      time: new Date(),
     };
-    const hadSaved = await addReview({ app, userId, task, trialIndex, reviewData });
+
+    const hadSaved = await postRequest({ postUrl: 'addReview', object: reviewData, authMethod:'jwt' });
+
     if (!hadSaved) setErrorText('שגיאה בשליחת המשוב לחניך');
 
     setSaved(hadSaved);
@@ -42,7 +42,7 @@ export default function SendReviewButton({ setErrorText, general, comments, sele
   };
 
   const handleSendClick = () => {
-    if (haveTestsChanged(selectedTests, version.tests, true)) onOpen();
+    if (haveTestsChanged(selectedTests, submission.tests, true)) onOpen();
     else sendReview();
   };
 
