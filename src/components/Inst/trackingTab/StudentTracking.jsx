@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
-import {Accordion, AccordionItem} from "@nextui-org/accordion";
-import {Spinner} from "@nextui-org/react";
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip} from "@nextui-org/react";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
+import { Card, Spinner } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip } from "@nextui-org/react";
 import "./StudentTracking.css";
 import getRequest from '../../../requests/anew/getRequest';
 
@@ -100,7 +100,7 @@ function renderCell(cell) {
                 ) : (
                     cell.lines > 0 ? (
                         (cell.active ?
-                            <circle r=".25" cx=".5" cy=".5" stroke={GRAY} strokeWidth=".08" fill="white" /> :
+                            <circle r=".12" cx=".5" cy=".5" stroke={GRAY} strokeWidth=".08" fill="white" /> :
                             <circle r=".1" cx=".5" cy=".5" fill={GRAY} />)
                     ) : (
                         <></>
@@ -125,20 +125,20 @@ function getColor(score) {
 
 function renderLegend() {
     return (
-        <div style={{ width: '100%' }}>
+        <Card style={{ width: 'auto', margin: "10px" }}>
             <svg xmlns="http://www.w3.org/2000/svg"
                  width="100%" height="5em"
                  viewBox="0 0 1 1"
              >
-                <circle cx="-2" cy=".3" r=".175" fill={getColor(0)} />
-                <circle cx="-1" cy=".3" r=".175" fill={getColor(.25)} />
-                <circle cx="0" cy=".3" r=".175" fill={getColor(.5)} />
-                <circle cx="1" cy=".3" r=".175" fill={getColor(.75)} />
-                <circle cx="2" cy=".3" r=".175" fill={getColor(1)} />
-                <text x="-2" y=".7" style={{ fontSize: ".012em" }} textAnchor="middle">0%</text>
-                <text x="2" y=".7" style={{ fontSize: ".012em" }} textAnchor="middle">100%</text>
+                <circle cx="-1.5" cy=".4" r=".175" fill={getColor(0)} />
+                <circle cx="-.5" cy=".4" r=".175" fill={getColor(.25)} />
+                <circle cx=".5" cy=".4" r=".175" fill={getColor(.5)} />
+                <circle cx="1.5" cy=".4" r=".175" fill={getColor(.75)} />
+                <circle cx="2.5" cy=".4" r=".175" fill={getColor(1)} />
+                <text x="-1.5" y=".8" style={{ fontSize: ".012em" }} textAnchor="middle">0%</text>
+                <text x="2.5" y=".8" style={{ fontSize: ".012em" }} textAnchor="middle">100%</text>
             </svg>
-        </div>
+        </Card>
     );
 }
 
