@@ -1,0 +1,24 @@
+td {
+    padding: 0 !important;
+    text-align: center;
+}
+
+td svg {
+    margin: 0 auto;
+}
+
+circle {
+    cursor: pointer;
+}
+
+circle:hover {
+    /*fill: purple;*/
+}
+
+line {
+    stroke-width: .08;
+}
+
+tr.anchor {
+    background: hsl(var(--nextui-default-100) / var(--nextui-default-100-opacity, var(--tw-bg-opacity)));
+}
