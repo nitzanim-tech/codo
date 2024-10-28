@@ -20,15 +20,15 @@ const postRequest = async ({ postUrl, object, setLoadCursor = true, token, authM
     });
 
     if (!response.ok) {
-      const errorText = await response.text(); // Extract error text from the response
-      throw new Error(`Error ${response.status}: ${errorText}`); // Throw error with status and text
+      const errorText = await response.text();
+      throw new Error(`Error ${response.status}: ${errorText}`); 
     }
 
     const respondJson = await response.json();
     return respondJson;
   } catch (error) {
     console.error(`Request failed: ${error.message}`);
-    return { error: error.message, status: response?.status }; // Return error message and status if response exists
+    return { error: error.message, status: response?.status }; 
   } finally {
     if (setLoadCursor) document.body.classList.remove('cursor-wait');
   }
