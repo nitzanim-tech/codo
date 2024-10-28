@@ -6,6 +6,7 @@ import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
 import TaskTab from '../components/Inst/taskTab/TaskTab';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageLessonsInst from '../components/Inst/manageTab/ManageLessonsInst';
+import StudentTracking from '../components/Inst/trackingTab/StudentTracking';
 import { CircularProgress } from '@nextui-org/react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import PassMatrix from '../components/Inst/statusTab/PassMatrix';
@@ -117,6 +118,12 @@ function Instructors() {
                       <ChangeSettingProvider>
                         <ManageLessonsInst group={selectedGroup} />
                       </ChangeSettingProvider>
+                    </div>
+                  </Tab>
+
+                  <Tab key="track" title="מעקב">
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <StudentTracking group={selectedGroup} />
                     </div>
                   </Tab>
 
