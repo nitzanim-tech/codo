@@ -15,12 +15,11 @@ const TaskLoaderModal = ({ taskId, setTaskData, loading, setLoading }) => {
     const loadTasks = async () => {
       const localTask = JSON.parse(localStorage.getItem(localStorageKey));
       const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${taskId}`, authMethod: 'jwt' });
-      setServerTask(taskFromDb);
+      if (!taskFromDb.error) setServerTask(taskFromDb);
       if (localTask && taskFromDb) onOpenChange(true);
       else if (localTask) setTaskData(localTask);
-      else if (taskFromDb) setTaskData(taskFromDb);
-      else setTaskData(emptyTask(taskId));
-
+      else if (!taskFromDb.error) setTaskData(taskFromDb);
+      else setTaskData(emptyTask({ id: taskId }));
 
       setLoading(false);
     };
@@ -72,20 +71,15 @@ const TaskLoaderModal = ({ taskId, setTaskData, loading, setLoading }) => {
 
 export default TaskLoaderModal;
 
-const emptyTask=(id)=> {
+const emptyTask = ({ id }) => {
   return {
-  id,
-  subjects: [],
-  code: '# hello word!!',
-  headers: {},
-  tests: [],
-  description:'',
-  example:'',
-  isDefault: true
-};}
-    
-      // lastUpdate: null,
-      // hasGame: false,
-      // writer: 'kTqDi3pSI5NkUW21FbJF6sxDm3D3',
-      // mainSubject: 'בוחן',
-      // 
+    id,
+    subjects: [],
+    code: '# hello word!!',
+    headers: {},
+    tests: [],
+    description: '',
+    example: '',
+    isDefault: true,
+  };
+};
