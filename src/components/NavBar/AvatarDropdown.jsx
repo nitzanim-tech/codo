@@ -6,27 +6,30 @@ import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { useFirebase } from '../../util/FirebaseProvider';
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
-import UserSettingModal from './UserSettingModal';
+import SendRequestForChangeGroup from './SendRequestForChangeGroup';
+import SendRequestForGetPermission from './SendRequestForGetPermission'
 import FollowTheSignsRoundedIcon from '@mui/icons-material/FollowTheSignsRounded';
+import Groups2RoundedIcon from '@mui/icons-material/Groups2Rounded';
 
-const LoginOrRegisterDropdown = () => {
+const AvatarDropdown = () => {
   const { auth, userData, setJwt, logOut } = useFirebase();
 
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
-  const [openLSettingModal, setOpenLSettingModal] = useState(false);
+  const [openRequestChangeGroup, setOpenRequestChangeGroup] = useState(false);
+  const [openRequestGetPerm, setOpenRequestGetPerm] = useState(false);
 
   const handleSignOut = async () => {
     await logOut();
   };
 
   const clearAll = () => {
-    setOpenLSettingModal(false);
+    setOpenRequestChangeGroup(false);
     setOpenRegisterModal(false);
     setOpenLoginModal(false);
+    setOpenRequestGetPerm(false)
   };
 
   return (
@@ -55,14 +58,27 @@ const LoginOrRegisterDropdown = () => {
                 לדף מדריך
               </DropdownItem>
             )}
-            <DropdownItem
-              key="setting"
-              onClick={() => setOpenLSettingModal(true)}
-              showDivider
-              startContent={<SettingsRoundedIcon />}
-            >
-              הגדרות
-            </DropdownItem>
+            {userData.permission && (
+              <DropdownItem
+                key="getPerm"
+                onClick={() => setOpenRequestGetPerm(true)}
+                startContent={<Groups2RoundedIcon />}
+                showDivider
+              >
+                בקשה להרשאות
+              </DropdownItem>
+            )}
+
+            {!userData.permission && (
+              <DropdownItem
+                key="reqChangeGroup"
+                onClick={() => setOpenRequestChangeGroup(true)}
+                showDivider
+                startContent={<Groups2RoundedIcon />}
+              >
+                שינוי קבוצה
+              </DropdownItem>
+            )}
             <DropdownItem key="logout" onClick={handleSignOut} startContent={<LogoutRoundedIcon />}>
               התנתק
             </DropdownItem>
@@ -108,11 +124,17 @@ const LoginOrRegisterDropdown = () => {
         />
       )}
 
-      {openLSettingModal && (
-        <UserSettingModal
-          auth={auth}
-          isOpen={openLSettingModal}
-          onOpenChange={setOpenLSettingModal}
+      {openRequestChangeGroup && (
+        <SendRequestForChangeGroup
+          isOpen={openRequestChangeGroup}
+          onOpenChange={setOpenRequestChangeGroup}
+          onClose={clearAll}
+        />
+      )}
+      {openRequestGetPerm && (
+        <SendRequestForGetPermission
+          isOpen={openRequestGetPerm}
+          onOpenChange={setOpenRequestGetPerm}
           onClose={clearAll}
         />
       )}
@@ -120,4 +142,4 @@ const LoginOrRegisterDropdown = () => {
   );
 };
 
-export default LoginOrRegisterDropdown;
+export default AvatarDropdown;

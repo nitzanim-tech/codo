@@ -54,7 +54,6 @@ const RegisterModal = ({ auth, isOpen, onOpenChange, onClose, setJwt }) => {
       const idToken = await result.user.getIdToken(true);
       const { token, error, status } = await postRequest({ postUrl: `registerUser`, object: user, token: idToken });
       if (error) {
-        console.log({ token, error, status });
         if (status == 409) {
           if (token) localStorage.setItem('token', token);
           setErrorMassage('משתמש קיים');

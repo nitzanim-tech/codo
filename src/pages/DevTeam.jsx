@@ -1,9 +1,9 @@
 import DevTasksTab from '../components/Dev/DevTasksTab';
+import AvatarDropdown from '../components/NavBar/AvatarDropdown';
 import { useFirebase } from '../util/FirebaseProvider';
-import LoginOrRegisterDropdown from '../components/NavBar/LoginOrRegisterDropdown';
 
 const DevTeam = () => {
-  const { auth, userData } = useFirebase();
+  const { userData } = useFirebase();
 
   return (
     <>
@@ -22,7 +22,7 @@ const DevTeam = () => {
           <DevTasksTab />
         ) : (
           <>
-            <p style={{fontSize:'24px'}}>Login:</p>
+            <p style={{ fontSize: '24px' }}>Login:</p>
             <div
               style={{
                 display: 'flex',
@@ -30,11 +30,10 @@ const DevTeam = () => {
                 justifyContent: 'center',
               }}
             >
-              <LoginOrRegisterDropdown auth={auth} userData={userData} />
+              <AvatarDropdown />
             </div>
           </>
         )}
-
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@nextui-org/react';
-
-import LoginOrRegisterDropdown from './LoginOrRegisterDropdown';
+import AvatarDropdown from './AvatarDropdown';
 import { Link } from 'react-router-dom';
 import './NavBar.css';
 
@@ -9,7 +8,7 @@ export default function NavigateBar() {
   return (
     <Navbar dir="rtl" height="50px" style={{ background: 'rgba(44, 36, 77, 0.9)', zIndex: 1100 }}>
       <NavbarContent justify="end" style={{ flex: 1 }}>
-        <LoginOrRegisterDropdown />
+        <AvatarDropdown />
         <Link
           to="/"
           style={{
