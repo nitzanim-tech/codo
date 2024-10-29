@@ -7,14 +7,16 @@ import { Select, SelectItem, Button } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
 import postRequest from '../../requests/anew/postRequest';
 import getRequest from '../../requests/anew/getRequest';
+import { Loading } from '../general/Messages';
 
 const SendRequestForChangeGroup = ({ isOpen, onOpenChange, onClose }) => {
-  const { userData } = useFirebase();
+  const { auth, userData } = useFirebase();
   const [error, setError] = useState('');
   const [groups, setGroups] = useState();
   const [chosenRegion, setChosenRegion] = useState();
   const [chosenGroup, setChosenGroup] = useState(userData.group);
   const [currentRequest, setCurrentRequest] = useState();
+  const [loading, setLoading] = useState();
 
   const findGroupName = (groupsFromDb, reqGroupId) => {
     for (const region of Object.values(groupsFromDb)) {
@@ -29,6 +31,7 @@ const SendRequestForChangeGroup = ({ isOpen, onOpenChange, onClose }) => {
   useEffect(() => {
     const getGroupsFromDb = async () => {
       try {
+        setLoading(true);
         const [groupsFromDb, curRequest] = await Promise.all([
           getRequest({ getUrl: `getSyllabusGroups`, authMethod: 'jwt' }),
           getRequest({ getUrl: `getChangeGroupReq?userId=${userData.id}`, authMethod: 'jwt' }),
@@ -36,11 +39,12 @@ const SendRequestForChangeGroup = ({ isOpen, onOpenChange, onClose }) => {
 
         if (curRequest.length > 0) {
           const reqGroupId = curRequest[0].requestedGroupId;
-          const foundGroupName = findGroupName(groupsFromDb, reqGroupId);
-          if (foundGroupName) setCurrentRequest(foundGroupName);
+          const reqGroupName = findGroupName(groupsFromDb, reqGroupId);
+          if (reqGroupName) setCurrentRequest({ reqGroupName, approved: curRequest[0].approved });
         }
 
         setGroups(groupsFromDb);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -55,8 +59,22 @@ const SendRequestForChangeGroup = ({ isOpen, onOpenChange, onClose }) => {
     const result = await postRequest({ postUrl: `postChangeGroupReq`, object: changeGroupReq, authMethod: 'jwt' });
     if (result.error) setError('שגיאה');
     else {
-      const groupName = findGroupName(groups, chosenGroup);
-      setCurrentRequest(groupName);
+      const reqGroupName = findGroupName(groups, chosenGroup);
+      setCurrentRequest({ reqGroupName, approved: false });
+    }
+  };
+
+  const loginNewGroup = async () => {
+    const idToken = await auth.currentUser.getIdToken(true);
+    const { token, error, status } = await getRequest({ getUrl: 'login', token: idToken });
+    const result = await postRequest({ postUrl: 'deleteChangeGroupReq', authMethod: 'jwt' });
+    if (token) {
+      localStorage.setItem('token', token);
+      console.log(token);
+      onClose();
+    } else {
+      setError('שגיאה');
+      localStorage.removeItem('token');
     }
   };
 
@@ -77,61 +95,75 @@ const SendRequestForChangeGroup = ({ isOpen, onOpenChange, onClose }) => {
                   }}
                 >
                   <div style={{ width: '70%' }}>
-                    {currentRequest ? (
-                      <>
-                        <p>הגשת בקשה לעבור לקבוצה {currentRequest}</p>
-                        <CenteredButton onClick={() => setCurrentRequest(null)} text={'שנה בקשה'} />
-                      </>
+                    {loading ? (
+                      <Loading />
                     ) : (
                       <>
-                        <p>אני רוצה לעבור לקבוצה - </p>
-                        <Select
-                          label="מרחב"
-                          value={chosenRegion}
-                          onChange={(e) => setChosenRegion(e.target.value)}
-                          dir="rtl"
-                          showScrollIndicators
-                          style={{ margin: '10px' }}
-                          classNames={{
-                            listbox: 'max-h-[250px] overflow-y-auto',
-                          }}
-                        >
-                          {groups &&
-                            Object.entries(groups || {}).map(([regionId, region]) => (
-                              <SelectItem key={regionId} value={regionId} dir="rtl">
-                                {region.name}
-                              </SelectItem>
-                            ))}
-                        </Select>
-                        <Select
-                          style={{ margin: '0 10px 0 10px' }}
-                          label="קבוצה"
-                          showScrollIndicators
-                          value={chosenGroup}
-                          disabled={!chosenRegion}
-                          onChange={(e) => setChosenGroup(e.target.value)}
-                          classNames={{
-                            listbox: 'max-h-[250px] overflow-y-auto',
-                          }}
-                          dir="rtl"
-                        >
-                          {chosenRegion &&
-                            groups[chosenRegion].groups.map((group) => (
-                              <SelectItem key={group.groupId} value={group.groupId} dir="rtl">
-                                {group.groupName}
-                              </SelectItem>
-                            ))}
-                        </Select>
-                        <CenteredButton onClick={sendChangeGroupReq} text={'הגש בקשה'} />
+                        {currentRequest?.reqGroupName ? (
+                          <>
+                            <p>הגשת בקשה לעבור לקבוצה {currentRequest.reqGroupName}</p>
+                            {currentRequest.approved && (
+                              <>
+                                <p>
+                                  <b>הבקשה אושרה!</b>
+                                </p>
+                                <CenteredButton onClick={loginNewGroup} text={'יאללה לקבוצה החדשה'} />
+                              </>
+                            )}
+                            <CenteredButton onClick={() => setCurrentRequest(null)} text={'שנה בקשה'} />
+                          </>
+                        ) : (
+                          <>
+                            <p>אני רוצה לעבור לקבוצה - </p>
+                            <Select
+                              label="מרחב"
+                              value={chosenRegion}
+                              onChange={(e) => setChosenRegion(e.target.value)}
+                              dir="rtl"
+                              showScrollIndicators
+                              style={{ margin: '10px' }}
+                              classNames={{
+                                listbox: 'max-h-[250px] overflow-y-auto',
+                              }}
+                            >
+                              {groups &&
+                                Object.entries(groups || {}).map(([regionId, region]) => (
+                                  <SelectItem key={regionId} value={regionId} dir="rtl">
+                                    {region.name}
+                                  </SelectItem>
+                                ))}
+                            </Select>
+                            <Select
+                              style={{ margin: '0 10px 0 10px' }}
+                              label="קבוצה"
+                              showScrollIndicators
+                              value={chosenGroup}
+                              disabled={!chosenRegion}
+                              onChange={(e) => setChosenGroup(e.target.value)}
+                              classNames={{
+                                listbox: 'max-h-[250px] overflow-y-auto',
+                              }}
+                              dir="rtl"
+                            >
+                              {chosenRegion &&
+                                groups[chosenRegion].groups.map((group) => (
+                                  <SelectItem key={group.groupId} value={group.groupId} dir="rtl">
+                                    {group.groupName}
+                                  </SelectItem>
+                                ))}
+                            </Select>
+                            <CenteredButton onClick={sendChangeGroupReq} text={'הגש בקשה'} />
+                          </>
+                        )}
+                        <p>ההחלפה תתבצע לאחר אישור של מדריך הקבוצה החדשה</p>
+                        <Divider />
+                        {error && (
+                          <p style={{ fontWeight: 'bold', color: 'red' }}>
+                            <CancelRoundedIcon />
+                            {error}
+                          </p>
+                        )}
                       </>
-                    )}
-                    <p>ההחלפה תתבצע לאחר אישור של מדריך הקבוצה החדשה</p>
-                    <Divider />
-                    {error && (
-                      <p style={{ fontWeight: 'bold', color: 'red' }}>
-                        <CancelRoundedIcon />
-                        {error}
-                      </p>
                     )}
                   </div>
                 </div>

@@ -47,7 +47,7 @@ function ChangeGroupReq({ requests, setRequests }) {
                       variant="light"
                       radius="full"
                       isIconOnly
-                      onClick={() => approveOrRejectRequest(req, 'approve')}
+                      onClick={() => approveOrRejectRequest(req, 'accept')}
                       color="success"
                     >
                       <DoneRoundedIcon />

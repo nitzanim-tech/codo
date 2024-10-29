@@ -35,8 +35,6 @@ const LoginModal = ({ auth, isOpen, onOpenChange, onClose, setJwt, logOut }) => 
         }
         await logOut();
         setJwt(null);
-
-        console.error({ token, error, status });
       }
     } catch (error) {
       console.error('Error during Google sign-in:', error);
@@ -44,6 +42,7 @@ const LoginModal = ({ auth, isOpen, onOpenChange, onClose, setJwt, logOut }) => 
       setJwt(null);
     }
   };
+  
   const handleClose = () => {
     onOpenChange();
     setError('');

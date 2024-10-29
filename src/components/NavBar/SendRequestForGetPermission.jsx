@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { ModalBody, ModalFooter } from '@nextui-org/react';
-import { Modal, ModalHeader, ModalContent, Divider, ScrollShadow } from '@nextui-org/react';
+import { Modal, ModalHeader, ModalContent, Divider } from '@nextui-org/react';
 import { Select, SelectItem, Button } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
 import postRequest from '../../requests/anew/postRequest';
