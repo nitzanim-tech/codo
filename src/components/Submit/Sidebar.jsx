@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import './Sidebar.css'; // Add this to style the sidebar
+import './Sidebar.css'; 
 import { Button, Divider } from '@nextui-org/react';
-import SlideshowIcon from '@mui/icons-material/Slideshow';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import CustomScrollbar from '../general/CustomScrollbar';
@@ -102,14 +100,23 @@ const unitData = {
   ],
 };
 */
-const lastSubmitedIndex = () => {
-  return 3;
+
+const lastSubmittedTask = (tasks) => {
+  return tasks
+    .filter((task) => task.submission === true)
+    .reduce(
+      (maxTask, task) => {
+        return task.index > maxTask.index ? task : maxTask;
+      },
+      { index: 0 },
+    );
 };
 
 const Sidebar = ({ openUnit, setOpenUnit, unitData }) => {
   const toggleSidebar = () => {
     setOpenUnit(!openUnit);
   };
+  const progressPrecent = lastSubmittedTask(unitData.tasks).index / unitData.practiceGoalIndex;
 
   return (
     <div className="sidebar">
@@ -129,13 +136,14 @@ const Sidebar = ({ openUnit, setOpenUnit, unitData }) => {
         {openUnit &&
           (unitData ? (
             <>
-              <div style={{ width: '100%', padding: '10%' }}>
-                <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%' }}>{unitData.name}</h1>
-                <ProgressBar percent={lastSubmitedIndex(12) / unitData.practiceGoalIndex} />
-                <Divider style={{ marginBottom: '20px' }} />
-
+              <div style={{ width: '100%', overflow: 'visible' }}>
+                <div style={{ width: '100%', padding: '10% 10% 0 10% ' }}>
+                  <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%' }}>{unitData.name}</h1>
+                  <ProgressBar percent={progressPrecent} />
+                  <Divider style={{ marginBottom: '20px' }} />
+                </div>
                 <CustomScrollbar>
-                  <div style={{ width: '100%', height: '70vh' }}>
+                  <div style={{ width: '100%', height: '70vh', padding: '0 10% 0 10% ', overflow: 'visible' }}>
                     <p style={{ textAlign: 'right', fontSize: '22px' }}>חומרי עזר</p>
                     {unitData.files?.length > 0 && (
                       <div className="sidebar-box">
@@ -169,12 +177,17 @@ const Sidebar = ({ openUnit, setOpenUnit, unitData }) => {
 export default Sidebar;
 
 const TaskCard = ({ task, index }) => (
-  <div style={{ position: 'relative' }}>
+  <div style={{ position: 'relative', overflow: 'visible' }}>
     {!task.personal && <ClassTag />}
     {task.submission && <CompleteIcon />}
-    <div className="sidebar-box" key={task.id || index}>
+    <div
+      className="sidebar-box"
+      key={task.id || index}
+      style={{ cursor: 'pointer' }}
+      onClick={() => (window.location.href = `${task.id}`)}
+    >
       {task.review && <ReviewIcon />}
-      <p>{task.name}</p>
+      <p style={{ marginRight: '15px' }}>{task.name}</p>
     </div>
   </div>
 );
@@ -186,9 +199,9 @@ const ClassTag = () => (
       marginTop: '-20px',
       background: '#423768',
       borderRadius: '10px 10px 0 0',
+      left: '67%',
       width: '30%',
       height: '20px',
-      marginLeft: '65%',
     }}
   >
     <p style={{ fontSize: '11px', padding: '4px' }}>משימת כיתה</p>
@@ -199,7 +212,8 @@ const CompleteIcon = () => (
   <div
     style={{
       position: 'absolute',
-      left: '90%',
+      left: '94%',
+      top: '6px',
       width: '30px',
       height: '30px',
       borderRadius: '50%',
@@ -384,7 +398,6 @@ const FileCard = ({ file }) => {
           justifyContent: 'space-between',
           alignItems: 'center',
           cursor: 'pointer',
-          padding: ' 0 5px 0 5px',
         }}
         onClick={() => window.open(file.link)}
       >
