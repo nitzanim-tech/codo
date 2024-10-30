@@ -14,7 +14,7 @@ import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import spicyIcon from '../assets/svg/pepper.svg';
 import getRequest from '../requests/anew/getRequest';
-import { Loading } from '../components/general/Messages';
+import { Loading, Unauthorized } from '../components/general/Messages';
 import styled from 'styled-components';
 
 import CustomScrollbar from '../components/general/CustomScrollbar';
@@ -96,7 +96,7 @@ function Home() {
           </div>
         </div>
       ) : (
-        <h1>אנא התחברו</h1>
+        <Unauthorized text='אנא התחברו'/>
       )}
     </>
   );

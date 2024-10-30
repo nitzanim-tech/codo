@@ -37,6 +37,7 @@ function Loading({ text = 'טוען...' }) {
     </div>
   );
 }
+
 function Unauthorized({ text = 'הכניסה למדריכים בלבד' }) {
   return (
     <div
@@ -46,10 +47,13 @@ function Unauthorized({ text = 'הכניסה למדריכים בלבד' }) {
         alignItems: 'center',
         margin: '30px',
         height: '50vh',
+        backgroundColor: 'rgb(255,255,255,0.8)',
+        borderRadius:'20PX',
+        fontSize:'28px'
       }}
     >
       <p dir="rtl">{text}</p>
-      <HttpsRoundedIcon />
+      <HttpsRoundedIcon fontSize='32px'/>
     </div>
   );
 }
