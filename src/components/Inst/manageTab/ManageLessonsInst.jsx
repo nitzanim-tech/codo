@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from 'react';
-import { Accordion, AccordionItem, CircularProgress, Button } from '@nextui-org/react';
+import { useState, useEffect } from 'react';
+import { Accordion, AccordionItem, CircularProgress } from '@nextui-org/react';
 
 import { FileCard, DevTaskCard } from '../../general/Cards';
 import getRequest from '../../../requests/anew/getRequest';

@@ -34,7 +34,7 @@ export const InstTaskButtons = ({ setting, index, groupId }) => {
 
   const toggleVisibility = async () => {
     let changes = { isVisible: !isVisible };
-    if (!isVisible) {
+    if (isVisible) {
       setShowTests(false);
       setShowReview(false);
       setChallenge(false);
@@ -101,7 +101,6 @@ export const InstFileButtons = ({ setting, index, groupId }) => {
   const updateSettingChange = async (id, change) => {
     const resourceId = index.split('-')[1];
     const updated = { groupId, resourceId, ...change };
-    console.log({ updated });
     const success = await postRequest({ postUrl: 'upsertGroupResource', object: updated });
     if (success)
       setSettingChange((prevSettingChange) => ({

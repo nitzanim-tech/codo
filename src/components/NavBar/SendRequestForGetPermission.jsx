@@ -9,7 +9,7 @@ import getRequest from '../../requests/anew/getRequest';
 import { ErrorMessage, SuccessMessage } from '../general/Messages';
 
 const SendRequestForGetPermission = ({ isOpen, onOpenChange, onClose }) => {
-  const { userData } = useFirebase();
+  const { auth, userData } = useFirebase();
   const [error, setError] = useState();
   const [success, setSuccess] = useState(false);
 
@@ -62,7 +62,19 @@ const SendRequestForGetPermission = ({ isOpen, onOpenChange, onClose }) => {
       if (result.status == 403) setError('הקבוצה רשומה על מדריך אחר, פנה למנהל המרחב');
       else setError('שגיאה');
     } else {
+      loginNewGroup();
+    }
+  };
+
+  const loginNewGroup = async () => {
+    const idToken = await auth.currentUser.getIdToken(true);
+    const { token, error, status } = await getRequest({ getUrl: 'login', token: idToken });
+    if (token) {
+      localStorage.setItem('token', token);
       setSuccess(true);
+    } else {
+      setError('שגיאה');
+      localStorage.removeItem('token');
     }
   };
 

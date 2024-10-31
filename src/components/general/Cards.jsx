@@ -34,7 +34,7 @@ const DevTaskCard = ({ index, text, isInst, setting, groupId  }) => {
     <Card key={index} dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <Button radius="full" variant="faded" onClick={() => window.open(`./submit/${taskId}`)}>
+          <Button radius="full" variant="faded" onClick={() => {}}>
             <BorderColorRoundedIcon style={{ color: '#005395' }} />
           </Button>
           {text}
