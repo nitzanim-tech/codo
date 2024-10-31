@@ -14,16 +14,16 @@ import postRequest from '../../requests/anew/postRequest';
 
 export const InstTaskButtons = ({ setting, index, groupId }) => {
   const [isVisible, setIsVisible] = useState(setting?.isVisible || false);
-  const [showTest, setShowTest] = useState(setting?.showTest || false);
+  const [showTests, setShowTests] = useState(setting?.showTests || false);
   const [showReview, setShowReview] = useState(setting?.showReview || false);
   const [challenge, setChallenge] = useState(setting?.isChallenge || false);
   const { setSettingChange } = useContext(SettingContext);
+
 
   const updateSettingChange = async (id, change) => {
     const resourceId = index.split('-')[1];
 
     const updated = { groupId, resourceId, ...change };
-    console.log(updated);
     const success = await postRequest({ postUrl: 'upsertGroupResource', object: updated });
     if (success)
       setSettingChange((prevSettingChange) => ({
@@ -35,19 +35,19 @@ export const InstTaskButtons = ({ setting, index, groupId }) => {
   const toggleVisibility = async () => {
     let changes = { isVisible: !isVisible };
     if (!isVisible) {
-      setShowTest(false);
+      setShowTests(false);
       setShowReview(false);
       setChallenge(false);
-      changes = { ...changes, showTest: false, showReview: false, isChallenge: false };
+      changes = { ...changes, showTests: false, showReview: false, isChallenge: false };
     }
     await updateSettingChange(index, changes);
     setIsVisible(!isVisible);
   };
 
   const toggleShowTests = async () => {
-    const changes = { showTest: !showTest };
+    const changes = { showTests: !showTests };
     await updateSettingChange(index, changes);
-    setShowTest(!showTest);
+    setShowTests(!showTests);
   };
 
   const toggleChallenge = async () => {
@@ -73,7 +73,7 @@ export const InstTaskButtons = ({ setting, index, groupId }) => {
 
       <Tooltip content="הצג טסטים">
         <IconButton onClick={toggleShowTests} disabled={!isVisible}>
-          {showTest ? <CheckCircleRoundedIcon style={{ color: '#005395' }} /> : <UnpublishedRoundedIcon />}
+          {showTests ? <CheckCircleRoundedIcon style={{ color: '#005395' }} /> : <UnpublishedRoundedIcon />}
         </IconButton>
       </Tooltip>
 

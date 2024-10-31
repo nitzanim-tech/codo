@@ -144,18 +144,20 @@ const Sidebar = ({ openUnit, setOpenUnit, unitData }) => {
                 </div>
                 <CustomScrollbar>
                   <div style={{ width: '100%', height: '70vh', padding: '0 10% 0 10% ', overflow: 'visible' }}>
-                    <p style={{ textAlign: 'right', fontSize: '22px' }}>חומרי עזר</p>
                     {unitData.files?.length > 0 && (
-                      <div className="sidebar-box">
-                        {unitData.files
-                          .sort((A, B) => A.index - B.index)
-                          .map((file, index) => (
-                            <React.Fragment key={file.id || index}>
-                              <Divider />
-                              <FileCard file={file} />
-                            </React.Fragment>
-                          ))}
-                      </div>
+                      <>
+                        <p style={{ textAlign: 'right', fontSize: '22px' }}>חומרי עזר</p>
+                        <div className="sidebar-box">
+                          {unitData.files
+                            .sort((A, B) => A.index - B.index)
+                            .map((file, index) => (
+                              <React.Fragment key={file.id || index}>
+                                <Divider />
+                                <FileCard file={file} />
+                              </React.Fragment>
+                            ))}
+                        </div>
+                      </>
                     )}
                     <p style={{ textAlign: 'right', fontSize: '22px', marginTop: '20px' }}>תרגילים</p>
                     {unitData.tasks?.length > 0 &&

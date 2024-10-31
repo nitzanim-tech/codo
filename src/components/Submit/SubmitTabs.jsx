@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-export default function SubmitTabs({ chosenTab:chosen, setChosenTab:setChosen }) {
+export default function SubmitTabs({ chosenTab: chosen, setChosenTab: setChosen, setting }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Tab text={'משוב'} icon={ReviewSvg} chosen={chosen} setChosen={setChosen} />
-      <Tab text={'טסטים'} icon={TestsSvg} chosen={chosen} setChosen={setChosen} />
+      {setting?.showReview && <Tab text={'משוב'} icon={ReviewSvg} chosen={chosen} setChosen={setChosen} />}
+      {setting?.showTests && <Tab text={'טסטים'} icon={TestsSvg} chosen={chosen} setChosen={setChosen} />}
       <Tab text={'תרגול'} icon={PracticeSvg} chosen={chosen} setChosen={setChosen} />
     </div>
   );

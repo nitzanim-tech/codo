@@ -21,12 +21,10 @@ import SubmitTabs from '../components/Submit/SubmitTabs';
 function Submit() {
   const { auth, userData } = useFirebase();
   const { task, unit } = useParams();
-
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState(null);
-    const [unitData, setUnitData] = useState(null)
-    
-const [highlightedLines, setHighlightedLines] = useState([]);
+  const [unitData, setUnitData] = useState(null);
+  const [highlightedLines, setHighlightedLines] = useState([]);
   const [noActivitySent, setNoActivitySent] = useState(false);
   const [code, setCode] = useState(localStorage.getItem(`${task}-code`) || examplecode);
   const [loading, setLoading] = useState(true);
@@ -64,14 +62,17 @@ const [highlightedLines, setHighlightedLines] = useState([]);
     const fetchData = async () => {
       if (userData) {
         localStorage.setItem(`${task}-lastCode`, code);
-        const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${task}&&groupId=${1}`, authMethod: 'jwt' });
+
+        const [taskFromDb, unitFromDb] = await Promise.all([
+          getRequest({ getUrl: `getTask?taskId=${task}&&unitId=${unit}`, authMethod: 'jwt' }),
+          getRequest({ getUrl: `getUnitData?unitId=${unit}`, authMethod: 'jwt' }),
+        ]);
+
         setSubmissions(taskFromDb.submissions);
         taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
         setTaskData(taskFromDb);
-
-        const unitFromDb = await getRequest({ getUrl: `getUnitData?unitId=${unit}`, authMethod: 'jwt' });
         setUnitData(unitFromDb);
-        console.log({ unitFromDb });
+
         const testNames = taskFromDb.tests.map((test) => test.name);
         const newEmptyTests = await Promise.all(testNames.map((name) => ({ name })));
         setTestsOutputs(newEmptyTests);
@@ -95,6 +96,16 @@ const [highlightedLines, setHighlightedLines] = useState([]);
 
     checkAuthStatus();
   }, [auth]);
+
+  useEffect(() => {
+    if (chosenTab != 'משוב') setOpenReview(null);
+  }, [chosenTab]);
+
+  useEffect(() => {
+    if (testsOutputs && testsOutputs[0] && (testsOutputs[0].output || testsOutputs[0].input)) {
+      setChosenTab('טסטים');
+    }
+  }, [testsOutputs]);
 
   return (
     <>
@@ -124,7 +135,7 @@ const [highlightedLines, setHighlightedLines] = useState([]);
                     transition: 'width 0.5s',
                   }}
                 >
-                  <SubmitTabs chosenTab={chosenTab} setChosenTab={setChosenTab} />
+                  <SubmitTabs setting={taskData.setting} chosenTab={chosenTab} setChosenTab={setChosenTab} />
                 </Grid>
                 <Grid
                   container
