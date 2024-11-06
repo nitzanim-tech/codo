@@ -8,10 +8,6 @@ import { CircularProgress, Divider, Slider } from '@nextui-org/react';
 import TaskCard from '../components/Home/TaskCard';
 import { useFirebase } from '../util/FirebaseProvider';
 
-import SlideshowIcon from '@mui/icons-material/Slideshow';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
-import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import spicyIcon from '../assets/svg/pepper.svg';
 import getRequest from '../requests/anew/getRequest';
 import { Loading, Unauthorized } from '../components/general/Messages';
@@ -25,29 +21,18 @@ const Levels = [
   { value: 2, name: 'יאללה מלחמה' },
 ];
 
-const FileCard = ({ file }) => {
-  return (
-    <Card dir="rtl" style={{ margin: '5px', textAlign: 'right' }}>
-      <Button radius="full" variant="faded" onClick={() => window.open(file.link)}>
-        {file.type === 'ppt' && <SlideshowIcon style={{ color: '#FAE233' }} />}
-        {file.type === 'pdf' && <PictureAsPdfIcon style={{ color: '#BF1E2E' }} />}
-        {file.type === 'zip' && <FolderZipRoundedIcon style={{ color: '#386641' }} />}
-        {file.type === 'webLink' && <PublicRoundedIcon style={{ color: '#BF1E2E' }} />}
-      </Button>
-      {file.name}
-    </Card>
-  );
-};
-
 function Home() {
   const { userData } = useFirebase();
   const [units, setUnits] = useState();
+  const [groupName, setGroupName] = useState();
 
   useEffect(() => {
     const fetchUnits = async () => {
       const unitsFromDb = await getRequest({ getUrl: `getNewHomepage`, authMethod: 'jwt' });
+      const groupNameFromDb = await getRequest({ getUrl: `getGroupName?groupId=${userData.group}` });
+      console.log(groupNameFromDb);
+      setGroupName(groupNameFromDb?.name);
       setUnits(unitsFromDb);
-      console.log({ unitsFromDb });
     };
 
     userData && fetchUnits();
@@ -90,13 +75,15 @@ function Home() {
               </Grid>
               <Grid item style={{ width: '35%' }}>
                 <h1 style={{ margin: '40px' }}> שלום {userData.name}</h1>
+                {groupName && <h2>קבוצת {groupName}</h2>}
+
                 {/* <SelectLevel levels={Levels} /> */}
               </Grid>
             </Grid>
           </div>
         </div>
       ) : (
-        <Unauthorized text='אנא התחברו'/>
+        <Unauthorized text="אנא התחברו" />
       )}
     </>
   );

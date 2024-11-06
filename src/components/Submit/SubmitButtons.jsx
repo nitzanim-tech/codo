@@ -23,7 +23,6 @@ export default function SubmitButtons({
   const [selectedTab, setSelectedTab] = useState('instructions');
 
   useEffect(() => {
-    console.log({ testsOutputs });
     testsOutputs[0]?.input && setSelectedTab('tests');
   }, [testsOutputs]);
 

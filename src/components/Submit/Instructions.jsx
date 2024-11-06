@@ -5,7 +5,7 @@ import SessionTracker from '../general/SessionTracker';
 import CustomScrollbar from '../general/CustomScrollbar';
 
 export default function Instructions({ taskObject }) {
-  console.log({ taskObject });
+
   return (
     <CustomScrollbar>
       <div style={{ height: '70vh', color: 'white', margin: ' 0 50px 0 50px' }}>
