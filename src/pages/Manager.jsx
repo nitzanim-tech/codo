@@ -71,7 +71,6 @@ const Manager = () => {
 
   return (
     <>
-      <NavBar />
       {!isAuthorized ? (
         <h1>הכניסה למנהלים בלבד</h1>
       ) : regions && groupsIndex ? (

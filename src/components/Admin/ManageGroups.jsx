@@ -3,8 +3,6 @@ import { useAsyncList } from '@react-stately/data';
 import { Button, Spinner, Input, Select, SelectItem } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 
-import SearchIcon from '@mui/icons-material/Search';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import getRequest from '../../requests/anew/getRequest';
 
 const ManageGroups = () => {

@@ -38,8 +38,8 @@ function App() {
 
         <Route path="/dev/:task" element={<AddNewTasks />} />
 
-        {/* <Route path="/admin" element={<Admin />} />
-        <Route path="/admin/groups" element={<ManageGroups />} />*/}
+        <Route path="/admin" element={<Admin />} />
+        {/* <Route path="/admin/groups" element={<ManageGroups />} />*/}
         {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
         <Route path="/manager" element={<Manager />} />
