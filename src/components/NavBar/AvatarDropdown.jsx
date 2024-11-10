@@ -52,7 +52,7 @@ const AvatarDropdown = () => {
             {userData.permission && (
               <DropdownItem
                 key="setting"
-                onClick={() => (window.location.href = `./inst`)}
+                onClick={() => (window.location.href = `/inst`)}
                 startContent={<FollowTheSignsRoundedIcon />}
               >
                 לדף מדריך
