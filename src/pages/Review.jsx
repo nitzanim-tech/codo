@@ -16,7 +16,7 @@ function Review() {
   // 1. WHEN IT HAS BEEN CALLED FROM THE INST PAGE - PASS THE TASK_ID TOO
   // SO THE REQUESTS FROM THE SERVER WILL HAPPEN SIMULTANEOUSLY
   // 2. ADD NUMERIC GARDE  
-  const { app, userData } = useFirebase();
+  const { userData } = useFirebase();
   const [submission, setSubmmition] = useState(null);
   const [selectedTests, setSelectedTests] = useState([]);
   const [taskData, setTaskData] = useState(null);
@@ -28,7 +28,7 @@ function Review() {
     const fetchData = async () => {
       const submissionData = await getRequest({ getUrl: `getSubmissionData?submission=${submissionId}` });
       const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${submissionData.task}`, authMethod: 'jwt' });
-      console.log({ submissionData });
+      console.log({ submissionData, taskFromDb });
       setTaskData(taskFromDb);
       setSubmmition(submissionData);
       const passTestsIndexes = submissionData.tests.reduce(
