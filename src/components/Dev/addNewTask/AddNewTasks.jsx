@@ -48,7 +48,7 @@ const AddNewTasks = () => {
     }
   };
 
-  const mainSubjects = ['תנאים', 'לולאות', 'פונקציות', 'בוחן'];
+  const mainSubjects = ['תנאים', 'לולאות', 'פונקציות', 'בוחן', 'רשימות'];
   return (
     <div
       style={{ margin: '30px', justifyContent: 'center', padding: '40px', backgroundColor: 'rgba(255,255,255, 0.8)' }}

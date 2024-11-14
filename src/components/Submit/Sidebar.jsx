@@ -5,6 +5,7 @@ import FolderZipRoundedIcon from '@mui/icons-material/FolderZipRounded';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import CustomScrollbar from '../general/CustomScrollbar';
 import { Loading } from '../general/Messages';
+import { useParams } from 'react-router-dom';
 
 /*
 const unitData = {
@@ -113,13 +114,15 @@ const lastSubmittedTask = (tasks) => {
 };
 
 const Sidebar = ({ openUnit, setOpenUnit, unitData }) => {
+  const { task: currentTask } = useParams() || '';
+
   const toggleSidebar = () => {
     setOpenUnit(!openUnit);
   };
   const progressPrecent = lastSubmittedTask(unitData.tasks).index / unitData.practiceGoalIndex;
 
   return (
-    <div className="sidebar">
+    <div className="sidebar" >
       <div className={`sidebar ${openUnit ? 'open' : 'closed'}`}>
         <div
           onClick={toggleSidebar}
@@ -143,7 +146,7 @@ const Sidebar = ({ openUnit, setOpenUnit, unitData }) => {
                   <Divider style={{ marginBottom: '20px' }} />
                 </div>
                 <CustomScrollbar>
-                  <div style={{ width: '100%', height: '70vh', padding: '0 10% 0 10% ', overflow: 'visible' }}>
+                  <div style={{ width: '100%', height: '75vh', padding: '0 10% 0 10% ', overflow: 'visible' }}>
                     {unitData.files?.length > 0 && (
                       <>
                         <p style={{ textAlign: 'right', fontSize: '22px' }}>חומרי עזר</p>
@@ -163,7 +166,14 @@ const Sidebar = ({ openUnit, setOpenUnit, unitData }) => {
                     {unitData.tasks?.length > 0 &&
                       unitData.tasks
                         .sort((A, B) => A.index - B.index)
-                        .map((task, index) => <TaskCard key={task.id || index} task={task} index={index} />)}
+                        .map((task, index) => (
+                          <TaskCard
+                            key={task.id || index}
+                            task={task}
+                            index={index}
+                            isCurrent={task.id == currentTask}
+                          />
+                        ))}
                   </div>
                 </CustomScrollbar>
               </div>
@@ -178,14 +188,17 @@ const Sidebar = ({ openUnit, setOpenUnit, unitData }) => {
 
 export default Sidebar;
 
-const TaskCard = ({ task, index }) => (
+const TaskCard = ({ task, index, isCurrent }) => (
   <div style={{ position: 'relative', overflow: 'visible' }}>
     {!task.personal && <ClassTag />}
     {task.submission && <CompleteIcon />}
     <div
       className="sidebar-box"
       key={task.id || index}
-      style={{ cursor: 'pointer' }}
+      style={{
+        cursor: 'pointer',
+        boxShadow: isCurrent ? '0 0 8px 0.5px white' : 'none', 
+      }}
       onClick={() => (window.location.href = `${task.id}`)}
     >
       {task.review && <ReviewIcon />}

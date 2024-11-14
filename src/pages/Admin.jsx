@@ -8,7 +8,7 @@ import postRequest from '../requests/anew/postRequest';
 import { Unauthorized } from '../components/General/Messages';
 
 function Admin() {
-  const { isAuthorized } = useFirebase();
+  const { userData } = useFirebase();
   const [groupsPerm, setGroupsPerm] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -65,8 +65,8 @@ function Admin() {
       }
     };
 
-    fetchInstructorData();
-  }, []);
+    userData && userData.permission > 1 && fetchInstructorData();
+  }, [userData]);
 
   const addPermission = async (instId) => {
     const object = { instructorId: instId, groupId: selectedGroup, action: 'add' };
@@ -77,7 +77,7 @@ function Admin() {
   return (
     <>
       <div className={`main-content`}>
-        {!isAuthorized ? (
+        {userData?.permission < 2 ? (
           <Unauthorized text="הכניסה למנהלים בלבד" />
         ) : instructorsData ? (
           <>
@@ -196,6 +196,7 @@ function Admin() {
                       : 'default'
                   }
                   style={{
+                    cursor:'pointer',
                     padding: '10px',
                     // flex: '1 1 calc(33.33% - 10px)',
                     textAlign: 'center',

@@ -85,11 +85,11 @@ export const InstTaskButtons = ({ setting, index, groupId }) => {
 
       <Divider orientation="vertical" variant="middle" flexItem />
 
-      <Tooltip content="אתגר">
+      {/* <Tooltip content="אתגר">
         <IconButton onClick={toggleChallenge} disabled={!isVisible}>
           {challenge ? <StarRateRoundedIcon style={{ color: '#005395' }} /> : <StarOutlineRoundedIcon />}
         </IconButton>
-      </Tooltip>
+      </Tooltip> */}
     </div>
   );
 };

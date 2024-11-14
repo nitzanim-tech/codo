@@ -108,7 +108,11 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
                   הגש
                 </Button>
               )}
-              <Button onClick={() => resetState()}>סגור</Button>
+              {nextTask && nextTask !== 'none' && nextTask !== 'end' && nextTask !== 'resource' ? (
+                <Button onClick={() => (window.location.href = `${nextTask}`)}>יאללה לתרגיל הבא</Button>
+              ) : (
+                <Button onClick={() => resetState()}>נמשיך לעבוד עליו</Button>
+              )}
             </ModalFooter>
           </>
         </ModalContent>
