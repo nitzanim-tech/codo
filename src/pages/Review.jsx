@@ -11,6 +11,7 @@ import { useFirebase } from '../util/FirebaseProvider';
 import { Unauthorized } from '../components/general/Messages';
 import getRequest from '../requests/anew/getRequest';
 import Instructions from '../components/Submit/Instructions';
+import CustomScrollbar from '../components/general/CustomScrollbar';
 
 function Review() {
   // TODO:
@@ -58,92 +59,93 @@ function Review() {
         <Unauthorized />
       ) : taskData ? (
         <>
-          <Grid container spacing={1} columns={3} rows={1} style={{ marginTop: '20px', padding: '20px' }}>
+          <Grid container spacing={1} columns={3} rows={1} style={{ padding: '2%' }}>
             <Grid item style={{ width: '69%' }}>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <Card style={{ width: '95%' }}>
-                  <ReviewComponent
-                    submittion={submission}
-                    selectedTests={selectedTests}
-                    testsAmount={taskData.tests.length}
-                    setTestsOutputs={setTestsOutputs}
-                    taskData={taskData}
-                  />
-                </Card>
-              </div>
+                <div style={{ display: 'flex', justifyContent: 'center', height:'85vh' }}>
+                  <Card style={{ width: '95%' }}>
+                    <ReviewComponent
+                      submittion={submission}
+                      selectedTests={selectedTests}
+                      testsAmount={taskData.tests.length}
+                      setTestsOutputs={setTestsOutputs}
+                      taskData={taskData}
+                    />
+                  </Card>
+                </div>
             </Grid>
 
-            <Grid item style={{ width: '30%', backgroundColor: 'rgba(255,255,255,0.6)' }}>
-              <div style={{ backgroundColor: 'rgba(255,255,255,0.6)' }}>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Grid item style={{ width: '30%', backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: '20px' }}>
+              <CustomScrollbar>
+                <div style={{ height: '80vh', padding: '2%' }}>
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <DashboardCard
-                      ratio={calculateGrade(taskData, selectedTests) + '/' + maxGrade(taskData)}
-                      text={'סה"כ'}
-                      size={70}
-                      max={100}
-                    />
-                  </div>
-                  <div>
-                    <h2>{taskData.name}</h2>
-                    <h2 style={{ fontSize: '1.7vw' }}>
-                      <b>{submission.student.name}</b>
-                    </h2>
-                    <h2 style={{ fontSize: '1.2vw' }}>{formatDate(submission.date)}</h2>
-                  </div>
-                </div>
-              </div>
-
-              <TestsCheckbox
-                task={taskData}
-                selectedTests={selectedTests}
-                setSelectedTests={setSelectedTests}
-                testsOutputs={testsOutputs}
-              />
-
-              <Accordion dir="rtl" variant="splitted" selectionMode="multiple" isCompact>
-                <AccordionItem
-                  title={<span style={{ color: 'white' }}>הוראות</span>}
-                  style={{
-                    borderRadius: '10px',
-                    background: '#463A6B',
-                    boxShadow: '0px 0px 3px 0px rgba(255, 255, 255, 0.25)',
-                  }}
-                >
-                  <div style={{ direction: 'rtl', textAlign: 'left' }}>
-                    <div dangerouslySetInnerHTML={{ __html: taskData.description }} />
-                  </div>
-                </AccordionItem>
-                <AccordionItem
-                  title={<span style={{ color: 'white' }}>דוגמה</span>}
-                  style={{
-                    borderRadius: '10px',
-                    background: '#463A6B',
-                    boxShadow: '0px 0px 3px 0px rgba(255, 255, 255, 0.25)',
-                  }}
-                >
-                  <div style={{ direction: 'rtl', textAlign: 'left' }}>
-                    <div dangerouslySetInnerHTML={{ __html: taskData.example }} />
-                  </div>
-                </AccordionItem>
-                {taskData.code && (
-                  <AccordionItem
-                    title={<span style={{ color: 'white' }}>פתרון</span>}
-                    style={{
-                      borderRadius: '10px',
-                      background: '#463A6B',
-                      boxShadow: '0px 0px 3px 0px rgba(255, 255, 255, 0.25)',
-                    }}
-                  >
-                    <div style={{ direction: 'rtl', textAlign: 'left' }}>
-                      <pre style={{ direction: 'ltr', padding: '10px', borderRadius: '5px', overflow: 'clip' }}>
-                        {taskData.code}
-                      </pre>
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
+                      <DashboardCard
+                        ratio={calculateGrade(taskData, selectedTests) + '/' + maxGrade(taskData)}
+                        size={70}
+                        max={100}
+                      />
                     </div>
-                  </AccordionItem>
-                )}
-              </Accordion>
 
+                    <div style={{ marginRight: '15%' }}>
+                      <h2>{taskData.name}</h2>
+                      <h2 style={{ fontSize: '1.7vw' }}>
+                        <b>{submission.student.name}</b>
+                      </h2>
+                      <h2 style={{ fontSize: '1.2vw' }}>{formatDate(submission.date)}</h2>
+                    </div>
+                  </div>
+
+                  <TestsCheckbox
+                    task={taskData}
+                    selectedTests={selectedTests}
+                    setSelectedTests={setSelectedTests}
+                    testsOutputs={testsOutputs}
+                  />
+
+                  <Accordion dir="rtl" variant="splitted" selectionMode="multiple" isCompact>
+                    <AccordionItem
+                      title={<span>הוראות</span>}
+                      style={{
+                        borderRadius: '10px',
+                        backgroundColor: 'rgba(255,255,255,0.6)',
+                        boxShadow: '0px 0px 3px 0px rgba(0, 0, 0, 0.25)',
+                      }}
+                    >
+                      <div style={{ direction: 'rtl', textAlign: 'right' }}>
+                        <div dangerouslySetInnerHTML={{ __html: taskData.description }} />
+                      </div>
+                    </AccordionItem>
+                    <AccordionItem
+                      title={<span>דוגמה</span>}
+                      style={{
+                        borderRadius: '10px',
+                        backgroundColor: 'rgba(255,255,255,0.6)',
+                        boxShadow: '0px 0px 3px 0px rgba(0, 0, 0, 0.25)',
+                      }}
+                    >
+                      <div style={{ direction: 'rtl', textAlign: 'left' }}>
+                        <div dangerouslySetInnerHTML={{ __html: taskData.example }} />
+                      </div>
+                    </AccordionItem>
+                    {taskData.code && (
+                      <AccordionItem
+                        title={<span>פתרון</span>}
+                        style={{
+                          borderRadius: '10px',
+                          backgroundColor: 'rgba(255,255,255,0.6)',
+                          boxShadow: '0px 0px 3px 0px rgba(0, 0, 0, 0.25)',
+                        }}
+                      >
+                        <div style={{ direction: 'rtl', textAlign: 'left' }}>
+                          <pre style={{ direction: 'ltr', padding: '10px', borderRadius: '5px', overflow: 'clip' }}>
+                            {taskData.code}
+                          </pre>
+                        </div>
+                      </AccordionItem>
+                    )}
+                  </Accordion>
+                </div>
+              </CustomScrollbar>
             </Grid>
           </Grid>
         </>
@@ -157,4 +159,3 @@ function Review() {
 export default Review;
 
 
-// const styledAcordionItem=style

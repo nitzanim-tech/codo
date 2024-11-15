@@ -16,8 +16,8 @@ function TestsCheckbox({ task, selectedTests, setSelectedTests, viewOnly, testsO
   };
 
   return (
-    <div style={{ padding: '5%' }}>
-      <Card style={{backgroundColor:'rgba(255,255,255,0)'}}>
+    <div style={{ padding: '1.5%' }}>
+      <Card style={{ backgroundColor: 'rgba(255,255,255,0.6)' }}>
         {/* <ScrollShadow className="h-[450px]" size={20}> */}
         <StyledCheckboxDiv>
           <CheckboxGroup label="הרצות" value={selectedTests} onValueChange={setSelectedTests} isDisabled={viewOnly}>

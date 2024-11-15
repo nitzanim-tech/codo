@@ -141,7 +141,7 @@ const Sidebar = ({ openUnit, setOpenUnit, unitData }) => {
             <>
               <div style={{ width: '100%', overflow: 'visible' }}>
                 <div style={{ width: '100%', padding: '10% 10% 0 10% ' }}>
-                  <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%' }}>{unitData.name}</h1>
+                  <h1 style={{ fontSize: '30px', textAlign: 'right', width: '100%', direction:'rtl' }}>{unitData.name}</h1>
                   <ProgressBar percent={progressPrecent} />
                   <Divider style={{ marginBottom: '20px' }} />
                 </div>

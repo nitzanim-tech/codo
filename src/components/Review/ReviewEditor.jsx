@@ -46,7 +46,7 @@ export default function ReviewEditor({ submittion, comments = {} }) {
 
   return (
     <StyledEditor
-      height={`${submittion.code.split('\n').length * LINE_HEGITH}px`}
+      // height={`${submittion.code.split('\n').length * LINE_HEGITH}px`}
       defaultLanguage="python"
       theme={theme}
       value={submittion.code}

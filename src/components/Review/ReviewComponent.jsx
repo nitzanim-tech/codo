@@ -13,11 +13,13 @@ export default function ReviewComponent({ submittion, selectedTests, testsAmount
 
   return (
     <div style={{ marginTop: '25px ' }}>
-      <ReviewEditor submittion={submittion} comments={comments} />
-
+      <div style={{ height: '50vh' }}>
+        <ReviewEditor submittion={submittion} comments={comments} />
+      </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '80%', paddingBlock: '20px', textAlign: 'right', direction: 'rtl' }}>
+        <div style={{ width: '80%', paddingBlock: '10px', textAlign: 'right', direction: 'rtl' }}>
           <Textarea
+            style={{ height: '15vh' }}
             label="משוב כללי"
             labelPlacement="outside"
             placeholder="כתבו כאן"
@@ -27,7 +29,7 @@ export default function ReviewComponent({ submittion, selectedTests, testsAmount
         </div>
       </div>
 
-      <div style={{ paddingBottom: '10px ' }}>
+      <div style={{ paddingBottom: '5px ' }}>
         <SendReviewButton
           setErrorText={setErrorText}
           general={generalReview}
