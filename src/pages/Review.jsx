@@ -50,7 +50,7 @@ function Review() {
       100,
     );
   };
-
+console.log(testsOutputs);
   return (
     <>
       {!userData ? (
@@ -59,7 +59,7 @@ function Review() {
         <Unauthorized />
       ) : taskData ? (
         <>
-          <Grid container spacing={1} columns={3} rows={1} style={{ padding: '2%' }}>
+          <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
             <Grid item style={{ width: '69%' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', height:'85vh' }}>
                   <Card style={{ width: '95%' }}>

@@ -22,8 +22,9 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
   tooltipPlacement ||= 'bottom';
 
   useEffect(() => {
-    if (runTests) handleClick();
-  }, [runTests]);
+    if (runTests && pyodide) handleClick();
+    console.log(runTests);
+  }, [runTests, pyodide]);
 
   async function runPython({ code, input = '' }) {
     try {

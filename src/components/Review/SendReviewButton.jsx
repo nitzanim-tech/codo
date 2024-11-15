@@ -3,7 +3,7 @@ import { Button, Tooltip, Textarea } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalBody, ModalContent, ModalFooter, useDisclosure } from '@nextui-org/react';
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import postRequest from '../../requests/anew/postRequest';
 
 export default function SendReviewButton({ setErrorText, general, comments, selectedTests, submission, testsAmount }) {
@@ -29,7 +29,7 @@ export default function SendReviewButton({ setErrorText, general, comments, sele
       time: new Date(),
     };
 
-    const hadSaved = await postRequest({ postUrl: 'addReview', object: reviewData, authMethod:'jwt' });
+    const hadSaved = await postRequest({ postUrl: 'addReview', object: reviewData, authMethod: 'jwt' });
 
     if (!hadSaved) setErrorText('שגיאה בשליחת המשוב לחניך');
 
@@ -53,13 +53,9 @@ export default function SendReviewButton({ setErrorText, general, comments, sele
           הועבר לחניך בהצלחה <CheckCircleRoundedIcon />
         </p>
       ) : (
-        <Tooltip content="העבר לחניך">
-          <Button style={{ margin: '10px ' }} radius="full" isIconOnly variant="faded" onClick={handleSendClick}>
-            <ReplyRoundedIcon />
-          </Button>
-        </Tooltip>
+        <SendReviewIcon handleSendClick={handleSendClick} />
       )}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center" size="xl">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center" size="xl" dir='rtl'>
         <ModalContent>
           {(onClose) => (
             <>
@@ -72,12 +68,13 @@ export default function SendReviewButton({ setErrorText, general, comments, sele
                 </p>
               </ModalBody>
               <ModalFooter>
-                <Button variant="ghost" radius="full" color="danger" onPress={onOpenChange}>
-                  ביטול
-                </Button>
                 <Button variant="ghost" radius="full" onPress={handleChangeTestsGrade}>
                   כן בטוח!
+                </Button>           
+                     <Button variant="ghost" radius="full" color="danger" onPress={onOpenChange}>
+                  ביטול
                 </Button>
+
               </ModalFooter>
             </>
           )}
@@ -104,3 +101,50 @@ function indexToBooleanArray(indexArray, testsAmount) {
   }
   return booleanArray;
 }
+
+const SendReviewIcon = ({handleSendClick}) => (
+  <Tooltip content="העבר לחניך">
+    <div
+      style={{
+        position: 'absolute',
+        left: '3%',
+        bottom: '5%',
+        width: '30px',
+        height: '30px',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        background: 'linear-gradient(54.94deg, #DD41B1 22.19%, #FF7BDA 82.85%)',
+      }}
+      onClick={()=>handleSendClick()}
+    >
+      <ReplyRoundedIcon  />
+    </div>
+  </Tooltip>
+);
+
+
+// const SendReviewIcon = () => (
+//   <Tooltip content="העבר לחניך">
+//     <button
+//       style={{
+//         position: 'absolute',
+//         left: '3%',
+//         bottom: '5%',
+//         width: '30px',
+//         height: '30px',
+//         borderRadius: '50%',
+//         display: 'flex',
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//         background: 'linear-gradient(58.67deg, #05C4FD 16.63%, #09D5CE 92%)',
+//         zIndex: '1900',
+//       }}
+//       onClick={() => console.log('hh')}
+//     >
+//       <ReplyRoundedIcon />
+//     </button>
+//   </Tooltip>
+// );

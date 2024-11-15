@@ -19,7 +19,7 @@ export default function ReviewComponent({ submittion, selectedTests, testsAmount
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div style={{ width: '80%', paddingBlock: '10px', textAlign: 'right', direction: 'rtl' }}>
           <Textarea
-            style={{ height: '15vh' }}
+            style={{ height: '12vh' }}
             label="משוב כללי"
             labelPlacement="outside"
             placeholder="כתבו כאן"
@@ -40,7 +40,9 @@ export default function ReviewComponent({ submittion, selectedTests, testsAmount
         />
 
         <PyodideProvider>
-          <RunTestButtonReview submmition={submittion} setTestsOutputs={setTestsOutputs} taskData={taskData} />
+          <div style={{ display: 'none',position: 'absolute' }}>
+            <RunTestButtonReview submmition={submittion} setTestsOutputs={setTestsOutputs} taskData={taskData} />
+          </div>{' '}
         </PyodideProvider>
 
         <p style={{ fontWeight: 'bold', color: 'red' }}>
