@@ -5,15 +5,18 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 import ModalExplanation from './ModalExplanation';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
-export default function TestsList({ testsOutputs, taskObject }) {
+export default function TestsList({ testsOutputs, taskObject, inDev }) {
   const [selectedValue, setSelectedValue] = useState(testsOutputs[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSelect = (value) => {
-    const selectedObject = testsOutputs.find((obj) => obj.name === value);
-    setSelectedValue(selectedObject);
-    onOpen();
+    if (!inDev) {
+      const selectedObject = testsOutputs.find((obj) => obj.name === value);
+      setSelectedValue(selectedObject);
+      onOpen();
+    }
   };
 
   return (
@@ -28,17 +31,17 @@ export default function TestsList({ testsOutputs, taskObject }) {
               startContent={
                 testsOutput.output ? (
                   testsOutput.correct ? (
-                    <CheckCircleRoundedIcon sx={{ color: '#005395' }} />
+                    <CheckCircleRoundedIcon sx={{ color: 'white' }} />
                   ) : (
-                    <CancelRoundedIcon sx={{ color: '#BF1E2E' }} />
+                    <CloseRoundedIcon sx={{ color: 'white' }} />
                   )
                 ) : (
-                  <RadioButtonUncheckedRoundedIcon />
+                  <RadioButtonUncheckedRoundedIcon sx={{ color: 'white' }} />
                 )
               }
               dir="rtl"
             >
-              {testsOutput.name}
+              <p style={{ color: 'white', textAlign: 'right' }}> {testsOutput.name}</p>
             </ListboxItem>
           ))}
         </Listbox>
@@ -50,14 +53,12 @@ export default function TestsList({ testsOutputs, taskObject }) {
 
 const ListboxWrapper = ({ children }) => (
   <div
-    className="w-full max-w-[320px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100"
     style={{
-      background: 'white',
       fontSize: '140px',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      margin: '0 auto', 
+      margin: '0 auto',
     }}
   >
     {children}
