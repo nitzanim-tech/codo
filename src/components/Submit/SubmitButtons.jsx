@@ -78,7 +78,7 @@ export default function SubmitButtons({
                             dir="rtl"
                             isReadOnly
                             disableAnimation
-                            variant="bordered"
+                            variant="faded"
                             defaultValue={submission.general}
                           />
                         </>

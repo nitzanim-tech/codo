@@ -10,14 +10,14 @@ import ReadReview from './components/Submit/ReadReview';
 import Play from './pages/Play';
 import Admin from './pages/Admin';
 import Manager from './pages/Manager';
-// import Dashboard from './pages/Dashboard';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
 import Syllabus from './pages/Syllabus';
-import ManageGroups from './components/Admin/ManageGroups';
 import NotFound from './pages/NotFound';
 import './App.css';
 import NavigateBar from './components/NavBar/NavigateBar';
+import ErrorBoundary from './components/General/ErrorBoundary';
+
 ReactGA.initialize(firebaseConfig.measurementId);
 
 function App() {
@@ -28,26 +28,28 @@ function App() {
   return (
     <BrowserRouter>
       <NavigateBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/inst" element={<Instructurs />} />
-        <Route path="/submit/:unit/:task" element={<Submit />} />
-        <Route path="/submit/:index/play" element={<Play />} />
-        <Route path="/review/:submissionId" element={<Review />} />
-        <Route path="/dev" element={<DevTeam />} />
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/inst" element={<Instructurs />} />
+          <Route path="/submit/:unit/:task" element={<Submit />} />
+          <Route path="/submit/:index/play" element={<Play />} />
+          <Route path="/review/:submissionId" element={<Review />} />
+          <Route path="/dev" element={<DevTeam />} />
 
-        <Route path="/dev/:task" element={<AddNewTasks />} />
+          <Route path="/dev/:task" element={<AddNewTasks />} />
 
-        <Route path="/admin" element={<Admin />} />
-        {/* <Route path="/admin/groups" element={<ManageGroups />} />*/}
-        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+          <Route path="/admin" element={<Admin />} />
+          {/* <Route path="/admin/groups" element={<ManageGroups />} />*/}
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
-        <Route path="/manager" element={<Manager />} />
+          <Route path="/manager" element={<Manager />} />
 
-        <Route path="/syllabus" element={<Syllabus />} />
+          <Route path="/syllabus" element={<Syllabus />} />
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }

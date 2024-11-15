@@ -14,6 +14,7 @@ import { Loading, Unauthorized } from '../components/general/Messages';
 import styled from 'styled-components';
 
 import CustomScrollbar from '../components/general/CustomScrollbar';
+import { ConstructionOutlined } from '@mui/icons-material';
 
 const Levels = [
   { value: 0, name: 'בקטנה, תן להתחמם' },
@@ -30,7 +31,6 @@ function Home() {
     const fetchUnits = async () => {
       const unitsFromDb = await getRequest({ getUrl: `getNewHomepage`, authMethod: 'jwt' });
       const groupNameFromDb = await getRequest({ getUrl: `getGroupName?groupId=${userData.group}` });
-      console.log(groupNameFromDb);
       setGroupName(groupNameFromDb?.name);
       setUnits(unitsFromDb);
     };

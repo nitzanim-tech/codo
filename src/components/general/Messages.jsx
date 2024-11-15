@@ -58,4 +58,27 @@ function Unauthorized({ text = 'הכניסה למדריכים בלבד' }) {
   );
 }
 
-export { SuccessMessage, ErrorMessage, Loading, Unauthorized };
+
+function FatalError({ text = 'הכניסה למדריכים בלבד' }) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '30px',
+        height: '50vh',
+        backgroundColor: 'rgb(255,255,255,0.8)',
+        borderRadius: '20PX',
+        color:'red',
+        fontSize: '28px',
+      }}
+    >
+      <p dir="rtl">{text}</p>
+      {/* <HttpsRoundedIcon fontSize="32px" /> */}
+    </div>
+  );
+}
+
+
+export { SuccessMessage, ErrorMessage, Loading, Unauthorized, FatalError };

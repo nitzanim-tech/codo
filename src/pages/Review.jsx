@@ -3,19 +3,20 @@ import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import ReviewComponent from '../components/Review/ReviewComponent';
-import { Card, Spinner } from '@nextui-org/react';
+import { Card, Spinner, Accordion, AccordionItem } from '@nextui-org/react';
 import { DashboardCard } from '../components/Inst/DashboardCard';
 import formatDate from '../util/formatDate';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
 import { useFirebase } from '../util/FirebaseProvider';
 import { Unauthorized } from '../components/general/Messages';
 import getRequest from '../requests/anew/getRequest';
+import Instructions from '../components/Submit/Instructions';
 
 function Review() {
-  // TODO: 
+  // TODO:
   // 1. WHEN IT HAS BEEN CALLED FROM THE INST PAGE - PASS THE TASK_ID TOO
   // SO THE REQUESTS FROM THE SERVER WILL HAPPEN SIMULTANEOUSLY
-  // 2. ADD NUMERIC GARDE  
+  // 2. ADD NUMERIC GARDE
   const { userData } = useFirebase();
   const [submission, setSubmmition] = useState(null);
   const [selectedTests, setSelectedTests] = useState([]);
@@ -28,7 +29,6 @@ function Review() {
     const fetchData = async () => {
       const submissionData = await getRequest({ getUrl: `getSubmissionData?submission=${submissionId}` });
       const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${submissionData.task}`, authMethod: 'jwt' });
-      console.log({ submissionData, taskFromDb });
       setTaskData(taskFromDb);
       setSubmmition(submissionData);
       const passTestsIndexes = submissionData.tests.reduce(
@@ -73,25 +73,77 @@ function Review() {
               </div>
             </Grid>
 
-            <Grid item style={{ width: '30%' }}>
-              <h2 style={{ fontSize: '1.7vw' }}>
-                <b>{submission.student.name}</b>
-              </h2>
-              <h2 style={{ fontSize: '1.7vw' }}>{formatDate(submission.date)}</h2>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <DashboardCard
-                  ratio={calculateGrade(taskData, selectedTests) + '/' + maxGrade(taskData)}
-                  text={'סה"כ'}
-                  size={70}
-                  max={100}
-                />
+            <Grid item style={{ width: '30%', backgroundColor: 'rgba(255,255,255,0.6)' }}>
+              <div style={{ backgroundColor: 'rgba(255,255,255,0.6)' }}>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <DashboardCard
+                      ratio={calculateGrade(taskData, selectedTests) + '/' + maxGrade(taskData)}
+                      text={'סה"כ'}
+                      size={70}
+                      max={100}
+                    />
+                  </div>
+                  <div>
+                    <h2>{taskData.name}</h2>
+                    <h2 style={{ fontSize: '1.7vw' }}>
+                      <b>{submission.student.name}</b>
+                    </h2>
+                    <h2 style={{ fontSize: '1.2vw' }}>{formatDate(submission.date)}</h2>
+                  </div>
+                </div>
               </div>
+
               <TestsCheckbox
                 task={taskData}
                 selectedTests={selectedTests}
                 setSelectedTests={setSelectedTests}
                 testsOutputs={testsOutputs}
               />
+
+              <Accordion dir="rtl" variant="splitted" selectionMode="multiple" isCompact>
+                <AccordionItem
+                  title={<span style={{ color: 'white' }}>הוראות</span>}
+                  style={{
+                    borderRadius: '10px',
+                    background: '#463A6B',
+                    boxShadow: '0px 0px 3px 0px rgba(255, 255, 255, 0.25)',
+                  }}
+                >
+                  <div style={{ direction: 'rtl', textAlign: 'left' }}>
+                    <div dangerouslySetInnerHTML={{ __html: taskData.description }} />
+                  </div>
+                </AccordionItem>
+                <AccordionItem
+                  title={<span style={{ color: 'white' }}>דוגמה</span>}
+                  style={{
+                    borderRadius: '10px',
+                    background: '#463A6B',
+                    boxShadow: '0px 0px 3px 0px rgba(255, 255, 255, 0.25)',
+                  }}
+                >
+                  <div style={{ direction: 'rtl', textAlign: 'left' }}>
+                    <div dangerouslySetInnerHTML={{ __html: taskData.example }} />
+                  </div>
+                </AccordionItem>
+                {taskData.code && (
+                  <AccordionItem
+                    title={<span style={{ color: 'white' }}>פתרון</span>}
+                    style={{
+                      borderRadius: '10px',
+                      background: '#463A6B',
+                      boxShadow: '0px 0px 3px 0px rgba(255, 255, 255, 0.25)',
+                    }}
+                  >
+                    <div style={{ direction: 'rtl', textAlign: 'left' }}>
+                      <pre style={{ direction: 'ltr', padding: '10px', borderRadius: '5px', overflow: 'clip' }}>
+                        {taskData.code}
+                      </pre>
+                    </div>
+                  </AccordionItem>
+                )}
+              </Accordion>
+
             </Grid>
           </Grid>
         </>
@@ -103,3 +155,6 @@ function Review() {
 }
 
 export default Review;
+
+
+// const styledAcordionItem=style

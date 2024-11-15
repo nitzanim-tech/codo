@@ -24,7 +24,7 @@ const getRequest = async ({ getUrl, token, authMethod }) => {
     const responseJson = await response.json();
     return responseJson;
   } catch (error) {
-    console.error('Request failed:', error.message);
+    console.error('Request failed:', error.message, '. Status:', response?.status );
     return { error: error.message, status: response?.status };
   } finally {
     document.body.classList.remove('cursor-wait');
