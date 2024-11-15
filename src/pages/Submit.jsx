@@ -174,6 +174,7 @@ function Submit() {
                       setHighlightedLines={setHighlightedLines}
                       submissions={submissions}
                       setOpenReview={setOpenReview}
+                      unitName={unitData.name}
                     />
                   </Grid>
                 </Grid>

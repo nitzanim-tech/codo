@@ -18,6 +18,7 @@ export default function SubmitButtons({
   submissions,
   setOpenReview,
   chosenTab,
+  unitName
 }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [selectedTab, setSelectedTab] = useState('instructions');
@@ -96,7 +97,7 @@ export default function SubmitButtons({
       )}
       {/* {taskObject?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskObject} />} */}
       {chosenTab == 'טסטים' && taskObject && <TestsList testsOutputs={testsOutputs} taskObject={taskObject} />}
-      {chosenTab == 'תרגול' && taskObject && <Instructions taskObject={taskObject} />}{' '}
+      {chosenTab == 'תרגול' && taskObject && <Instructions taskObject={taskObject} unitName={unitName} />}{' '}
       {/* {taskObject?.setting?.showTest && <Instructions taskObject={taskObject} />}{' '} */}
     </>
   );
