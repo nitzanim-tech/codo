@@ -16,7 +16,7 @@ const Tab = ({ text, icon: Icon, chosen, setChosen }) => {
   return (
     <StyledTab onClick={() => setChosen(text)}>
       {isTabChosen ? <ChosenTabSvg /> : <NonChosenTabSvg />}
-      <TabContent>
+      <TabContent style={{marginTop:'10px'}}>
         <Icon color={isTabChosen ? 'white' : 'rgba(44, 36, 77, 1)'} />
         <span style={{ color: isTabChosen ? 'white' : 'rgba(44, 36, 77, 1)' }}>{text}</span>
       </TabContent>
@@ -49,7 +49,7 @@ const TabContent = styled.div`
 `;
 
 const NonChosenTabSvg = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="90" viewBox="0 0 109 114" fill="none">
+  <svg xmlns="http://www.w3.org/2000/svg" width="90" viewBox="0 0 109 100" fill="none">
     <g filter="url(#filter0_d_208_4452)">
       <path
         d="M5 54.5C5 26.6096 27.6096 4 55.5 4C83.3904 4 106 26.6096 106 54.5V110H5V54.5Z"
@@ -64,7 +64,7 @@ const NonChosenTabSvg = () => (
         x="0"
         y="0"
         width="109"
-        height="114"
+        height="100"
         filterUnits="userSpaceOnUse"
         color-interpolation-filters="sRGB"
       >
@@ -87,7 +87,7 @@ const NonChosenTabSvg = () => (
 );
 
 const ChosenTabSvg = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="90" viewBox="0 0 109 114" fill="none">
+  <svg xmlns="http://www.w3.org/2000/svg" width="90" viewBox="0 0 109 100" fill="none">
     <g filter="url(#filter0_d_208_4451)">
       <path
         d="M8 54.5C8 26.6096 30.6096 4 58.5 4C86.3904 4 109 26.6096 109 54.5V110H8V54.5Z"
@@ -102,7 +102,7 @@ const ChosenTabSvg = () => (
         x="0"
         y="0"
         width="109"
-        height="114"
+        height="100"
         filterUnits="userSpaceOnUse"
         colorInterpolationFilters="sRGB"
       >

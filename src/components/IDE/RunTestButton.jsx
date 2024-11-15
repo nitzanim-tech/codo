@@ -8,6 +8,7 @@ import { useFirebase } from '../../util/FirebaseProvider';
 import { useParams } from 'react-router-dom';
 import levenshteinDistance from '../../util/levenshteinDistance';
 import postRequest from '../../requests/anew/postRequest';
+import { RunTestsIcon } from './Icons';
 
 export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject, buttonElement, logSession,
                                         tooltipText, tooltipPlacement}) {
@@ -93,8 +94,8 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
   }
 
   const defaultButton = (
-    <Button radius="full" isIconOnly variant="faded" isDisabled={!pyodide} onClick={handleClick}>
-      <RuleRoundedIcon />
+    <Button radius="full" isIconOnly variant="faded" isDisabled={!pyodide} onClick={handleClick} style={{border:'none'}}>
+      <RunTestsIcon />
     </Button>
   );
 

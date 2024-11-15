@@ -40,7 +40,7 @@ export default function MonacoEditor({ code, setCode, theme, highlightedLines })
 
   return (
     <StyledEditor
-      height="50vh"
+      height="45vh"
       defaultLanguage="python"
       theme={theme}
       value={code}

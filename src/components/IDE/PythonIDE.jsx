@@ -7,14 +7,12 @@ import MonacoEditor from './MonacoEditor';
 
 function PythonIDE({ testsOutputs, setTestsOutputs, taskObject, highlightedLines, code, setCode }) {
   const [output, setOutput] = useState('');
-  const [inputValue, setInputValue] = useState('');
   const [inputCallback, setInputCallback] = useState(null);
   const [error, setError] = useState(null);
   const [theme, setTheme] = useState('vs-dark');
 
   const handleInput = (value) => {
     if (inputCallback) {
-      setInputValue('');
       inputCallback(value);
       setInputCallback(null);
     }
@@ -22,8 +20,8 @@ function PythonIDE({ testsOutputs, setTestsOutputs, taskObject, highlightedLines
 
   return (
     <>
-      <Card isFooterBlurred style={{ backgroundColor: theme == 'vs-dark' ? '#1E1E1E' : 'white' }}>
-        <CardBody>
+      <Card isFooterBlurred style={{ backgroundColor: theme == 'vs-dark' ? '#1E1E1E' : 'white', overflow: 'visible' }}>
+        <CardBody style={{ overflow: 'visible' }}>
           <IDEButtons
             code={code}
             setOutput={setOutput}
@@ -34,19 +32,22 @@ function PythonIDE({ testsOutputs, setTestsOutputs, taskObject, highlightedLines
             setTheme={setTheme}
             taskObject={taskObject}
           />
-          <div style={{ marginLeft: '-30px', marginRight: '-20px' }}>
-            <MonacoEditor
-              code={code}
-              setCode={setCode}
-              output={output}
-              theme={theme}
-              highlightedLines={highlightedLines}
-            />
+          <div style={{ overflow: 'hidden' }}>
+            <div style={{ marginLeft: '-30px', marginRight: '-20px', padding: '10px' }}>
+              <MonacoEditor
+                code={code}
+                setCode={setCode}
+                output={output}
+                theme={theme}
+                highlightedLines={highlightedLines}
+              />
+            </div>
           </div>
         </CardBody>
       </Card>
 
       <Terminal output={output || ''} onInput={handleInput} waitingForInput={!!inputCallback} error={error} />
+      <p style={{ color: 'rgba(255,255,255,0.8)', marginTop:'5px' }}>{taskObject.subjects.join(' | ')}</p>
     </>
   );
 }

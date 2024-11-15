@@ -50,7 +50,6 @@ function Review() {
       100,
     );
   };
-console.log(testsOutputs);
   return (
     <>
       {!userData ? (

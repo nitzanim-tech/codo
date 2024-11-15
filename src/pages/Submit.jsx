@@ -114,7 +114,7 @@ function Submit() {
           <Loading />
         ) : auth.currentUser ? (
           taskData && testsOutputs ? (
-            <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
+            <Grid container spacing={1} columns={3} rows={1} style={{ padding: '0.8% 2% 2% 2%' }}>
               <Grid
                 item
                 style={{

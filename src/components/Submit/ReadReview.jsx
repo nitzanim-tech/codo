@@ -4,10 +4,10 @@ import { Card, Textarea } from '@nextui-org/react';
 import { CircularProgress } from '@nextui-org/react';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import TestsCheckbox from '../Review/TestsCheckbox';
+import CustomScrollbar from '../general/CustomScrollbar';
 const LINE_HEGITH = 20;
 
 export default function ReadReview({ code, comments }) {
-  
   const [convertedComments, setConvertedComments] = useState();
   useEffect(() => {
     setConvertedComments(convertCommentsToObject(comments, code));
@@ -18,55 +18,56 @@ export default function ReadReview({ code, comments }) {
     monaco.editor.setTheme('Active4D');
   };
 
-
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <Card style={{ width: '100%' }}>
-        {convertedComments ? (
-          <>
-            <div style={{ marginTop: '30px' }}>
-              {convertedComments.map((editor, index) => (
-                <React.Fragment key={index}>
-                  <Editor
-                    beforeMount={handleEditorWillMount}
-                    height={editor.height}
-                    theme="Active4D"
-                    defaultLanguage="python"
-                    value={editor.code}
-                    options={{
-                      lineNumbers: (num) => editor.start + num - 1,
-                      glyphMargin: false,
-                      scrollBeyondLastLine: false,
-                      readOnly: true,
-                      overviewRulerLanes: 0,
-                      hideCursorInOverviewRuler: true,
-                      overviewRulerBorder: false,
-                      renderLineHighlight: 'none',
-                      minimap: { enabled: false },
-                      scrollbar: {
-                        vertical: 'hidden',
-                        horizontal: 'hidden',
-                        handleMouseWheel: false,
-                        verticalScrollbarSize: 0,
-                      },
-                    }}
-                  />
-                  {editor.comment && (
-                    <p style={{ textAlign: 'right', marginRight: '50px', color: '#005395', direction: 'rtl' }}>
-                      <PersonRoundedIcon />: {editor.comment}
-                    </p>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          </>
-        ) : (
-          <CircularProgress />
-        )}
-      </Card>
-      {/* {version && (
+    <div style={{ display: 'flex', justifyContent: 'center' , overflow:'auto'}}>
+      {/* <CustomScrollbar> */}
+        <Card style={{ width: '100%', height: '72vh' }}>
+          {convertedComments ? (
+            <>
+              <div style={{ marginTop: '30px' }}>
+                {convertedComments.map((editor, index) => (
+                  <React.Fragment key={index}>
+                    <Editor
+                      beforeMount={handleEditorWillMount}
+                      height={editor.height}
+                      theme="Active4D"
+                      defaultLanguage="python"
+                      value={editor.code}
+                      options={{
+                        lineNumbers: (num) => editor.start + num - 1,
+                        glyphMargin: false,
+                        scrollBeyondLastLine: false,
+                        readOnly: true,
+                        overviewRulerLanes: 0,
+                        hideCursorInOverviewRuler: true,
+                        overviewRulerBorder: false,
+                        renderLineHighlight: 'none',
+                        minimap: { enabled: false },
+                        scrollbar: {
+                          vertical: 'hidden',
+                          horizontal: 'hidden',
+                          handleMouseWheel: false,
+                          verticalScrollbarSize: 0,
+                        },
+                      }}
+                    />
+                    {editor.comment && (
+                      <p style={{ textAlign: 'right', marginRight: '50px', color: '#005395', direction: 'rtl' }}>
+                        <PersonRoundedIcon />: {editor.comment}
+                      </p>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            </>
+          ) : (
+            <CircularProgress />
+          )}
+        </Card>
+        {/* {version && (
         <TestsCheckbox task={taskData} selectedTests={version.selectedTests} setSelectedTests={() => {}} viewOnly />
       )} */}
+      {/* </CustomScrollbar> */}
     </div>
   );
 }

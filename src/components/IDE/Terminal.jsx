@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
-const Terminal = ({ output, onInput, waitingForInput, error, height = '20vh' }) => {
+const Terminal = ({ output, onInput, waitingForInput, error, height = '18vh' }) => {
   const [input, setInput] = useState('');
 
   const [inputIndexes, setInputIndexes] = useState([]);

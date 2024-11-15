@@ -9,7 +9,7 @@ import { ModalBody, ModalFooter } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import { useFirebase } from '../../util/FirebaseProvider';
 import postRequest from '../../requests/anew/postRequest';
-
+import { SendIcon } from './Icons';
 function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
   const { auth } = useFirebase();
   const { task, unit } = useParams();
@@ -57,8 +57,14 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
   return (
     <>
       <Tooltip content="הגש" placement={'bottom'}>
-        <Button isIconOnly variant="faded" onClick={() => runTestBeforeSumbit()} radius="full">
-          <ReplyRoundedIcon />
+        <Button
+          isIconOnly
+          variant="faded"
+          onClick={() => runTestBeforeSumbit()}
+          radius="full"
+          style={{ border: 'none' }}
+        >
+          <SendIcon />
         </Button>
       </Tooltip>
 

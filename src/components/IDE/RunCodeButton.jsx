@@ -5,8 +5,9 @@ import { Tooltip, Button } from '@nextui-org/react';
 import { usePyodide } from './PyodideProvider.jsx';
 import { cleanTraceback } from '../../util/cleanTraceback.js';
 import { convertInptToAsync } from './asyncInputHandler.js';
+import { RunCodeIcon } from './Icons.jsx';
 
-function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
+function RunCodeButton({ code, setOutput, setInputCallback, setError, icon: Icon }) {
   const pyodide = usePyodide();
 
   async function handleEvaluate() {
@@ -73,11 +74,18 @@ function RunCodeButton({ code, setOutput, setInputCallback, setError }) {
   }
 
   return (
-    // <Tooltip content="הרץ" placement={'bottom'}>
-    <Button radius="full" isIconOnly variant="faded" isDisabled={!pyodide} onClick={() => handleEvaluate()}>
-      <PlayCircleRoundedIcon />
-    </Button>
-    // </Tooltip>
+    <Tooltip content="הרץ" placement={'bottom'}>
+      <Button
+        radius="full"
+        isIconOnly
+        variant="faded"
+        style={{ border: 'none' }}
+        isDisabled={!pyodide}
+        onClick={() => handleEvaluate()}
+      >
+        <RunCodeIcon />
+      </Button>
+    </Tooltip>
   );
 }
 

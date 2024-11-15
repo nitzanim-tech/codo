@@ -8,6 +8,7 @@ import RunTestButton from './RunTestButton';
 import SumbitButton from './SumbitButton';
 import RunCodeButton from './RunCodeButton';
 import SportsEsportsRoundedIcon from '@mui/icons-material/SportsEsportsRounded';
+
 function IDEButtons({
   code,
   setOutput,
@@ -24,15 +25,7 @@ function IDEButtons({
   };
 
   return (
-    <div style={{ marginTop: '-10px', textAlign: 'right' }}>
-      <Switch
-        size="lg"
-        color="primary"
-        startContent={<WbSunnyRoundedIcon sx={{ color: 'white' }} />}
-        endContent={<DarkModeRoundedIcon />}
-        style={{ marginRight: '3%' }}
-        onValueChange={handleThemeChange}
-      ></Switch>
+    <ButtonsDiv>
       {taskObject.hasGame && (
         <ButtonWrapper>
           <Tooltip content="משחק" placement={'bottom'}>
@@ -62,13 +55,45 @@ function IDEButtons({
       <ButtonWrapper>
         <RunCodeButton code={code} setOutput={setOutput} setInputCallback={setInputCallback} setError={setError} />
       </ButtonWrapper>
-    </div>
+    </ButtonsDiv>
   );
 }
 
 export default IDEButtons;
 
 const ButtonWrapper = styled.div`
-  margin-right: 0.75%;
+  margin: 2%;
   display: inline-block;
 `;
+
+const ButtonsDiv = ({ children }) => (
+  <div style={styles.container}>
+    <div style={styles.innerDiv}>{children}</div>
+  </div>
+);
+
+const styles = {
+  container: {
+    overflow: 'visible',
+    position: 'absolute',
+    zIndex: '500',
+    left: '40%',
+    bottom: '-10%',
+    width: '185px',
+    height: '60px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+  },
+  innerDiv: {
+    width: '177px',
+    height: '52px',
+    borderRadius: '26px',
+    backgroundColor: '#2D2D4E',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center', 
+  },
+};
+
