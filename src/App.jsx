@@ -6,7 +6,6 @@ import Review from './pages/Review';
 import DevTeam from './pages/DevTeam';
 import AddNewTasks from './components/Dev/addNewTask/AddNewTasks';
 import Home from './pages/Home';
-import ReadReview from './components/Submit/ReadReview';
 import Play from './pages/Play';
 import Admin from './pages/Admin';
 import Manager from './pages/Manager';

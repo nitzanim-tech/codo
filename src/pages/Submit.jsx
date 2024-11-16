@@ -14,7 +14,7 @@ import postRequest from '../requests/anew/postRequest';
 import { handleUserActivity } from '../components/Submit/activityTracker';
 import { CircularProgress } from '@nextui-org/react';
 import { Loading } from '../components/general/Messages';
-import ReadReview from '../components/Submit/ReadReview';
+import ReadReviewEditor from '../components/Submit/ReadReviewEditor';
 import Sidebar from '../components/Submit/Sidebar';
 import SubmitTabs from '../components/Submit/SubmitTabs';
 
@@ -154,7 +154,7 @@ function Submit() {
                 >
                   <Grid item style={{ width: '60%' }}>
                     {openReview && submissions ? (
-                      <ReadReview code={openReview.code} comments={openReview.comments} />
+                      <ReadReviewEditor code={openReview.code} comments={openReview.comments} />
                     ) : (
                       <PythonIDE
                         testsOutputs={testsOutputs}

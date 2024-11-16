@@ -7,7 +7,7 @@ import TestsCheckbox from '../Review/TestsCheckbox';
 import CustomScrollbar from '../general/CustomScrollbar';
 const LINE_HEGITH = 20;
 
-export default function ReadReview({ code, comments }) {
+export default function ReadReviewEditor({ code, comments }) {
   const [convertedComments, setConvertedComments] = useState();
   useEffect(() => {
     setConvertedComments(convertCommentsToObject(comments, code));

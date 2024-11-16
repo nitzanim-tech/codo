@@ -37,7 +37,7 @@ function TextCompare({ oldText, newText }) {
       </div>
 
       <div style={{ direction: 'ltr' }}>
-        <ScrollShadow className="h-[400px]" size={5}>
+        <ScrollShadow className="h-[300px]" size={5}>
           <ReactDiffViewer
             leftTitle={'הפלט שלך'}
             rightTitle={'פלט הפתרון'}
