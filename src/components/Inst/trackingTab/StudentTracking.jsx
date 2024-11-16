@@ -16,7 +16,7 @@ function StudentTracking({ group }) {
   useEffect(() => {
     async function fetchData() {
       const res = await getRequest({ getUrl: `getTrackingData?group=${group}` });
-
+      console.log(res);
       setStudents(res.students);
       setUnitData(res.unitData);
       setSelectedKeys([res.unitData[res.unitData.length - 1].unit]);
@@ -50,6 +50,9 @@ function StudentTracking({ group }) {
   };
 
   const renderRow = (unit, row, rowIdx) => {
+    console.log(unit.tasks[0].task_id);
+    console.log(unit);
+
     return (
       <TableRow key={`${unit.unit}_${rowIdx}`} className={unit.tasks[rowIdx].anchor ? 'anchor' : ''}>
         <TableCell>
@@ -60,7 +63,9 @@ function StudentTracking({ group }) {
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
+                cursor: 'pointer',
               }}
+              onClick={() => window.open(`/submit/${unit.unitId}/${unit.tasks[rowIdx].task_id}`)}
             >
               {unit.tasks[rowIdx].task}
             </div>

@@ -5,7 +5,7 @@ import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import postRequest from '../../requests/anew/postRequest';
-
+import { SendIcon } from '../IDE/Icons';
 export default function SendReviewButton({ setErrorText, general, comments, selectedTests, submission, testsAmount }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [saved, setSaved] = useState(false);
@@ -102,25 +102,23 @@ function indexToBooleanArray(indexArray, testsAmount) {
   return booleanArray;
 }
 
-const SendReviewIcon = ({handleSendClick}) => (
+const SendReviewIcon = ({ handleSendClick }) => (
   <Tooltip content="העבר לחניך">
     <div
       style={{
         position: 'absolute',
         left: '3%',
         bottom: '5%',
-        width: '30px',
-        height: '30px',
         borderRadius: '50%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        background: 'linear-gradient(54.94deg, #DD41B1 22.19%, #FF7BDA 82.85%)',
+        transform: 'scaleX(-1)', 
       }}
-      onClick={()=>handleSendClick()}
+      onClick={() => handleSendClick()}
     >
-      <ReplyRoundedIcon  />
+      <SendIcon />
     </div>
   </Tooltip>
 );

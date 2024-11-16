@@ -15,19 +15,8 @@ export default function Instructions({ taskObject, unitName }) {
         <hr className="solid" style={{ background: '#36356A', height: '1px', border: 'none', marginBottom: '15px' }} />
 
         <div style={{ direction: 'rtl' }} dangerouslySetInnerHTML={{ __html: taskObject.description }} />
-        <div style={{ width: '100%', textAlign: 'right', direction: 'rtl' }}>
+        <div style={{ width: '100%', textAlign: 'right', direction: 'rtl', marginTop:'20px' }}>
           <Accordion dir="rtl" variant="splitted" selectionMode="multiple" isCompact>
-            {/* <AccordionItem title="מה צריך לדעת?">
-          <p style={{ marginBottom: '10px' }}>נושאים עיקריים: </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
-            {taskObject.subjects &&
-              taskObject.subjects.map((subject) => (
-                <Chip key={subject} variant="faded">
-                  {subject}
-                </Chip>
-              ))}
-          </div>
-        </AccordionItem> */}
 
             <AccordionItem
               title={<span style={{ color: 'white' }}>דוגמה</span>}

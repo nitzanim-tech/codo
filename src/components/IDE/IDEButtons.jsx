@@ -52,6 +52,7 @@ function IDEButtons({
       <ButtonWrapper>
         <RunTestButton code={code} setTestsOutputs={setTestsOutputs} runTests={runTests} taskObject={taskObject} />
       </ButtonWrapper>
+      
       <ButtonWrapper>
         <RunCodeButton code={code} setOutput={setOutput} setInputCallback={setInputCallback} setError={setError} />
       </ButtonWrapper>
@@ -62,7 +63,8 @@ function IDEButtons({
 export default IDEButtons;
 
 const ButtonWrapper = styled.div`
-  margin: 2%;
+  margin: 2.5%;
+  margin-top: 10px;
   display: inline-block;
 `;
 
@@ -77,8 +79,9 @@ const styles = {
     overflow: 'visible',
     position: 'absolute',
     zIndex: '500',
-    left: '40%',
-    bottom: '-10%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bottom: '-15%',
     width: '185px',
     height: '60px',
     display: 'flex',
@@ -93,7 +96,7 @@ const styles = {
     backgroundColor: '#2D2D4E',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center', 
+    alignItems: 'center',
   },
 };
 

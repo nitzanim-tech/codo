@@ -51,10 +51,8 @@ export default function SubmitButtons({
           setOpenReview={setOpenReview}
         />
       )}
-      {/* {taskObject?.setting?.showTest && <TestsList testsOutputs={testsOutputs} taskObject={taskObject} />} */}
       {chosenTab == 'טסטים' && taskObject && <TestsList testsOutputs={testsOutputs} taskObject={taskObject} />}
-      {chosenTab == 'תרגול' && taskObject && <Instructions taskObject={taskObject} unitName={unitName} />}{' '}
-      {/* {taskObject?.setting?.showTest && <Instructions taskObject={taskObject} />}{' '} */}
+      {chosenTab == 'תרגול' && taskObject && <Instructions taskObject={taskObject} unitName={unitName} />}
     </>
   );
 }

@@ -8,7 +8,7 @@ import { DashboardCard } from '../components/Inst/DashboardCard';
 import formatDate from '../util/formatDate';
 import TestsCheckbox from '../components/Review/TestsCheckbox';
 import { useFirebase } from '../util/FirebaseProvider';
-import { Unauthorized } from '../components/general/Messages';
+import { Loading, Unauthorized } from '../components/general/Messages';
 import getRequest from '../requests/anew/getRequest';
 import Instructions from '../components/Submit/Instructions';
 import CustomScrollbar from '../components/general/CustomScrollbar';
@@ -53,24 +53,24 @@ function Review() {
   return (
     <>
       {!userData ? (
-        <Spinner />
+        <Loading />
       ) : !userData.permission ? (
         <Unauthorized />
       ) : taskData ? (
         <>
           <Grid container spacing={1} columns={3} rows={1} style={{ padding: '1.5%' }}>
             <Grid item style={{ width: '69%' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', height:'85vh' }}>
-                  <Card style={{ width: '95%' }}>
-                    <ReviewComponent
-                      submittion={submission}
-                      selectedTests={selectedTests}
-                      testsAmount={taskData.tests.length}
-                      setTestsOutputs={setTestsOutputs}
-                      taskData={taskData}
-                    />
-                  </Card>
-                </div>
+              <div style={{ display: 'flex', justifyContent: 'center', height: '85vh' }}>
+                <Card style={{ width: '95%' }}>
+                  <ReviewComponent
+                    submittion={submission}
+                    selectedTests={selectedTests}
+                    testsAmount={taskData.tests.length}
+                    setTestsOutputs={setTestsOutputs}
+                    taskData={taskData}
+                  />
+                </Card>
+              </div>
             </Grid>
 
             <Grid item style={{ width: '30%', backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: '20px' }}>
@@ -136,7 +136,16 @@ function Review() {
                         }}
                       >
                         <div style={{ direction: 'rtl', textAlign: 'left' }}>
-                          <pre style={{ direction: 'ltr', padding: '10px', borderRadius: '5px', overflow: 'clip' }}>
+                          <pre
+                            style={{
+                              direction: 'ltr',
+                              padding: '10px',
+                              borderRadius: '5px',
+                              overflow: 'clip',
+                              whiteSpace: 'pre-wrap',
+                              wordBreak: 'break-word',
+                            }}
+                          >
                             {taskData.code}
                           </pre>
                         </div>

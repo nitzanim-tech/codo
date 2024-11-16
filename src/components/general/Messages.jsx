@@ -25,6 +25,7 @@ function Loading({ text = 'טוען...' }) {
   return (
     <div
       style={{
+        direction: 'rtl',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -32,8 +33,8 @@ function Loading({ text = 'טוען...' }) {
         height: '50vh',
       }}
     >
-      <p dir="rtl">{text}</p>
       <CircularProgress />
+      <p dir="rtl" style={{marginRight:'10px'}}>{text}</p>
     </div>
   );
 }
@@ -48,16 +49,15 @@ function Unauthorized({ text = 'הכניסה למדריכים בלבד' }) {
         margin: '30px',
         height: '50vh',
         backgroundColor: 'rgb(255,255,255,0.8)',
-        borderRadius:'20PX',
-        fontSize:'28px'
+        borderRadius: '20PX',
+        fontSize: '28px',
       }}
     >
       <p dir="rtl">{text}</p>
-      <HttpsRoundedIcon fontSize='32px'/>
+      <HttpsRoundedIcon fontSize="32px" />
     </div>
   );
 }
-
 
 function FatalError({ text = 'הכניסה למדריכים בלבד' }) {
   return (
@@ -70,7 +70,7 @@ function FatalError({ text = 'הכניסה למדריכים בלבד' }) {
         height: '50vh',
         backgroundColor: 'rgb(255,255,255,0.8)',
         borderRadius: '20PX',
-        color:'red',
+        color: 'red',
         fontSize: '28px',
       }}
     >
@@ -79,6 +79,5 @@ function FatalError({ text = 'הכניסה למדריכים בלבד' }) {
     </div>
   );
 }
-
 
 export { SuccessMessage, ErrorMessage, Loading, Unauthorized, FatalError };
