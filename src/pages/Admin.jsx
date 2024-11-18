@@ -56,7 +56,6 @@ function Admin() {
           getUrl: `getInstGroupsPerm?syllabusId=${syllabusId}`,
           authMethod: 'jwt',
         });
-
         setInstructorsData(data.groups);
         setGroupsPerm([...new Set(data.groups.map((item) => item.regionName))]);
         setInstructorsList(data.instructorsList);
@@ -162,7 +161,7 @@ function Admin() {
           <Button isIconOnly onClick={() => setShowSidebar(false)}>
             X
           </Button>
-          <h1> {filteredItems.find((group) => group.groupId === selectedGroup).groupName}</h1>
+          <h1> {filteredItems.find((group) => group.groupId === selectedGroup)?.groupName}</h1>
           <div style={{ margin: '20px 0px 20px 0px' }}>
             <Input
               type="text"

@@ -8,9 +8,12 @@ import Board from '../Games/SET/Board';
 import Terminal from '../components/IDE/Terminal';
 import RunCodeButton from '../components/IDE/RunCodeButton';
 import woodBackground from '../assets/svg/wood.svg';
+import { useParams } from 'react-router-dom';
 
 function Play() {
-  const code = localStorage.getItem('code');
+  const { task } = useParams();
+  const code = localStorage.getItem(`${task}-code`) + '\nmain()';
+
   const [output, setOutput] = useState('');
   const [error, setError] = useState('');
   const [inputCallback, setInputCallback] = useState('');
@@ -60,13 +63,10 @@ function Play() {
 
   return (
     <>
-      <NavBar />
       <PyodideProvider>
         <div className="container">
           <div className="left-half" style={{ backgroundImage: `url(${woodBackground})` }}>
-            <div
-              style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}
-            >
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
               <Board boardText={relevatOutput} clickedCards={clickedCards} setClickedCards={setClickedCards} />
             </div>
 

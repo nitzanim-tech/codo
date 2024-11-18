@@ -24,7 +24,6 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
 
   useEffect(() => {
     if (runTests && pyodide) handleClick();
-    console.log(runTests);
   }, [runTests, pyodide]);
 
   async function runPython({ code, input = '' }) {

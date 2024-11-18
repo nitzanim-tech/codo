@@ -29,12 +29,7 @@ function IDEButtons({
       {taskObject.hasGame && (
         <ButtonWrapper>
           <Tooltip content="משחק" placement={'bottom'}>
-            <Button
-              radius="full"
-              isIconOnly
-              variant="ghost"
-              onClick={() => window.open(window.location.href + '/play')}
-            >
+            <Button radius="full" isIconOnly variant="ghost" onClick={() => window.open(`/play/${taskObject.id}`)}>
               <SportsEsportsRoundedIcon />
             </Button>
           </Tooltip>
@@ -52,7 +47,7 @@ function IDEButtons({
       <ButtonWrapper>
         <RunTestButton code={code} setTestsOutputs={setTestsOutputs} runTests={runTests} taskObject={taskObject} />
       </ButtonWrapper>
-      
+
       <ButtonWrapper>
         <RunCodeButton code={code} setOutput={setOutput} setInputCallback={setInputCallback} setError={setError} />
       </ButtonWrapper>
