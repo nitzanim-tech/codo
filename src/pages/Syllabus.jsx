@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Grid, Paper, Box } from '@mui/material';
-import NavBar from '../components/NavBar/NavigateBar';
 import { useFirebase } from '../util/FirebaseProvider';
 import { Input, Select, Divider, SelectItem, CircularProgress } from '@nextui-org/react';
 import { Listbox, ListboxItem, Button } from '@nextui-org/react';

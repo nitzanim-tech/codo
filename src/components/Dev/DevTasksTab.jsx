@@ -6,7 +6,6 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from 
 
 import formatDate from '../../util/formatDate';
 import getRequest from '../../requests/anew/getRequest';
-import DEVELOPERS from './Developers';
 
 import SearchIcon from '@mui/icons-material/Search';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
@@ -35,24 +34,39 @@ const DevTasksTab = () => {
         items: tasksArray,
       };
     },
+
     async sort({ items, sortDescriptor }) {
+      const { column, direction } = sortDescriptor;
+
       return {
         items: items.sort((a, b) => {
-          let first = a[sortDescriptor.column];
-          let second = b[sortDescriptor.column];
+          let first = a[column];
+          let second = b[column];
 
-          if (sortDescriptor.column === 'edit') {
+          if (column === 'edit') {
             first = localStorage.getItem(`newTask-${a.uid}`) ? 1 : 0;
             second = localStorage.getItem(`newTask-${b.uid}`) ? 1 : 0;
           }
-          if (sortDescriptor.column === 'lastUpdate') {
-            first = first ? new Date(first) : new Date(0);
-            second = second ? new Date(second) : new Date(0);
+
+          if (column === 'lastUpdate') {
+            first = first ? new Date(first).getTime() : 0;
+            second = second ? new Date(second).getTime() : 0;
           }
 
-          let cmp = (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1;
+          if (['name', 'writer', 'mainSubject'].includes(column)) {
+            first = first?.toString().toLowerCase() || '';
+            second = second?.toString().toLowerCase() || '';
+          }
 
-          if (sortDescriptor.direction === 'descending') {
+          let cmp = 0;
+
+          if (typeof first === 'string' && typeof second === 'string') {
+            cmp = first.localeCompare(second);
+          } else {
+            cmp = first < second ? -1 : first > second ? 1 : 0;
+          }
+
+          if (direction === 'descending') {
             cmp *= -1;
           }
 
@@ -154,7 +168,7 @@ const DevTasksTab = () => {
               <TableCell>{task.lastUpdate ? formatDate(task.lastUpdate) : '?'}</TableCell>
               <TableCell>{task.level || '?'}</TableCell>
               <TableCell>{task.mainSubject}</TableCell>
-              <TableCell>{DEVELOPERS[task.writer]}</TableCell>
+              <TableCell>{task.writerName}</TableCell>
               <TableCell>
                 {task.syllabus &&
                   task.syllabus.map((syllab) => (

@@ -1,32 +1,31 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import PythonIDE from '../components/IDE/PythonIDE';
-import NavBar from '../components/NavBar/NavigateBar';
 import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import SubmitButtons from '../components/Submit/SubmitButtons';
 import SessionTracker from '../components/general/SessionTracker';
-import './Submit.css';
 import getRequest from '../requests/anew/getRequest';
-import { examplecode } from '../util/examples/exampleCode';
-import postRequest from '../requests/anew/postRequest';
 import { handleUserActivity } from '../components/Submit/activityTracker';
-import { CircularProgress } from '@nextui-org/react';
 import { Loading } from '../components/general/Messages';
 import ReadReviewEditor from '../components/Submit/ReadReviewEditor';
 import Sidebar from '../components/Submit/Sidebar';
 import SubmitTabs from '../components/Submit/SubmitTabs';
+import './Submit.css';
+
+const defaultCode = '# Write you code here';
 
 function Submit() {
   const { auth, userData } = useFirebase();
   const { task, unit } = useParams();
+
   const [taskData, setTaskData] = useState(null);
   const [testsOutputs, setTestsOutputs] = useState(null);
   const [unitData, setUnitData] = useState(null);
   const [highlightedLines, setHighlightedLines] = useState([]);
   const [noActivitySent, setNoActivitySent] = useState(false);
-  const [code, setCode] = useState(localStorage.getItem(`${task}-code`) || examplecode);
+  const [code, setCode] = useState(localStorage.getItem(`${task}-code`) || defaultCode);
   const [loading, setLoading] = useState(true);
   const [submissions, setSubmissions] = useState();
   const [openReview, setOpenReview] = useState();
@@ -67,7 +66,7 @@ function Submit() {
           getRequest({ getUrl: `getTask?taskId=${task}&&unitId=${unit}`, authMethod: 'jwt' }),
           getRequest({ getUrl: `getUnitData?unitId=${unit}`, authMethod: 'jwt' }),
         ]);
-
+        taskFromDb.name = unitFromDb?.tasks.find((t) => t.id == task)?.name || taskFromDb.name;
         setSubmissions(taskFromDb.submissions);
         taskFromDb.tests = taskFromDb.tests.filter((test) => !test.isHidden);
         setTaskData(taskFromDb);

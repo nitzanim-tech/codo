@@ -7,7 +7,6 @@ import ManageLessonsInst from '../components/Inst/manageTab/ManageLessonsInst';
 import StudentTracking from '../components/Inst/trackingTab/StudentTracking';
 import { CircularProgress } from '@nextui-org/react';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
-import PassMatrix from '../components/Inst/statusTab/PassMatrix';
 import { useFirebase } from '../util/FirebaseProvider';
 import styled from 'styled-components';
 import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettingProvider';
