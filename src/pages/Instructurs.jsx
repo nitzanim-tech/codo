@@ -42,32 +42,6 @@ function Instructors() {
 
   const getGroupName = (groupId) => instructorGroups.filter((x) => x.id == groupId)[0].name;
 
-  //   useEffect(() => {
-  //     const fetchTasksData = async () => {
-  //       const tasksData = await getTasksData({ app });
-  //       setTasksList(tasksData);
-  //     };
-  //     fetchTasksData();
-  //   }, []);
-
-  // useEffect(() => {
-  //   if (userData) {
-  //     setSelectedGroup(userData.group);
-  //     isAuthorized(userData.email) ? setUnauthorized(false) : setUnauthorized(true);
-  //   }
-  // }, [userData]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     let data = await getStudentsByGroup({ app: app, groupId: selectedGroup.id });
-  //     data = data.filter((student) => !student.email.includes('@nitzanim.tech'));
-  //     data = getStudentGroups(userData.permissions, data);
-  //     setStudentsRawData(data);
-  //     setIsLoading(false);
-  //   };
-  //   selectedGroup && fetchData();
-  // }, [selectedGroup]);
-
   return (
     <>
       {userData ? (
@@ -91,22 +65,6 @@ function Instructors() {
                 </Dropdown>
 
                 <Tabs aria-label="Options">
-                  {/*   <Tab key="tasks" title="משימות" aria-label="Task tab">
-                    <div dir="ltr">
-                      {tasksList && <TaskTab tasksList={tasksList} studentsRawData={studentsRawData} />}
-                    </div>
-                  </Tab> */}
-
-                  {/* <Tab key="students" title="חניכים" aria-label="Students tab">
-                    <CenteredDiv>
-                      <StudentsTable
-                        isLoading={isLoading}
-                        students={formatStudentTable(studentsRawData)}
-                        app={app}
-                        auth={auth}
-                      />
-                    </CenteredDiv>
-                  </Tab> */}
 
                   <Tab key="manage" title="מפגשים">
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -126,11 +84,6 @@ function Instructors() {
                     <ChangeGroupReq requests={changeGroupRequests} setRequests={setChangeGroupRequests} />
                   </Tab>
 
-                  {/* <Tab key="status" title="סטטוס">
-                    <CenteredDiv>
-                      <PassMatrix studentsRawData={studentsRawData} tasksList={tasksList} />
-                    </CenteredDiv>
-                  </Tab> */}
                 </Tabs>
               </div>
             </>
@@ -146,40 +99,4 @@ function Instructors() {
 }
 
 export default Instructors;
-
-const CenteredDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  direction: ltr;
-`;
-
-const getStudentGroups = (permissions, students) => {
-  return students.map((student) => {
-    const group = permissions.find((permission) => permission && permission.id === student.group);
-    return { ...student, group: group || { id: student.group } };
-  });
-};
-
-
-const formatStudentTable = (data) => {
-  if (data) {
-    return data.map((item) => {
-      const { submissions, ...rest } = item;
-      let subLength = 0;
-      if (submissions) {
-        if (Array.isArray(submissions)) subLength = submissions.length;
-        else subLength = Object.keys(submissions).length;
-      }
-      return {
-        ...rest,
-        uid: item.uid,
-        group:item.group.name,
-        subLength,
-      };
-    });
-  } else {
-    return [];
-  }
-};
 
