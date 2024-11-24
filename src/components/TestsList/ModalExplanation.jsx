@@ -8,6 +8,7 @@ import { DefaultExplanation } from './DefaultExplanation';
 import { getTaskExplanation } from '../../Tasks/TaskComponents';
 
 export default function ModalExplanation({ selectedValue, taskObject, isOpen, onClose }) {
+  console.log(taskObject);
   return (
     <Modal isOpen={isOpen} onClose={onClose} dir="rtl" hideCloseButton size="3xl">
       <ModalContent>
@@ -23,7 +24,7 @@ export default function ModalExplanation({ selectedValue, taskObject, isOpen, on
             </ModalHeader>
 
             <ModalBody>
-              {taskObject.code
+              {taskObject.isDefault
                 ? DefaultExplanation(selectedValue)
                 : getTaskExplanation({ task: taskObject.id, selectedValue })}
             </ModalBody>
