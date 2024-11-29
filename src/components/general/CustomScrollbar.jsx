@@ -14,6 +14,7 @@ const CustomScrollbar = ({ children }) => {
           /* WebKit (Chrome, Safari) Scrollbar Styles */
           div::-webkit-scrollbar {
             width: 10px;
+            height:10px
           }
 
           div::-webkit-scrollbar-track {
