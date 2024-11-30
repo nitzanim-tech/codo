@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 function getColor(score) {
-  score/=100
+  score /= 100;
   const START = [255, 123, 217];
   const END = [88, 134, 255];
   const diffs = START.map((x, i) => END[i] - x);
@@ -32,12 +32,13 @@ const Hole = styled.div`
 
 const Text = styled.span`
   position: absolute;
+  font-size: ${({ textSize }) => textSize}px;
 `;
 
-const DonutChart = ({ percentage, ratio, size = 200, showPrecent }) => (
+const DonutChart = ({ percentage, ratio, size = 200, showPrecent, textSize = 15 }) => (
   <Donut percentage={percentage} size={size}>
     <Hole size={size} />
-    <Text>{ratio && !showPrecent ? ratio : Math.round(percentage) + '%'}</Text>
+    <Text textSize={textSize}>{ratio && !showPrecent ? ratio : Math.round(percentage) + '%'}</Text>
   </Donut>
 );
 

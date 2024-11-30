@@ -42,11 +42,19 @@ const UnitTables = ({ tasks, unit, syllabus }) => {
     setResources(newResources);
   };
 
-const updateName = async (updatedTask) => {
+const updatePracticeName = async (updatedTask) => {
   const success = await postRequest({ postUrl: 'updatePractice', object: updatedTask });
   if (success) {
     const newPractice = insertOrUpdateAtIndex(practice, updatedTask, 'update');
     setPractice(newPractice);
+  }
+};
+
+const updateResourceName = async (updatedResource) => {
+  const success = await postRequest({ postUrl: 'updateResource', object: updatedResource });
+  if (success) {
+    const updatedResources = insertOrUpdateAtIndex(resources, updatedResource, 'update');
+    setResources(updatedResources);
   }
 };
 
@@ -95,6 +103,7 @@ return (
               setClicked={setClicked}
               addFile={addFile}
               removeResource={removeResource}
+              updateName={updateResourceName}
             />
           </Grid>
           <Grid item>
@@ -103,7 +112,7 @@ return (
               setClicked={setClicked}
               clicked={clicked}
               removePractice={removePractice}
-              updateName={updateName}
+              updateName={updatePracticeName}
             />
           </Grid>
         </Grid>

@@ -18,8 +18,8 @@ const CompleteIcon = () => (
   </div>
 );
 
-const ReviewSvg = ({ color = 'white' }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 36 32" fill="none">
+const ReviewSvg = ({ color = 'white' , width="20"}) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={width} viewBox="0 0 36 32" fill="none">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
