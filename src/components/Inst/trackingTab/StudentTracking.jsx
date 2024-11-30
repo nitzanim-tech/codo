@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
-import { Card, Spinner } from '@nextui-org/react';
+import { Card } from '@nextui-org/react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip } from '@nextui-org/react';
 import './StudentTracking.css';
 import getRequest from '../../../requests/anew/getRequest';
@@ -39,10 +39,10 @@ function StudentTracking({ group }) {
                   height: '2.4em',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  textAlign: 'center', 
+                  textAlign: 'center',
                   whiteSpace: 'normal',
-                  overflow: 'hidden', 
-                  textOverflow: 'ellipsis', 
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                   lineHeight: '1.2em',
                 }}
               >
@@ -214,7 +214,7 @@ function StudentTracking({ group }) {
     <div style={{ width: '80%' }}>
       {renderLegend()}
       <CustomScrollbar>
-        <div style={{ width: '100%', height: '60vh' }}>
+        <div style={{ width: '100%', height: '70vh' }}>
           <Accordion
             key={group}
             dir="rtl"

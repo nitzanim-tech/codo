@@ -32,17 +32,20 @@ function Review() {
       const taskFromDb = await getRequest({ getUrl: `getTask?taskId=${submissionData.task}`, authMethod: 'jwt' });
       setTaskData(taskFromDb);
       setSubmmition(submissionData);
+
       const passTestsIndexes = submissionData.tests.reduce(
         (acc, val, index) => (val === true ? [...acc, index] : acc),
         [],
       );
-      setSelectedTests(passTestsIndexes);
+      const validIndexes = passTestsIndexes.filter((index) => index < taskFromDb.tests.length);
+
+      setSelectedTests(validIndexes);
     };
     fetchData();
-  }, []);
+  }, [submissionId]);
 
   const calculateGrade = (taskData, selectedTests) => {
-    return selectedTests.reduce((sum, testIndex) => sum + taskData.tests[testIndex].score, 0);
+    return selectedTests.reduce((sum, testIndex) => sum + taskData.tests[testIndex]?.score, 0);
   };
   const maxGrade = (taskData) => {
     return Math.min(
