@@ -1,21 +1,23 @@
-import { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Instructurs from './pages/Instructurs';
-import Submit from './pages/Submit';
-import Review from './pages/Review';
-import DevTeam from './pages/DevTeam';
-import AddNewTasks from './components/Dev/addNewTask/AddNewTasks';
-import Home from './pages/Home';
-import Play from './pages/Play';
-import Admin from './pages/Admin';
-import Manager from './pages/Manager';
 import ReactGA from 'react-ga4';
 import firebaseConfig from './util/firebaseConfig';
-import Syllabus from './pages/Syllabus';
-import NotFound from './pages/NotFound';
-import './App.css';
 import NavigateBar from './components/NavBar/NavigateBar';
 import ErrorBoundary from './components/General/ErrorBoundary';
+
+import './App.css';
+
+import Home from './pages/Home';
+const Instructurs = lazy(() => import('./pages/Instructurs'));
+const Submit = lazy(() => import('./pages/Submit'));
+const Play = lazy(() => import('./pages/Play'));
+const Review = lazy(() => import('./pages/Review'));
+const DevTeam = lazy(() => import('./pages/DevTeam'));
+const AddNewTasks = lazy(() => import('./components/Dev/addNewTask/AddNewTasks'));
+const Admin = lazy(() => import('./pages/Admin'));
+const Manager = lazy(() => import('./pages/Manager'));
+const Syllabus = lazy(() => import('./pages/Syllabus'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 ReactGA.initialize(firebaseConfig.measurementId);
 

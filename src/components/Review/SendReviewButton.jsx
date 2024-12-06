@@ -6,6 +6,7 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import postRequest from '../../requests/anew/postRequest';
 import { SendIcon } from '../IDE/Icons';
+
 export default function SendReviewButton({ setErrorText, general, comments, selectedTests, submission, testsAmount }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [saved, setSaved] = useState(false);
@@ -85,11 +86,15 @@ export default function SendReviewButton({ setErrorText, general, comments, sele
 }
 
 function haveTestsChanged(selectedTests, pass, isRunningTest) {
-  const maxCheckIndex = isRunningTest && pass.includes(null) ? pass.indexOf(null) : selectedTests.length;
+  console.log({ selectedTests, pass, isRunningTest });
+  const maxCheckIndex = isRunningTest && pass.includes(null) ? pass.indexOf(null) : pass.length;
+  const selectedTestsArray = indexToBooleanArray(selectedTests, pass.length);
   for (let i = 0; i < maxCheckIndex; i++) {
-    if (pass[i] && !selectedTests.includes(i)) return true;
-    if (!pass[i] && selectedTests.includes(i)) return true;
+    if (pass[i] !== selectedTestsArray[i]) {
+      return true; 
+    }
   }
+
   return false;
 }
 
