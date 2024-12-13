@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Tooltip } from '@nextui-org/react';
-import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
+import { useParams } from 'react-router-dom';
+import { useFirebase } from '../../util/FirebaseProvider';
+import { ModalBody, ModalFooter, Modal, ModalHeader, ModalContent, Button, Tooltip } from '@nextui-org/react';
+import postRequest from '../../requests/anew/postRequest';
+import { calculateWorkingTime, agrigateLocalStorageLogs } from './sessionsHandler';
+
+import { SendIcon } from './Icons';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import { useParams } from 'react-router-dom';
-
-import { ModalBody, ModalFooter } from '@nextui-org/react';
-import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
-import { useFirebase } from '../../util/FirebaseProvider';
-import postRequest from '../../requests/anew/postRequest';
-import { SendIcon } from './Icons';
 
 function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
   const { auth } = useFirebase();
@@ -39,12 +37,25 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
   };
 
   const callSumbitCode = async () => {
-    const pass = testsOutputs.map((test) => test.correct);
-    const time = new Date().toISOString();
-    const newSubmit = { userId: auth.currentUser.uid, taskId: task, code, time, pass, unitId: unit };
+    const sessions = localStorage.getItem(`${task}-logs`);
 
+    const workingTime = calculateWorkingTime(JSON.parse(sessions));
+    console.log(workingTime);
+    const newSubmit = {
+      userId: auth.currentUser.uid,
+      taskId: task,
+      code,
+      time: new Date().toISOString(),
+      pass: testsOutputs.map((test) => test.correct),
+      unitId: unit,
+      sessions,
+      workingTime,
+    };
     const { nextPractice } = await postRequest({ postUrl: 'postSubmit', object: newSubmit });
-    nextPractice ? setNextTask(nextPractice) : setErrorSent(true);
+    if (nextPractice) {
+      setNextTask(nextPractice);
+      agrigateLocalStorageLogs(task);
+    } else setErrorSent(true);
   };
 
   const resetState = () => {
@@ -124,7 +135,7 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
             </ModalFooter>
           </>
         </ModalContent>
-      </Modal>  
+      </Modal>
     </>
   );
 }

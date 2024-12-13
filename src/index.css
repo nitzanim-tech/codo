@@ -44,6 +44,8 @@ body {
   background-position: center; 
   height: 100vh; 
   margin: 0; 
+  color:rgba(23, 32, 42, 0.9)
+  /* color: rgba(24, 19, 44, 0.9); */
 }
 
 h1 {

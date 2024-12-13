@@ -5,7 +5,7 @@ import { Grid } from '@mui/material';
 import { PyodideProvider } from '../components/IDE/PyodideProvider';
 import { useFirebase } from '../util/FirebaseProvider';
 import SubmitButtons from '../components/Submit/SubmitButtons';
-import SessionTracker from '../components/general/SessionTracker';
+import SessionTracker from '../components/General/SessionTracker';
 import getRequest from '../requests/anew/getRequest';
 import { handleUserActivity } from '../components/Submit/activityTracker';
 import { Loading } from '../components/general/Messages';

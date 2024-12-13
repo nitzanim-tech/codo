@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Tooltip } from '@nextui-org/react';
-import RuleRoundedIcon from '@mui/icons-material/RuleRounded';
 import { usePyodide } from './PyodideProvider';
 import { cleanTracebackTest } from '../../util/cleanTraceback';
 import { getProcessOutputs } from '../../Tasks/TaskComponents';
 import { useFirebase } from '../../util/FirebaseProvider';
 import { useParams } from 'react-router-dom';
-import levenshteinDistance from '../../util/levenshteinDistance';
-import postRequest from '../../requests/anew/postRequest';
 import { RunTestsIcon } from './Icons';
+import { updateLocalStorageLogs } from './sessionsHandler';
 
 export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject, buttonElement, logSession,
                                         tooltipText, tooltipPlacement}) {
   const pyodide = usePyodide();
-  const { userData } = useFirebase();
   const { task } = useParams();
   if (logSession == null) {
     logSession = true;
@@ -83,12 +80,8 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
     if (!taskObject.inDev && logSession) {
       const pass = testsOutput.map((output) => output.correct);
       const time = new Date().toISOString();
-      const lastCode = localStorage.getItem(`${task}-lastCode`) || "";
-      const dist = levenshteinDistance(code, lastCode);
-      const session = { type: 'run', time, taskId: task, userId: userData.id, pass, dist };
-      postRequest({ postUrl: 'addSession', object: session, setLoadCursor: false });
-
-      localStorage.setItem(`${task}-lastCode`, code);
+      const session = { type: 'run', time, pass };
+      updateLocalStorageLogs(session, task)
     }
   }
 
@@ -99,12 +92,13 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
   );
 
   return (
+    <>
     <Tooltip content={tooltipText} placement={tooltipPlacement}>
       {React.cloneElement(buttonElement || defaultButton, {
         isDisabled: !pyodide,
         onClick: handleClick,
       })}
-    </Tooltip>
+    </Tooltip></>
   );
 }
 
