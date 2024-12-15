@@ -4,14 +4,14 @@ export const handleUserActivity = (index, userData, noActivitySent, setNoActivit
   clearTimeout(window.userActivityTimer);
 
   if (noActivitySent) {
-    const session = { type: 'userActive', time: new Date() };
+    const session = { type: 'userActive', time: new Date().toISOString() };
     updateLocalStorageLogs(session, index);
     setNoActivitySent(false);
   }
 
   window.userActivityTimer = setTimeout(
     () => {
-      const session = { type: 'noActivity', time: new Date() };
+      const session = { type: 'noActivity', time: new Date().toISOString() };
       updateLocalStorageLogs(session, index);
       setNoActivitySent(true);
     },

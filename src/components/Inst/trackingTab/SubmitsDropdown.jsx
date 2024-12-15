@@ -11,7 +11,6 @@ const HasReview = ({ color, size }) => (
 function SubmitsDropdown({ id, isOpen, setIsDropdownOpen, triggerContent, items }) {
   const [isAnimating, setIsAnimating] = useState(false);
   const dropdownRef = useRef(null);
-  console.log(triggerContent.conflict);
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.dropdown-container') && !event.target.closest('.dropdown-content') && isOpen) {

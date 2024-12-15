@@ -1,13 +1,31 @@
 import { useState, useEffect } from 'react';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { Card } from '@nextui-org/react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip } from '@nextui-org/react';
-import './StudentTracking.css';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import getRequest from '../../../requests/anew/getRequest';
 import SubmitsDropdown from './SubmitsDropdown';
 import { Loading } from '../../General/Messages';
 import CustomScrollbar from '../../General/CustomScrollbar';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
+
+import './StudentTracking.css';
 const GRAY = '#92929F';
+
+const LightTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(
+  ({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.white,
+      direction:'rtl',
+      color: 'rgba(0, 0, 0, 0.87)',
+      boxShadow: theme.shadows[2],
+      fontSize: 13,
+      fontFamily: '"Varela Round", sans-serif',
+      borderRadius: theme.shape.borderRadius,
+    },
+  }),
+);
+
 
 function StudentTracking({ group }) {
   const [students, setStudents] = useState(null);
@@ -32,7 +50,7 @@ function StudentTracking({ group }) {
         <TableColumn key="tasks"></TableColumn>
         {students.map((student) => (
           <TableColumn key={student.id} width={'80px'}>
-            <Tooltip content={student.full_name} placement="bottomStart">
+            <LightTooltip title={student.full_name} >
               <div
                 style={{
                   width: '4em',
@@ -48,7 +66,7 @@ function StudentTracking({ group }) {
               >
                 {student.full_name}
               </div>
-            </Tooltip>
+            </LightTooltip>
           </TableColumn>
         ))}
       </TableHeader>
@@ -59,7 +77,7 @@ function StudentTracking({ group }) {
     return (
       <TableRow key={`${unit.unit}_${rowIdx}`} className={unit.tasks[rowIdx].anchor ? 'anchor' : ''}>
         <TableCell>
-          <Tooltip content={unit.tasks[rowIdx].task} placement="topStart">
+          <LightTooltip title={unit.tasks[rowIdx].task} >
             <div
               style={{
                 direction: 'rtl',
@@ -74,7 +92,7 @@ function StudentTracking({ group }) {
             >
               {unit.tasks[rowIdx].task}
             </div>
-          </Tooltip>
+          </LightTooltip>
         </TableCell>
         {row.map((cell) => renderCell(cell, unit.unit, rowIdx))}
       </TableRow>

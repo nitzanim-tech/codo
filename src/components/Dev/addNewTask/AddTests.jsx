@@ -58,7 +58,13 @@ const AddTests = ({ testsList, setTestList, code }) => {
 
   const deleteTest = () => {
     if (selectedTestIndex !== null) {
-      const updatedTestsList = testsList.filter((_, index) => index !== parseInt(selectedTestIndex));
+          const updatedTestsList = testsList
+            .filter((_, index) => index !== parseInt(selectedTestIndex))
+            .map((test, newIndex) => ({
+              ...test,
+              index: newIndex.toString(), 
+            }));
+
       setTestList(updatedTestsList);
       setShowEditButton(false);
       setSelectedTestIndex(null);

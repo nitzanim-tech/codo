@@ -42,7 +42,7 @@ const agrigateLocalStorageLogs = (task) => {
   const logsKey = `${task}-logs`;
   const existingLogs = JSON.parse(localStorage.getItem(logsKey)) || [];
   const workingTime = calculateWorkingTime(existingLogs);
-  const updatedLog = [{ type: 'aggr', workingTime, time: new Date() }];
+  const updatedLog = [{ type: 'aggr', workingTime, time: new Date().toISOString() }];
   localStorage.setItem(logsKey, JSON.stringify(updatedLog));
 };
 

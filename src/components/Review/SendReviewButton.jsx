@@ -27,7 +27,7 @@ export default function SendReviewButton({ setErrorText, general, comments, sele
       comments: comments.current || {},
       general,
       grade: null, // ADD NUMERIC GRADE
-      time: new Date(),
+      time: new Date().toISOString(),
     };
 
     const hadSaved = await postRequest({ postUrl: 'addReview', object: reviewData, authMethod: 'jwt' });
