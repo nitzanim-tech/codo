@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, Button } from '@nextui-org/react';
 import StudentsTable from '../components/Inst/studentsTab/StudentsTable';
-import TaskTab from '../components/Inst/taskTab/TaskTab';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ManageLessonsInst from '../components/Inst/manageTab/ManageLessonsInst';
 import StudentTracking from '../components/Inst/trackingTab/StudentTracking';
@@ -10,9 +9,10 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-o
 import { useFirebase } from '../util/FirebaseProvider';
 import styled from 'styled-components';
 import { ChangeSettingProvider } from '../components/Inst/manageTab/ChangeSettingProvider';
-import { Unauthorized } from '../components/general/Messages';
+import { Loading, Unauthorized } from '../components/General/Messages';
 import getRequest from '../requests/anew/getRequest';
 import ChangeGroupReq from '../components/Inst/studentsTab/ChangeGroupReq';
+import StudentTaskTable from '../components/Inst/studentsTab/StudentTaskTable';
 
 function Instructors() {
   const { app, userData, auth } = useFirebase();
@@ -65,8 +65,7 @@ function Instructors() {
                 </Dropdown>
 
                 <Tabs aria-label="Options">
-
-                  <Tab key="manage" title="מפגשים">
+                  <Tab key="manage" title="תכנים">
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                       <ChangeSettingProvider>
                         <ManageLessonsInst group={selectedGroup} />
@@ -74,16 +73,16 @@ function Instructors() {
                     </div>
                   </Tab>
 
-                  <Tab key="track" title="מעקב">
+                  <Tab key="track" title="הגשות">
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <StudentTracking group={selectedGroup} />
+                      <StudentTracking group={selectedGroup} />
                     </div>
                   </Tab>
 
-                  <Tab key="changeGroupRequest" title="בקשות הצטרפות">
+                  <Tab key="changeGroupRequest" title="חניכים">
                     <ChangeGroupReq requests={changeGroupRequests} setRequests={setChangeGroupRequests} />
+                    {/* <StudentTaskTable group={selectedGroup} /> */}
                   </Tab>
-
                 </Tabs>
               </div>
             </>
@@ -91,7 +90,7 @@ function Instructors() {
         </>
       ) : (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <CircularProgress />
+          <Loading />
         </div>
       )}
     </>

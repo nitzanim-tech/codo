@@ -125,27 +125,27 @@ export function processTestsOutputs({ taskTests, testsOutputs }) {
     const trialsFeedback = [];
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      if (/^Round \d+:/.test(line) || /^round \d+:/.test(line)) {
-        if (currentBlock) {
-          blocks.push(currentBlock.trim());
-          rounds[currentRound] = currentBlock.trim();
-        }
-        currentBlock = line;
-        currentRound = line;
-        trialsFeedback.push({});
-      } else if (/^\d+$/.test(line)) {
-        currentBlock += '\n' + line;
-      } else {
-        currentBlock += '\n' + line;
-        const feedback = trialsFeedback[trialsFeedback.length - 1];
-        if (/^green/.test(line) || /^Green/.test(line)) {
-          feedback.green = line;
-        } else if (/^Orange/.test(line) || /^orange/.test(line)) {
-          feedback.orange = line;
-        } else if (/^Gray/.test(line) || /^gray/.test(line) || /^Grey/.test(line) || /^grey/.test(line)) {
-          feedback.gray = line;
-        }
-      }
+if (/^round\s*\d+\s*:/i.test(line)) {
+  if (currentBlock) {
+    blocks.push(currentBlock.trim());
+    rounds[currentRound] = currentBlock.trim();
+  }
+  currentBlock = line;
+  currentRound = line;
+  trialsFeedback.push({});
+} else if (/^\d+$/.test(line)) {
+  currentBlock += '\n' + line;
+} else if (trialsFeedback.length > 0) {
+  currentBlock += '\n' + line;
+  const feedback = trialsFeedback[trialsFeedback.length - 1];
+  if (/^green/.test(line) || /^Green/.test(line)) {
+    feedback.green = line;
+  } else if (/^Orange/.test(line) || /^orange/.test(line)) {
+    feedback.orange = line;
+  } else if (/^Gray/.test(line) || /^gray/.test(line) || /^Grey/.test(line) || /^grey/.test(line)) {
+    feedback.gray = line;
+  }
+}
     }
     if (currentBlock) {
       blocks.push(currentBlock.trim());

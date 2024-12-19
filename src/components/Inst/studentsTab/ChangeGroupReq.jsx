@@ -3,7 +3,7 @@ import { Button, Card } from '@nextui-org/react';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import postRequest from '../../../requests/anew/postRequest';
-import { ErrorMessage, SuccessMessage } from '../../general/Messages';
+import { ErrorMessage, SuccessMessage } from '../../General/Messages';
 
 
 

@@ -151,7 +151,8 @@ export function processTestsOutputs({ taskTests, testsOutputs }) {
 }
 
 
-const ans = `gray_list = []
+const ans = `
+gray_list = []
 orange_list = []
 green_list =[]
 index = 0
@@ -174,4 +175,5 @@ else:
             index +=1
         print("Green letters: " + str(green_list))
         print("Orange letters: " + str(orange_list))
-        print("Gray letters: " + str(gray_list))`;
+        print("Gray letters: " + str(gray_list))
+        `;
