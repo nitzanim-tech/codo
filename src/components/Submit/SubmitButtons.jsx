@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@nextui-org/react';
-import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
-import ChecklistRtlRoundedIcon from '@mui/icons-material/ChecklistRtlRounded';
 import Instructions from './Instructions';
 import TestsList from '../TestsList/TestsList';
-import { Tabs, Tab } from '@nextui-org/react';
 import Coduck from '../Coduck/Coduck';
-import GradingRoundedIcon from '@mui/icons-material/GradingRounded';
-import { Accordion, AccordionItem, Textarea } from '@nextui-org/react';
-import DonutChart from '../Inst/Chart';
-import { ReviewSvg } from './Icons';
 
 import ReadReviewTab from './ReadReviewTab';
 export default function SubmitButtons({

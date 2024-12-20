@@ -19,10 +19,10 @@ function IDEButtons({
   setTheme,
   taskObject,
 }) {
+  
   const [runTests, setRunTests] = useState(false);
-  const handleThemeChange = (checked) => {
-    setTheme(checked ? 'hc-light' : 'vs-dark');
-  };
+
+  console.log(taskObject.setting);
 
   return (
     <ButtonsDiv>
@@ -41,13 +41,18 @@ function IDEButtons({
           testsOutputs={testsOutputs}
           setRunTests={setRunTests}
           taskId={taskObject.id}
-          showTests={taskObject?.setting?.showTest || null}
+          showTests={taskObject?.setting?.showTests || null}
         />
       </ButtonWrapper>
       <ButtonWrapper>
-        <RunTestButton code={code} setTestsOutputs={setTestsOutputs} runTests={runTests} taskObject={taskObject} />
+        <RunTestButton
+          code={code}
+          setTestsOutputs={setTestsOutputs}
+          runTests={runTests}
+          taskObject={taskObject}
+          showTests={taskObject?.setting?.showTests || null}
+        />
       </ButtonWrapper>
-
       <ButtonWrapper>
         <RunCodeButton code={code} setOutput={setOutput} setInputCallback={setInputCallback} setError={setError} />
       </ButtonWrapper>

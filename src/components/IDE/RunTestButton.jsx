@@ -8,8 +8,17 @@ import { useParams } from 'react-router-dom';
 import { RunTestsIcon } from './Icons';
 import { updateLocalStorageLogs } from './sessionsHandler';
 
-export default function RunTestButton({ code, setTestsOutputs, runTests, taskObject, buttonElement, logSession,
-                                        tooltipText, tooltipPlacement}) {
+export default function RunTestButton({
+  code,
+  setTestsOutputs,
+  runTests,
+  taskObject,
+  buttonElement,
+  logSession,
+  tooltipText,
+  tooltipPlacement,
+  showTests,
+}) {
   const pyodide = usePyodide();
   const { task } = useParams();
   if (logSession == null) {
@@ -81,24 +90,32 @@ export default function RunTestButton({ code, setTestsOutputs, runTests, taskObj
       const pass = testsOutput.map((output) => output.correct);
       const time = new Date().toISOString();
       const session = { type: 'run', time, pass };
-      updateLocalStorageLogs(session, task)
+      updateLocalStorageLogs(session, task);
     }
   }
 
   const defaultButton = (
-    <Button radius="full" isIconOnly variant="faded" isDisabled={!pyodide} onClick={handleClick} style={{border:'none'}}>
+    <Button
+      radius="full"
+      isIconOnly
+      variant="faded"
+      isDisabled={!pyodide}
+      onClick={handleClick}
+      style={{ border: 'none' }}
+    >
       <RunTestsIcon />
     </Button>
   );
 
   return (
     <>
-    <Tooltip content={tooltipText} placement={tooltipPlacement}>
-      {React.cloneElement(buttonElement || defaultButton, {
-        isDisabled: !pyodide,
-        onClick: handleClick,
-      })}
-    </Tooltip></>
+      <Tooltip content={tooltipText} placement={tooltipPlacement}>
+        {React.cloneElement(buttonElement || defaultButton, {
+          isDisabled: !pyodide || !showTests,
+          onClick: handleClick,
+        })}
+      </Tooltip>
+    </>
   );
 }
 

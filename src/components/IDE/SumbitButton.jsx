@@ -27,7 +27,6 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
   function countCorrectTests(tests) {
     const total = tests.length;
     const correct = tests.filter((test) => test.correct).length;
-    // const taskObject = getTaskByIndex({ index: taskId });
     if (showTests) setTestStatus(`${correct}/${total}`);
   }
 
@@ -85,7 +84,7 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
           <ModalHeader style={{ textAlign: 'center' }}>הגש</ModalHeader>
           <>
             <ModalBody style={{ textAlign: 'center' }}>
-              {testStatus && auth.currentUser && <p>הקוד עבר {testStatus} טסטים</p>}
+              {testStatus && showTests && <p>הקוד עבר {testStatus} טסטים</p>}
               {auth.currentUser.uid ? <p>האם ברצונך להגיש?</p> : <p>יש להרשם או להתחבר</p>}
               {nextTask && (
                 <>
