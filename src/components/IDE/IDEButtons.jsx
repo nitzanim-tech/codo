@@ -22,8 +22,6 @@ function IDEButtons({
   
   const [runTests, setRunTests] = useState(false);
 
-  console.log(taskObject.setting);
-
   return (
     <ButtonsDiv>
       {taskObject.hasGame && (

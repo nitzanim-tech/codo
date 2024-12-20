@@ -101,7 +101,12 @@ function Submit() {
   }, [chosenTab]);
 
   useEffect(() => {
-    if (testsOutputs && testsOutputs[0] && (testsOutputs[0].output || testsOutputs[0].input)) {
+    if (
+      testsOutputs &&
+      testsOutputs[0] &&
+      (testsOutputs[0].output || testsOutputs[0].input) &&
+      taskData?.setting?.showTests
+    ) {
       setChosenTab('טסטים');
     }
   }, [testsOutputs]);

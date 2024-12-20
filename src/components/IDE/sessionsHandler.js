@@ -3,7 +3,6 @@ const calculateWorkingTime = (sessions) => {
   let totalTimeInMinutes = aggrSession ? aggrSession.workingTime : 0;
   let startTime = aggrSession ? new Date(aggrSession.time) : null;
 
-  console.log(aggrSession, startTime);
 
   for (let session of sessions) {
     if (session.type === 'start' || session.type === 'userActive') {

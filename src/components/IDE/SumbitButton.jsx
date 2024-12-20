@@ -39,7 +39,6 @@ function SumbitButton({ code, testsOutputs, setRunTests, showTests }) {
     const sessions = localStorage.getItem(`${task}-logs`);
 
     const workingTime = calculateWorkingTime(JSON.parse(sessions));
-    console.log(workingTime);
     const newSubmit = {
       userId: auth.currentUser.uid,
       taskId: task,

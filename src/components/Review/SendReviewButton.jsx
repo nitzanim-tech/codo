@@ -86,7 +86,6 @@ export default function SendReviewButton({ setErrorText, general, comments, sele
 }
 
 function haveTestsChanged(selectedTests, pass, isRunningTest) {
-  console.log({ selectedTests, pass, isRunningTest });
   const maxCheckIndex = isRunningTest && pass.includes(null) ? pass.indexOf(null) : pass.length;
   const selectedTestsArray = indexToBooleanArray(selectedTests, pass.length);
   for (let i = 0; i < maxCheckIndex; i++) {

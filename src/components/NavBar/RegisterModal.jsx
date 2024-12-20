@@ -32,7 +32,6 @@ const RegisterModal = ({ auth, isOpen, onOpenChange, onClose, setJwt }) => {
         name: `${data.program} | ${data.hebYear}`,
         defaultGroup: data.defaultGroup,
       }));
-      console.log(defaultGroupsFromDb);
       setRegionList(defaultGroupsFromDb);
       setSyllabus(syllabusList);
     };

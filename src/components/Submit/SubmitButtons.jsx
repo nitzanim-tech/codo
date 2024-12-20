@@ -17,7 +17,8 @@ export default function SubmitButtons({
   const [selectedTab, setSelectedTab] = useState('instructions');
 
   useEffect(() => {
-    testsOutputs[0]?.input && setSelectedTab('tests');
+    if (taskObject?.setting?.showTests) 
+      testsOutputs[0]?.input && setSelectedTab('tests');
   }, [testsOutputs]);
 
   useEffect(() => {
