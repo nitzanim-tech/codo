@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@nextui-org/react';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
-import duckIcon from '../../assets/svg/rubber-duck.svg';
 import ChecklistRtlRoundedIcon from '@mui/icons-material/ChecklistRtlRounded';
 import Instructions from './Instructions';
 import TestsList from '../TestsList/TestsList';
@@ -35,14 +34,14 @@ export default function SubmitButtons({
 
   return (
     <>
-      {/* CODUCK: */}
-      {/* 
-          <Coduck
-            task={taskObject}
-            chatHistory={chatHistory}
-            setChatHistory={setChatHistory}
-            setHighlightedLines={setHighlightedLines}
-          /> */}
+      {chosenTab == 'קודאק' && taskObject && (
+        <Coduck
+          task={taskObject}
+          chatHistory={chatHistory}
+          setChatHistory={setChatHistory}
+          setHighlightedLines={setHighlightedLines}
+        />
+      )}
       {chosenTab == 'משוב' && taskObject && (
         <ReadReviewTab
           testsOutputs={testsOutputs}

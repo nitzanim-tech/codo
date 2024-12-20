@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import getCoduckResp from '../../requests/coduck/getCoduckResp';
-import getTaskTranslationResp from '../../requests/coduck/getTaskTranslationResp';
 import Chat from './Chat';
+import postRequest from '../../requests/anew/postRequest';
 
 const Coduck = ({ task, chatHistory, setChatHistory, setHighlightedLines }) => {
   const [newMessage, setNewMessage] = useState('');
@@ -10,10 +9,20 @@ const Coduck = ({ task, chatHistory, setChatHistory, setHighlightedLines }) => {
   const [taskInEnglish, setTaskInEnglish] = useState('');
 
   useEffect(() => {
-    getTaskTranslationResp({ task: task.description }).then((data) => {
-      setTaskInEnglish(data.task.task);
-    });
-  }, [task]);
+    const fetchTaskTranslation = async () => {
+      try {
+        const object = { task: task.description };
+        const data = await postRequest({ postUrl: 'getTaskTranslation', object });
+        setTaskInEnglish(data.task.task);
+      } catch (error) {
+        console.error('Error fetching task translation:', error);
+      }
+    };
+
+    if (task) {
+      fetchTaskTranslation();
+    }
+  }, []);
 
   const handleSendMessage = async () => {
     if (newMessage.trim() !== '') {
@@ -29,17 +38,24 @@ const Coduck = ({ task, chatHistory, setChatHistory, setHighlightedLines }) => {
       setLoading(true);
 
       try {
-        var code = localStorage.getItem('code');
-        code = localStorage.getItem('code').split('\n').map((x, i) => `${i + 1} ${x}`).join('\n');
+        let code = localStorage.getItem(`${task.id}-code`) || '';
+
+        code = localStorage
+          .getItem(`${task.id}-code`)
+          .split('\n')
+          .map((x, i) => `${i + 1} ${x}`)
+          .join('\n');
         if (code == lastSentCode) {
           code = null;
         } else {
           userMessage.code = code;
           setLastSentCode(code);
         }
-
-        const response = await getCoduckResp({ chatHistory: currChatHistory, code, task: taskInEnglish });
-        console.log(response);
+        const object = { chatMessages: currChatHistory, code, task: taskInEnglish };
+        const response = await postRequest({
+          postUrl: 'getCoduckRes',
+          object,
+        });
 
         if (response.lines !== null) {
           if (typeof response.lines === 'number') {
@@ -57,7 +73,7 @@ const Coduck = ({ task, chatHistory, setChatHistory, setHighlightedLines }) => {
             console.log('Highlight lines', linesToHighlight);
           }
         } else {
-            setHighlightedLines([]);
+          setHighlightedLines([]);
         }
 
         const updatedChatHistory = currChatHistory.map((msg, index) => {

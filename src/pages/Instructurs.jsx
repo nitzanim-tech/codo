@@ -81,7 +81,7 @@ function Instructors() {
 
                   <Tab key="changeGroupRequest" title="חניכים">
                     <ChangeGroupReq requests={changeGroupRequests} setRequests={setChangeGroupRequests} />
-                    {/* <StudentTaskTable group={selectedGroup} /> */}
+                    <StudentTaskTable group={selectedGroup} />
                   </Tab>
                 </Tabs>
               </div>
