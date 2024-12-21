@@ -4,18 +4,11 @@ import { Bar, Scatter } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, Tooltip, Legend, BarElement } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import getRequest from '../../../requests/anew/getRequest';
+import getColor from '../../../util/getColor';
 
 ChartJS.register(ChartDataLabels);
 ChartJS.register(CategoryScale, LinearScale, PointElement, Tooltip, Legend, BarElement); // Register BarElement
 
-function getColor(score) {
-  score /= 100;
-  const START = [255, 123, 217];
-  const END = [88, 134, 255];
-  const diffs = START.map((x, i) => END[i] - x);
-  const res = START.map((x, i) => x + score * diffs[i]);
-  return `rgb(${Math.round(res[0])}, ${Math.round(res[1])}, ${Math.round(res[2])})`;
-}
 const calculateStudentStatus = (averageGrade, anchorTasksSubmitted) => {
   const numericAverageGrade = parseFloat(averageGrade) || 0;
   const anchorTasksPercentage = (anchorTasksSubmitted / 20) * 100;

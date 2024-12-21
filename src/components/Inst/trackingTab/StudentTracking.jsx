@@ -8,15 +8,18 @@ import { Loading } from '../../General/Messages';
 import CustomScrollbar from '../../General/CustomScrollbar';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
+import SimpleDropdown from './SimpleDropdown';
 
 import './StudentTracking.css';
+import postRequest from '../../../requests/anew/postRequest';
+
 const GRAY = '#92929F';
 
 const LightTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(
   ({ theme }) => ({
     [`& .${tooltipClasses.tooltip}`]: {
       backgroundColor: theme.palette.common.white,
-      direction:'rtl',
+      direction: 'rtl',
       color: 'rgba(0, 0, 0, 0.87)',
       boxShadow: theme.shadows[2],
       fontSize: 13,
@@ -25,7 +28,6 @@ const LightTooltip = styled(({ className, ...props }) => <Tooltip {...props} cla
     },
   }),
 );
-
 
 function StudentTracking({ group }) {
   const [students, setStudents] = useState(null);
@@ -50,7 +52,7 @@ function StudentTracking({ group }) {
         <TableColumn key="tasks"></TableColumn>
         {students.map((student) => (
           <TableColumn key={student.id} width={'80px'}>
-            <LightTooltip title={student.full_name} >
+            <LightTooltip title={student.full_name}>
               <div
                 style={{
                   width: '4em',
@@ -77,7 +79,7 @@ function StudentTracking({ group }) {
     return (
       <TableRow key={`${unit.unit}_${rowIdx}`} className={unit.tasks[rowIdx].anchor ? 'anchor' : ''}>
         <TableCell>
-          <LightTooltip title={unit.tasks[rowIdx].task} >
+          <LightTooltip title={unit.tasks[rowIdx].task}>
             <div
               style={{
                 direction: 'rtl',
@@ -94,7 +96,7 @@ function StudentTracking({ group }) {
             </div>
           </LightTooltip>
         </TableCell>
-        {row.map((cell) => renderCell(cell, unit.unit, rowIdx))}
+        {row.map((cell) => renderCell(cell, unit.unit, rowIdx, unit.unitId))}
       </TableRow>
     );
   };
@@ -142,7 +144,24 @@ function StudentTracking({ group }) {
     return sortedNonReviewedSubmissions.length > 0 ? sortedNonReviewedSubmissions[0] : null;
   };
 
-  function renderCell(cell, unitKey, rowIdx) {
+  function getColor(score) {
+    const START = [255, 123, 217];
+    const END = [88, 134, 255];
+    const diffs = START.map((x, i) => END[i] - x);
+    const res = START.map((x, i) => x + score * diffs[i]);
+    return `rgb(${Math.round(res[0])}, ${Math.round(res[1])}, ${Math.round(res[2])})`;
+  }
+
+  const postPracticeToUser = async (cellKey, unitId) => {
+    const [taskId, userId] = cellKey.split('_');
+    const object = { taskId, userId, unitId };
+    const { practice } = await postRequest({ postUrl: 'postPracticeToUser', object, authMethod: 'jwt' });
+    if (practice?.praticeId) {
+      return true;
+    }
+  };
+
+  function renderCell(cell, unitKey, rowIdx, unitId) {
     const cellKey = `${unitKey}_${rowIdx}_${cell.key}`;
     const isDropdownOpen = cellKey === dropdownStates;
     const selectedSubmission = cell.submissions?.length > 0 ? selectRelevatSubmission(cell) : cell;
@@ -174,11 +193,28 @@ function StudentTracking({ group }) {
             {!(cell.lines & 2) ? null : <line x1="0.5" x2="0.5" y1="1" y2="0.5" stroke={GRAY} />}
             {cell.active ? <ActiveSub /> : <NoActiveSub />}
           </svg>
-
+          {!cell.active && (
+            <div style={{ marginLeft: '10px', marginRight: '10px', position: 'absolute' }}>
+              <SimpleDropdown
+                isOpen={isDropdownOpen && selectedSubmission.score == null && cell.lines}
+                setIsDropdownOpen={setDropdownStates}
+                items={[
+                  {
+                    label: 'פתח תרגיל',
+                    onClick: () => {
+                      const succeed = postPracticeToUser(cell.key, unitId);
+                      if (succeed) cell.active = true;
+                    },
+                  },
+                ]}
+              />
+            </div>
+          )}
           {selectedSubmission.score >= 0 && (
             <div style={{ marginLeft: '10px', marginRight: '10px', position: 'absolute' }}>
               <SubmitsDropdown
                 isOpen={isDropdownOpen}
+                setIsDropdownOpen={setDropdownStates}
                 onToggle={(open) => setDropdownStates(open ? cellKey : null)}
                 triggerContent={{
                   tooltip: `${Math.round(selectedSubmission.score * 100)}%`,
@@ -197,14 +233,6 @@ function StudentTracking({ group }) {
 
   const ActiveSub = () => <circle r=".12" cx=".5" cy=".5" stroke={GRAY} strokeWidth=".08" fill="white" />;
   const NoActiveSub = () => <circle r=".1" cx=".5" cy=".5" fill={GRAY} />;
-
-  function getColor(score) {
-    const START = [255, 123, 217];
-    const END = [88, 134, 255];
-    const diffs = START.map((x, i) => END[i] - x);
-    const res = START.map((x, i) => x + score * diffs[i]);
-    return `rgb(${Math.round(res[0])}, ${Math.round(res[1])}, ${Math.round(res[2])})`;
-  }
 
   function renderLegend() {
     return (
