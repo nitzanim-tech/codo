@@ -10,6 +10,7 @@ import getRequest from '../../requests/anew/getRequest';
 import SearchIcon from '@mui/icons-material/Search';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
+import CustomScrollbar from '../General/CustomScrollbar';
 
 const DevTasksTab = () => {
   const [filterValue, setFilterValue] = useState('');
@@ -88,108 +89,112 @@ const DevTasksTab = () => {
 
   return (
     <>
-      <div className="flex gap-4 mb-4 w-7/10 mx-auto" style={{ width: '70%' }}>
-        <Input
-          isClearable
-          placeholder="Search by task name..."
-          startContent={<SearchIcon />}
-          value={filterValue}
-          onClear={() => setFilterValue('')}
-          onValueChange={(value) => setFilterValue(value)}
-        />
-        <Select
-          placeholder="Select Main Subject"
-          selectedKeys={selectedSubject}
-          value={selectedSubject}
-          onChange={(value) => setSelectedSubject(value.target.value)}
-        >
-          <SelectItem key="">All Subjects</SelectItem>
-          {Array.from(new Set(list.items.map((task) => task.mainSubject))).map((subject) => (
-            <SelectItem key={subject}>{subject}</SelectItem>
-          ))}
-        </Select>
-        <Button
-          onClick={() => {
-            const newTaskId = uuidv4().replace(/-/g, '').slice(-12);
-            window.location.assign(`./dev/${newTaskId}`);
-          }}
-        >
-          Add new
-        </Button>
-      </div>
+      <CustomScrollbar>
+        <div style={{ width: '100%', height: '70vh' }}>
+          <div className="flex gap-4 mb-4 w-7/10 mx-auto" style={{ width: '70%' }}>
+            <Input
+              isClearable
+              placeholder="Search by task name..."
+              startContent={<SearchIcon />}
+              value={filterValue}
+              onClear={() => setFilterValue('')}
+              onValueChange={(value) => setFilterValue(value)}
+            />
+            <Select
+              placeholder="Select Main Subject"
+              selectedKeys={selectedSubject}
+              value={selectedSubject}
+              onChange={(value) => setSelectedSubject(value.target.value)}
+            >
+              <SelectItem key="">All Subjects</SelectItem>
+              {Array.from(new Set(list.items.map((task) => task.mainSubject))).map((subject) => (
+                <SelectItem key={subject}>{subject}</SelectItem>
+              ))}
+            </Select>
+            <Button
+              onClick={() => {
+                const newTaskId = uuidv4().replace(/-/g, '').slice(-12);
+                window.location.assign(`./dev/${newTaskId}`);
+              }}
+            >
+              Add new
+            </Button>
+          </div>
 
-      <Table
-        aria-label="Tasks Table with Sorting"
-        sortDescriptor={list.sortDescriptor}
-        onSortChange={list.sort}
-        classNames={{
-          table: 'min-h-[100px]',
-        }}
-      >
-        <TableHeader>
-          <TableColumn key="edit" allowsSorting>
-            Edit
-          </TableColumn>
-          <TableColumn key="uid" allowsSorting>
-            ID
-          </TableColumn>
-          <TableColumn key="name" allowsSorting>
-            Name
-          </TableColumn>
-          <TableColumn key="lastUpdate" allowsSorting>
-            Last Update
-          </TableColumn>
-          <TableColumn key="level" allowsSorting>
-            Level
-          </TableColumn>
-          <TableColumn key="mainSubject" allowsSorting>
-            Main Subject
-          </TableColumn>
-          <TableColumn key="writer" allowsSorting>
-            Writer
-          </TableColumn>
-          <TableColumn key="syllabus">Syllabus</TableColumn>
-        </TableHeader>
+          <Table
+            aria-label="Tasks Table with Sorting"
+            sortDescriptor={list.sortDescriptor}
+            onSortChange={list.sort}
+            classNames={{
+              table: 'min-h-[100px]',
+            }}
+          >
+            <TableHeader>
+              <TableColumn key="edit" allowsSorting>
+                Edit
+              </TableColumn>
+              <TableColumn key="uid" allowsSorting>
+                ID
+              </TableColumn>
+              <TableColumn key="name" allowsSorting>
+                Name
+              </TableColumn>
+              <TableColumn key="lastUpdate" allowsSorting>
+                Last Update
+              </TableColumn>
+              <TableColumn key="level" allowsSorting>
+                Level
+              </TableColumn>
+              <TableColumn key="mainSubject" allowsSorting>
+                Main Subject
+              </TableColumn>
+              <TableColumn key="writer" allowsSorting>
+                Writer
+              </TableColumn>
+              <TableColumn key="syllabus">Syllabus</TableColumn>
+            </TableHeader>
 
-        <TableBody items={filteredItems} isLoading={list.isLoading} loadingContent={<Spinner label="Loading..." />}>
-          {(task) => (
-            <TableRow key={task.uid}>
-              <TableCell>
-                <Button variant="light" radius="full" isIconOnly size="sm" onClick={() => onTaskClick(task)}>
-                  {localStorage.getItem(`newTask-${task.uid}`) ? (
-                    <BorderColorRoundedIcon style={{ color: 'red' }} />
-                  ) : (
-                    <EditRoundedIcon style={{ color: '#005395' }} />
-                  )}
-                </Button>
-              </TableCell>
-              <TableCell>{task.uid}</TableCell>
-              <TableCell>{task.name}</TableCell>
-              <TableCell>{task.lastUpdate ? formatDate(task.lastUpdate) : '?'}</TableCell>
-              <TableCell>{task.level || '?'}</TableCell>
-              <TableCell>{task.mainSubject}</TableCell>
-              <TableCell>{task.writerName}</TableCell>
-              <TableCell>
-                {task.syllabus &&
-                  task.syllabus.map((syllab) => (
-                    <Tooltip key={syllab} content={syllab} arrow>
-                      <span
-                        style={{
-                          display: 'inline-block',
-                          width: '12px',
-                          height: '12px',
-                          borderRadius: '50%',
-                          backgroundColor: syllabusColors[syllab] || 'gray',
-                          marginRight: '5px',
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            <TableBody items={filteredItems} isLoading={list.isLoading} loadingContent={<Spinner label="Loading..." />}>
+              {(task) => (
+                <TableRow key={task.uid}>
+                  <TableCell>
+                    <Button variant="light" radius="full" isIconOnly size="sm" onClick={() => onTaskClick(task)}>
+                      {localStorage.getItem(`newTask-${task.uid}`) ? (
+                        <BorderColorRoundedIcon style={{ color: 'red' }} />
+                      ) : (
+                        <EditRoundedIcon style={{ color: '#005395' }} />
+                      )}
+                    </Button>
+                  </TableCell>
+                  <TableCell>{task.uid}</TableCell>
+                  <TableCell>{task.name}</TableCell>
+                  <TableCell>{task.lastUpdate ? formatDate(task.lastUpdate) : '?'}</TableCell>
+                  <TableCell>{task.level || '?'}</TableCell>
+                  <TableCell>{task.mainSubject}</TableCell>
+                  <TableCell>{task.writerName}</TableCell>
+                  <TableCell>
+                    {task.syllabus &&
+                      task.syllabus.map((syllab) => (
+                        <Tooltip key={syllab} content={syllab} arrow>
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              width: '12px',
+                              height: '12px',
+                              borderRadius: '50%',
+                              backgroundColor: syllabusColors[syllab] || 'gray',
+                              marginRight: '5px',
+                            }}
+                          />
+                        </Tooltip>
+                      ))}
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </CustomScrollbar>
     </>
   );
 };

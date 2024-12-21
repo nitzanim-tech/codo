@@ -3,7 +3,7 @@ import { ModalBody, ModalFooter, Button } from '@nextui-org/react';
 import { Modal, ModalHeader, ModalContent } from '@nextui-org/react';
 import getRequest from '../../../requests/anew/getRequest';
 import { useDisclosure } from '@nextui-org/react';
-import { Loading } from '../../general/Messages';
+import { Loading } from '../../General/Messages';
 
 const TaskLoaderModal = ({ taskId, setTaskData, loading, setLoading }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

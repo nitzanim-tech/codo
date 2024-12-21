@@ -6,6 +6,7 @@ import getRequest from '../requests/anew/getRequest';
 import postRequest from '../requests/anew/postRequest';
 
 import { Unauthorized } from '../components/General/Messages';
+import CustomScrollbar from '../components/General/CustomScrollbar';
 
 function Admin() {
   const { userData } = useFirebase();
@@ -104,49 +105,52 @@ function Admin() {
                   onChange={(e) => setFilterValue(e.target.value)}
                 />
               </div>
+              <CustomScrollbar>
+                <div style={{ width: '100%', height: '78vh' }}>
+                  <Table aria-label="Instructors Table with Sorting">
+                    <TableHeader>
+                      <TableColumn key="instructors" allowsSorting onClick={() => handleSort('instructors')}>
+                        מדריכים
+                      </TableColumn>
+                      <TableColumn key="groupName" allowsSorting onClick={() => handleSort('groupName')}>
+                        קבוצה
+                      </TableColumn>
+                      <TableColumn key="regionName" allowsSorting onClick={() => handleSort('regionName')}>
+                        מרחב
+                      </TableColumn>
+                    </TableHeader>
 
-              <Table aria-label="Instructors Table with Sorting">
-                <TableHeader>
-                  <TableColumn key="instructors" allowsSorting onClick={() => handleSort('instructors')}>
-                    מדריכים
-                  </TableColumn>
-                  <TableColumn key="groupName" allowsSorting onClick={() => handleSort('groupName')}>
-                    קבוצה
-                  </TableColumn>
-                  <TableColumn key="regionName" allowsSorting onClick={() => handleSort('regionName')}>
-                    מרחב
-                  </TableColumn>
-                </TableHeader>
-
-                <TableBody>
-                  {filteredItems.map((item) => (
-                    <TableRow key={item.groupId}>
-                      <TableCell width={'60%'} dir="rtl">
-                        {item.instructors.map((instructor) => (
-                          <Chip key={instructor.userId} variant="flat" color="primary">
-                            {instructor.userName}
-                          </Chip>
-                        ))}
-                        <Button
-                          radius="full"
-                          isIconOnly
-                          variant="flat"
-                          color="success"
-                          size="sm"
-                          onClick={() => {
-                            setShowSidebar(true);
-                            setSelectedGroup(item.groupId);
-                          }}
-                        >
-                          +
-                        </Button>
-                      </TableCell>
-                      <TableCell>{item.groupName}</TableCell>
-                      <TableCell>{item.regionName}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                    <TableBody>
+                      {filteredItems.map((item) => (
+                        <TableRow key={item.groupId}>
+                          <TableCell width={'60%'} dir="rtl">
+                            {item.instructors.map((instructor) => (
+                              <Chip key={instructor.userId} variant="flat" color="primary">
+                                {instructor.userName}
+                              </Chip>
+                            ))}
+                            <Button
+                              radius="full"
+                              isIconOnly
+                              variant="flat"
+                              color="success"
+                              size="sm"
+                              onClick={() => {
+                                setShowSidebar(true);
+                                setSelectedGroup(item.groupId);
+                              }}
+                            >
+                              +
+                            </Button>
+                          </TableCell>
+                          <TableCell>{item.groupName}</TableCell>
+                          <TableCell>{item.regionName}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CustomScrollbar>
             </div>
           </>
         ) : (
@@ -155,7 +159,6 @@ function Admin() {
           </div>
         )}
       </div>
-
       {showSidebar && (
         <div className="sidebar" style={{ width: '30%', padding: '2%' }}>
           <Button isIconOnly onClick={() => setShowSidebar(false)}>
@@ -195,7 +198,7 @@ function Admin() {
                       : 'default'
                   }
                   style={{
-                    cursor:'pointer',
+                    cursor: 'pointer',
                     padding: '10px',
                     // flex: '1 1 calc(33.33% - 10px)',
                     textAlign: 'center',
@@ -206,7 +209,7 @@ function Admin() {
               ))}
           </div>
         </div>
-      )}
+      )}{' '}
     </>
   );
 }
